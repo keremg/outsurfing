@@ -20,4 +20,4 @@ import { ChooseRoute } from './ChooseRoute.page';
   ],
   declarations: [ChooseRoute]
 })
-export class ChooseRouteModule {}
+export class ChooseRoutePageModule {}

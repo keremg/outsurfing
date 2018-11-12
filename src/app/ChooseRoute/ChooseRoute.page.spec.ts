@@ -3,9 +3,9 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { ChooseRoute } from './ChooseRoute.page';
 
-describe('HomePage', () => {
+describe('ChooseRoutePage', () => {
   let component: ChooseRoute;
-  let fixture: ComponentFixture<HomePage>;
+  let fixture: ComponentFixture<ChooseRoutePage>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
