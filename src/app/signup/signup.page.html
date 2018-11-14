@@ -5,7 +5,6 @@
 </ion-header>
 
 <ion-content padding>
-  <img src="assets/img/banner.jpg" />
   <form [formGroup]="signupForm" (submit)="signupUser()" novalidate>
     <ion-item>
       <ion-label stacked>Email</ion-label>
@@ -32,8 +31,8 @@
       <p>Your password needs more than 6 characters.</p>
     </ion-item>
 
-    <button ion-button block type="submit" [disabled]="!signupForm.valid">
+    <ion-button block type="submit" [disabled]="!signupForm.valid">
       Create an Account
-    </button>
+    </ion-button>
   </form>
 </ion-content>

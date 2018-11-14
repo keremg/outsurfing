@@ -1,46 +1,46 @@
 <ion-header>
   <ion-toolbar>
     <ion-title>
-      Ionic Blank
+      OutSurfing
     </ion-title>
   </ion-toolbar>
 </ion-header>
 <ion-content padding>
-<form [formGroup]="loginForm" (submit)="loginUser()" novalidate>
-  <ion-item>
-    <ion-label stacked>Email</ion-label>
-    <ion-input formControlName="email" type="email"
-    placeholder="Your email address"
-    [class.invalid]="!loginForm.controls.email.valid && blur">
-    </ion-input>
-  </ion-item>
-  <ion-item class="error-message" *ngIf="!loginForm.controls.email.valid &&
-   loginForm.controls.email.touched">
-    <p>Please enter a valid email address.</p>
-  </ion-item>
+  <form [formGroup]="loginForm" (submit)="loginUser()" novalidate>
+    <ion-item>
+      <ion-label stacked>Email</ion-label>
+      <ion-input formControlName="email" type="email"
+      placeholder="Your email address"
+      [class.invalid]="!loginForm.controls.email.valid && blur">
+      </ion-input>
+    </ion-item>
+    <ion-item class="error-message" *ngIf="!loginForm.controls.email.valid &&
+     loginForm.controls.email.touched">
+      <p>Please enter a valid email address.</p>
+    </ion-item>
 
-  <ion-item>
-    <ion-label stacked>Password</ion-label>
-    <ion-input formControlName="password" type="password"
-    placeholder="Your password"
-    [class.invalid]="!loginForm.controls.password.valid && blur">
-    </ion-input>
-  </ion-item>
-  <ion-item class="error-message" *ngIf="!loginForm.controls.password.valid
-  && loginForm.controls.password.touched">
-    <p>Your password needs more than 6 characters.</p>
-  </ion-item>
+    <ion-item>
+      <ion-label stacked>Password</ion-label>
+      <ion-input formControlName="password" type="password"
+      placeholder="Your password"
+      [class.invalid]="!loginForm.controls.password.valid && blur">
+      </ion-input>
+    </ion-item>
+    <ion-item class="error-message" *ngIf="!loginForm.controls.password.valid
+    && loginForm.controls.password.touched">
+      <p>Your password needs more than 6 characters.</p>
+    </ion-item>
 
-  <button ion-button block type="submit" [disabled]="!loginForm.valid">
-    Log In
-  </button>
-</form>
+    <ion-button block type="submit" [disabled]="!loginForm.valid">
+      Log In
+    </ion-button>
+  </form>
 
-<button ion-button block clear (click)="goToSignup()">
-  Create a new account
-</button>
+  <ion-button block clear (click)="goToSignup()">
+    Create a new account
+  </ion-button>
 
-<button ion-button block clear (click)="goToResetPassword()">
-  I forgot my password 🙁
-</button>
+  <ion-button block clear (click)="goToResetPassword()">
+    I forgot my password 🙁
+  </ion-button>
 </ion-content>
