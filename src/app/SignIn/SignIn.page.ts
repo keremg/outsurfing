@@ -7,7 +7,6 @@ import {
 import { FormBuilder, FormGroup, Validators,FormsModule, ReactiveFormsModule  } from '@angular/forms';
 import { EmailValidator } from '../../validators/email';
 import { AuthService } from '../auth.service';
-import { HomePageModule } from '../home/home.module';
 @Component({
   selector: 'app-SignIn',
   templateUrl: 'SignIn.page.html',
@@ -38,11 +37,11 @@ export class SignInPage {
   }
 
   goToSignup():void {
-    this.navCtrl.navigateForward('SignupPage');//TODO
+    this.navCtrl.navigateForward('Signup');
   }
 
   goToResetPassword():void {
-    this.navCtrl.navigateForward('ResetPasswordPage');//TODO
+    this.navCtrl.navigateForward('ResetPassword');
   }
 
   async loginUser() {

@@ -5,7 +5,7 @@
     </ion-title>
   </ion-toolbar>
 </ion-header>
-
+<ion-content padding>
 <form [formGroup]="loginForm" (submit)="loginUser()" novalidate>
   <ion-item>
     <ion-label stacked>Email</ion-label>
@@ -43,3 +43,4 @@
 <button ion-button block clear (click)="goToResetPassword()">
   I forgot my password 🙁
 </button>
+</ion-content>

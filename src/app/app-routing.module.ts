@@ -7,6 +7,8 @@ const routes: Routes = [
   { path: 'ChooseRoute', loadChildren: './ChooseRoute/ChooseRoute.module#ChooseRoutePageModule' },
   { path: 'SignIn', loadChildren: './SignIn/SignIn.module#SignInModule' },
   { path: 'EditTrip', loadChildren: './edit-trip/edit-trip.module#EditTripPageModule' },
+  { path: 'ResetPassword', loadChildren: './reset-password/reset-password.module#ResetPasswordPageModule' },
+  { path: 'Signup', loadChildren: './signup/signup.module#SignupPageModule' },
 
 ];
 
