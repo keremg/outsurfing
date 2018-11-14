@@ -20,7 +20,7 @@ export class SignInPage {
 
   constructor(
     public navCtrl: NavController,
-    public loadingCtrl: LoadingController,
+    public loadingController: LoadingController,
     public alertCtrl: AlertController,
     public authService: AuthService,
     formBuilder: FormBuilder
@@ -45,7 +45,7 @@ export class SignInPage {
     this.navCtrl.navigateForward('ResetPasswordPage');//TODO
   }
 
-  loginUser():void {
+  async loginUser() {
     if (!this.loginForm.valid) {
       console.log(
         `Form is not valid yet, current value: ${this.loginForm.value}`
@@ -53,15 +53,18 @@ export class SignInPage {
     } else {
       const email = this.loginForm.value.email;
       const password = this.loginForm.value.password;
-
+      this.loading = await this.loadingController.create({
+      message: 'Hellooo',
+      duration: 2000
+    });
       this.authService.loginUser(email, password).then(
-        authData => {
-          this.loading.dismiss().then(async () => {
-            this.navCtrl.navigateRoot('home');
+        async (authData) => {
+          await this.loading.dismiss().then(async () => {
+            await this.navCtrl.navigateRoot('home');
           });
         },
-        error =>  {
-          this.loading.dismiss().then(async () => {
+        async (error) =>  {
+          await this.loading.dismiss().then(async () => {
             const alert = await this.alertCtrl.create({
               message: error.message,
               buttons: [{ text: 'Ok', role: 'cancel' }]
@@ -70,8 +73,8 @@ export class SignInPage {
           });
         }
       );
-      this.loading = this.loadingCtrl.create();
-      this.loading.present();
+
+      return await this.loading.present();
     }
   }
 }
