@@ -1,12 +1,158 @@
 <ion-header>
-  <ion-toolbar>
-    <ion-title>
+  <ion-toolbar padding>
+    <ion-label style="font-size: 3em;">
       OutSurfing
-    </ion-title>
+    </ion-label>
+    <ion-button style="float: right;">
+      Create a new trip
+    </ion-button>
   </ion-toolbar>
 </ion-header>
 
 <ion-content padding>
-  The world is your oyster.
-  <p>If you get lost, the <a target="_blank" rel="noopener" href="https://ionicframework.com/docs">docs</a> will be your guide.</p>
+  <ion-searchbar></ion-searchbar><!-- add filter https://www.joshmorony.com/high-performance-list-filtering-in-ionic-2/-->
+  <ion-grid wrap>
+    <ion-row>
+      <ion-col>
+        <ion-card class="trip" >
+          <ion-img src="/assets/trip1.jpg" class="tripImg"></ion-img>
+          <ion-card-header>
+            <ion-card-title style="font-size: 3em;">Trip #1</ion-card-title>
+            <!--need to be added from JS-->
+          </ion-card-header>
+          <ion-card-content>
+            <ion-grid padding wrap>
+              <ion-row>
+                <ion-col class="col" size="auto">
+                  <div class="tripData">Meeting Location and Distance</div>
+                </ion-col>
+                <ion-col class="col" size="auto">
+                  <div class="tripData">Starting Date and duration</div>
+                </ion-col>
+                <ion-col class="col" size="auto">
+                  <div class="tripData">isOrginizer</div>
+                </ion-col>
+                <ion-col class="col" size="auto">
+                  <div class="tripData">Short description</div>
+                </ion-col>
+                <ion-col class="col" size="auto">
+                  <div class="tripData">Route Score</div>
+                </ion-col>
+                <ion-col class="col" size="auto">
+                  <div class="tripData">Organizer score</div>
+                </ion-col>
+                <ion-col class="col" size="auto">
+                  <div class="tripData">Route Level</div>
+                </ion-col>
+                <ion-col class="col" size="auto">
+                  <div class="tripData">Route Type</div>
+                </ion-col>
+                <ion-col class="col" size="auto">
+                  <div class="tripData">Trip audience</div>
+                </ion-col>
+              </ion-row>
+            </ion-grid>
+
+          </ion-card-content>
+
+        </ion-card>
+      </ion-col>
+      <ion-col>
+        <ion-card class="trip" >
+          <ion-img src="/assets/trip1.jpg" class="tripImg"></ion-img>
+          <ion-card-header>
+            <ion-card-title style="font-size: 3em;">Trip #2</ion-card-title>
+            <!--need to be added from JS-->
+          </ion-card-header>
+          <ion-card-content>
+            <ion-grid padding wrap>
+              <ion-row>
+                <ion-col class="col" size="auto">
+                  <div class="tripData">Meeting Location and Distance</div>
+                </ion-col>
+                <ion-col class="col" size="auto">
+                  <div class="tripData">Starting Date and duration</div>
+                </ion-col>
+                <ion-col class="col" size="auto">
+                  <div class="tripData">isOrginizer</div>
+                </ion-col>
+                <ion-col class="col" size="auto">
+                  <div class="tripData">Short description</div>
+                </ion-col>
+                <ion-col class="col" size="auto">
+                  <div class="tripData">Route Score</div>
+                </ion-col>
+                <ion-col class="col" size="auto">
+                  <div class="tripData">Organizer score</div>
+                </ion-col>
+                <ion-col class="col" size="auto">
+                  <div class="tripData">Route Level</div>
+                </ion-col>
+                <ion-col class="col" size="auto">
+                  <div class="tripData">Route Type</div>
+                </ion-col>
+                <ion-col class="col" size="auto">
+                  <div class="tripData">Trip audience</div>
+                </ion-col>
+              </ion-row>
+            </ion-grid>
+
+          </ion-card-content>
+
+        </ion-card>
+      </ion-col>
+      <ion-col>
+        <ion-card class="trip" >
+          <ion-img src="/assets/trip1.jpg" class="tripImg"></ion-img>
+          <ion-card-header>
+            <ion-card-title style="font-size: 3em;">Trip #3</ion-card-title>
+            <!--need to be added from JS-->
+          </ion-card-header>
+          <ion-card-content>
+            <ion-grid padding wrap>
+              <ion-row>
+                <ion-col class="col" size="auto">
+                  <div class="tripData">Meeting Location and Distance</div>
+                </ion-col>
+                <ion-col class="col" size="auto">
+                  <div class="tripData">Starting Date and duration</div>
+                </ion-col>
+                <ion-col class="col" size="auto">
+                  <div class="tripData">isOrginizer</div>
+                </ion-col>
+                <ion-col class="col" size="auto">
+                  <div class="tripData">Short description</div>
+                </ion-col>
+                <ion-col class="col" size="auto">
+                  <div class="tripData">Route Score</div>
+                </ion-col>
+                <ion-col class="col" size="auto">
+                  <div class="tripData">Organizer score</div>
+                </ion-col>
+                <ion-col class="col" size="auto">
+                  <div class="tripData">Route Level</div>
+                </ion-col>
+                <ion-col class="col" size="auto">
+                  <div class="tripData">Route Type</div>
+                </ion-col>
+                <ion-col class="col" size="auto">
+                  <div class="tripData">Trip audience</div>
+                </ion-col>
+              </ion-row>
+            </ion-grid>
+
+          </ion-card-content>
+
+        </ion-card>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+
+
+  <ion-fab vertical="bottom" horizontal="start" slot="fixed">
+    <ion-fab-button>
+      <ion-icon name="arrow-dropup"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
+  <!-- add filter https://www.joshmorony.com/high-performance-list-filtering-in-ionic-2/-->
 </ion-content>
