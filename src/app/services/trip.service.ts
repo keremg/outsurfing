@@ -2,8 +2,8 @@ import { Injectable } from '@angular/core';
 import {AngularFirestore, AngularFirestoreCollection, AngularFirestoreDocument} from 'angularfire2/firestore';
 import {Observable} from 'rxjs';
 import {map} from 'rxjs/operators';
-import {Trip} from '../models/Trip';
 import { Action } from 'rxjs/internal/scheduler/Action';
+import {Trip} from '../models/Trip';
 
 
 @Injectable({

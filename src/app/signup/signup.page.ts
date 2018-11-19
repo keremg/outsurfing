@@ -6,9 +6,9 @@ import {
 } from '@ionic/angular';
 import { FormBuilder, FormGroup, Validators,FormsModule, ReactiveFormsModule  } from '@angular/forms';
 import { EmailValidator } from '../../validators/email';
-import { AuthService } from '../auth.service';
+import { AuthService } from '../services/auth.service';
 import {UserService} from '../services/user.service';
-import {User} from '../models/user';
+import {User} from '../models/User';
 
 
 @Component({
@@ -43,7 +43,16 @@ export class SignupPage {
       password: [
         "",
         Validators.compose([Validators.minLength(6), Validators.required])
-      ]
+      ],
+      name:[""],
+      birthDate:[""],
+      phone:[""],
+      gender:[""],
+      guide:[""],
+      about:[""],
+      tripLevel:[""],
+      tripDuration:[""],
+      peopleType:[""],
     });
   }
 

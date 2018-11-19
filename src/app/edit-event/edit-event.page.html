@@ -1,11 +1,11 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title>EditTrip</ion-title>
+    <ion-title>EditEvent</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content padding>
-  <form [formGroup]="EditTripForm" (submit)="saveTrip()" novalidate>
+  <form [formGroup]="EditEventForm" (submit)="saveEvent()" novalidate>
     <ion-item>
       <ion-label stacked>Email</ion-label>
       <ion-input formControlName="email" type="email" placeholder="Your email address" [class.invalid]="!signupForm.controls.email.valid && blur">
@@ -58,7 +58,7 @@
       </ion-input>
     </ion-item>
     <ion-item>
-      <ion-label>Trips level</ion-label>
+      <ion-label>Events level</ion-label>
       <ion-select multiple="true">
         <ion-select-option value="extreme">Extreme</ion-select-option>
         <ion-select-option value="advanced">Advanced</ion-select-option>
@@ -68,7 +68,7 @@
       </ion-select>
     </ion-item>
     <ion-item>
-      <ion-label>Trips Duration</ion-label>
+      <ion-label>Events Duration</ion-label>
       <ion-select multiple="true">
         <ion-select-option value="fewDays">Few days</ion-select-option>
         <ion-select-option value="campHike">Camp+hike</ion-select-option>

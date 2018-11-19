@@ -5,14 +5,8 @@ import { Routes, RouterModule } from '@angular/router';
 
 import { IonicModule } from '@ionic/angular';
 
-import { EditTripPage } from './edit-trip.page';
 
-const routes: Routes = [
-  {
-    path: '',
-    component: EditTripPage
-  }
-];
+import { ChooseTrip } from './ChooseTrip.page';
 
 @NgModule({
   imports: [
@@ -20,8 +14,13 @@ const routes: Routes = [
     FormsModule,
     ReactiveFormsModule,
     IonicModule,
-    RouterModule.forChild(routes)
+    RouterModule.forChild([
+      {
+        path: '',
+        component: ChooseTrip
+      }
+    ])
   ],
-  declarations: [EditTripPage]
+  declarations: [ChooseTrip]
 })
-export class EditTripPageModule {}
+export class ChooseTripPageModule {}

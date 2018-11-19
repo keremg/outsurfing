@@ -5,8 +5,14 @@ import { Routes, RouterModule } from '@angular/router';
 
 import { IonicModule } from '@ionic/angular';
 
+import { CreateTripPage } from './create-trip.page';
 
-import { ChooseRoute } from './ChooseRoute.page';
+const routes: Routes = [
+  {
+    path: '',
+    component: CreateTripPage
+  }
+];
 
 @NgModule({
   imports: [
@@ -14,13 +20,8 @@ import { ChooseRoute } from './ChooseRoute.page';
     FormsModule,
     ReactiveFormsModule,
     IonicModule,
-    RouterModule.forChild([
-      {
-        path: '',
-        component: ChooseRoute
-      }
-    ])
+    RouterModule.forChild(routes)
   ],
-  declarations: [ChooseRoute]
+  declarations: [CreateTripPage]
 })
-export class ChooseRoutePageModule {}
+export class CreateTripPageModule {}

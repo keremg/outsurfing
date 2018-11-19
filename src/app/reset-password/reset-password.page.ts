@@ -5,7 +5,7 @@ import {
 } from '@ionic/angular';
 import { FormBuilder, FormGroup, Validators,FormsModule, ReactiveFormsModule  } from '@angular/forms';
 import { EmailValidator } from '../../validators/email';
-import { AuthService } from '../auth.service';
+import { AuthService } from '../services/auth.service';
 
 @Component({
   selector: "page-reset-password",
