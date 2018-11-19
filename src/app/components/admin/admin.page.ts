@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import {UserService} from '../services/user.service';
+import {UserService} from '../../services/user.service';
 
 @Component({
   selector: 'app-admin',
@@ -26,5 +26,5 @@ export class AdminPage implements OnInit {
         console.log(this.user);
       });
   }
-*/ 
+*/
 }

@@ -5,8 +5,8 @@ import {
   NavController
 } from '@ionic/angular';
 import { FormBuilder, FormGroup, Validators,FormsModule, ReactiveFormsModule  } from '@angular/forms';
-import { EmailValidator } from '../../validators/email';
-import { AuthService } from '../services/auth.service';
+import { EmailValidator } from '../../../validators/email';
+import { AuthService } from '../../services/auth.service';
 @Component({
   selector: 'app-SignIn',
   templateUrl: 'SignIn.page.html',
