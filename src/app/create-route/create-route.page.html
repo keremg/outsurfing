@@ -1,11 +1,11 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title>EditTrip</ion-title>
+    <ion-title>CreateRoute</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content padding>
-  <form [formGroup]="EditTripForm" (submit)="saveTrip()" novalidate>
+  <form [formGroup]="createRouteForm" (submit)="createRoute()" novalidate>
     <ion-item>
       <ion-label stacked>Email</ion-label>
       <ion-input formControlName="email" type="email" placeholder="Your email address" [class.invalid]="!signupForm.controls.email.valid && blur">
@@ -94,7 +94,7 @@
 
 
     <ion-button block type="submit">
-      Save
+      Create
     </ion-button>
   </form>
 </ion-content>

@@ -9,6 +9,9 @@ const routes: Routes = [
   { path: 'EditTrip', loadChildren: './edit-trip/edit-trip.module#EditTripPageModule' },
   { path: 'ResetPassword', loadChildren: './reset-password/reset-password.module#ResetPasswordPageModule' },
   { path: 'Signup', loadChildren: './signup/signup.module#SignupPageModule' },
+  { path: 'CreateRoute', loadChildren: './create-route/create-route.module#CreateRoutePageModule' },
+  { path: 'ViewProfile', loadChildren: './view-profile/view-profile.module#ViewProfilePageModule' },
+  { path: 'TripReview', loadChildren: './trip-review/trip-review.module#TripReviewPageModule' },
 
 ];
 
