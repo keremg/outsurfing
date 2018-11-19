@@ -1,23 +1,26 @@
 import { Injectable } from '@angular/core';
-import * as firebase from 'firebase/app';
-// You don't need to import firebase/app either since it's being imported above
-import 'firebase/auth';
-import 'firebase/database';
+import { AngularFireAuth } from 'angularfire2/auth';
+import * as firebase from 'firebase';//import { Observable } from 'rxjs/Observable';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
+  //user: Observable<firebase.User>;
 
-  constructor() { }
+  constructor(private firebaseAuth: AngularFireAuth) {
+    //this.user = firebaseAuth.authState;
+  }
 
   loginUser(email: string, password: string): Promise<any> {
-    return firebase.auth().signInWithEmailAndPassword(email, password);
+    return this.firebaseAuth
+      .auth
+      .signInWithEmailAndPassword(email, password);
   }
 
   signupUser(email: string, password: string): Promise<any> {
-    return firebase
-      .auth()
+    return this.firebaseAuth
+      .auth
       .createUserWithEmailAndPassword(email, password)
       .then(newUserCredential => {
         firebase
@@ -31,16 +34,20 @@ export class AuthService {
       });
   }
 
+  getCurrentUser(){
+    return this.firebaseAuth.auth.currentUser;
+  }
+
   resetPassword(email:string): Promise<void> {
-    return firebase.auth().sendPasswordResetEmail(email);
+    return this.firebaseAuth.auth.sendPasswordResetEmail(email);
   }
 
   logoutUser(): Promise<void> {
-    const userId: string = firebase.auth().currentUser.uid;
-    firebase
+    const userId: string = this.firebaseAuth.auth.currentUser.uid;
+    /*firebase
       .database()
       .ref(`/userProfile/${userId}`)
-      .off();
-    return firebase.auth().signOut();
+      .off();*/
+    return this.firebaseAuth.auth.signOut();
   }
 }

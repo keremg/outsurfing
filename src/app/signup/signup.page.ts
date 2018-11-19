@@ -7,6 +7,9 @@ import {
 import { FormBuilder, FormGroup, Validators,FormsModule, ReactiveFormsModule  } from '@angular/forms';
 import { EmailValidator } from '../../validators/email';
 import { AuthService } from '../auth.service';
+import {UserService} from '../services/user.service';
+import {User} from '../models/user';
+
 
 @Component({
   selector: 'app-signup',
@@ -17,12 +20,20 @@ export class SignupPage {
   public signupForm: FormGroup;
   public loading;
 
+  Testuser = {
+    firstName: "adi",
+    lastName: "caspi"
+  };
+  users:User[];
+  user:User;
+
   constructor(
     public navCtrl: NavController,
     public authService: AuthService,
     public loadingCtrl: LoadingController,
     public alertCtrl: AlertController,
-    formBuilder: FormBuilder
+    formBuilder: FormBuilder,
+    private userService:UserService
   ) {
     this.signupForm = formBuilder.group({
       email: [
@@ -48,6 +59,9 @@ export class SignupPage {
     this.authService.signupUser(email, password).then(
       user => {
         this.loading.dismiss().then(async () => {
+          this.addUser(this.authService.getCurrentUser());
+
+
           await this.navCtrl.navigateRoot('');
         });
       },
@@ -65,4 +79,9 @@ export class SignupPage {
     await this.loading.present();
   }
 }
+
+  addUser (user: any){
+    //this.userService.addUsers(user);
+    }
+
 }

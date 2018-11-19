@@ -12,6 +12,8 @@ const routes: Routes = [
   { path: 'CreateRoute', loadChildren: './create-route/create-route.module#CreateRoutePageModule' },
   { path: 'ViewProfile', loadChildren: './view-profile/view-profile.module#ViewProfilePageModule' },
   { path: 'TripReview', loadChildren: './trip-review/trip-review.module#TripReviewPageModule' },
+  { path: 'EditProfile', loadChildren: './edit-profile/edit-profile.module#EditProfilePageModule' },
+  { path: 'Admin', loadChildren: './admin/admin.module#AdminPageModule' },
 
 ];
 
