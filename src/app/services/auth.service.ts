@@ -6,48 +6,40 @@ import * as firebase from 'firebase';//import { Observable } from 'rxjs/Observab
   providedIn: 'root'
 })
 export class AuthService {
-  //user: Observable<firebase.User>;
 
-  constructor(private firebaseAuth: AngularFireAuth) {
-    //this.user = firebaseAuth.authState;
-  }
+  constructor(private firebaseAuth: AngularFireAuth) {  }
 
-  loginUser(email: string, password: string): Promise<any> {
+  async loginUser(email: string, password: string) {
     return this.firebaseAuth
       .auth
       .signInWithEmailAndPassword(email, password);
   }
 
-  signupUser(email: string, password: string): Promise<any> {
-    return this.firebaseAuth
-      .auth
-      .createUserWithEmailAndPassword(email, password)
-      .then(newUserCredential => {
-        firebase
-          .database()
-          .ref(`/userProfile/${newUserCredential.user.uid}/email`)
-          .set(email);
-      })
-      .catch(error => {
-        console.error(error);
-        throw new Error(error);
-      });
+  async signupUser(email: string, password: string) {
+    try {
+      return this.firebaseAuth
+        .auth
+        .createUserWithEmailAndPassword(email, password)
+    }
+    catch (error) {
+      console.error(error);
+      throw new Error(error);
+    }
   }
 
-  getCurrentUser(){
+  async getCurrentUser() {
     return this.firebaseAuth.auth.currentUser;
   }
 
-  resetPassword(email:string): Promise<void> {
+  async deleteCurrentUser(){
+    return this.firebaseAuth.auth.currentUser.delete();
+  }
+
+  async resetPassword(email: string) {
     return this.firebaseAuth.auth.sendPasswordResetEmail(email);
   }
 
-  logoutUser(): Promise<void> {
-    const userId: string = this.firebaseAuth.auth.currentUser.uid;
-    /*firebase
-      .database()
-      .ref(`/userProfile/${userId}`)
-      .off();*/
+  async logoutUser() {
     return this.firebaseAuth.auth.signOut();
   }
 }

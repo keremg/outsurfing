@@ -1,13 +1,16 @@
 export interface User {
     firstName: string;
     lastName: string;
-    password: string;
-    age: number;
+    userName: string;
+    about:string,
     email: string;
-    cancellation: number;
-    gender: string;
+    cancellations: number;
+    gender: number; //0 is male, 1 is female, 2 is other
     isGuide: boolean;
     phone: string;
-    username: string;
-    id: string;
+
+    //birthDate:date,
+    //tripLevel:[""],
+    //tripDuration:[""],
+    //peopleType:[""],
 }
