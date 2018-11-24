@@ -42,4 +42,12 @@ export class AuthService {
   async logoutUser() {
     return this.firebaseAuth.auth.signOut();
   }
+
+  isLoggedIn() {
+  if (this.firebaseAuth.auth.currentUser == null ) {
+      return false;
+    } else {
+      return true;
+    }
+  }
 }
