@@ -1,158 +1,257 @@
 <ion-header>
-  <ion-toolbar padding-horizontal>
-    <ion-label style="font-size: 3em;">
-      OutSurfing
-    </ion-label>
-    <ion-button style="float: right;">
-      Create a new event
-    </ion-button>
-  </ion-toolbar>
+    <ion-toolbar padding-horizontal>
+        <ion-label style="font-size: 3em;">
+            OutSurfing
+        </ion-label>
+        <ion-button style="float: right;">
+            Create a new event
+        </ion-button>
+    </ion-toolbar>
 </ion-header>
 
 <ion-content padding>
-  <ion-searchbar></ion-searchbar><!-- add filter https://www.joshmorony.com/high-performance-list-filtering-in-ionic-2/-->
-  <ion-grid wrap>
-    <ion-row>
-      <ion-col>
-        <ion-card class="event" >
-          <ion-img src="/assets/event1.jpg" class="eventImg"></ion-img>
-          <ion-card-header>
-            <ion-card-title style="font-size: 3em;">Event #1</ion-card-title>
-            <!--need to be added from JS-->
-          </ion-card-header>
-          <ion-card-content>
-            <ion-grid padding wrap>
-              <ion-row>
-                <ion-col class="col" size="auto">
-                  <div class="eventData">Meeting Location and Distance</div>
-                </ion-col>
-                <ion-col class="col" size="auto">
-                  <div class="eventData">Starting Date and duration</div>
-                </ion-col>
-                <ion-col class="col" size="auto">
-                  <div class="eventData">isOrginizer</div>
-                </ion-col>
-                <ion-col class="col" size="auto">
-                  <div class="eventData">Short description</div>
-                </ion-col>
-                <ion-col class="col" size="auto">
-                  <div class="eventData">Trip Score</div>
-                </ion-col>
-                <ion-col class="col" size="auto">
-                  <div class="eventData">Organizer score</div>
-                </ion-col>
-                <ion-col class="col" size="auto">
-                  <div class="eventData">Trip Level</div>
-                </ion-col>
-                <ion-col class="col" size="auto">
-                  <div class="eventData">Trip Type</div>
-                </ion-col>
-                <ion-col class="col" size="auto">
-                  <div class="eventData">Event audience</div>
-                </ion-col>
-              </ion-row>
-            </ion-grid>
+    <ion-searchbar></ion-searchbar>
+    <!-- add filter https://www.joshmorony.com/high-performance-list-filtering-in-ionic-2/-->
+    <ion-infinite-scroll>
+        <ion-card class="event">
 
-          </ion-card-content>
+            <ion-card-header>
+                <ion-card-title style="font-size: 3em;">Event Zeelim River - Upper part</ion-card-title>
+                <ion-card-subtitle>
+                    <ion-label padding-end>24/11/2018 08:00am</ion-label>
+                    <ion-label padding-end>1 day</ion-label>
+                    <ion-label padding-end>Meeting: Tel Aviv, Ben Yehuda 220</ion-label>
+                    <ion-label padding-end>Distance to meeting: 5km</ion-label>
+                    <ion-label padding-end>Distance to trip: 70km</ion-label>
+                </ion-card-subtitle>
+                <!--need to be added from JS-->
+            </ion-card-header>
+            <ion-card-content>
+                <ion-grid>
+                    <ion-row>
+                        <ion-col size="4" push-md="8">
+                            <ion-img src="/assets/event1.jpg" class="eventImg"></ion-img>
+                            <ion-list>
+                                <ion-item>
+                                    <ion-label>
+                                        Trip Score: 9 (17 reviewers)
+                                    </ion-label>
+                                    <ion-label>
+                                        Level: Extreme
+                                    </ion-label>
+                                </ion-item>
+                                <ion-item>
+                                    <ion-label>
+                                        Type: Water, Hiking, Canyon, Swiming
+                                    </ion-label>
+                                </ion-item>
+                            </ion-list>
 
-        </ion-card>
-      </ion-col>
-      <ion-col>
-        <ion-card class="event" >
-          <ion-img src="/assets/event1.jpg" class="eventImg"></ion-img>
-          <ion-card-header>
-            <ion-card-title style="font-size: 3em;">Event #2</ion-card-title>
-            <!--need to be added from JS-->
-          </ion-card-header>
-          <ion-card-content>
-            <ion-grid padding wrap>
-              <ion-row>
-                <ion-col class="col" size="auto">
-                  <div class="eventData">Meeting Location and Distance</div>
-                </ion-col>
-                <ion-col class="col" size="auto">
-                  <div class="eventData">Starting Date and duration</div>
-                </ion-col>
-                <ion-col class="col" size="auto">
-                  <div class="eventData">isOrginizer</div>
-                </ion-col>
-                <ion-col class="col" size="auto">
-                  <div class="eventData">Short description</div>
-                </ion-col>
-                <ion-col class="col" size="auto">
-                  <div class="eventData">Trip Score</div>
-                </ion-col>
-                <ion-col class="col" size="auto">
-                  <div class="eventData">Organizer score</div>
-                </ion-col>
-                <ion-col class="col" size="auto">
-                  <div class="eventData">Trip Level</div>
-                </ion-col>
-                <ion-col class="col" size="auto">
-                  <div class="eventData">Trip Type</div>
-                </ion-col>
-                <ion-col class="col" size="auto">
-                  <div class="eventData">Event audience</div>
-                </ion-col>
-              </ion-row>
-            </ion-grid>
+                        </ion-col>
+                        <ion-col size="8" pull-md="4">
+                            <ion-grid wrap>
+                                <ion-row>
+                                    <ion-col size="3">
+                                        <ion-img src="/assets/haham.jpg"></ion-img>
+                                    </ion-col>
+                                    <ion-col size="6">
+                                        <ion-item>
+                                            Organizer: Hatuka, Age: 35
+                                        </ion-item>
+                                        <ion-item>
+                                            Is Guide: Yes
+                                        </ion-item>
+                                        <ion-item>
+                                            Guide Score: 8 (544 reviews)
+                                        </ion-item>
+                                        <ion-item>
+                                            Traveler Score: 2 (12 reviews)
+                                        </ion-item>
+                                    </ion-col>
+                                    <ion-col size="3">
+                                        <ion-item>
+                                            5 participants
+                                        </ion-item>
+                                        <ion-grid wrap>
+                                            <ion-row size="12">
+                                                <ion-col size="4">
+                                                    <ion-img src="/assets/haham.jpg"></ion-img>
+                                                </ion-col>
+                                                <ion-col size="4">
+                                                    <ion-img src="/assets/haham.jpg"></ion-img>
+                                                </ion-col>
+                                                <ion-col size="4">
+                                                    <ion-img src="/assets/haham.jpg"></ion-img>
+                                                </ion-col>
+                                            </ion-row>
+                                            <ion-row size="12">
+                                                <ion-col size="4">
+                                                    <ion-img src="/assets/haham.jpg"></ion-img>
+                                                </ion-col>
+                                                <ion-col size="4">
+                                                    <ion-img src="/assets/haham.jpg"></ion-img>
+                                                </ion-col>
+                                            </ion-row>
+                                        </ion-grid>
 
-          </ion-card-content>
+                                    </ion-col>
 
-        </ion-card>
-      </ion-col>
-      <ion-col>
-        <ion-card class="event" >
-          <ion-img src="/assets/event1.jpg" class="eventImg"></ion-img>
-          <ion-card-header>
-            <ion-card-title style="font-size: 3em;">Event #3</ion-card-title>
-            <!--need to be added from JS-->
-          </ion-card-header>
-          <ion-card-content>
-            <ion-grid padding wrap>
-              <ion-row>
-                <ion-col class="col" size="auto">
-                  <div class="eventData">Meeting Location and Distance</div>
-                </ion-col>
-                <ion-col class="col" size="auto">
-                  <div class="eventData">Starting Date and duration</div>
-                </ion-col>
-                <ion-col class="col" size="auto">
-                  <div class="eventData">isOrginizer</div>
-                </ion-col>
-                <ion-col class="col" size="auto">
-                  <div class="eventData">Short description</div>
-                </ion-col>
-                <ion-col class="col" size="auto">
-                  <div class="eventData">Trip Score</div>
-                </ion-col>
-                <ion-col class="col" size="auto">
-                  <div class="eventData">Organizer score</div>
-                </ion-col>
-                <ion-col class="col" size="auto">
-                  <div class="eventData">Trip Level</div>
-                </ion-col>
-                <ion-col class="col" size="auto">
-                  <div class="eventData">Trip Type</div>
-                </ion-col>
-                <ion-col class="col" size="auto">
-                  <div class="eventData">Event audience</div>
-                </ion-col>
-              </ion-row>
-            </ion-grid>
+                                </ion-row>
+                                <ion-row>
+                                    <ion-col>
+                                        <ion-item>
+                                            (Short) Description: Join us to the beautiful Zeelim river, for a day-hike in a canyon with beautiful water pools, boulders, cliffs, and desert wild life.
+                                            We will start at Zfira-pool at the upper-Zeelim and walk through the whole canyon until the dead sea.
+                                            The trip requires good shape, as we will have cool adventures such as using ropes, metal ladders, and swimming through water pools
+                                        </ion-item>
+                                    </ion-col>
+                                </ion-row>
+                                <ion-row>
+                                    <ion-col>
+                                        <ion-item>
+                                            <ion-label>
+                                                Price: Free  (or 50$ per person)
+                                            </ion-label>
+                                            <ion-label>
+                                                Transportation: private cars
+                                            </ion-label>
+                                            <ion-label>
+                                                available places in cars: 3
+                                            </ion-label>
+                                            <ion-label>
+                                                Audience: Single, Couples
+                                            </ion-label>
+                                            <ion-label>
+                                                Equipment: hiking shoes, 3 liters of water, food for the day, sun screen, short sleeves, long sleeves, flash-lights
+                                            </ion-label>
 
-          </ion-card-content>
+                                        </ion-item>
+                                    </ion-col>
+                                </ion-row>
+                            </ion-grid>
+                        </ion-col>
+                    </ion-row>
+                </ion-grid>
+
+            </ion-card-content>
 
         </ion-card>
-      </ion-col>
-    </ion-row>
-  </ion-grid>
+
+        <ion-card class="event">
+
+            <ion-card-header>
+                <ion-card-title style="font-size: 3em;">Event #2</ion-card-title>
+                <ion-card-subtitle>24/11/2018</ion-card-subtitle>
+                <!--need to be added from JS-->
+            </ion-card-header>
+            <ion-card-content>
+                <ion-grid>
+                    <ion-row>
+                        <ion-col size="4" push-md="8">
+                            <ion-img src="/assets/event1.jpg" class="eventImg"></ion-img>
+                        </ion-col>
+                        <ion-col size="8" pull-md="4">
+                            <ion-grid padding wrap>
+                                <ion-row>
+                                    <ion-col class="col" size="auto">
+                                        <div class="eventData">Meeting Location and Distance</div>
+                                    </ion-col>
+                                    <ion-col class="col" size="auto">
+                                        <div class="eventData">Starting Date and duration</div>
+                                    </ion-col>
+                                    <ion-col class="col" size="auto">
+                                        <div class="eventData">isOrginizer</div>
+                                    </ion-col>
+                                    <ion-col class="col" size="auto">
+                                        <div class="eventData">Short description</div>
+                                    </ion-col>
+                                    <ion-col class="col" size="auto">
+                                        <div class="eventData">Trip Score</div>
+                                    </ion-col>
+                                    <ion-col class="col" size="auto">
+                                        <div class="eventData">Organizer score</div>
+                                    </ion-col>
+                                    <ion-col class="col" size="auto">
+                                        <div class="eventData">Trip Level</div>
+                                    </ion-col>
+                                    <ion-col class="col" size="auto">
+                                        <div class="eventData">Trip Type</div>
+                                    </ion-col>
+                                    <ion-col class="col" size="auto">
+                                        <div class="eventData">Event audience</div>
+                                    </ion-col>
+                                </ion-row>
+                            </ion-grid>
+                        </ion-col>
+                    </ion-row>
+                </ion-grid>
+            </ion-card-content>
+
+        </ion-card>
+
+        <ion-card class="event">
+
+            <ion-card-header>
+                <ion-card-title style="font-size: 3em;">Event #3</ion-card-title>
+                <ion-card-subtitle>24/11/2018</ion-card-subtitle>
+                <!--need to be added from JS-->
+            </ion-card-header>
+            <ion-card-content>
+                <ion-grid>
+                    <ion-row>
+                        <ion-col size="4" push-md="8">
+                            <ion-img src="/assets/event1.jpg" class="eventImg"></ion-img>
+                        </ion-col>
+                        <ion-col size="8" pull-md="4">
+                            <ion-grid padding wrap>
+                                <ion-row>
+                                    <ion-col class="col" size="auto">
+                                        <div class="eventData">Meeting Location and Distance</div>
+                                    </ion-col>
+                                    <ion-col class="col" size="auto">
+                                        <div class="eventData">Starting Date and duration</div>
+                                    </ion-col>
+                                    <ion-col class="col" size="auto">
+                                        <div class="eventData">isOrginizer</div>
+                                    </ion-col>
+                                    <ion-col class="col" size="auto">
+                                        <div class="eventData">Short description</div>
+                                    </ion-col>
+                                    <ion-col class="col" size="auto">
+                                        <div class="eventData">Trip Score</div>
+                                    </ion-col>
+                                    <ion-col class="col" size="auto">
+                                        <div class="eventData">Organizer score</div>
+                                    </ion-col>
+                                    <ion-col class="col" size="auto">
+                                        <div class="eventData">Trip Level</div>
+                                    </ion-col>
+                                    <ion-col class="col" size="auto">
+                                        <div class="eventData">Trip Type</div>
+                                    </ion-col>
+                                    <ion-col class="col" size="auto">
+                                        <div class="eventData">Event audience</div>
+                                    </ion-col>
+                                </ion-row>
+                            </ion-grid>
+                        </ion-col>
+                    </ion-row>
+                </ion-grid>
+            </ion-card-content>
+
+        </ion-card>
+
+        <ion-infinite-scroll-content
+                loadingSpinner="bubbles"
+                loadingText="Loading more data...">
+        </ion-infinite-scroll-content>
+    </ion-infinite-scroll>
 
 
-  <ion-fab vertical="bottom" horizontal="start" slot="fixed">
-    <ion-fab-button>
-      <ion-icon name="arrow-dropup"></ion-icon>
-    </ion-fab-button>
-  </ion-fab>
-  <!-- add filter https://www.joshmorony.com/high-performance-list-filtering-in-ionic-2/-->
+    <ion-fab vertical="bottom" horizontal="start" slot="fixed">
+        <ion-fab-button>
+            <ion-icon name="arrow-dropup"></ion-icon>
+        </ion-fab-button>
+    </ion-fab>
+    <!-- add filter https://www.joshmorony.com/high-performance-list-filtering-in-ionic-2/-->
 </ion-content>
