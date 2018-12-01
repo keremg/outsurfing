@@ -9,7 +9,11 @@
     <ion-item>
       <ion-label *ngIf="!signupForm.controls.email.valid" color="danger" stacked>*</ion-label>
       <ion-label stacked>Email</ion-label>
+<<<<<<< HEAD
       <ion-input formControlName="email" type="email" placeholder="Email" [(ngModel)]="email" [class.invalid]="!signupForm.controls.email.valid && blur">
+=======
+      <ion-input formControlName="email" type="email" placeholder="Your email address" [class.invalid]="!signupForm.controls.email.valid && blur">
+>>>>>>> f19f8ac63a4537e68dcc98f1ae236dc2a94b0de0
       </ion-input>
     </ion-item>
       <ion-label color="danger" class="error-message" *ngIf="!signupForm.controls.email.valid && signupForm.controls.email.touched" >

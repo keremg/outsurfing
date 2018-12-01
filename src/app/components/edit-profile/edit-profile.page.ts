@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 import { Component , OnInit } from '@angular/core';
+=======
+import { Component } from '@angular/core';
+>>>>>>> f19f8ac63a4537e68dcc98f1ae236dc2a94b0de0
 import {
   AlertController,
   LoadingController,
@@ -16,11 +20,18 @@ import { User } from '../../models/User';
   templateUrl: './edit-profile.page.html',
   styleUrls: ['./edit-profile.page.scss'],
 })
+<<<<<<< HEAD
 export class EditProfilePage implements OnInit {
   public signupForm: FormGroup;
   public loading;
   public email: string;
   
+=======
+export class EditProfilePage {
+  public signupForm: FormGroup;
+  public loading;
+
+>>>>>>> f19f8ac63a4537e68dcc98f1ae236dc2a94b0de0
   constructor(
     public navCtrl: NavController,
     public authService: AuthService,
@@ -46,10 +57,13 @@ export class EditProfilePage implements OnInit {
       peopleType: [""],
     });
   }
+<<<<<<< HEAD
   ngOnInit(){
    let user = this.authService.getCurrentUser();
    console.log(user)
   }
+=======
+>>>>>>> f19f8ac63a4537e68dcc98f1ae236dc2a94b0de0
 
   async signupUser() {
     if (!this.signupForm.valid) {
