@@ -6,7 +6,7 @@ import { Routes, RouterModule } from '@angular/router';
 import { IonicModule } from '@ionic/angular';
 
 
-import { ChooseTrip } from './ChooseTrip.page';
+import { ChooseRoute } from './ChooseRoute.page';
 
 @NgModule({
   imports: [
@@ -17,10 +17,10 @@ import { ChooseTrip } from './ChooseTrip.page';
     RouterModule.forChild([
       {
         path: '',
-        component: ChooseTrip
+        component: ChooseRoute
       }
     ])
   ],
-  declarations: [ChooseTrip]
+  declarations: [ChooseRoute]
 })
-export class ChooseTripPageModule {}
+export class ChooseRoutePageModule {}
