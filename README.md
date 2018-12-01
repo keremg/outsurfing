@@ -32,7 +32,9 @@ check by browsing to http://localhost:8100/
 Updating Git:
 ==============
 after you've made changes, do the following:
-1. for any new file (not updated one, but totally new):
+0. Assuming you are on master branch (locally on our pc) and made changes to files (and maybe added few new files)
+
+1. for any new file that you've added (not updated one, but totally new):
 git add <filename>
 
 2. do this to put all changes on the 'side':
