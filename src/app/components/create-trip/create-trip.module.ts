@@ -4,8 +4,9 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { Routes, RouterModule } from '@angular/router';
 
 import { IonicModule } from '@ionic/angular';
-
+// import { ImagePicker } from '@ionic-native/image-picker';
 import { CreateTripPage } from './create-trip.page';
+import { Validators, FormBuilder, FormGroup } from '@angular/forms';
 
 const routes: Routes = [
   {
@@ -20,6 +21,7 @@ const routes: Routes = [
     FormsModule,
     ReactiveFormsModule,
     IonicModule,
+
     RouterModule.forChild(routes)
   ],
   declarations: [CreateTripPage]

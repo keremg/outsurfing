@@ -1,5 +1,7 @@
 {
   "name": "outsurfing",
-  "integrations": {},
+  "integrations": {
+    "cordova": {}
+  },
   "type": "angular"
 }

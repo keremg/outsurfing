@@ -1,33 +1,255 @@
 <ion-header>
-  <ion-toolbar>
-    <ion-title>CreateTrip</ion-title>
-  </ion-toolbar>
+  <ion-toolbar> <ion-title>Create Trip</ion-title> </ion-toolbar>
 </ion-header>
 
 <ion-content padding>
   <form [formGroup]="createTripForm" (submit)="createTrip()" novalidate>
     <ion-item>
-      <ion-label stacked>Email</ion-label>
-      <ion-input formControlName="email" type="email" placeholder="Your email address" [class.invalid]="!signupForm.controls.email.valid && blur">
+      <ion-label
+        *ngIf="!createTripForm.controls.tripName.valid"
+        color="danger"
+        stacked
+        >*</ion-label
+      >
+      <ion-label stacked>Trip name</ion-label>
+      <ion-input
+        formControlName="tripName"
+        type="text"
+        placeholder="Trip name"
+        [class.invalid]="!createTripForm.controls.tripName.valid && blur"
+      >
       </ion-input>
     </ion-item>
-    <ion-item class="error-message" *ngIf="!signupForm.controls.email.valid
-    && signupForm.controls.email.touched">
-      <p>Please enter a valid email.</p>
+    <ion-item
+      class="error-message"
+      *ngIf="
+        !createTripForm.controls.tripName.valid &&
+        createTripForm.controls.tripName.touched
+      "
+    >
+      <p>Please enter trip name</p>
     </ion-item>
 
     <ion-item>
-      <ion-label stacked>Password</ion-label>
-      <ion-input formControlName="password" type="password" placeholder="Your password" [class.invalid]="!signupForm.controls.password.valid && blur">
+      <ion-label
+        *ngIf="!createTripForm.controls.creatorName.valid"
+        color="danger"
+        stacked
+        >*</ion-label
+      >
+      <ion-label stacked>Your name</ion-label>
+      <ion-input
+        formControlName="creatorName"
+        type="text"
+        placeholder="Your name"
+        class="error-message"
+        [ngClass]="{
+          'is-invalid': createTripForm.controls.creatorName.errors
+        }"
+      >
       </ion-input>
     </ion-item>
-    <ion-item class="error-message" *ngIf="!signupForm.controls.password.valid  &&
-    signupForm.controls.password.touched">
-      <p>Your password needs more than 6 characters.</p>
+
+    <ion-item>
+      <ion-label
+        *ngIf="!createTripForm.controls.shortDescription.valid"
+        color="danger"
+        stacked
+        >*</ion-label
+      >
+      <ion-label stacked>Short description</ion-label>
+      <ion-input
+        formControlName="shortDescription"
+        type="text"
+        placeholder="Short description"
+        [class.invalid]="
+          !createTripForm.controls.shortDescription.valid && blur
+        "
+      >
+      </ion-input>
     </ion-item>
 
-    <ion-button block type="submit">
-      Create
-    </ion-button>
+    <ion-item>
+      <ion-label
+        *ngIf="!createTripForm.controls.tripName.valid"
+        color="danger"
+        stacked
+        >*</ion-label
+      >
+      <ion-label stacked>Your phone number</ion-label>
+      <ion-input
+        formControlName="phoneNumber"
+        type="number"
+        placeholder="Your phone number"
+        [class.invalid]="!createTripForm.controls.phoneNumber.valid && blur"
+      >
+      </ion-input>
+    </ion-item>
+
+    <ion-item
+      class="error-message"
+      *ngIf="
+        !createTripForm.controls.phoneNumber.valid &&
+        createTripForm.controls.phoneNumber.touched
+      "
+    >
+      <p>Please enter your phone number</p>
+    </ion-item>
+
+    <ion-item>
+      <ion-label stacked>Are you a guide?</ion-label>
+      <ion-checkbox
+        formControlName="isGuide"
+        color="primary"
+        checked="false"
+      ></ion-checkbox>
+    </ion-item>
+
+    <ion-item>
+      <ion-label stacked>Trip price</ion-label>
+      <ion-input
+        formControlName="tripPrice"
+        type="number"
+        placeholder="Trip price"
+        [class.invalid]="!createTripForm.controls.tripPrice.valid && blur"
+      >
+      </ion-input>
+    </ion-item>
+
+    <ion-item
+      class="error-message"
+      *ngIf="
+        !createTripForm.controls.tripPrice.valid &&
+        createTripForm.controls.tripPrice.touched
+      "
+    >
+    </ion-item>
+
+    <ion-item>
+      <ion-label stacked>Entrance fee</ion-label>
+      <ion-input
+        formControlName="fee"
+        type="number"
+        placeholder="Entrance fee"
+        [class.invalid]="!createTripForm.controls.fee.valid && blur"
+      >
+      </ion-input>
+    </ion-item>
+
+    <ion-item
+      class="error-message"
+      *ngIf="
+        !createTripForm.controls.tripPrice.valid &&
+        createTripForm.controls.tripPrice.touched
+      "
+    >
+    </ion-item>
+
+    <ion-item>
+      <ion-label stacked>Start location</ion-label>
+      <ion-input
+        formControlName="startLocation"
+        type="startLocation"
+        placeholder="Start location"
+        [class.invalid]="!createTripForm.controls.startLocation.valid && blur"
+      >
+      </ion-input>
+    </ion-item>
+
+    <ion-item
+      class="error-message"
+      *ngIf="
+        !createTripForm.controls.startLocation.valid &&
+        createTripForm.controls.startLocation.touched
+      "
+    >
+    </ion-item>
+
+    <ion-item>
+      <ion-label stacked>Upload photos</ion-label>
+      <ion-input
+        formControlName="photos"
+        type="file"
+        (change)="onFileSelected($event)"
+        placeholder="upload photos"
+      >
+        <button type="button" (click)="onUpload()">Upload</button>
+      </ion-input>
+    </ion-item>
+
+    <ion-item
+      class="error-message"
+      *ngIf="
+        !createTripForm.controls.startLocation.valid &&
+        createTripForm.controls.startLocation.touched
+      "
+    >
+    </ion-item>
+    <ion-item>
+      <ion-label>Recommended months</ion-label>
+      <ion-select formControlName="recMonths" multiple="true">
+        <ion-select-option value="jan">January</ion-select-option>
+        <ion-select-option value="feb">February</ion-select-option>
+        <ion-select-option value="mar">March</ion-select-option>
+        <ion-select-option value="apr">April</ion-select-option>
+        <ion-select-option value="may">May</ion-select-option>
+        <ion-select-option value="jun">June</ion-select-option>
+        <ion-select-option value="jul">July</ion-select-option>
+        <ion-select-option value="aug">August</ion-select-option>
+        <ion-select-option value="sep">September</ion-select-option>
+        <ion-select-option value="oct">October</ion-select-option>
+        <ion-select-option value="nov">Novemeber</ion-select-option>
+        <ion-select-option value="dec">December</ion-select-option>
+      </ion-select>
+    </ion-item>
+
+    <ion-item>
+      <ion-label stacked>Long description</ion-label>
+      <ion-input
+        formControlName="longDescription"
+        type="longDescription"
+        placeholder="Long description"
+        [class.invalid]="!createTripForm.controls.longDescription.valid && blur"
+      >
+      </ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label
+        *ngIf="!createTripForm.controls.tripLevel.valid"
+        color="danger"
+        stacked
+        >*</ion-label
+      >
+
+      <ion-label>Trip level</ion-label>
+      <ion-select formControlName="tripLevel" multiple="false">
+        <ion-select-option value="extreme">Extreme</ion-select-option>
+        <ion-select-option value="advanced">Advanced</ion-select-option>
+        <ion-select-option value="average" selected>Average</ion-select-option>
+        <ion-select-option value="easy">Easy</ion-select-option>
+        <ion-select-option value="picnic">Picnic</ion-select-option>
+      </ion-select>
+    </ion-item>
+
+    <ion-item>
+      <ion-label>Properties</ion-label>
+      <ion-select formControlName="properties" multiple="true">
+        <ion-select-option value="water">Water</ion-select-option>
+        <ion-select-option value="swimming">Swimming</ion-select-option>
+        <ion-select-option value="mountains" selected
+          >Mountains</ion-select-option
+        >
+        <ion-select-option value="bicycles">Bicycles</ion-select-option>
+        <ion-select-option value="forest">Forest</ion-select-option>
+        <ion-select-option value="desert">Desert</ion-select-option>
+        <ion-select-option value="oasis">Oasis</ion-select-option>
+        <ion-select-option value="historical">Historical</ion-select-option>
+        <ion-select-option value="archeology">Archeology</ion-select-option>
+        <ion-select-option value="ropes">Ropes</ion-select-option>
+      </ion-select>
+    </ion-item>
+
+    <ion-button block type="submit"> Create </ion-button>
   </form>
 </ion-content>
