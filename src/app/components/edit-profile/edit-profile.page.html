@@ -5,5 +5,127 @@
 </ion-header>
 
 <ion-content padding>
+  <form [formGroup]="signupForm" (submit)="signupUser()" novalidate>
+    <ion-item>
+      <ion-label *ngIf="!signupForm.controls.email.valid" color="danger" stacked>*</ion-label>
+      <ion-label stacked>Email</ion-label>
+      <ion-input formControlName="email" type="email" placeholder="Email" [(ngModel)]="email" [class.invalid]="!signupForm.controls.email.valid && blur">
+      </ion-input>
+    </ion-item>
+      <ion-label color="danger" class="error-message" *ngIf="!signupForm.controls.email.valid && signupForm.controls.email.touched" >
+        Please enter a valid email.
+      </ion-label>
 
+    <ion-item>
+      <ion-label *ngIf="!signupForm.controls.password.valid" color="danger" stacked>*</ion-label>
+      <ion-label stacked>Password</ion-label>
+      <ion-input formControlName="password" type="password" placeholder="Your password" [class.invalid]="!signupForm.controls.password.valid && blur">
+      </ion-input>
+    </ion-item>
+    <ion-label color="danger" class="error-message" *ngIf="!signupForm.controls.password.valid && signupForm.controls.password.touched" >
+      Your password needs more than 6 characters.
+    </ion-label>
+
+    <ion-item>
+      <ion-label *ngIf="!signupForm.controls.firstName.valid" color="danger" stacked>*</ion-label>
+      <ion-label stacked>First Name</ion-label>
+      <ion-input formControlName="firstName" type="text" placeholder="Your first name">
+      </ion-input>
+    </ion-item>
+    <ion-label color="danger" class="error-message" *ngIf="!signupForm.controls.firstName.valid && signupForm.controls.firstName.touched" >
+      You must fill a first name.
+    </ion-label>
+
+    <ion-item>
+      <ion-label *ngIf="!signupForm.controls.lastName.valid" color="danger" stacked>*</ion-label>
+      <ion-label stacked>Last Name</ion-label>
+      <ion-input formControlName="lastName" type="text" placeholder="Your last name">
+      </ion-input>
+    </ion-item>
+    <ion-label color="danger" class="error-message" *ngIf="!signupForm.controls.lastName.valid && signupForm.controls.lastName.touched" >
+      You must fill a lst name.
+    </ion-label>
+
+    <ion-item>
+      <ion-label *ngIf="!signupForm.controls.userName.valid" color="danger" stacked>*</ion-label>
+      <ion-label stacked>User Name</ion-label>
+      <ion-input formControlName="userName" type="text" placeholder="Your user name">
+      </ion-input>
+    </ion-item>
+    <ion-label color="danger" class="error-message" *ngIf="!signupForm.controls.userName.valid && signupForm.controls.userName.touched" >
+      Your username needs more than 3 characters.
+    </ion-label>
+
+    <ion-item>
+      <ion-label stacked>Birth date</ion-label>
+      <ion-datetime formControlName="birthDate" displayFormat="MM DD YYYY" placeholder="Select Date"></ion-datetime>
+    </ion-item>
+
+    <ion-item>
+      <ion-label *ngIf="!signupForm.controls.phone.valid" color="danger" stacked>*</ion-label>
+      <ion-label stacked>Phone number</ion-label>
+      <ion-input formControlName="phone" type="tel" placeholder="Your phone number">
+      </ion-input>
+    </ion-item>
+    <ion-label color="danger" class="error-message" *ngIf="!signupForm.controls.phone.valid && signupForm.controls.phone.touched" >
+      Your phone can contain only numeric value
+    </ion-label>
+
+    <ion-item>
+      <ion-label>Gender</ion-label>
+      <ion-select formControlName="isGuide">
+        <ion-select-option value="0" selected>Male</ion-select-option>
+        <ion-select-option value="1">Female</ion-select-option>
+        <ion-select-option value="2">Other</ion-select-option>
+      </ion-select>
+    </ion-item>
+    <ion-item>
+      <ion-label stacked>Guide</ion-label>
+      <ion-checkbox formControlName="isGuide" color="primary" checked="false"></ion-checkbox>
+    </ion-item>
+    <ion-item>
+      <ion-label stacked>About myself</ion-label>
+      <ion-input formControlName="about" type="text" placeholder="Your about">
+      </ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label>Trips level</ion-label>
+      <ion-select formControlName="tripLevel" multiple="true">
+        <ion-select-option value="extreme">Extreme</ion-select-option>
+        <ion-select-option value="advanced">Advanced</ion-select-option>
+        <ion-select-option value="average" selected>Average</ion-select-option>
+        <ion-select-option value="easy">Easy</ion-select-option>
+        <ion-select-option value="picnic">Picnic</ion-select-option>
+      </ion-select>
+    </ion-item>
+    <ion-item>
+      <ion-label>Trips Duration</ion-label>
+      <ion-select formControlName="tripDuration" multiple="true">
+        <ion-select-option value="fewDays">Few days</ion-select-option>
+        <ion-select-option value="campHike">Camp+hike</ion-select-option>
+        <ion-select-option value="fullDay" selected>Full day</ion-select-option>
+        <ion-select-option value="fewHours">Few hours</ion-select-option>
+      </ion-select>
+    </ion-item>
+    <ion-item>
+      <ion-label>People type </ion-label>
+      <ion-select formControlName="peopleType" multiple="true">
+        <ion-select-option value="singles" selected>Singles</ion-select-option>
+        <ion-select-option value="couples" selected>Couples</ion-select-option>
+        <ion-select-option value="withKids" >With kids</ion-select-option>
+        <ion-select-option value="LGBT" >LGBT</ion-select-option>
+        <ion-select-option value="elderlies" >Elderlies</ion-select-option>
+      </ion-select>
+    </ion-item>
+
+
+
+
+
+
+
+    <ion-button block type="submit" [disabled]="!signupForm.valid">
+      Update account
+    </ion-button>
+  </form>
 </ion-content>
