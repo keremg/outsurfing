@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component , OnInit } from '@angular/core';
 import {
   AlertController,
   LoadingController,
@@ -16,10 +16,11 @@ import { User } from '../../models/User';
   templateUrl: './edit-profile.page.html',
   styleUrls: ['./edit-profile.page.scss'],
 })
-export class EditProfilePage {
+export class EditProfilePage implements OnInit {
   public signupForm: FormGroup;
   public loading;
-
+  public email: string;
+  
   constructor(
     public navCtrl: NavController,
     public authService: AuthService,
@@ -44,6 +45,10 @@ export class EditProfilePage {
       tripDuration: [""],
       peopleType: [""],
     });
+  }
+  ngOnInit(){
+   let user = this.authService.getCurrentUser();
+   console.log(user)
   }
 
   async signupUser() {
