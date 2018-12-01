@@ -1,22 +1,22 @@
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { CreateRoutePage } from './create-route.page';
+import { SingleRoutePage } from './single-route.page';
 
-describe('CreateRoutePage', () => {
-  let component: CreateRoutePage;
-  let fixture: ComponentFixture<CreateRoutePage>;
+describe('SingleRoutePage', () => {
+  let component: SingleRoutePage;
+  let fixture: ComponentFixture<SingleRoutePage>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ CreateRoutePage ],
+      declarations: [ SingleRoutePage ],
       schemas: [CUSTOM_ELEMENTS_SCHEMA],
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(CreateRoutePage);
+    fixture = TestBed.createComponent(SingleRoutePage);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

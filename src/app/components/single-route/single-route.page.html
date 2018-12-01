@@ -3,10 +3,10 @@
 </ion-header>
 
 <ion-content padding>
-  <form [formGroup]="createTripForm" (submit)="createTrip()" novalidate>
+  <form [formGroup]="singleRouteForm" (submit)="updateRoute()" novalidate>
     <ion-item>
       <ion-label
-        *ngIf="!createTripForm.controls.tripName.valid"
+        *ngIf="!singleRouteForm.controls.tripName.valid"
         color="danger"
         stacked
         >*</ion-label
@@ -16,15 +16,15 @@
         formControlName="tripName"
         type="text"
         placeholder="Trip name"
-        [class.invalid]="!createTripForm.controls.tripName.valid && blur"
+        [class.invalid]="!singleRouteForm.controls.tripName.valid && blur"
       >
       </ion-input>
     </ion-item>
     <ion-item
       class="error-message"
       *ngIf="
-        !createTripForm.controls.tripName.valid &&
-        createTripForm.controls.tripName.touched
+        !singleRouteForm.controls.tripName.valid &&
+        singleRouteForm.controls.tripName.touched
       "
     >
       <p>Please enter trip name</p>
@@ -32,7 +32,7 @@
 
     <ion-item>
       <ion-label
-        *ngIf="!createTripForm.controls.creatorName.valid"
+        *ngIf="!singleRouteForm.controls.creatorName.valid"
         color="danger"
         stacked
         >*</ion-label
@@ -44,7 +44,7 @@
         placeholder="Your name"
         class="error-message"
         [ngClass]="{
-          'is-invalid': createTripForm.controls.creatorName.errors
+          'is-invalid': singleRouteForm.controls.creatorName.errors
         }"
       >
       </ion-input>
@@ -52,7 +52,7 @@
 
     <ion-item>
       <ion-label
-        *ngIf="!createTripForm.controls.shortDescription.valid"
+        *ngIf="!singleRouteForm.controls.shortDescription.valid"
         color="danger"
         stacked
         >*</ion-label
@@ -63,7 +63,7 @@
         type="text"
         placeholder="Short description"
         [class.invalid]="
-          !createTripForm.controls.shortDescription.valid && blur
+          !singleRouteForm.controls.shortDescription.valid && blur
         "
       >
       </ion-input>
@@ -71,7 +71,7 @@
 
     <ion-item>
       <ion-label
-        *ngIf="!createTripForm.controls.tripName.valid"
+        *ngIf="!singleRouteForm.controls.tripName.valid"
         color="danger"
         stacked
         >*</ion-label
@@ -81,7 +81,7 @@
         formControlName="phoneNumber"
         type="number"
         placeholder="Your phone number"
-        [class.invalid]="!createTripForm.controls.phoneNumber.valid && blur"
+        [class.invalid]="!singleRouteForm.controls.phoneNumber.valid && blur"
       >
       </ion-input>
     </ion-item>
@@ -89,8 +89,8 @@
     <ion-item
       class="error-message"
       *ngIf="
-        !createTripForm.controls.phoneNumber.valid &&
-        createTripForm.controls.phoneNumber.touched
+        !singleRouteForm.controls.phoneNumber.valid &&
+        singleRouteForm.controls.phoneNumber.touched
       "
     >
       <p>Please enter your phone number</p>
@@ -111,7 +111,7 @@
         formControlName="tripPrice"
         type="number"
         placeholder="Trip price"
-        [class.invalid]="!createTripForm.controls.tripPrice.valid && blur"
+        [class.invalid]="!singleRouteForm.controls.tripPrice.valid && blur"
       >
       </ion-input>
     </ion-item>
@@ -119,8 +119,8 @@
     <ion-item
       class="error-message"
       *ngIf="
-        !createTripForm.controls.tripPrice.valid &&
-        createTripForm.controls.tripPrice.touched
+        !singleRouteForm.controls.tripPrice.valid &&
+        singleRouteForm.controls.tripPrice.touched
       "
     >
     </ion-item>
@@ -131,7 +131,7 @@
         formControlName="fee"
         type="number"
         placeholder="Entrance fee"
-        [class.invalid]="!createTripForm.controls.fee.valid && blur"
+        [class.invalid]="!singleRouteForm.controls.fee.valid && blur"
       >
       </ion-input>
     </ion-item>
@@ -139,8 +139,8 @@
     <ion-item
       class="error-message"
       *ngIf="
-        !createTripForm.controls.tripPrice.valid &&
-        createTripForm.controls.tripPrice.touched
+        !singleRouteForm.controls.tripPrice.valid &&
+        singleRouteForm.controls.tripPrice.touched
       "
     >
     </ion-item>
@@ -151,7 +151,7 @@
         formControlName="startLocation"
         type="startLocation"
         placeholder="Start location"
-        [class.invalid]="!createTripForm.controls.startLocation.valid && blur"
+        [class.invalid]="!singleRouteForm.controls.startLocation.valid && blur"
       >
       </ion-input>
     </ion-item>
@@ -159,8 +159,8 @@
     <ion-item
       class="error-message"
       *ngIf="
-        !createTripForm.controls.startLocation.valid &&
-        createTripForm.controls.startLocation.touched
+        !singleRouteForm.controls.startLocation.valid &&
+        singleRouteForm.controls.startLocation.touched
       "
     >
     </ion-item>
@@ -180,8 +180,8 @@
     <ion-item
       class="error-message"
       *ngIf="
-        !createTripForm.controls.startLocation.valid &&
-        createTripForm.controls.startLocation.touched
+        !singleRouteForm.controls.startLocation.valid &&
+        singleRouteForm.controls.startLocation.touched
       "
     >
     </ion-item>
@@ -209,14 +209,14 @@
         formControlName="longDescription"
         type="longDescription"
         placeholder="Long description"
-        [class.invalid]="!createTripForm.controls.longDescription.valid && blur"
+        [class.invalid]="!singleRouteForm.controls.longDescription.valid && blur"
       >
       </ion-input>
     </ion-item>
 
     <ion-item>
       <ion-label
-        *ngIf="!createTripForm.controls.tripLevel.valid"
+        *ngIf="!singleRouteForm.controls.tripLevel.valid"
         color="danger"
         stacked
         >*</ion-label
