@@ -5,7 +5,7 @@ import { ChooseTrip } from './ChooseTrip.page';
 
 describe('ChooseTripPage', () => {
   let component: ChooseTrip;
-  let fixture: ComponentFixture<ChooseTripPage>;
+  let fixture: ComponentFixture<ChooseTrip>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
