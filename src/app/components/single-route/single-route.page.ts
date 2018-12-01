@@ -3,12 +3,12 @@ import { Validators, FormBuilder, FormGroup } from '@angular/forms';
 //import { ImagePicker } from '@ionic-native/image-picker';
 
 @Component({
-  selector: 'app-create-trip',
-  templateUrl: './create-trip.page.html',
-  styleUrls: ['./create-trip.page.scss']
+  selector: 'app-single-route',
+  templateUrl: './single-route.page.html',
+  styleUrls: ['./single-route.page.scss']
 })
-export class CreateTripPage implements OnInit {
-  public createTripForm: FormGroup;
+export class SingleRoutePage implements OnInit {
+  public singleRouteForm: FormGroup;
   selectedFile: File = null;
 
   constructor(
@@ -16,7 +16,7 @@ export class CreateTripPage implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.createTripForm = this.formBuilder.group({
+    this.singleRouteForm = this.formBuilder.group({
       tripName: ['', Validators.required],
       isGuide: ['', Validators.required],
       creatorName: ['', Validators.required],
@@ -46,4 +46,8 @@ export class CreateTripPage implements OnInit {
     fd.append('image', this.selectedFile, this.selectedFile.name);
     console.log(fd);
   }
+
+    updateRoute() {
+      alert("here should save the route");
+    }
 }

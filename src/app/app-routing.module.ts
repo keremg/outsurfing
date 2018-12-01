@@ -10,7 +10,7 @@ const routes: Routes = [
   { path: 'EditEvent', loadChildren: './components/edit-event/edit-event.module#EditEventPageModule'},
   { path: 'ResetPassword', loadChildren: './components/reset-password/reset-password.module#ResetPasswordPageModule' },
   { path: 'Signup', loadChildren: './components/signup/signup.module#SignupPageModule' },
-  { path: 'CreateTrip', loadChildren: './components/create-trip/create-trip.module#CreateTripPageModule'},
+  { path: 'SingleRoute', loadChildren: './components/single-route/single-route.module#SingleRoutePageModule'},
   { path: 'ViewProfile', loadChildren: './components/view-profile/view-profile.module#ViewProfilePageModule'},
   { path: 'EditProfile', loadChildren: './components/edit-profile/edit-profile.module#EditProfilePageModule'  },
   { path: 'Admin', loadChildren: './components/admin/admin.module#AdminPageModule' },

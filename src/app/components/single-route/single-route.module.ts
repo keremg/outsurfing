@@ -5,13 +5,13 @@ import { Routes, RouterModule } from '@angular/router';
 
 import { IonicModule } from '@ionic/angular';
 // import { ImagePicker } from '@ionic-native/image-picker';
-import { CreateTripPage } from './create-trip.page';
+import { SingleRoutePage } from './single-route.page';
 import { Validators, FormBuilder, FormGroup } from '@angular/forms';
 
 const routes: Routes = [
   {
     path: '',
-    component: CreateTripPage
+    component: SingleRoutePage
   }
 ];
 
@@ -24,6 +24,6 @@ const routes: Routes = [
 
     RouterModule.forChild(routes)
   ],
-  declarations: [CreateTripPage]
+  declarations: [SingleRoutePage]
 })
-export class CreateTripPageModule {}
+export class SingleRoutePageModule {}
