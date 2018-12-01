@@ -1,16 +1,37 @@
 <ion-header>
+
     <ion-toolbar padding-horizontal>
-        <ion-label style="font-size: 3em;">
-            OutSurfing
+
+        <ion-label style="font-size: 2em;" slot="primary">
+            OutSurfing - Events
         </ion-label>
-        <ion-button style="float: right;">
-            Create a new event
-        </ion-button>
+        <ion-label slot="primary" padding-horizontal >
+            <ion-searchbar ></ion-searchbar>
+        </ion-label>
+        <ion-label slot="primary" style="font-size: 1.5em;" >
+            <ion-icon name="funnel" ></ion-icon>
+            Filter
+        </ion-label>
+
+        <ion-buttons slot="end" color="primary">
+            <ion-button style="float: right;" slot="end" color="primary" fill="solid" shape="round" >
+                Create a new event
+            </ion-button>
+        </ion-buttons>
+        <ion-buttons slot="end">
+
+            <ion-button>
+                <ion-icon slot="icon-only" name="contact"></ion-icon>
+            </ion-button>
+            <ion-menu-button autoHide="false"></ion-menu-button>
+        </ion-buttons>
+
+
+
     </ion-toolbar>
 </ion-header>
 
 <ion-content padding>
-    <ion-searchbar></ion-searchbar>
     <!-- add filter https://www.joshmorony.com/high-performance-list-filtering-in-ionic-2/-->
     <ion-infinite-scroll>
         <ion-card class="event">
@@ -26,14 +47,9 @@
                                     )
                                 </ion-label>
                                 <ion-label>
-                                    Level: Extreme
+                                    Level: Medium +
                                 </ion-label>
                             </ion-item>
-                            <!--<ion-item>-->
-                            <!--<ion-label>-->
-                            <!--Type: Water, Hiking, Canyon, Swiming-->
-                            <!--</ion-label>-->
-                            <!--</ion-item>-->
                         </ion-list>
                     </ion-col>
                     <ion-col size="8" pull-md="4">
@@ -121,11 +137,11 @@
                                 </ion-col>
                                 <ion-col size="4">
                                     <ion-item>
-                                        <ion-icon name="car" style="font-size: 1em;"></ion-icon>
+                                        <ion-icon name="car" style="font-size: 1em;" padding-end></ion-icon>
                                         6 Available seats
                                     </ion-item>
                                     <ion-item>
-                                        <ion-icon name="cart" style="font-size: 1em;"></ion-icon>
+                                        <ion-icon name="cart" style="font-size: 1em;" padding-end></ion-icon>
                                         50$/
                                         <ion-icon name="contact" style="font-size: 1em;"></ion-icon>
                                     </ion-item>
@@ -135,9 +151,7 @@
                                         </ion-label>
                                     </ion-item>
                                     <ion-item>
-                                        <ion-icon name="bus"></ion-icon>
-                                        <ion-icon name="car"></ion-icon>
-                                        <ion-icon name="train"></ion-icon>
+                                        <ion-icon name="log-in">Arrival</ion-icon>
                                         : private cars
                                     </ion-item>
                                 </ion-col>
@@ -192,11 +206,7 @@
                                     Level: Extreme
                                 </ion-label>
                             </ion-item>
-                            <!--<ion-item>-->
-                            <!--<ion-label>-->
-                            <!--Type: Water, Hiking, Canyon, Swiming-->
-                            <!--</ion-label>-->
-                            <!--</ion-item>-->
+
                         </ion-list>
                     </ion-col>
                     <ion-col size="8" pull-md="4">
@@ -355,11 +365,7 @@
                                     Level: Extreme
                                 </ion-label>
                             </ion-item>
-                            <!--<ion-item>-->
-                            <!--<ion-label>-->
-                            <!--Type: Water, Hiking, Canyon, Swiming-->
-                            <!--</ion-label>-->
-                            <!--</ion-item>-->
+
                         </ion-list>
                     </ion-col>
                     <ion-col size="8" pull-md="4">
