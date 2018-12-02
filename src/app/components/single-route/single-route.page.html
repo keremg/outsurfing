@@ -1,5 +1,5 @@
 <ion-header>
-  <ion-toolbar> <ion-title>Create Trip</ion-title> </ion-toolbar>
+  <ion-toolbar> <ion-title>Create Route</ion-title> </ion-toolbar>
 </ion-header>
 
 <ion-content padding>
@@ -11,7 +11,7 @@
         stacked
         >*</ion-label
       >
-      <ion-label stacked>Trip name</ion-label>
+      <ion-label stacked>Route name</ion-label>
       <ion-input
         formControlName="tripName"
         type="text"
@@ -27,7 +27,7 @@
         singleRouteForm.controls.tripName.touched
       "
     >
-      <p>Please enter trip name</p>
+      <p>Please enter route name</p>
     </ion-item>
 
     <ion-item>
@@ -106,11 +106,11 @@
     </ion-item>
 
     <ion-item>
-      <ion-label stacked>Trip price</ion-label>
+      <ion-label stacked>Route price</ion-label>
       <ion-input
         formControlName="tripPrice"
         type="number"
-        placeholder="Trip price"
+        placeholder="Route price"
         [class.invalid]="!singleRouteForm.controls.tripPrice.valid && blur"
       >
       </ion-input>
@@ -146,6 +146,12 @@
     </ion-item>
 
     <ion-item>
+      <ion-label
+        *ngIf="!singleRouteForm.controls.startLocation.valid"
+        color="danger"
+        stacked
+        >*</ion-label
+      >
       <ion-label stacked>Start location</ion-label>
       <ion-input
         formControlName="startLocation"
@@ -163,6 +169,37 @@
         singleRouteForm.controls.startLocation.touched
       "
     >
+    </ion-item>
+
+    <ion-item>
+      <ion-label
+        *ngIf="!singleRouteForm.controls.startLocation.valid"
+        color="danger"
+        stacked
+        >*</ion-label
+      >
+      <ion-label stacked>End location</ion-label>
+      <ion-input
+        formControlName="endLocation"
+        type="text"
+        placeholder="End location"
+        [class.invalid]="!singleRouteForm.controls.endLocation.valid && blur"
+      >
+      </ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-grid>
+        <ion-row>
+          <ion-col size="3" align-self-start>
+            <ion-img
+              src="/assets/images/googlemaps.jpg"
+              class="eventImg"
+            ></ion-img>
+          </ion-col>
+          <ion-label> Click to add route location from Google Maps </ion-label>
+        </ion-row>
+      </ion-grid>
     </ion-item>
 
     <ion-item>
@@ -185,6 +222,16 @@
       "
     >
     </ion-item>
+
+    <ion-item
+      class="error-message"
+      *ngIf="
+        !singleRouteForm.controls.endLocation.valid &&
+        singleRouteForm.controls.endLocation.touched
+      "
+    >
+    </ion-item>
+
     <ion-item>
       <ion-label>Recommended months</ion-label>
       <ion-select formControlName="recMonths" multiple="true">
@@ -209,7 +256,9 @@
         formControlName="longDescription"
         type="longDescription"
         placeholder="Long description"
-        [class.invalid]="!singleRouteForm.controls.longDescription.valid && blur"
+        [class.invalid]="
+          !singleRouteForm.controls.longDescription.valid && blur
+        "
       >
       </ion-input>
     </ion-item>
@@ -222,7 +271,7 @@
         >*</ion-label
       >
 
-      <ion-label>Trip level</ion-label>
+      <ion-label>Route level</ion-label>
       <ion-select formControlName="tripLevel" multiple="false">
         <ion-select-option value="extreme">Extreme</ion-select-option>
         <ion-select-option value="advanced">Advanced</ion-select-option>

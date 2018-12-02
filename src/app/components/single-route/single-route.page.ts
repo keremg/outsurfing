@@ -31,7 +31,8 @@ export class SingleRoutePage implements OnInit {
       properties: ['', Validators.required],
       photos: [''],
       recMonths: [''],
-      fee: ['']
+      fee: [''],
+      gMapsLocation: ['', Validators.required]
     });
   }
 
@@ -47,7 +48,7 @@ export class SingleRoutePage implements OnInit {
     console.log(fd);
   }
 
-    updateRoute() {
-      alert("here should save the route");
-    }
+  updateRoute() {
+    alert('here should save the route');
+  }
 }
