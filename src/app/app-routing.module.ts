@@ -14,6 +14,7 @@ const routes: Routes = [
   { path: 'ViewProfile', loadChildren: './components/view-profile/view-profile.module#ViewProfilePageModule'},
   { path: 'EditProfile', loadChildren: './components/edit-profile/edit-profile.module#EditProfilePageModule'  },
   { path: 'Admin', loadChildren: './components/admin/admin.module#AdminPageModule' },
+  { path: 'EventReview', loadChildren: './components/event-review/event-review.module#EventReviewPageModule' },
 
 ];
 

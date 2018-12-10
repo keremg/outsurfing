@@ -24,7 +24,9 @@ import { AuthGuardService } from './services/auth-guard.service';
 @NgModule({
   declarations: [AppComponent],
   entryComponents: [],
-  imports: [BrowserModule,IonicModule.forRoot(), AppRoutingModule, AppRoutingModule ,AngularFireDatabaseModule,HttpClientModule, AngularFireModule.initializeApp(environment.firebase), AngularFirestoreModule, AngularFireAuthModule],
+  imports: [BrowserModule, IonicModule.forRoot(), AppRoutingModule, AppRoutingModule ,
+      AngularFireDatabaseModule, HttpClientModule, AngularFireModule.initializeApp(environment.firebase),
+      AngularFirestoreModule, AngularFireAuthModule],
   providers: [
     StatusBar,
     SplashScreen,

@@ -1,0 +1,29 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>EventReview</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content padding>
+
+  <ion-item>
+    <ion-label>How much did you enjoy the trip?</ion-label>
+    <rating [(rating)]="rating1"></rating>
+  </ion-item>
+  <ion-item>
+    <ion-label>Guide professionalism</ion-label>
+    <rating [(rating)]="rating2"></rating>
+  </ion-item>
+  <ion-item>
+    <ion-label>Guide atitude</ion-label>
+    <rating [(rating)]="rating3"></rating>
+  </ion-item>
+  <ion-item>
+    <ion-label>Guide knowledge</ion-label>
+    <rating [(rating)]="rating4"></rating>
+  </ion-item>
+  <ion-item>
+    <ion-label>Organizer level </ion-label>
+    <rating [(rating)]="rating5"></rating>
+  </ion-item>
+</ion-content>
