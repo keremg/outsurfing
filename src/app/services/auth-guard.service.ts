@@ -2,6 +2,9 @@ import { Injectable } from '@angular/core';
 import { CanActivate } from '@angular/router';
 import { AuthService } from './auth.service';
 import {NavController} from '@ionic/angular';
+import {map,first} from 'rxjs/operators';
+import {Observable, ReplaySubject, Subject} from 'rxjs';
+import * as firebase from 'firebase';
 
 
 @Injectable({
@@ -11,13 +14,7 @@ export class AuthGuardService implements CanActivate {
 
   constructor(private authService: AuthService, private nav: NavController) { }
 
-  canActivate() {
-      return true;
-      debugger;
-      if ( this.authService.authenticated ) {
-          return true;
-      }
-      this.nav.navigateRoot('');
-      return false;
-  }
+    public canActivate(): Observable<boolean> {
+        return this.authService.whenLoggedIn().asObservable();
+    }
 }

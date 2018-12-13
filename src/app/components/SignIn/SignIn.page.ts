@@ -37,10 +37,11 @@ export class SignInPage implements OnInit{
   }
 
   ngOnInit(): void {
-//debugger;
-      if ( this.authService.authenticated ) {
-          this.navCtrl.navigateForward('home')
-      }
+      this.authService.whenLoggedIn().asObservable().subscribe((b) => {
+          if( b)
+              this.navCtrl.navigateForward('home')
+      });
+
   }
 
     goToSignup():void {

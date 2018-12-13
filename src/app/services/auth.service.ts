@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { AngularFireAuth } from 'angularfire2/auth';
 import * as firebase from 'firebase';
-import {BehaviorSubject, Observable} from 'rxjs';
+import {BehaviorSubject, Observable, ReplaySubject, Subject} from 'rxjs';
 import {first} from 'rxjs/operators';
 
 
@@ -11,22 +11,30 @@ import {first} from 'rxjs/operators';
 export class AuthService {
 
     authState: firebase.User = null;
+    private logIns: Subject<boolean> = new ReplaySubject(1);
 
 
     constructor(private afAuth: AngularFireAuth) {
-      debugger;
         this.afAuth.authState.subscribe((auth) => {
-          //debugger;
             this.authState = auth;
+            if( auth)
+                this.logIns.next(true);
+            else
+                this.logIns.next(false);
+
         });
     }
 
+    public whenLoggedIn(): Subject<boolean> {
+        return this.logIns;
+    }
 
     // Returns true if user is logged in
     get authenticated() {
         //debugger;
         return this.authState !== null;
     }
+    
 
     // Returns current user data
     get currentUser(): any {
