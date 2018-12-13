@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
-import { Router, CanActivate } from '@angular/router';
+import { CanActivate } from '@angular/router';
 import { AuthService } from './auth.service';
+import {NavController} from '@ionic/angular';
 
 
 @Injectable({
@@ -8,12 +9,15 @@ import { AuthService } from './auth.service';
 })
 export class AuthGuardService implements CanActivate {
 
-  constructor(private router: Router, private authService: AuthService) { }
+  constructor(private authService: AuthService, private nav: NavController) { }
+
   canActivate() {
-      if ( this.authService.isLoggedIn() ) {
+      return true;
+      debugger;
+      if ( this.authService.authenticated ) {
           return true;
       }
-      this.router.navigate(['/']);
+      this.nav.navigateRoot('');
       return false;
   }
 }

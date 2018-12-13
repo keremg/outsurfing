@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {
   AlertController,
   LoadingController,
@@ -13,7 +13,7 @@ import { AuthService } from '../../services/auth.service';
   styleUrls: ['SignIn.page.scss'],
 
 })
-export class SignInPage {
+export class SignInPage implements OnInit{
   public loginForm: FormGroup;
   public loading;
 
@@ -36,7 +36,14 @@ export class SignInPage {
     });
   }
 
-  goToSignup():void {
+  ngOnInit(): void {
+//debugger;
+      if ( this.authService.authenticated ) {
+          this.navCtrl.navigateForward('home')
+      }
+  }
+
+    goToSignup():void {
     this.navCtrl.navigateForward('Signup');
   }
 
@@ -56,7 +63,7 @@ export class SignInPage {
       message: 'Hellooo',
       duration: 2000
     });
-      this.authService.loginUser(email, password).then(
+      this.authService.emailLogin(email, password).then(
         async (authData) => {
           await this.loading.dismiss().then(async () => {
             await this.navCtrl.navigateRoot('home');

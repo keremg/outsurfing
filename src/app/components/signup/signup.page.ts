@@ -58,7 +58,7 @@ let success =false;
       try {
         this.loading = await this.loadingCtrl.create();
         this.loading.present();
-        let user = await this.authService.signupUser(email, password);
+        let user = await this.authService.emailSignup(email, password);
         await this.loading.dismiss();
 
         let u: User = {

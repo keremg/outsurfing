@@ -1,53 +1,120 @@
 import { Injectable } from '@angular/core';
 import { AngularFireAuth } from 'angularfire2/auth';
-import * as firebase from 'firebase';//import { Observable } from 'rxjs/Observable';
+import * as firebase from 'firebase';
+import {BehaviorSubject, Observable} from 'rxjs';
+import {first} from 'rxjs/operators';
+
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
 
-  constructor(private firebaseAuth: AngularFireAuth) {  }
+    authState: firebase.User = null;
 
-  async loginUser(email: string, password: string) {
-    return this.firebaseAuth
-      .auth
-      .signInWithEmailAndPassword(email, password);
-  }
 
-  async signupUser(email: string, password: string) {
-    try {
-      return this.firebaseAuth
-        .auth
-        .createUserWithEmailAndPassword(email, password)
+    constructor(private afAuth: AngularFireAuth) {
+      debugger;
+        this.afAuth.authState.subscribe((auth) => {
+          //debugger;
+            this.authState = auth;
+        });
     }
-    catch (error) {
-      console.error(error);
-      throw new Error(error);
+
+
+    // Returns true if user is logged in
+    get authenticated() {
+        //debugger;
+        return this.authState !== null;
     }
-  }
 
-  async getCurrentUser() {
-    return this.firebaseAuth.auth.currentUser;
-  }
-
-  async deleteCurrentUser(){
-    return this.firebaseAuth.auth.currentUser.delete();
-  }
-
-  async resetPassword(email: string) {
-    return this.firebaseAuth.auth.sendPasswordResetEmail(email);
-  }
-
-  async logoutUser() {
-    return this.firebaseAuth.auth.signOut();
-  }
-
-  isLoggedIn() {
-  if (this.firebaseAuth.auth.currentUser == null ) {
-      return false;
-    } else {
-      return true;
+    // Returns current user data
+    get currentUser(): any {
+        return this.authenticated ? this.authState : null;
     }
-  }
+
+    // Returns
+    get currentUserObservable(): any {
+        return this.afAuth.authState
+    }
+
+    // Returns current user UID
+    get currentUserId(): string {
+        return this.authenticated ? this.authState.uid : '';
+    }
+
+
+
+
+
+    async emailLogin(email: string, password: string) {
+        return this.afAuth
+            .auth
+            .signInWithEmailAndPassword(email, password);
+    }
+
+    async emailSignup(email: string, password: string) {
+        try {
+            return this.afAuth
+                .auth
+                .createUserWithEmailAndPassword(email, password)
+        } catch (error) {
+            console.error(error);
+            throw new Error(error);
+        }
+    }
+
+    async getCurrentUser() {
+        return this.afAuth.auth.currentUser;
+    }
+
+    async deleteCurrentUser() {
+        return this.afAuth.auth.currentUser.delete();
+    }
+
+    async resetPassword(email: string) {
+        return this.afAuth.auth.sendPasswordResetEmail(email);
+    }
+
+    async logoutUser() {
+        return this.afAuth.auth.signOut();
+    }
+
+
+    //// Social Auth ////
+
+    githubLogin() {
+        const provider = new firebase.auth.GithubAuthProvider()
+        return this.socialSignIn(provider);
+    }
+
+    googleLogin() {
+        const provider = new firebase.auth.GoogleAuthProvider()
+        return this.socialSignIn(provider);
+    }
+
+    facebookLogin() {
+        const provider = new firebase.auth.FacebookAuthProvider()
+        return this.socialSignIn(provider);
+    }
+
+    twitterLogin(){
+        const provider = new firebase.auth.TwitterAuthProvider()
+        return this.socialSignIn(provider);
+    }
+
+    private socialSignIn(provider) {
+        return this.afAuth.auth.signInWithPopup(provider)
+            .then((credential) =>  {
+                this.authState = credential.user
+            })
+            .catch(error => console.log(error));
+    }
+
+
+
+
+
+
+
 }
