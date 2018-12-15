@@ -34,7 +34,7 @@ export class AuthService {
         //debugger;
         return this.authState !== null;
     }
-    
+
 
     // Returns current user data
     get currentUser(): any {

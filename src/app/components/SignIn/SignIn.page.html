@@ -22,7 +22,7 @@
     <ion-item>
       <ion-label stacked>Password</ion-label>
       <ion-input formControlName="password" type="password"
-      placeholder="Your password"
+      placeholder="Your password"  (keyup.enter)="loginUser()"
       [class.invalid]="!loginForm.controls.password.valid && blur">
       </ion-input>
     </ion-item>

@@ -15,6 +15,7 @@ export class AuthGuardService implements CanActivate {
   constructor(private authService: AuthService, private nav: NavController) { }
 
     public canActivate(): Observable<boolean> {
+//Todo fix redirect
         return this.authService.whenLoggedIn().asObservable();
     }
 }

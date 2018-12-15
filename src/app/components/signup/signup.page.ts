@@ -70,10 +70,10 @@ let success =false;
           gender: parseInt(this.signupForm.value.gender.value),
           isGuide: this.signupForm.value.isGuide == 'true',
           about: this.signupForm.value.about,
-          cancellations: 0
-          // birthDate:  this.signupForm.value.birthDate;
-          // tripLevel: this.signupForm.value.tripLevel;
-          // tripDuration: this.signupForm.value.tripDuration;
+          cancellations: 0,
+           birthDate:  this.signupForm.value.birthDate
+          // tripLevel: this.signupForm.value.tripLevel
+          // tripDuration: this.signupForm.value.tripDuration
           // peopleType: this.signupForm.value.peopleType;
         }
 
