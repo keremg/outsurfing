@@ -8,8 +8,8 @@ export interface User {
     gender: number; //0 is male, 1 is female, 2 is other
     isGuide: boolean;
     phone: string;
-    birthDate:number;
-    //tripLevel:[""],
-    //tripDuration:[""],
-    //peopleType:[""],
+    birthDate:string;
+    tripLevel:[string];
+    tripDuration:[string];
+    peopleType:[string];
 }

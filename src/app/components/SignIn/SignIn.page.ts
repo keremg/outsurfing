@@ -45,7 +45,7 @@ export class SignInPage implements OnInit{
   }
 
     goToSignup():void {
-    this.navCtrl.navigateForward('Signup');
+    this.navCtrl.navigateForward('SignUp');
   }
 
   goToResetPassword():void {
