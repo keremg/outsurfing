@@ -39,17 +39,17 @@ export class SignInPage implements OnInit{
   ngOnInit(): void {
       this.authService.whenLoggedIn().asObservable().subscribe((b) => {
           if( b)
-              this.navCtrl.navigateForward('home')
+              this.navCtrl.navigateForward('home', true)
       });
 
   }
 
     goToSignup():void {
-    this.navCtrl.navigateForward('SignUp');
+    this.navCtrl.navigateForward('SignUp', true);
   }
 
   goToResetPassword():void {
-    this.navCtrl.navigateForward('ResetPassword');
+    this.navCtrl.navigateForward('ResetPassword',true);
   }
 
   async loginUser() {

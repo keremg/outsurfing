@@ -1,10 +1,11 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title>Signup</ion-title>
+    <ion-buttons slot="start"> <ion-back-button defaultHref=""></ion-back-button> </ion-buttons>
+    <ion-title>OutSurfing Signup</ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content padding>
+<ion-content padding no-bounce text-center fullscreen>
   <form [formGroup]="signupForm" (submit)="signupUser()" novalidate>
     <ion-item>
       <ion-label *ngIf="!signupForm.controls.email.valid" color="danger" stacked>*</ion-label>
@@ -31,19 +32,18 @@
       <ion-label stacked>First Name</ion-label>
       <ion-input formControlName="firstName" type="text" placeholder="Your first name">
       </ion-input>
-    </ion-item>
-    <ion-label color="danger" class="error-message" *ngIf="!signupForm.controls.firstName.valid && signupForm.controls.firstName.touched" >
-      You must fill a first name.
-    </ion-label>
 
-    <ion-item>
+
       <ion-label *ngIf="!signupForm.controls.lastName.valid" color="danger" stacked>*</ion-label>
       <ion-label stacked>Last Name</ion-label>
       <ion-input formControlName="lastName" type="text" placeholder="Your last name">
       </ion-input>
     </ion-item>
+    <ion-label color="danger" class="error-message" *ngIf="!signupForm.controls.firstName.valid && signupForm.controls.firstName.touched" >
+      You must fill a first name.
+    </ion-label>
     <ion-label color="danger" class="error-message" *ngIf="!signupForm.controls.lastName.valid && signupForm.controls.lastName.touched" >
-      You must fill a lst name.
+      You must fill a last name.
     </ion-label>
 
     <ion-item>
@@ -57,11 +57,6 @@
     </ion-label>
 
     <ion-item>
-      <ion-label stacked>Birth date</ion-label><!--TODO add a better web date picker-->
-      <ion-datetime formControlName="birthDate" displayFormat="MM DD YYYY" placeholder="Select Date"></ion-datetime>
-    </ion-item>
-
-    <ion-item>
       <ion-label *ngIf="!signupForm.controls.phone.valid" color="danger" stacked>*</ion-label>
       <ion-label stacked>Phone number</ion-label>
       <ion-input formControlName="phone" type="tel" placeholder="Your phone number">
@@ -71,6 +66,10 @@
       Your phone can contain only numeric value
     </ion-label>
 
+    <ion-item>
+      <ion-label stacked>Birth date</ion-label><!--TODO add a better web date picker-->
+      <ion-datetime formControlName="birthDate" displayFormat="MM DD YYYY" placeholder="Select Date"></ion-datetime>
+    </ion-item>
     <ion-item>
       <ion-label>Gender</ion-label>
       <ion-select formControlName="isGuide">
@@ -83,11 +82,7 @@
       <ion-label stacked>Guide</ion-label>
       <ion-checkbox formControlName="isGuide" color="primary" checked="false"></ion-checkbox>
     </ion-item>
-    <ion-item>
-      <ion-label stacked>About myself</ion-label>
-      <ion-input formControlName="about" type="text" placeholder="Your about">
-      </ion-input>
-    </ion-item>
+
     <ion-item>
       <ion-label>Trips level</ion-label>
       <ion-select formControlName="tripLevel" multiple="true">
@@ -117,14 +112,18 @@
         <ion-select-option value="elderlies" >Elderlies</ion-select-option>
       </ion-select>
     </ion-item>
+    <ion-item>
+      <ion-label stacked>About myself</ion-label>
+      <ion-input formControlName="about" type="text" placeholder="Your about">
+      </ion-input>
+    </ion-item>
 
 
 
 
 
 
-
-    <ion-button block type="submit" [disabled]="!signupForm.valid">
+    <ion-button block type="submit" [disabled]="!signupForm.valid" >
       Create an Account
     </ion-button>
   </form>
