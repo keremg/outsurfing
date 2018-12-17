@@ -65,16 +65,19 @@ let success =false;
           email: this.signupForm.value.email,
           firstName: this.signupForm.value.firstName,
           lastName: this.signupForm.value.lastName,
-          userName: this.signupForm.value.userName,
+          recentLocation: this.signupForm.value.recentLocation,
+          imagesUrls: this.signupForm.value.imagesUrls,
           phone: this.signupForm.value.phone,
           gender: parseInt(this.signupForm.value.gender.value),
           isGuide: this.signupForm.value.isGuide == 'true',
           about: this.signupForm.value.about,
           cancellations: 0,
-           birthDate:  this.signupForm.value.birthDate,
-          tripLevel: this.signupForm.value.tripLevel,
-          tripDuration: this.signupForm.value.tripDuration,
-          peopleType: this.signupForm.value.peopleType
+          birthDate:  this.signupForm.value.birthDate,
+          tripDifficulties: this.signupForm.value.tripDifficulties,
+          tripDurations: this.signupForm.value.tripDurations,
+          audienceTypes: this.signupForm.value.audienceTypes,
+          travelerRatings: this.signupForm.value.travelerRatings,
+          guideRatings: this.signupForm.value.guideRatings
         }
 
         await this.userService.addUsers(u);
