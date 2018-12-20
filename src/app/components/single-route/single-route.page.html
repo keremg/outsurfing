@@ -6,25 +6,25 @@
   <form [formGroup]="singleRouteForm" (submit)="updateRoute()" novalidate>
     <ion-item>
       <ion-label
-        *ngIf="!singleRouteForm.controls.tripName.valid"
+        *ngIf="!singleRouteForm.controls.name.valid"
         color="danger"
         stacked
         >*</ion-label
       >
       <ion-label stacked>Route name</ion-label>
       <ion-input
-        formControlName="tripName"
+        formControlName="name"
         type="text"
-        placeholder="Trip name"
-        [class.invalid]="!singleRouteForm.controls.tripName.valid && blur"
+        placeholder="route name"
+        [class.invalid]="!singleRouteForm.controls.name.valid && blur"
       >
       </ion-input>
     </ion-item>
     <ion-item
       class="error-message"
       *ngIf="
-        !singleRouteForm.controls.tripName.valid &&
-        singleRouteForm.controls.tripName.touched
+        !singleRouteForm.controls.name.valid &&
+        singleRouteForm.controls.name.touched
       "
     >
       <p>Please enter route name</p>
@@ -207,12 +207,15 @@
       <ion-input
         formControlName="photos"
         type="file"
-        (change)="onFileSelected($event)"
+        accept="image/*"
+        (ionChange)="onFileSelected($event)"
         placeholder="upload photos"
       >
-        <button type="button" (click)="onUpload()">Upload</button>
       </ion-input>
+      <button type="button" (click)="onUpload()">Upload</button>
+
     </ion-item>
+
 
     <ion-item
       class="error-message"
