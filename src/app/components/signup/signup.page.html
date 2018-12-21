@@ -47,16 +47,6 @@
     </ion-label>
 
     <ion-item>
-      <ion-label *ngIf="!signupForm.controls.userName.valid" color="danger" stacked>*</ion-label>
-      <ion-label stacked>User Name</ion-label>
-      <ion-input formControlName="userName" type="text" placeholder="Your user name">
-      </ion-input>
-    </ion-item>
-    <ion-label color="danger" class="error-message" *ngIf="!signupForm.controls.userName.valid && signupForm.controls.userName.touched" >
-      Your username needs more than 3 characters.
-    </ion-label>
-
-    <ion-item>
       <ion-label *ngIf="!signupForm.controls.phone.valid" color="danger" stacked>*</ion-label>
       <ion-label stacked>Phone number</ion-label>
       <ion-input formControlName="phone" type="tel" placeholder="Your phone number">
@@ -84,40 +74,47 @@
     </ion-item>
 
     <ion-item>
-      <ion-label>Trips level</ion-label>
-      <ion-select formControlName="tripLevel" multiple="true">
-        <ion-select-option value="extreme">Extreme</ion-select-option>
-        <ion-select-option value="advanced">Advanced</ion-select-option>
-        <ion-select-option value="average" selected>Average</ion-select-option>
-        <ion-select-option value="easy">Easy</ion-select-option>
-        <ion-select-option value="picnic">Picnic</ion-select-option>
+      <ion-label>Trips Difficulties</ion-label>
+      <ion-select formControlName="tripDifficulties" multiple="true">
+        <ion-select-option value="0">Very easy</ion-select-option>
+        <ion-select-option value="1">Easy</ion-select-option>
+        <ion-select-option value="2" selected>Moderate</ion-select-option>
+        <ion-select-option value="3">Challenging</ion-select-option>
+        <ion-select-option value="4">Extreme</ion-select-option>
+        <ion-select-option value="5">Very extreme</ion-select-option>
       </ion-select>
     </ion-item>
     <ion-item>
       <ion-label>Trips Duration</ion-label>
-      <ion-select formControlName="tripDuration" multiple="true">
-        <ion-select-option value="fewDays">Few days</ion-select-option>
-        <ion-select-option value="campHike">Camp+hike</ion-select-option>
-        <ion-select-option value="fullDay" selected>Full day</ion-select-option>
-        <ion-select-option value="fewHours">Few hours</ion-select-option>
+        <!--ion-range dual-knobs="true" formControlName="tripDurations" min="0.04" max = ""></ion-range-->
+      <ion-select formControlName="tripDurations" multiple="true">
+        <ion-select-option value="365">Few days</ion-select-option>
+        <ion-select-option value="2">Camp+hike</ion-select-option>
+        <ion-select-option value="1" selected>Full day</ion-select-option>
+        <ion-select-option value="0.5">Few hours</ion-select-option>
       </ion-select>
     </ion-item>
     <ion-item>
-      <ion-label>People type </ion-label>
-      <ion-select formControlName="peopleType" multiple="true">
-        <ion-select-option value="singles" selected>Singles</ion-select-option>
-        <ion-select-option value="couples" selected>Couples</ion-select-option>
-        <ion-select-option value="withKids" >With kids</ion-select-option>
-        <ion-select-option value="LGBT" >LGBT</ion-select-option>
-        <ion-select-option value="elderlies" >Elderlies</ion-select-option>
-      </ion-select>
+      <ion-label>Audience type </ion-label>
+        <ion-select formControlName="audienceTypes" multiple="true">
+          <ion-select-option *ngFor="let item of audienceTypeEnum" value="{{item.value}}">{{item.key}}</ion-select-option>
+        </ion-select>
     </ion-item>
     <ion-item>
       <ion-label stacked>About myself</ion-label>
       <ion-input formControlName="about" type="text" placeholder="Your about">
       </ion-input>
     </ion-item>
-
+    <ion-item>
+      <ion-label stacked>Location</ion-label>
+      <ion-input formControlName="recentLocation" type="text" placeholder="Your about">
+      </ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label stacked>Images</ion-label>
+      <ion-input formControlName="imagesUrls" type="text" placeholder="Your about">
+      </ion-input>
+    </ion-item>
 
 
 

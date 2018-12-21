@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import {Component, Pipe, PipeTransform} from '@angular/core';
 import {
   AlertController,
   LoadingController,
@@ -9,7 +9,7 @@ import { EmailValidator } from '../../../validators/email';
 import { AuthService } from '../../services/auth.service';
 import { UserService } from '../../services/user.service';
 import { User } from '../../models/User';
-
+import {AudienceTypeEnum}from '../../AudienceType.enum';
 
 @Component({
   selector: 'app-signup',
@@ -19,8 +19,11 @@ import { User } from '../../models/User';
 export class SignupPage {
   public signupForm: FormGroup;
   public loading;
+    audienceTypeEnum = this.getENUM(AudienceTypeEnum);
 
-  constructor(
+
+
+    constructor(
     public navCtrl: NavController,
     public authService: AuthService,
     public loadingCtrl: LoadingController,
@@ -33,16 +36,18 @@ export class SignupPage {
       password: ["", Validators.compose([Validators.minLength(6), Validators.required])],
       firstName: ["", Validators.compose([Validators.minLength(1), Validators.required])],
       lastName: ["", Validators.compose([Validators.minLength(1), Validators.required])],
-      userName: ["", Validators.compose([Validators.minLength(3), Validators.required])],
       phone: ["", Validators.compose([Validators.pattern("^[0-9]*$"), Validators.minLength(9), Validators.required])],
       gender: [""],
       isGuide: [""],
       about: [""],
-
+        recentLocation:[""],
+        imagesUrls:[""],
       birthDate: [""],
-      tripLevel: [""],
-      tripDuration: [""],
-      peopleType: [""],
+        tripDifficulties: [""],
+        tripDurations: [""],
+        audienceTypes: [""],
+        travelerRatings:[""],
+        guideRatings:[""]
     });
   }
 
@@ -65,8 +70,8 @@ let success =false;
           email: this.signupForm.value.email,
           firstName: this.signupForm.value.firstName,
           lastName: this.signupForm.value.lastName,
-          recentLocation: this.signupForm.value.recentLocation,
-          imagesUrls: this.signupForm.value.imagesUrls,
+          recentLocation: this.signupForm.value.recentLocation,//TODO
+          imagesUrls: this.signupForm.value.imagesUrls,//TODO
           phone: this.signupForm.value.phone,
           gender: parseInt(this.signupForm.value.gender.value),
           isGuide: this.signupForm.value.isGuide == 'true',
@@ -102,4 +107,19 @@ let success =false;
     }
   }
 
+
+
+    getENUM(ENUM:any): string[] {
+        let myEnum = [];
+        let objectEnum = Object.keys(ENUM);
+        const values = objectEnum.slice( 0 , objectEnum.length / 2 );
+        const keys = objectEnum.slice( objectEnum.length / 2 );
+
+        for (let i = 0 ; i < objectEnum.length/2 ; i++ ) {
+            myEnum.push( { key: keys[i], value: values[i] } );
+        }
+        return myEnum;
+    }
+
 }
+

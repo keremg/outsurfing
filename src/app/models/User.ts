@@ -13,7 +13,7 @@ export class User {
     birthDate?: string;
     tripDifficulties?: number[]; // Level:  0 - very easy, 1-easy, 2-moderate, 3-challenging, 4-extreme, 5-very extreme
     tripDurations?: number[]; //will represent number of days, so half day should be 0.5 , one hour should be 0.04
-    audienceTypes?: string[];
+    audienceTypes?: number[];
     travelerRatings?: {ranking: number, review: string}[];//can be changed to
     guideRatings?: {ranking: number, review: string}[];
 }
