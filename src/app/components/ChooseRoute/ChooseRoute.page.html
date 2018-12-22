@@ -14,7 +14,7 @@
         </ion-label>
 
         <ion-buttons slot="end" color="primary">
-            <ion-button style="float: right;" slot="end" color="primary" fill="solid" shape="round">
+            <ion-button style="float: right;" slot="end" color="primary" fill="solid" shape="round" (click)="createNew()">
                 Create a new route
             </ion-button>
         </ion-buttons>
@@ -31,6 +31,152 @@
 <ion-content padding>
     <!-- add filter https://www.joshmorony.com/high-performance-list-filtering-in-ionic-2/-->
     <ion-infinite-scroll>
+        <ion-card *ngFor="let route of routesList | async; let i = index" [attr.data-index]="i" class="route">
+            <ion-grid>
+                <ion-row>
+                    <ion-col size="4">
+
+                        <ion-img src="/assets/images/zeelim_zfira.jpg" class="eventImg"></ion-img>
+
+                    </ion-col>
+                    <ion-col size="8">
+
+                        <ion-card-header no-padding>
+                            <ion-card-title style="font-size: 2em;">
+                                <ion-row justify-content-between style="align-items: center;">
+                                    <ion-col size="8">
+                                        <!--<ion-icon name="calendar"></ion-icon> terrain local_florist map-->
+                                        <i class="material-icons">
+                                            {{route.iconName}}
+                                        </i>
+                                        <ion-text style="font-size: 0.5em;">Trip Route</ion-text>
+                                        {{route.name}}
+                                    </ion-col>
+                                    <ion-col size="2">
+                                        <ion-button color="success" shape="round" fill="solid" float-right>Event It
+                                        </ion-button>
+                                    </ion-col>
+                                    <ion-col size="2">
+                                        <ion-button shape="round" fill="outline" float-right (click)="goToRoute(route.id)">Details</ion-button>
+                                    </ion-col>
+                                </ion-row>
+                            </ion-card-title>
+                            <ion-card-subtitle>
+                                <ion-label padding-end>Duration: {{route.routeDuration}} days</ion-label>
+                                <ion-label padding-end>Distance to route: 70km TODO</ion-label>
+                                <ion-label>Seasons: {{route.seasons}}</ion-label>
+                            </ion-card-subtitle>
+                            <ion-card-subtitle>
+                                <ion-label>
+                                    Type: {{route.routeProperties}}
+                                </ion-label>
+                            </ion-card-subtitle>
+
+                            <!--need to be added from JS-->
+                        </ion-card-header>
+                        <!--<ion-card-content>-->
+                        <ion-grid wrap>
+                            <ion-row>
+
+                                <ion-col size="4">
+                                    <ion-item>
+                                        Trip Rating: 9 (17
+                                        <ion-icon name="contact"></ion-icon>
+                                        )
+                                    </ion-item>
+                                    <ion-item>
+                                        Level: Medium +
+                                    </ion-item>
+                                    <ion-item>
+                                        Donated by Guide: Hanuka, 35 <!-- or 'by Traveller -->
+                                    </ion-item>
+
+
+                                </ion-col>
+                                <ion-col size="4">
+
+                                    <ion-item>
+                                        Optional Guidance for 50$/ <ion-icon name="contact" style="font-size: 1em;"></ion-icon>
+                                    </ion-item>
+                                    <ion-row>
+                                        <ion-col size="3">
+                                            <ion-img src="/assets/images/haham.jpg"></ion-img>
+                                        </ion-col>
+                                        <ion-col size="9">
+                                            <ion-item>
+                                                Guide Rating: 8 (544
+                                                <ion-icon name="contact"></ion-icon>
+                                                )
+                                            </ion-item>
+                                            <ion-item>
+                                                Traveler Rating: 2 (12
+                                                <ion-icon name="contact"></ion-icon>
+                                                )
+                                            </ion-item>
+                                        </ion-col>
+
+                                    </ion-row>
+
+
+
+                                </ion-col>
+
+
+                                <ion-col size="4">
+
+                                    <ion-item>
+                                        <ion-label>
+                                            For group of 10+ <ion-icon name="contact" style="font-size: 1em;"></ion-icon>
+                                        </ion-label>
+                                    </ion-item>
+
+
+
+                                    <ion-item>
+                                        <ion-icon name="log-in">Arrival</ion-icon>
+                                        Phone: 054-5548784
+                                    </ion-item>
+                                    <ion-item>
+                                        email tomer@gmail.com
+                                    </ion-item>
+                                </ion-col>
+
+                            </ion-row>
+                            <ion-row>
+                                <ion-col>
+                                    <ion-item>
+                                        (Short) Description: Join us to the beautiful Zeelim river, for a day-hike
+                                        in a canyon with beautiful water pools, boulders, cliffs, and desert wild
+                                        life.
+                                        We will start at Zfira-pool at the upper-Zeelim and walk through the whole
+                                        canyon until the dead sea.
+                                        The trip requires good shape, as we will have cool adventures such as using
+                                        ropes, metal ladders, and swimming through water pools
+                                    </ion-item>
+                                </ion-col>
+                            </ion-row>
+                            <ion-row>
+                                <ion-col>
+                                    <ion-item>
+                                        Equipment: hikng shoes, 3 liters of water, food for the day, sun
+                                        screen, short sleeves, long sleeves, flash-lights
+                                    </ion-item>
+                                </ion-col>
+                            </ion-row>
+                        </ion-grid>
+                        <!--</ion-card-content>-->
+
+
+                    </ion-col>
+                </ion-row>
+            </ion-grid>
+
+
+        </ion-card>
+
+
+
+
         <ion-card class="route">
             <ion-grid>
                 <ion-row>
@@ -173,295 +319,6 @@
 
 
         </ion-card>
-
-
-        <ion-card class="route">
-            <ion-grid>
-                <ion-row>
-                    <ion-col size="4">
-
-                        <ion-img src="/assets/images/yehudia.jpg" class="eventImg"></ion-img>
-
-                    </ion-col>
-                    <ion-col size="8">
-
-                        <ion-card-header no-padding>
-                            <ion-card-title style="font-size: 2em;">
-                                <ion-row justify-content-between style="align-items: center;">
-                                    <ion-col size="8">
-                                        <!--<ion-icon name="calendar"></ion-icon> terrain local_florist map-->
-                                        <i class="material-icons">
-                                            terrain
-                                        </i>
-                                        <ion-text style="font-size: 0.5em;">Trip Route</ion-text>
-                                        Yehudia Stream - Forbidden paradise
-                                    </ion-col>
-                                    <ion-col size="2">
-                                        <ion-button color="success" shape="round" fill="solid" float-right>Event It
-                                        </ion-button>
-                                    </ion-col>
-                                    <ion-col size="2">
-                                        <ion-button shape="round" fill="outline" float-right>Details</ion-button>
-                                    </ion-col>
-                                </ion-row>
-                            </ion-card-title>
-                            <ion-card-subtitle>
-                                <ion-label padding-end>Duration: 6-8 hours</ion-label>
-                                <ion-label padding-end>Distance to route: 70km</ion-label>
-                                <ion-label>Seasons: Oct-Apr</ion-label>
-                            </ion-card-subtitle>
-                            <ion-card-subtitle>
-                                <ion-label>
-                                    Type: Water, Hiking, Canyon, Swiming
-                                </ion-label>
-                            </ion-card-subtitle>
-
-                            <!--need to be added from JS-->
-                        </ion-card-header>
-                        <!--<ion-card-content>-->
-                        <ion-grid wrap>
-                            <ion-row>
-
-                                <ion-col size="4">
-                                    <ion-item>
-                                        Trip Rating: 9 (17
-                                        <ion-icon name="contact"></ion-icon>
-                                        )
-                                    </ion-item>
-                                    <ion-item>
-                                        Level: Medium +
-                                    </ion-item>
-                                    <ion-item>
-                                        Donated by Guide: Hanuka, 35 <!-- or 'by Traveller -->
-                                    </ion-item>
-
-
-                                </ion-col>
-                                <ion-col size="4">
-
-                                    <ion-item>
-                                        Optional Guidance for 50$/ <ion-icon name="contact" style="font-size: 1em;"></ion-icon>
-                                    </ion-item>
-                                    <ion-row>
-                                        <ion-col size="3">
-                                            <ion-img src="/assets/images/haham.jpg"></ion-img>
-                                        </ion-col>
-                                        <ion-col size="9">
-                                            <ion-item>
-                                                Guide Rating: 8 (544
-                                                <ion-icon name="contact"></ion-icon>
-                                                )
-                                            </ion-item>
-                                            <ion-item>
-                                                Traveler Rating: 2 (12
-                                                <ion-icon name="contact"></ion-icon>
-                                                )
-                                            </ion-item>
-                                        </ion-col>
-
-                                    </ion-row>
-
-
-
-                                </ion-col>
-
-
-                                <ion-col size="4">
-
-                                    <ion-item>
-                                        <ion-label>
-                                            For group of 10+ <ion-icon name="contact" style="font-size: 1em;"></ion-icon>
-                                        </ion-label>
-                                    </ion-item>
-
-
-
-                                    <ion-item>
-                                        <ion-icon name="log-in">Arrival</ion-icon>
-                                        Phone: 054-5548784
-                                    </ion-item>
-                                    <ion-item>
-                                        email tomer@gmail.com
-                                    </ion-item>
-                                </ion-col>
-
-                            </ion-row>
-                            <ion-row>
-                                <ion-col>
-                                    <ion-item>
-                                        (Short) Description: Join us to the beautiful Zeelim river, for a day-hike
-                                        in a canyon with beautiful water pools, boulders, cliffs, and desert wild
-                                        life.
-                                        We will start at Zfira-pool at the upper-Zeelim and walk through the whole
-                                        canyon until the dead sea.
-                                        The trip requires good shape, as we will have cool adventures such as using
-                                        ropes, metal ladders, and swimming through water pools
-                                    </ion-item>
-                                </ion-col>
-                            </ion-row>
-                            <ion-row>
-                                <ion-col>
-                                    <ion-item>
-                                        Equipment: hikng shoes, 3 liters of water, food for the day, sun
-                                        screen, short sleeves, long sleeves, flash-lights
-                                    </ion-item>
-                                </ion-col>
-                            </ion-row>
-                        </ion-grid>
-                        <!--</ion-card-content>-->
-
-
-                    </ion-col>
-                </ion-row>
-            </ion-grid>
-
-
-        </ion-card>
-
-        <ion-card class="route">
-            <ion-grid>
-                <ion-row>
-                    <ion-col size="4">
-
-                        <ion-img src="/assets/images/zavitan.jpg" class="eventImg"></ion-img>
-
-                    </ion-col>
-                    <ion-col size="8">
-
-                        <ion-card-header no-padding>
-                            <ion-card-title style="font-size: 2em;">
-                                <ion-row justify-content-between style="align-items: center;">
-                                    <ion-col size="8">
-                                        <!--<ion-icon name="calendar"></ion-icon> terrain local_florist map-->
-                                        <i class="material-icons">
-                                            terrain
-                                        </i>
-                                        <ion-text style="font-size: 0.5em;">Trip Route</ion-text>
-                                        Zavitan Stream - Canyoning Adventure
-                                    </ion-col>
-                                    <ion-col size="2">
-                                        <ion-button color="success" shape="round" fill="solid" float-right>Event It
-                                        </ion-button>
-                                    </ion-col>
-                                    <ion-col size="2">
-                                        <ion-button shape="round" fill="outline" float-right>Details</ion-button>
-                                    </ion-col>
-                                </ion-row>
-                            </ion-card-title>
-                            <ion-card-subtitle>
-                                <ion-label padding-end>Duration: 6-8 hours</ion-label>
-                                <ion-label padding-end>Distance to route: 70km</ion-label>
-                                <ion-label>Seasons: Oct-Apr</ion-label>
-                            </ion-card-subtitle>
-                            <ion-card-subtitle>
-                                <ion-label>
-                                    Type: Water, Hiking, Canyon, Swiming
-                                </ion-label>
-                            </ion-card-subtitle>
-
-                            <!--need to be added from JS-->
-                        </ion-card-header>
-                        <!--<ion-card-content>-->
-                        <ion-grid wrap>
-                            <ion-row>
-
-                                <ion-col size="4">
-                                    <ion-item>
-                                        Trip Rating: 9 (17
-                                        <ion-icon name="contact"></ion-icon>
-                                        )
-                                    </ion-item>
-                                    <ion-item>
-                                        Level: Extreme + ropes
-                                    </ion-item>
-                                    <ion-item>
-                                        Donated by Guide: Hanuka, 35 <!-- or 'by Traveller -->
-                                    </ion-item>
-
-
-                                </ion-col>
-                                <ion-col size="4">
-
-                                    <ion-item>
-                                        Optional Guidance for 50$/ <ion-icon name="contact" style="font-size: 1em;"></ion-icon>
-                                    </ion-item>
-                                    <ion-row>
-                                        <ion-col size="3">
-                                            <ion-img src="/assets/images/haham.jpg"></ion-img>
-                                        </ion-col>
-                                        <ion-col size="9">
-                                            <ion-item>
-                                                Guide Rating: 8 (544
-                                                <ion-icon name="contact"></ion-icon>
-                                                )
-                                            </ion-item>
-                                            <ion-item>
-                                                Traveler Rating: 2 (12
-                                                <ion-icon name="contact"></ion-icon>
-                                                )
-                                            </ion-item>
-                                        </ion-col>
-
-                                    </ion-row>
-
-
-
-                                </ion-col>
-
-
-                                <ion-col size="4">
-
-                                    <ion-item>
-                                        <ion-label>
-                                            For group of 10+ <ion-icon name="contact" style="font-size: 1em;"></ion-icon>
-                                        </ion-label>
-                                    </ion-item>
-
-
-
-                                    <ion-item>
-                                        <ion-icon name="log-in">Arrival</ion-icon>
-                                        Phone: 054-5548784
-                                    </ion-item>
-                                    <ion-item>
-                                        email tomer@gmail.com
-                                    </ion-item>
-                                </ion-col>
-
-                            </ion-row>
-                            <ion-row>
-                                <ion-col>
-                                    <ion-item>
-                                        (Short) Description: Join us to the beautiful Zeelim river, for a day-hike
-                                        in a canyon with beautiful water pools, boulders, cliffs, and desert wild
-                                        life.
-                                        We will start at Zfira-pool at the upper-Zeelim and walk through the whole
-                                        canyon until the dead sea.
-                                        The trip requires good shape, as we will have cool adventures such as using
-                                        ropes, metal ladders, and swimming through water pools
-                                    </ion-item>
-                                </ion-col>
-                            </ion-row>
-                            <ion-row>
-                                <ion-col>
-                                    <ion-item>
-                                        Equipment: hikng shoes, 3 liters of water, food for the day, sun
-                                        screen, short sleeves, long sleeves, flash-lights
-                                    </ion-item>
-                                </ion-col>
-                            </ion-row>
-                        </ion-grid>
-                        <!--</ion-card-content>-->
-
-
-                    </ion-col>
-                </ion-row>
-            </ion-grid>
-
-
-        </ion-card>
-
-
 
         <ion-infinite-scroll-content
                 loadingSpinner="bubbles"

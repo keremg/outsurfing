@@ -1,7 +1,7 @@
 import {User} from './User';
 
 export class Event {
-    id: string;
+    id?: string;
     routeId: string; //the route from which the Event was created
     name: string;
     country: string;

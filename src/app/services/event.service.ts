@@ -10,35 +10,31 @@ import {Event} from '../models/Event';
   providedIn: 'root'
 })
 export class EventService {
-    tripsCollection: AngularFirestoreCollection<Event>;
-    tripDocRef: AngularFirestoreDocument<Event>;
-    trips: Observable<Event[]>;
-    trip: Observable<Event>;
+    eventsCollection: AngularFirestoreCollection<Event>;
+    eventDocRef: AngularFirestoreDocument<Event>;
+    events: Observable<Event[]>;
+    event: Observable<Event>;
 
     constructor(private afs: AngularFirestore) {
-        this.tripsCollection = this.afs.collection('trips', ref => ref.orderBy('region', 'asc'));
+        this.eventsCollection = this.afs.collection('events', ref => ref.orderBy('region', 'asc'));
     }
 
-    getTrips(): Observable<Event[]> {
+     getEvents(): Observable<Event[]> {
       debugger;
-        this.trips = this.tripsCollection.snapshotChanges().pipe(map(changes => {
+        this.events = this.eventsCollection.snapshotChanges().pipe(map(changes => {
             return changes.map(action => {
                 const data = action.payload.doc.data() as Event;
                 data.id = action.payload.doc.id;
                 return data;
             });
         }));
-        return this.trips;
-    }
-
-    addTrip(trip: Event) {
-        this.tripsCollection.add(trip);
+        return this.events;
     }
 
 
-    gettrip(id: string): Observable<Event> {
-        this.tripDocRef = this.afs.doc<Event>(`trips/${id}`);
-        this.trip = this.tripDocRef.snapshotChanges().pipe(map(action => {
+     getEvent(id: string): Observable<Event> {
+        this.eventDocRef = this.eventsCollection.doc<Event>(id);
+        this.event = this.eventDocRef.snapshotChanges().pipe(map(action => {
             if (action.payload.exists === false) {
                 return null;
             } else {
@@ -47,7 +43,16 @@ export class EventService {
                 return data;
             }
         }));
-        return this.trip;
+        return this.event;
+    }
+
+
+    async addEvent(event: Event) {
+        return this.eventsCollection.add(event);
+    }
+
+    async editEvent(event: Event){
+        return this.eventsCollection.doc(event.id).update(event);
     }
 
 }

@@ -17,7 +17,7 @@ export class EventDetailPage implements OnInit {
 
   ngOnInit() {
       this.id = this.activatedRoute.snapshot.paramMap.get('id');
-      const eventObs = this.eventService.gettrip(this.id);
+      const eventObs = this.eventService.getEvent(this.id);
   }
 
   async onJoin(){
