@@ -16,7 +16,8 @@ const routes: Routes = [
   { path: 'EditProfile', loadChildren: './components/edit-profile/edit-profile.module#EditProfilePageModule' ,canActivate: [AuthGuardService] },
   { path: 'Admin', loadChildren: './components/admin/admin.module#AdminPageModule',canActivate: [AuthGuardService] },
   { path: 'EventReview', loadChildren: './components/event-review/event-review.module#EventReviewPageModule' ,canActivate: [AuthGuardService]},
-  { path: 'EventDetail/:id', loadChildren: './components/event-detail/event-detail.module#EventDetailPageModule' ,canActivate: [AuthGuardService]},
+    { path: 'EventDetail/:id/:route', loadChildren: './components/event-detail/event-detail.module#EventDetailPageModule' ,canActivate: [AuthGuardService]},
+
   { path: 'JoinEvent', loadChildren: './components/join-event/join-event.module#JoinEventPageModule' ,canActivate: [AuthGuardService]},
 
 ];

@@ -1,7 +1,7 @@
 <ion-header>
 
     <ion-toolbar padding-horizontal>
-        <ion-back-button slot="start" defaultHref="home"></ion-back-button> 
+        <ion-back-button slot="start" defaultHref="home"></ion-back-button>
         <ion-label style="font-size: 2em;" slot="start">
             OutSurfing - Choose a Route
         </ion-label>
@@ -53,7 +53,7 @@
                                         {{route.name}}
                                     </ion-col>
                                     <ion-col size="2">
-                                        <ion-button color="success" shape="round" fill="solid" float-right>Event It
+                                        <ion-button color="success" shape="round" fill="solid" float-right (click)="eventIt(route.id)">Event It
                                         </ion-button>
                                     </ion-col>
                                     <ion-col size="2">

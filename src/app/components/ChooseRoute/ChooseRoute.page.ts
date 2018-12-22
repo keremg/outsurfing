@@ -28,4 +28,8 @@ export class ChooseRoute implements OnInit {
     createNew(){
         this.navCtrl.navigateForward('SingleRoute')
     }
+
+    eventIt(routeId){
+        this.navCtrl.navigateForward('EventDetail/0/'+routeId)
+    }
 }
