@@ -14,9 +14,7 @@ interface QueryConfig {
     prepend: boolean // prepend to source?
 }
 
-@Injectable({
-    providedIn: 'root'
-})
+@Injectable()
 export class PaginationService {
 
     // Source data

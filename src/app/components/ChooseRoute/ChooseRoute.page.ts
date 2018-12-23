@@ -9,6 +9,7 @@ import {PaginationService} from '../../services/pagination.service';
     selector: 'app-ChooseRoute',
     templateUrl: 'ChooseRoute.page.html',
     styleUrls: ['ChooseRoute.page.scss'],
+    providers:[PaginationService],
 })
 export class ChooseRoute implements OnInit {
 

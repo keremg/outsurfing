@@ -10,7 +10,7 @@ import {PaginationService} from '../../services/pagination.service';
     selector: 'app-home',
     templateUrl: 'home.page.html',
     styleUrls: ['home.page.scss'],
-
+    providers:[PaginationService],
 })
 
 export class HomePage implements OnInit {
