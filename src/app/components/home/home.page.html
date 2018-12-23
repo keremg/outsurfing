@@ -5,11 +5,11 @@
         <ion-label style="font-size: 2em;" slot="primary">
             OutSurfing - Events
         </ion-label>
-        <ion-label slot="primary" padding-horizontal >
-            <ion-searchbar ></ion-searchbar>
+        <ion-label slot="primary" padding-horizontal>
+            <ion-searchbar></ion-searchbar>
         </ion-label>
-        <ion-label slot="primary" style="font-size: 1.5em;" >
-            <ion-icon name="funnel" ></ion-icon>
+        <ion-label slot="primary" style="font-size: 1.5em;">
+            <ion-icon name="funnel"></ion-icon>
             Filter
         </ion-label>
 
@@ -27,492 +27,652 @@
         </ion-buttons>
 
 
-
     </ion-toolbar>
 </ion-header>
 
 <ion-content padding>
     <!-- add filter https://www.joshmorony.com/high-performance-list-filtering-in-ionic-2/-->
-    <ion-infinite-scroll>
-        <ion-card class="event">
-            <ion-grid>
-                <ion-row>
-                    <ion-col size="4" push-md="8">
-                        <ion-img src="/assets/images/zeelim_zfira.jpg" class="eventImg"></ion-img>
-                        <ion-list>
-                            <ion-item>
-                                <ion-label>
-                                    Trip Rating: 9 (17
+    <ion-card *ngFor="let event of this.page.data | async; let i = index" [attr.data-index]="i" class="event">
+        <ion-grid>
+            <ion-row>
+                <ion-col size="4" push-md="8">
+                    <ion-img src="/assets/images/zeelim_zfira.jpg" class="eventImg"></ion-img>
+                    <ion-list>
+                        <ion-item>
+                            <ion-label>
+                                Trip Rating: 9 (17
+                                <ion-icon name="contact"></ion-icon>
+                                )
+                            </ion-label>
+                            <ion-label>
+                                Level: Medium +
+                            </ion-label>
+                        </ion-item>
+                    </ion-list>
+                </ion-col>
+                <ion-col size="8" pull-md="4">
+
+                    <ion-card-header no-padding>
+                        <ion-card-title style="font-size: 2em;">
+                            <ion-row justify-content-between style="align-items: center;">
+                                <ion-col size="9">
+                                    <ion-icon name="calendar"></ion-icon>
+                                    <ion-text style="font-size: 0.5em;">Event</ion-text>
+                                    {{event.name}}
+                                </ion-col>
+                                <ion-col size="3">
+                                    <ion-button shape="round" fill="outline" (click)="ShowEventDetail(event.doc.id)"
+                                                float-right>More Details
+                                    </ion-button>
+                                </ion-col>
+                            </ion-row>
+                        </ion-card-title>
+                        <ion-card-subtitle>
+                            <ion-label padding-end>24/11/2018 08:00am</ion-label>
+                            <ion-label padding-end>1 day</ion-label>
+                            <ion-label padding-end>Meeting: Tel Aviv, Ben Yehuda 220</ion-label>
+                            <ion-label padding-end>Distance to meeting: 5km</ion-label>
+                            <ion-label padding-end>Distance to trip: 70km</ion-label>
+                        </ion-card-subtitle>
+                        <ion-card-subtitle>
+                            <ion-label>
+                                Type: Water, Hiking, Canyon, Swiming
+                            </ion-label>
+                            <ion-label>
+                                Ages: 20-70
+                            </ion-label>
+                        </ion-card-subtitle>
+                        <!--need to be added from JS-->
+                    </ion-card-header>
+                    <!--<ion-card-content>-->
+                    <ion-grid wrap>
+                        <ion-row>
+                            <ion-col size="2">
+                                <ion-img src="/assets/images/haham.jpg"></ion-img>
+                            </ion-col>
+                            <ion-col size="4">
+                                <ion-item>
+                                    Hanuka, Age: 35
+                                </ion-item>
+                                <ion-item>
+                                    Is Guide: Yes
+                                </ion-item>
+                                <ion-item>
+                                    Guide Rating: 8 (544
                                     <ion-icon name="contact"></ion-icon>
                                     )
-                                </ion-label>
-                                <ion-label>
-                                    Level: Medium +
-                                </ion-label>
-                            </ion-item>
-                        </ion-list>
-                    </ion-col>
-                    <ion-col size="8" pull-md="4">
-
-                        <ion-card-header no-padding>
-                            <ion-card-title style="font-size: 2em;">
-                                <ion-row justify-content-between style="align-items: center;">
-                                    <ion-col size="9">
-                                        <ion-icon name="calendar"></ion-icon>
-                                        <ion-text style="font-size: 0.5em;">Event</ion-text>
-                                        Zeelim Wadi - Upper part
-                                    </ion-col>
-                                    <ion-col size="3">
-                                        <ion-button shape="round" fill="outline" (click)="ShowEventDetail(2)" float-right>More Details</ion-button>
-                                    </ion-col>
-                                </ion-row>
-                            </ion-card-title>
-                            <ion-card-subtitle>
-                                <ion-label padding-end>24/11/2018 08:00am</ion-label>
-                                <ion-label padding-end>1 day</ion-label>
-                                <ion-label padding-end>Meeting: Tel Aviv, Ben Yehuda 220</ion-label>
-                                <ion-label padding-end>Distance to meeting: 5km</ion-label>
-                                <ion-label padding-end>Distance to trip: 70km</ion-label>
-                            </ion-card-subtitle>
-                            <ion-card-subtitle>
-                                <ion-label>
-                                    Type: Water, Hiking, Canyon, Swiming
-                                </ion-label>
-                                <ion-label>
-                                    Ages: 20-70
-                                </ion-label>
-                            </ion-card-subtitle>
-                            <!--need to be added from JS-->
-                        </ion-card-header>
-                        <!--<ion-card-content>-->
-                        <ion-grid wrap>
-                            <ion-row>
-                                <ion-col size="2">
-                                    <ion-img src="/assets/images/haham.jpg"></ion-img>
-                                </ion-col>
-                                <ion-col size="4">
-                                    <ion-item>
-                                        Hanuka, Age: 35
-                                    </ion-item>
-                                    <ion-item>
-                                        Is Guide: Yes
-                                    </ion-item>
-                                    <ion-item>
-                                        Guide Rating: 8 (544
-                                        <ion-icon name="contact"></ion-icon>
-                                        )
-                                    </ion-item>
-                                    <ion-item>
-                                        Traveler Rating: 2 (12
-                                        <ion-icon name="contact"></ion-icon>
-                                        )
-                                    </ion-item>
-                                </ion-col>
-                                <ion-col size="2">
-                                    <ion-item>
-                                        5 participants
-                                    </ion-item>
-                                    <ion-grid wrap>
-                                        <ion-row size="12">
-                                            <ion-col size="4">
-                                                <ion-img src="/assets/images/haham.jpg"></ion-img>
-                                            </ion-col>
-                                            <ion-col size="4">
-                                                <ion-img src="/assets/images/haham.jpg"></ion-img>
-                                            </ion-col>
-                                            <ion-col size="4">
-                                                <ion-img src="/assets/images/haham.jpg"></ion-img>
-                                            </ion-col>
-                                        </ion-row>
-                                        <ion-row size="12">
-                                            <ion-col size="4">
-                                                <ion-img src="/assets/images/haham.jpg"></ion-img>
-                                            </ion-col>
-                                            <ion-col size="4">
-                                                <ion-img src="/assets/images/haham.jpg"></ion-img>
-                                            </ion-col>
-                                        </ion-row>
-                                    </ion-grid>
-
-                                </ion-col>
-                                <ion-col size="4">
-                                    <ion-item>
-                                        <ion-icon name="car" style="font-size: 1em;" padding-end></ion-icon>
-                                        6 Available seats
-                                    </ion-item>
-                                    <ion-item>
-                                        <ion-icon name="cart" style="font-size: 1em;" padding-end></ion-icon>
-                                        50$/
-                                        <ion-icon name="contact" style="font-size: 1em;"></ion-icon>
-                                    </ion-item>
-                                    <ion-item>
-                                        <ion-label>
-                                            Audience: Single, Couples
-                                        </ion-label>
-                                    </ion-item>
-                                    <ion-item>
-                                        <ion-icon name="log-in">Arrival</ion-icon>
-                                        : private cars
-                                    </ion-item>
-                                </ion-col>
-
-                            </ion-row>
-                            <ion-row>
-                                <ion-col>
-                                    <ion-item>
-                                        (Short) Description: Join us to the beautiful Zeelim river, for a day-hike
-                                        in a canyon with beautiful water pools, boulders, cliffs, and desert wild
-                                        life.
-                                        We will start at Zfira-pool at the upper-Zeelim and walk through the whole
-                                        canyon until the dead sea.
-                                        The trip requires good shape, as we will have cool adventures such as using
-                                        ropes, metal ladders, and swimming through water pools
-                                    </ion-item>
-                                </ion-col>
-                            </ion-row>
-                            <ion-row>
-                                <ion-col>
-                                    <ion-item>
-                                        Equipment: hikng shoes, 3 liters of water, food for the day, sun
-                                        screen, short sleeves, long sleeves, flash-lights
-                                    </ion-item>
-                                </ion-col>
-                            </ion-row>
-                        </ion-grid>
-                        <!--</ion-card-content>-->
-
-
-                    </ion-col>
-                </ion-row>
-            </ion-grid>
-
-
-        </ion-card>
-
-
-        <ion-card class="event">
-            <ion-grid>
-                <ion-row>
-                    <ion-col size="4" push-md="8">
-                        <ion-img src="/assets/images/yehudia.jpg" class="eventImg"></ion-img>
-                        <ion-list>
-                            <ion-item>
-                                <ion-label>
-                                    Trip Rating: 9 (17
+                                </ion-item>
+                                <ion-item>
+                                    Traveler Rating: 2 (12
                                     <ion-icon name="contact"></ion-icon>
                                     )
-                                </ion-label>
-                                <ion-label>
-                                    Level: Extreme
-                                </ion-label>
-                            </ion-item>
+                                </ion-item>
+                            </ion-col>
+                            <ion-col size="2">
+                                <ion-item>
+                                    5 participants
+                                </ion-item>
+                                <ion-grid wrap>
+                                    <ion-row size="12">
+                                        <ion-col size="4">
+                                            <ion-img src="/assets/images/haham.jpg"></ion-img>
+                                        </ion-col>
+                                        <ion-col size="4">
+                                            <ion-img src="/assets/images/haham.jpg"></ion-img>
+                                        </ion-col>
+                                        <ion-col size="4">
+                                            <ion-img src="/assets/images/haham.jpg"></ion-img>
+                                        </ion-col>
+                                    </ion-row>
+                                    <ion-row size="12">
+                                        <ion-col size="4">
+                                            <ion-img src="/assets/images/haham.jpg"></ion-img>
+                                        </ion-col>
+                                        <ion-col size="4">
+                                            <ion-img src="/assets/images/haham.jpg"></ion-img>
+                                        </ion-col>
+                                    </ion-row>
+                                </ion-grid>
 
-                        </ion-list>
-                    </ion-col>
-                    <ion-col size="8" pull-md="4">
+                            </ion-col>
+                            <ion-col size="4">
+                                <ion-item>
+                                    <ion-icon name="car" style="font-size: 1em;" padding-end></ion-icon>
+                                    6 Available seats
+                                </ion-item>
+                                <ion-item>
+                                    <ion-icon name="cart" style="font-size: 1em;" padding-end></ion-icon>
+                                    50$/
+                                    <ion-icon name="contact" style="font-size: 1em;"></ion-icon>
+                                </ion-item>
+                                <ion-item>
+                                    <ion-label>
+                                        Audience: Single, Couples
+                                    </ion-label>
+                                </ion-item>
+                                <ion-item>
+                                    <ion-icon name="log-in">Arrival</ion-icon>
+                                    : private cars
+                                </ion-item>
+                            </ion-col>
 
-
-                        <ion-card-header no-padding>
-                            <ion-card-title style="font-size: 2em;">
-                                <ion-row justify-content-between style="align-items: center;">
-                                    <ion-col size="9">
-                                        <ion-icon name="calendar"></ion-icon>
-                                        <ion-text style="font-size: 0.5em;">Event</ion-text>
-                                        Yehudia Stream - Forbidden paradise
-                                    </ion-col>
-                                    <ion-col size="3">
-                                        <ion-button shape="round" fill="outline" float-right>More Details</ion-button>
-                                    </ion-col>
-                                </ion-row>
-                            </ion-card-title>
-                            <ion-card-subtitle>
-                                <ion-label padding-end>24/11/2018 08:00am</ion-label>
-                                <ion-label padding-end>1 day</ion-label>
-                                <ion-label padding-end>Meeting: Tel Aviv, Ben Yehuda 220</ion-label>
-                                <ion-label padding-end>Distance to meeting: 5km</ion-label>
-                                <ion-label padding-end>Distance to trip: 70km</ion-label>
-                            </ion-card-subtitle>
-                            <ion-card-subtitle>
-                                <ion-label>
-                                    Type: Water, Hiking, Canyon, Swiming
-                                </ion-label>
-                                <ion-label>
-                                    Ages: 20-70
-                                </ion-label>
-                            </ion-card-subtitle>
-                            <!--need to be added from JS-->
-                        </ion-card-header>
-                        <!--<ion-card-content>-->
-                        <ion-grid wrap>
-                            <ion-row>
-                                <ion-col size="2">
-                                    <ion-img src="/assets/images/haham.jpg"></ion-img>
-                                </ion-col>
-                                <ion-col size="4">
-                                    <ion-item>
-                                        Hanuka, Age: 35
-                                    </ion-item>
-                                    <ion-item>
-                                        Is Guide: Yes
-                                    </ion-item>
-                                    <ion-item>
-                                        Guide Rating: 8 (544
-                                        <ion-icon name="contact"></ion-icon>
-                                        )
-                                    </ion-item>
-                                    <ion-item>
-                                        Traveler Rating: 2 (12
-                                        <ion-icon name="contact"></ion-icon>
-                                        )
-                                    </ion-item>
-                                </ion-col>
-                                <ion-col size="2">
-                                    <ion-item>
-                                        5 participants
-                                    </ion-item>
-                                    <ion-grid wrap>
-                                        <ion-row size="12">
-                                            <ion-col size="4">
-                                                <ion-img src="/assets/images/haham.jpg"></ion-img>
-                                            </ion-col>
-                                            <ion-col size="4">
-                                                <ion-img src="/assets/images/haham.jpg"></ion-img>
-                                            </ion-col>
-                                            <ion-col size="4">
-                                                <ion-img src="/assets/images/haham.jpg"></ion-img>
-                                            </ion-col>
-                                        </ion-row>
-                                        <ion-row size="12">
-                                            <ion-col size="4">
-                                                <ion-img src="/assets/images/haham.jpg"></ion-img>
-                                            </ion-col>
-                                            <ion-col size="4">
-                                                <ion-img src="/assets/images/haham.jpg"></ion-img>
-                                            </ion-col>
-                                        </ion-row>
-                                    </ion-grid>
-
-                                </ion-col>
-                                <ion-col size="4">
-                                    <ion-item>
-                                        <ion-icon name="car" style="font-size: 1em;"></ion-icon>
-                                        6 Available seats
-                                    </ion-item>
-                                    <ion-item>
-                                        <ion-icon name="cart" style="font-size: 1em;"></ion-icon>
-                                        50$/
-                                        <ion-icon name="contact" style="font-size: 1em;"></ion-icon>
-                                    </ion-item>
-                                    <ion-item>
-                                        <ion-label>
-                                            Audience: Single, Couples
-                                        </ion-label>
-                                    </ion-item>
-                                    <ion-item>
-                                        <ion-icon name="bus"></ion-icon>
-                                        <ion-icon name="car"></ion-icon>
-                                        <ion-icon name="train"></ion-icon>
-                                        : private cars
-                                    </ion-item>
-                                </ion-col>
-
-                            </ion-row>
-                            <ion-row>
-                                <ion-col>
-                                    <ion-item>
-                                        (Short) Description: Join us to the beautiful Zeelim river, for a day-hike
-                                        in a canyon with beautiful water pools, boulders, cliffs, and desert wild
-                                        life.
-                                        We will start at Zfira-pool at the upper-Zeelim and walk through the whole
-                                        canyon until the dead sea.
-                                        The trip requires good shape, as we will have cool adventures such as using
-                                        ropes, metal ladders, and swimming through water pools
-                                    </ion-item>
-                                </ion-col>
-                            </ion-row>
-                            <ion-row>
-                                <ion-col>
-                                    <ion-item>
-                                        Equipment: hikng shoes, 3 liters of water, food for the day, sun
-                                        screen, short sleeves, long sleeves, flash-lights
-                                    </ion-item>
-                                </ion-col>
-                            </ion-row>
-                        </ion-grid>
-                        <!--</ion-card-content>-->
+                        </ion-row>
+                        <ion-row>
+                            <ion-col>
+                                <ion-item>
+                                    (Short) Description: Join us to the beautiful Zeelim river, for a day-hike
+                                    in a canyon with beautiful water pools, boulders, cliffs, and desert wild
+                                    life.
+                                    We will start at Zfira-pool at the upper-Zeelim and walk through the whole
+                                    canyon until the dead sea.
+                                    The trip requires good shape, as we will have cool adventures such as using
+                                    ropes, metal ladders, and swimming through water pools
+                                </ion-item>
+                            </ion-col>
+                        </ion-row>
+                        <ion-row>
+                            <ion-col>
+                                <ion-item>
+                                    Equipment: hikng shoes, 3 liters of water, food for the day, sun
+                                    screen, short sleeves, long sleeves, flash-lights
+                                </ion-item>
+                            </ion-col>
+                        </ion-row>
+                    </ion-grid>
+                    <!--</ion-card-content>-->
 
 
-                    </ion-col>
-                </ion-row>
-            </ion-grid>
+                </ion-col>
+            </ion-row>
+        </ion-grid>
 
 
-        </ion-card>
-
-        <ion-card class="event">
-            <ion-grid>
-                <ion-row>
-                    <ion-col size="4" push-md="8">
-                        <ion-img src="/assets/images/zavitan.jpg" class="eventImg"></ion-img>
-                        <ion-list>
-                            <ion-item>
-                                <ion-label>
-                                    Trip Rating: 9 (17
-                                    <ion-icon name="contact"></ion-icon>
-                                    )
-                                </ion-label>
-                                <ion-label>
-                                    Level: Extreme
-                                </ion-label>
-                            </ion-item>
-
-                        </ion-list>
-                    </ion-col>
-                    <ion-col size="8" pull-md="4">
+    </ion-card>
 
 
-                        <ion-card-header no-padding>
-                            <ion-card-title style="font-size: 2em;">
-                                <ion-row justify-content-between style="align-items: center;">
-                                    <ion-col size="9">
-                                        <ion-icon name="calendar"></ion-icon>
-                                        <ion-text style="font-size: 0.5em;">Event</ion-text>
-                                        Zavitan Stream - Canyoning Adventuregi
-                                    </ion-col>
-                                    <ion-col size="3">
-                                        <ion-button shape="round" fill="outline" float-right>More Details</ion-button>
-                                    </ion-col>
-                                </ion-row>
-                            </ion-card-title>
-                            <ion-card-subtitle>
-                                <ion-label padding-end>24/11/2018 08:00am</ion-label>
-                                <ion-label padding-end>1 day</ion-label>
-                                <ion-label padding-end>Meeting: Tel Aviv, Ben Yehuda 220</ion-label>
-                                <ion-label padding-end>Distance to meeting: 5km</ion-label>
-                                <ion-label padding-end>Distance to route: 70km</ion-label>
-                            </ion-card-subtitle>
-                            <ion-card-subtitle>
-                                <ion-label>
-                                    Type: Water, Hiking, Canyon, Swiming
-                                </ion-label>
-                                <ion-label>
-                                    Ages: 20-70
-                                </ion-label>
-                            </ion-card-subtitle>
-                            <!--need to be added from JS-->
-                        </ion-card-header>
-                        <!--<ion-card-content>-->
-                        <ion-grid wrap>
-                            <ion-row>
-                                <ion-col size="2">
-                                    <ion-img src="/assets/images/haham.jpg"></ion-img>
-                                </ion-col>
-                                <ion-col size="4">
-                                    <ion-item>
-                                        Hanuka, Age: 35
-                                    </ion-item>
-                                    <ion-item>
-                                        Is Guide: Yes
-                                    </ion-item>
-                                    <ion-item>
-                                        Guide Rating: 8 (544
-                                        <ion-icon name="contact"></ion-icon>
-                                        )
-                                    </ion-item>
-                                    <ion-item>
-                                        Traveler Rating: 2 (12
-                                        <ion-icon name="contact"></ion-icon>
-                                        )
-                                    </ion-item>
-                                </ion-col>
-                                <ion-col size="2">
-                                    <ion-item>
-                                        5 participants
-                                    </ion-item>
-                                    <ion-grid wrap>
-                                        <ion-row size="12">
-                                            <ion-col size="4">
-                                                <ion-img src="/assets/images/haham.jpg"></ion-img>
-                                            </ion-col>
-                                            <ion-col size="4">
-                                                <ion-img src="/assets/images/haham.jpg"></ion-img>
-                                            </ion-col>
-                                            <ion-col size="4">
-                                                <ion-img src="/assets/images/haham.jpg"></ion-img>
-                                            </ion-col>
-                                        </ion-row>
-                                        <ion-row size="12">
-                                            <ion-col size="4">
-                                                <ion-img src="/assets/images/haham.jpg"></ion-img>
-                                            </ion-col>
-                                            <ion-col size="4">
-                                                <ion-img src="/assets/images/haham.jpg"></ion-img>
-                                            </ion-col>
-                                        </ion-row>
-                                    </ion-grid>
-
-                                </ion-col>
-                                <ion-col size="4">
-                                    <ion-item>
-                                        <ion-icon name="car" style="font-size: 1em;"></ion-icon>
-                                        6 Available seats
-                                    </ion-item>
-                                    <ion-item>
-                                        <ion-icon name="cart" style="font-size: 1em;"></ion-icon>
-                                        50$/
-                                        <ion-icon name="contact" style="font-size: 1em;"></ion-icon>
-                                    </ion-item>
-                                    <ion-item>
-                                        <ion-label>
-                                            Audience: Single, Couples
-                                        </ion-label>
-                                    </ion-item>
-                                    <ion-item>
-                                        <ion-icon name="bus"></ion-icon>
-                                        <ion-icon name="car"></ion-icon>
-                                        <ion-icon name="train"></ion-icon>
-                                        : private cars
-                                    </ion-item>
-                                </ion-col>
-
-                            </ion-row>
-                            <ion-row>
-                                <ion-col>
-                                    <ion-item>
-                                        (Short) Description: Join us to the beautiful Zeelim river, for a day-hike
-                                        in a canyon with beautiful water pools, boulders, cliffs, and desert wild
-                                        life.
-                                        We will start at Zfira-pool at the upper-Zeelim and walk through the whole
-                                        canyon until the dead sea.
-                                        The trip requires good shape, as we will have cool adventures such as using
-                                        ropes, metal ladders, and swimming through water pools
-                                    </ion-item>
-                                </ion-col>
-                            </ion-row>
-                            <ion-row>
-                                <ion-col>
-                                    <ion-item>
-                                        Equipment: hikng shoes, 3 liters of water, food for the day, sun
-                                        screen, short sleeves, long sleeves, flash-lights
-                                    </ion-item>
-                                </ion-col>
-                            </ion-row>
-                        </ion-grid>
-                        <!--</ion-card-content>-->
-
-
-                    </ion-col>
-                </ion-row>
-            </ion-grid>
-
-
-        </ion-card>
-
+    <ion-infinite-scroll id='infinite-scroll' (ionInfinite)="loadData($event)">
         <ion-infinite-scroll-content
                 loadingSpinner="bubbles"
                 loadingText="Loading more data...">
         </ion-infinite-scroll-content>
     </ion-infinite-scroll>
+
+
+    <!--TODO: from here all cards are just an example-->
+    <ion-card class="event">
+        <ion-grid>
+            <ion-row>
+                <ion-col size="4" push-md="8">
+                    <ion-img src="/assets/images/zeelim_zfira.jpg" class="eventImg"></ion-img>
+                    <ion-list>
+                        <ion-item>
+                            <ion-label>
+                                Trip Rating: 9 (17
+                                <ion-icon name="contact"></ion-icon>
+                                )
+                            </ion-label>
+                            <ion-label>
+                                Level: Medium +
+                            </ion-label>
+                        </ion-item>
+                    </ion-list>
+                </ion-col>
+                <ion-col size="8" pull-md="4">
+
+                    <ion-card-header no-padding>
+                        <ion-card-title style="font-size: 2em;">
+                            <ion-row justify-content-between style="align-items: center;">
+                                <ion-col size="9">
+                                    <ion-icon name="calendar"></ion-icon>
+                                    <ion-text style="font-size: 0.5em;">Event</ion-text>
+                                    Upper tzeelim
+                                </ion-col>
+                                <ion-col size="3">
+                                    <ion-button shape="round" fill="outline" (click)="ShowEventDetail(2)"
+                                                float-right>More Details
+                                    </ion-button>
+                                </ion-col>
+                            </ion-row>
+                        </ion-card-title>
+                        <ion-card-subtitle>
+                            <ion-label padding-end>24/11/2018 08:00am</ion-label>
+                            <ion-label padding-end>1 day</ion-label>
+                            <ion-label padding-end>Meeting: Tel Aviv, Ben Yehuda 220</ion-label>
+                            <ion-label padding-end>Distance to meeting: 5km</ion-label>
+                            <ion-label padding-end>Distance to trip: 70km</ion-label>
+                        </ion-card-subtitle>
+                        <ion-card-subtitle>
+                            <ion-label>
+                                Type: Water, Hiking, Canyon, Swiming
+                            </ion-label>
+                            <ion-label>
+                                Ages: 20-70
+                            </ion-label>
+                        </ion-card-subtitle>
+                        <!--need to be added from JS-->
+                    </ion-card-header>
+                    <!--<ion-card-content>-->
+                    <ion-grid wrap>
+                        <ion-row>
+                            <ion-col size="2">
+                                <ion-img src="/assets/images/haham.jpg"></ion-img>
+                            </ion-col>
+                            <ion-col size="4">
+                                <ion-item>
+                                    Hanuka, Age: 35
+                                </ion-item>
+                                <ion-item>
+                                    Is Guide: Yes
+                                </ion-item>
+                                <ion-item>
+                                    Guide Rating: 8 (544
+                                    <ion-icon name="contact"></ion-icon>
+                                    )
+                                </ion-item>
+                                <ion-item>
+                                    Traveler Rating: 2 (12
+                                    <ion-icon name="contact"></ion-icon>
+                                    )
+                                </ion-item>
+                            </ion-col>
+                            <ion-col size="2">
+                                <ion-item>
+                                    5 participants
+                                </ion-item>
+                                <ion-grid wrap>
+                                    <ion-row size="12">
+                                        <ion-col size="4">
+                                            <ion-img src="/assets/images/haham.jpg"></ion-img>
+                                        </ion-col>
+                                        <ion-col size="4">
+                                            <ion-img src="/assets/images/haham.jpg"></ion-img>
+                                        </ion-col>
+                                        <ion-col size="4">
+                                            <ion-img src="/assets/images/haham.jpg"></ion-img>
+                                        </ion-col>
+                                    </ion-row>
+                                    <ion-row size="12">
+                                        <ion-col size="4">
+                                            <ion-img src="/assets/images/haham.jpg"></ion-img>
+                                        </ion-col>
+                                        <ion-col size="4">
+                                            <ion-img src="/assets/images/haham.jpg"></ion-img>
+                                        </ion-col>
+                                    </ion-row>
+                                </ion-grid>
+
+                            </ion-col>
+                            <ion-col size="4">
+                                <ion-item>
+                                    <ion-icon name="car" style="font-size: 1em;" padding-end></ion-icon>
+                                    6 Available seats
+                                </ion-item>
+                                <ion-item>
+                                    <ion-icon name="cart" style="font-size: 1em;" padding-end></ion-icon>
+                                    50$/
+                                    <ion-icon name="contact" style="font-size: 1em;"></ion-icon>
+                                </ion-item>
+                                <ion-item>
+                                    <ion-label>
+                                        Audience: Single, Couples
+                                    </ion-label>
+                                </ion-item>
+                                <ion-item>
+                                    <ion-icon name="log-in">Arrival</ion-icon>
+                                    : private cars
+                                </ion-item>
+                            </ion-col>
+
+                        </ion-row>
+                        <ion-row>
+                            <ion-col>
+                                <ion-item>
+                                    (Short) Description: Join us to the beautiful Zeelim river, for a day-hike
+                                    in a canyon with beautiful water pools, boulders, cliffs, and desert wild
+                                    life.
+                                    We will start at Zfira-pool at the upper-Zeelim and walk through the whole
+                                    canyon until the dead sea.
+                                    The trip requires good shape, as we will have cool adventures such as using
+                                    ropes, metal ladders, and swimming through water pools
+                                </ion-item>
+                            </ion-col>
+                        </ion-row>
+                        <ion-row>
+                            <ion-col>
+                                <ion-item>
+                                    Equipment: hikng shoes, 3 liters of water, food for the day, sun
+                                    screen, short sleeves, long sleeves, flash-lights
+                                </ion-item>
+                            </ion-col>
+                        </ion-row>
+                    </ion-grid>
+                    <!--</ion-card-content>-->
+
+
+                </ion-col>
+            </ion-row>
+        </ion-grid>
+
+
+    </ion-card>
+
+    <ion-card class="event">
+        <ion-grid>
+            <ion-row>
+                <ion-col size="4" push-md="8">
+                    <ion-img src="/assets/images/yehudia.jpg" class="eventImg"></ion-img>
+                    <ion-list>
+                        <ion-item>
+                            <ion-label>
+                                Trip Rating: 9 (17
+                                <ion-icon name="contact"></ion-icon>
+                                )
+                            </ion-label>
+                            <ion-label>
+                                Level: Extreme
+                            </ion-label>
+                        </ion-item>
+
+                    </ion-list>
+                </ion-col>
+                <ion-col size="8" pull-md="4">
+
+
+                    <ion-card-header no-padding>
+                        <ion-card-title style="font-size: 2em;">
+                            <ion-row justify-content-between style="align-items: center;">
+                                <ion-col size="9">
+                                    <ion-icon name="calendar"></ion-icon>
+                                    <ion-text style="font-size: 0.5em;">Event</ion-text>
+                                    Yehudia Stream - Forbidden paradise
+                                </ion-col>
+                                <ion-col size="3">
+                                    <ion-button shape="round" fill="outline" float-right>More Details</ion-button>
+                                </ion-col>
+                            </ion-row>
+                        </ion-card-title>
+                        <ion-card-subtitle>
+                            <ion-label padding-end>24/11/2018 08:00am</ion-label>
+                            <ion-label padding-end>1 day</ion-label>
+                            <ion-label padding-end>Meeting: Tel Aviv, Ben Yehuda 220</ion-label>
+                            <ion-label padding-end>Distance to meeting: 5km</ion-label>
+                            <ion-label padding-end>Distance to trip: 70km</ion-label>
+                        </ion-card-subtitle>
+                        <ion-card-subtitle>
+                            <ion-label>
+                                Type: Water, Hiking, Canyon, Swiming
+                            </ion-label>
+                            <ion-label>
+                                Ages: 20-70
+                            </ion-label>
+                        </ion-card-subtitle>
+                        <!--need to be added from JS-->
+                    </ion-card-header>
+                    <!--<ion-card-content>-->
+                    <ion-grid wrap>
+                        <ion-row>
+                            <ion-col size="2">
+                                <ion-img src="/assets/images/haham.jpg"></ion-img>
+                            </ion-col>
+                            <ion-col size="4">
+                                <ion-item>
+                                    Hanuka, Age: 35
+                                </ion-item>
+                                <ion-item>
+                                    Is Guide: Yes
+                                </ion-item>
+                                <ion-item>
+                                    Guide Rating: 8 (544
+                                    <ion-icon name="contact"></ion-icon>
+                                    )
+                                </ion-item>
+                                <ion-item>
+                                    Traveler Rating: 2 (12
+                                    <ion-icon name="contact"></ion-icon>
+                                    )
+                                </ion-item>
+                            </ion-col>
+                            <ion-col size="2">
+                                <ion-item>
+                                    5 participants
+                                </ion-item>
+                                <ion-grid wrap>
+                                    <ion-row size="12">
+                                        <ion-col size="4">
+                                            <ion-img src="/assets/images/haham.jpg"></ion-img>
+                                        </ion-col>
+                                        <ion-col size="4">
+                                            <ion-img src="/assets/images/haham.jpg"></ion-img>
+                                        </ion-col>
+                                        <ion-col size="4">
+                                            <ion-img src="/assets/images/haham.jpg"></ion-img>
+                                        </ion-col>
+                                    </ion-row>
+                                    <ion-row size="12">
+                                        <ion-col size="4">
+                                            <ion-img src="/assets/images/haham.jpg"></ion-img>
+                                        </ion-col>
+                                        <ion-col size="4">
+                                            <ion-img src="/assets/images/haham.jpg"></ion-img>
+                                        </ion-col>
+                                    </ion-row>
+                                </ion-grid>
+
+                            </ion-col>
+                            <ion-col size="4">
+                                <ion-item>
+                                    <ion-icon name="car" style="font-size: 1em;"></ion-icon>
+                                    6 Available seats
+                                </ion-item>
+                                <ion-item>
+                                    <ion-icon name="cart" style="font-size: 1em;"></ion-icon>
+                                    50$/
+                                    <ion-icon name="contact" style="font-size: 1em;"></ion-icon>
+                                </ion-item>
+                                <ion-item>
+                                    <ion-label>
+                                        Audience: Single, Couples
+                                    </ion-label>
+                                </ion-item>
+                                <ion-item>
+                                    <ion-icon name="bus"></ion-icon>
+                                    <ion-icon name="car"></ion-icon>
+                                    <ion-icon name="train"></ion-icon>
+                                    : private cars
+                                </ion-item>
+                            </ion-col>
+
+                        </ion-row>
+                        <ion-row>
+                            <ion-col>
+                                <ion-item>
+                                    (Short) Description: Join us to the beautiful Zeelim river, for a day-hike
+                                    in a canyon with beautiful water pools, boulders, cliffs, and desert wild
+                                    life.
+                                    We will start at Zfira-pool at the upper-Zeelim and walk through the whole
+                                    canyon until the dead sea.
+                                    The trip requires good shape, as we will have cool adventures such as using
+                                    ropes, metal ladders, and swimming through water pools
+                                </ion-item>
+                            </ion-col>
+                        </ion-row>
+                        <ion-row>
+                            <ion-col>
+                                <ion-item>
+                                    Equipment: hikng shoes, 3 liters of water, food for the day, sun
+                                    screen, short sleeves, long sleeves, flash-lights
+                                </ion-item>
+                            </ion-col>
+                        </ion-row>
+                    </ion-grid>
+                    <!--</ion-card-content>-->
+
+
+                </ion-col>
+            </ion-row>
+        </ion-grid>
+
+
+    </ion-card>
+
+    <ion-card class="event">
+        <ion-grid>
+            <ion-row>
+                <ion-col size="4" push-md="8">
+                    <ion-img src="/assets/images/zavitan.jpg" class="eventImg"></ion-img>
+                    <ion-list>
+                        <ion-item>
+                            <ion-label>
+                                Trip Rating: 9 (17
+                                <ion-icon name="contact"></ion-icon>
+                                )
+                            </ion-label>
+                            <ion-label>
+                                Level: Extreme
+                            </ion-label>
+                        </ion-item>
+
+                    </ion-list>
+                </ion-col>
+                <ion-col size="8" pull-md="4">
+
+
+                    <ion-card-header no-padding>
+                        <ion-card-title style="font-size: 2em;">
+                            <ion-row justify-content-between style="align-items: center;">
+                                <ion-col size="9">
+                                    <ion-icon name="calendar"></ion-icon>
+                                    <ion-text style="font-size: 0.5em;">Event</ion-text>
+                                    Zavitan Stream - Canyoning Adventuregi
+                                </ion-col>
+                                <ion-col size="3">
+                                    <ion-button shape="round" fill="outline" float-right>More Details</ion-button>
+                                </ion-col>
+                            </ion-row>
+                        </ion-card-title>
+                        <ion-card-subtitle>
+                            <ion-label padding-end>24/11/2018 08:00am</ion-label>
+                            <ion-label padding-end>1 day</ion-label>
+                            <ion-label padding-end>Meeting: Tel Aviv, Ben Yehuda 220</ion-label>
+                            <ion-label padding-end>Distance to meeting: 5km</ion-label>
+                            <ion-label padding-end>Distance to route: 70km</ion-label>
+                        </ion-card-subtitle>
+                        <ion-card-subtitle>
+                            <ion-label>
+                                Type: Water, Hiking, Canyon, Swiming
+                            </ion-label>
+                            <ion-label>
+                                Ages: 20-70
+                            </ion-label>
+                        </ion-card-subtitle>
+                        <!--need to be added from JS-->
+                    </ion-card-header>
+                    <!--<ion-card-content>-->
+                    <ion-grid wrap>
+                        <ion-row>
+                            <ion-col size="2">
+                                <ion-img src="/assets/images/haham.jpg"></ion-img>
+                            </ion-col>
+                            <ion-col size="4">
+                                <ion-item>
+                                    Hanuka, Age: 35
+                                </ion-item>
+                                <ion-item>
+                                    Is Guide: Yes
+                                </ion-item>
+                                <ion-item>
+                                    Guide Rating: 8 (544
+                                    <ion-icon name="contact"></ion-icon>
+                                    )
+                                </ion-item>
+                                <ion-item>
+                                    Traveler Rating: 2 (12
+                                    <ion-icon name="contact"></ion-icon>
+                                    )
+                                </ion-item>
+                            </ion-col>
+                            <ion-col size="2">
+                                <ion-item>
+                                    5 participants
+                                </ion-item>
+                                <ion-grid wrap>
+                                    <ion-row size="12">
+                                        <ion-col size="4">
+                                            <ion-img src="/assets/images/haham.jpg"></ion-img>
+                                        </ion-col>
+                                        <ion-col size="4">
+                                            <ion-img src="/assets/images/haham.jpg"></ion-img>
+                                        </ion-col>
+                                        <ion-col size="4">
+                                            <ion-img src="/assets/images/haham.jpg"></ion-img>
+                                        </ion-col>
+                                    </ion-row>
+                                    <ion-row size="12">
+                                        <ion-col size="4">
+                                            <ion-img src="/assets/images/haham.jpg"></ion-img>
+                                        </ion-col>
+                                        <ion-col size="4">
+                                            <ion-img src="/assets/images/haham.jpg"></ion-img>
+                                        </ion-col>
+                                    </ion-row>
+                                </ion-grid>
+
+                            </ion-col>
+                            <ion-col size="4">
+                                <ion-item>
+                                    <ion-icon name="car" style="font-size: 1em;"></ion-icon>
+                                    6 Available seats
+                                </ion-item>
+                                <ion-item>
+                                    <ion-icon name="cart" style="font-size: 1em;"></ion-icon>
+                                    50$/
+                                    <ion-icon name="contact" style="font-size: 1em;"></ion-icon>
+                                </ion-item>
+                                <ion-item>
+                                    <ion-label>
+                                        Audience: Single, Couples
+                                    </ion-label>
+                                </ion-item>
+                                <ion-item>
+                                    <ion-icon name="bus"></ion-icon>
+                                    <ion-icon name="car"></ion-icon>
+                                    <ion-icon name="train"></ion-icon>
+                                    : private cars
+                                </ion-item>
+                            </ion-col>
+
+                        </ion-row>
+                        <ion-row>
+                            <ion-col>
+                                <ion-item>
+                                    (Short) Description: Join us to the beautiful Zeelim river, for a day-hike
+                                    in a canyon with beautiful water pools, boulders, cliffs, and desert wild
+                                    life.
+                                    We will start at Zfira-pool at the upper-Zeelim and walk through the whole
+                                    canyon until the dead sea.
+                                    The trip requires good shape, as we will have cool adventures such as using
+                                    ropes, metal ladders, and swimming through water pools
+                                </ion-item>
+                            </ion-col>
+                        </ion-row>
+                        <ion-row>
+                            <ion-col>
+                                <ion-item>
+                                    Equipment: hikng shoes, 3 liters of water, food for the day, sun
+                                    screen, short sleeves, long sleeves, flash-lights
+                                </ion-item>
+                            </ion-col>
+                        </ion-row>
+                    </ion-grid>
+                    <!--</ion-card-content>-->
+
+
+                </ion-col>
+            </ion-row>
+        </ion-grid>
+
+
+    </ion-card>
 
 
     <ion-fab vertical="bottom" horizontal="start" slot="fixed">

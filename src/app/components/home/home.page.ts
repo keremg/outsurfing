@@ -1,44 +1,63 @@
 import {Component, OnInit} from '@angular/core';
-import { AuthService } from '../../services/auth.service';
+import {AuthService} from '../../services/auth.service';
 import {NavController} from '@ionic/angular';
 import {EventService} from '../../services/event.service';
-import {ActivatedRoute, NavigationExtras, Params} from '@angular/router';
-import {QueryParamsHandling} from '@angular/router/src/config';
+import {Observable} from 'rxjs';
+import {Event} from '../../models/Event';
+import {PaginationService} from '../../services/pagination.service';
 
 @Component({
-  selector: 'app-home',
-  templateUrl: 'home.page.html',
-  styleUrls: ['home.page.scss'],
+    selector: 'app-home',
+    templateUrl: 'home.page.html',
+    styleUrls: ['home.page.scss'],
 
 })
 
 export class HomePage implements OnInit {
+
+
     constructor(
         public navCtrl: NavController,
         private authService: AuthService,
-        public tripService: EventService,
+        //public eventService: EventService,
+        public page: PaginationService
     ) {
 
     }
 
 
     ngOnInit() {
-
+        this.page.init('events', 'key', {reverse: true, prepend: false});
     }
 
 
     ShowEventDetail(eventId: string) {
-        return this.navCtrl.navigateForward('EventDetail/' + eventId+'/');
+        return this.navCtrl.navigateForward('EventDetail/' + eventId + '/');
     }
 
-     logout() {
-         this.authService.logoutUser().then(() => {
-             this.navCtrl.navigateRoot('');
-         }).catch(() => {
-                 console.log('error in logout');
-             }
-         );
+    logout() {
+        this.authService.logoutUser().then(() => {
+            this.navCtrl.navigateRoot('');
+        }).catch(() => {
+                console.log('error in logout');
+            }
+        );
 
-     }
+    }
+
+    loadData(event) {
+        this.page.more();
+
+        console.log('Done');
+        event.target.complete();
+
+        // App logic to determine if all data is loaded
+        // and disable the infinite scroll
+        //if (this.page.done) {
+        //event.target.disabled = true;
+        //}
+    }
+
+
 }
 

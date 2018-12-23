@@ -2,10 +2,7 @@ import { Injectable } from '@angular/core';
 import {AngularFirestore, AngularFirestoreCollection, AngularFirestoreDocument} from 'angularfire2/firestore';
 import {Observable} from 'rxjs';
 import {map} from 'rxjs/operators';
-import { Action } from 'rxjs/internal/scheduler/Action';
 import {Event} from '../models/Event';
-import {Route} from '../models/Route';
-
 
 @Injectable({
   providedIn: 'root'
@@ -32,6 +29,7 @@ export class EventService {
     }
 
 
+
      getEvent(id: string): Observable<Event> {
         this.eventDoc = this.events.doc<Event>(id);
         return this.eventDoc.snapshotChanges().pipe(map(action => {
@@ -46,6 +44,8 @@ export class EventService {
     }
 
 
+
+
     async addEvent(event: Event) {
         return this.events.add({...event});
     }
@@ -55,5 +55,8 @@ export class EventService {
         this.eventDoc = this.afs.doc<Event>(`${this.collection_endpoint}/${id}`);
         return this.eventDoc.update(update);
     }
+
+
+
 
 }

@@ -125,7 +125,6 @@ export class SingleRoutePage implements OnInit {
     }
 
     async updateRoute() {
-      debugger;
         this.mapFormValuesToRouteModel();
         let copyOfRoute = _.cloneDeep(this.route);
         if (this.id) {
