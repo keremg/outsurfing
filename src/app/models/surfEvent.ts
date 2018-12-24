@@ -30,7 +30,7 @@ export class SurfEvent {
     isGuidedevent: boolean;
     priceOfEvent: number;    //default 0, more if isGuidedevent
     organizerContactDetails: string; //free text allowing the guide to describe email and/or phone for contacting him/her about event
-    enteranceFee: number; //if any
+    entranceFee: number; //if any
     requiredEquipment: string;
     numEventsCreatedFromRoute: number;
     recommendedMonths: number[];

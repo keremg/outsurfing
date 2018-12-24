@@ -6,8 +6,10 @@ import {SurfUser} from '../../models/surfUser';
 import {ActivatedRoute} from '@angular/router';
 //import { ImagePicker } from '@ionic-native/image-picker';
 import {RouteService} from '../../services/route.service';
-import {NavController} from '@ionic/angular';
+import {AlertController, LoadingController, NavController} from '@ionic/angular';
 import {debug} from 'util';
+import {AuthService} from '../../services/auth.service';
+import {UserService} from '../../services/user.service';
 
 declare let window: any;
 
@@ -21,44 +23,66 @@ export class SingleRoutePage implements OnInit {
     selectedFile: File = null;
     route: SurfRoute = new SurfRoute();
     id: string;
-
+    currentUserId: string;
+    currentUser: SurfUser;
 
     constructor(private formBuilder: FormBuilder, /* private imagePicker: ImagePicker*/
                 private activatedRoute: ActivatedRoute,
                 private routesService: RouteService,
-                public navCtrl: NavController){
+                public navCtrl: NavController,
+                public authService: AuthService,
+                private userService: UserService) {
         window.route = this;
 
 
     }
 
     async ngOnInit() {
+        debugger;
         this.id = this.activatedRoute.snapshot.paramMap.get('id');
 
         this.singleRouteForm = this.formBuilder.group({
             name: ['', Validators.required],
-            isGuide: ['', Validators.required],
-            creatorName: ['', Validators.required],
-            phoneNumber: ['', Validators.required],
-            tripPrice: ['', Validators.required],
-            startLocation: ['', Validators.required],
-            endLocation: ['', Validators.required],
+            country: ['', Validators.required],
+            state: ['', Validators.required],
+            routeStartLocation: ['', Validators.required],
+            routeEndLocation: [''],
+            routeStartGeolocation: ['', Validators.required],
+            routeEndGeolocation: [''],
+            imagesUrls: [[], Validators.required],
+            mapUrl: [''],
+            lengthKM: [0, Validators.required],
             shortDescription: ['', Validators.required],
             longDescription: ['', Validators.required],
-            tripLevel: ['', Validators.required],
-            tripDuration: ['', Validators.required],
-            properties: ['', Validators.required],
-            photos: [''],
-            recMonths: [''],
-            fee: [''],
-            gMapsLocation: ['', Validators.required]
+            //TODO: add ability to rank the route (for all users, also in VIEW mode)
+            routeDifficulty: ['', Validators.required],
+            routeDuration: [0, Validators.required],
+            routeProperties: [''],
+            isGuidingOffered: [''],
+            offeredPrice: [0],
+            guideContactDetails: [''],
+            entranceFee: 0,
+            requiredEquipment: [''],
+            recommendedMonths: ['']
+            //TODO make sure numEventsCreatedFromRoute is updated!
         });
 
         window.form = this.singleRouteForm;
+
+        this.currentUserId = this.authService.currentUserId;
+        this.currentUser = await this.userService.getuser(this.currentUserId).toPromise().catch((err) => {console.log('ERROR loading user: ' + err)});
+        console.log('this.currentUser: ', this.currentUser)
+debugger;
         if (this.id) {
-            await this.routesService.getRoute(this.id).subscribe(r => {
-              if(r) {
+            await this.routesService.getRoute(this.id).subscribe(async r => {
+              if (r) {
+                  debugger;
                   this.route = r;
+                  if (!this.route.routeCreatorId) {
+                      this.route.routeCreatorId = this.currentUserId; // safety
+                  }
+
+                  this.route.routeCreator = await this.userService.getuser(this.route.routeCreatorId).toPromise();
                   this.editForm(this.route);
               }
               else{
@@ -67,46 +91,70 @@ export class SingleRoutePage implements OnInit {
               }
             });
         } else {
+            this.route.routeCreatorId = this.currentUserId;
+            this.route.routeCreator = this.currentUser;
 
-            //defaults
-            this.route.name = 'route name';
+            // defaults
+            // this.route.name = 'route name';
             this.route.country = 'Israel';
             this.route.state = 'Israel';
-            this.route.routeStartLocation = 'Zeelim parking';
-            this.route.routeEndLocation = 'Namer spring';
-            this.route.imagesUrls = ['file-name-here?'];
-            this.route.mapUrl = 'https://he.wikipedia.org/wiki/%D7%A0%D7%97%D7%9C_%D7%A6%D7%90%D7%9C%D7%99%D7%9D#/media/File:NahalTzeelim01_ST_04.jpg';
-            this.route.lengthKM = 8;
-            this.route.shortDescription = 'חול אבנים ועוד חול';
-            this.route.longDescription = 'kuk kuu aksu adkscu';
-            //this.route.routeRanking = [{ranking: 3, review: 'nice'}];
-            this.route.routeDifficulty = 3; // Level:  0 - very easy, 1-easy, 2-moderate, 3-challenging, 4-extreme, 5-very extreme
-            this.route.routeDuration = 1; // will represent number of days, so half day should be 0.5 , one hour should be 0.04
-            this.route.routeProperties = ['water', 'desert', 'canyon']; // -	e.g. water, swimming, mountains, bicycles, forest, desert, oasis, historical, archeology, ropes
 
-            this.route.routeCreatorId = 'hgf6yi9';
-            //this.route.routeCreator = {firstName: 'Tidhar', lastName: 'Seifer', isGuide: true}; //new User(); // {id: 'hgf6yi9', name: 'Adi'};
+            // this.route.routeStartLocation = 'Zeelim parking';
+            // this.route.routeEndLocation = 'Namer spring';
+            // this.route.routeStartGeolocation = '';
+            // this.route.routeEndGeolocation = '';
+            // this.route.imagesUrls = ['file-name-here?'];
+            // this.route.mapUrl = 'https://he.wikipedia.org/wiki/%D7%A0%D7%97%D7%9C_%D7%A6%D7%90%D7%9C%D7%99%D7%9D#/media/File:NahalTzeelim01_ST_04.jpg';
+            // this.route.lengthKM = 8;
+            // this.route.shortDescription = 'חול אבנים ועוד חול';
+            // this.route.longDescription = 'kuk kuu aksu adkscu';
+            // this.route.routeRanking = [{ranking: 3, review: 'nice'}];
+            this.route.routeDifficulty = '3'; // Level:  0 - very easy, 1-easy, 2-moderate, 3-challenging, 4-extreme, 5-very extreme
+            // this.route.routeDuration = 1; // will represent number of days, so half day should be 0.5 , one hour should be 0.04
+            this.route.routeProperties = []; // ['water', 'desert', 'canyon']; // -	e.g. water, swimming, mountains, bicycles, forest, desert, oasis, historical, archeology, ropes
+
+            // this.route.routeCreatorId = 'hgf6yi9';
+            // this.route.routeCreator = {firstName: 'Tidhar', lastName: 'Seifer', isGuide: true}; //new User(); // {id: 'hgf6yi9', name: 'Adi'};
             this.route.isGuidingOffered = false;
             this.route.offeredPrice = 0; // default 0, more if isGuidingOffered
-            this.route.guideContactDetails = '0541223681'; // ree text allowing the guide to describe email and/or phone for contacting him/her about guidance
-            this.route.enteranceFee = 20;
-            this.route.requiredEquipment = 'shoes, pancake';
-            this.route.numEventsCreatedFromRoute = 59689;
-            this.route.recommendedMonths = [1, 2, 3, 4, 10, 11, 12];
+            // this.route.guideContactDetails = '0541223681'; // ree text allowing the guide to describe email and/or phone for contacting him/her about guidance
+            this.route.entranceFee = 0;
+            // this.route.requiredEquipment = 'shoes, pancake';
+            // this.route.numEventsCreatedFromRoute = 59689;
+            this.route.recommendedMonths = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12"];
 
             this.editForm(this.route);
         }
 
+        //TODO: What about route-ranks? we should remember who ranked it and allow only one rank from same user to same route
 
     }
 
     editForm(route: SurfRoute) {
+        // route -> form   (Populating the form)
         this.singleRouteForm.patchValue({
             name: route.name,
-            //isGuide: route.routeCreator.isGuide, //TODO: Should be out of form, just label
-            //creatorName: route.routeCreator.firstName + ' ' + route.routeCreator.lastName, //TODO: Should be out of form, just label
-            phoneNumber: route.guideContactDetails,
-            shortDescription: route.shortDescription
+            country: route.country,
+            state: route.state,
+            routeStartLocation: route.routeStartLocation,
+            routeEndLocation: route.routeEndLocation,
+            routeStartGeolocation: route.routeStartGeolocation,
+            routeEndGeolocation: route.routeEndGeolocation,
+            imagesUrls: route.imagesUrls,
+            mapUrl: route.mapUrl,
+            lengthKM: route.lengthKM,
+            shortDescription: route.shortDescription,
+            longDescription: route.longDescription,
+            routeDifficulty: route.routeDifficulty,
+            routeDuration: route.routeDuration,
+            routeProperties: route.routeProperties,
+            isGuidingOffered: route.isGuidingOffered,
+            offeredPrice: route.offeredPrice,
+            guideContactDetails: route.guideContactDetails,
+            entranceFee: route.entranceFee,
+            requiredEquipment: route.requiredEquipment,
+            recommendedMonths: route.recommendedMonths
+
         });
     }
 
@@ -121,27 +169,70 @@ export class SingleRoutePage implements OnInit {
         let desc = '';
         const fd = new FormData();
         fd.append('image', this.selectedFile, this.selectedFile.name);
+        //TODO: upload phooto to server
+        //TODO: imageId = Get the link to that photo or ID of that
+        //TODO: make sure to delete previous photo first (if we support single photo meanwhile)
+        //TODO: this.route.imagesUrls.push(imageId)
         console.log(fd);
     }
 
+    onMapUpload() {
+        let desc = '';
+        const fd = new FormData();
+        fd.append('image', this.selectedFile, this.selectedFile.name);
+        //TODO: upload photo to server
+        //TODO: imageId = Get the link to that photo or ID of that
+        //TODO: this.route.mapUrl = imageId;
+        console.log(fd);
+    }
     async updateRoute() {
         this.mapFormValuesToRouteModel();
         let copyOfRoute = _.cloneDeep(this.route);
+
+        //delete junk that the DB shouldn't have
+        delete copyOfRoute.routeCreator; //remove the property
+
         if (this.id) {
             //update
-            await this.routesService.updateRoute(this.id, this.route);
+            await this.routesService.updateRoute(this.id, copyOfRoute);
             //TODO should navigate to a different page
         } else {
-            await this.routesService.addRoute(this.route);
-            //TODO should navigate to a different page
+            const returnedId = await this.routesService.addRoute(copyOfRoute);
+            if (returnedId) {
+                this.id = returnedId;
+            }
+            //TODO should navigate to a different page?
 
         }
-
-
     }
 
     mapFormValuesToRouteModel() {
+        //preperation of this.route
         this.route.name = this.singleRouteForm.value.name;
+        this.route.country = this.singleRouteForm.value.country;
+        this.route.state = this.singleRouteForm.value.state;
+        this.route.routeStartLocation = this.singleRouteForm.value.routeStartLocation;
+        this.route.routeEndLocation = this.singleRouteForm.value.routeEndLocation;
+        this.route.routeStartGeolocation = this.singleRouteForm.value.routeStartGeolocation;
+        this.route.routeEndGeolocation = this.singleRouteForm.value.routeEndGeolocation;
+        this.route.imagesUrls = this.singleRouteForm.value.imagesUrls;
+        this.route.mapUrl = this.singleRouteForm.value.mapUrl;
+        this.route.lengthKM = this.singleRouteForm.value.lengthKM;
         this.route.shortDescription = this.singleRouteForm.value.shortDescription;
+        this.route.longDescription = this.singleRouteForm.value.longDescription;
+        this.route.routeDifficulty = this.singleRouteForm.value.routeDifficulty;
+        this.route.routeDuration = this.singleRouteForm.value.routeDuration;
+        this.route.routeDifficulty = this.singleRouteForm.value.routeDifficulty;
+        this.route.routeDuration = this.singleRouteForm.value.routeDuration;
+        this.route.routeProperties = this.singleRouteForm.value.routeProperties;
+        this.route.isGuidingOffered = this.singleRouteForm.value.isGuidingOffered;
+        this.route.offeredPrice = this.singleRouteForm.value.offeredPrice;
+        this.route.guideContactDetails = this.singleRouteForm.value.guideContactDetails;
+        this.route.entranceFee = this.singleRouteForm.value.entranceFee;
+        this.route.requiredEquipment = this.singleRouteForm.value.requiredEquipment;
+        this.route.recommendedMonths = this.singleRouteForm.value.recommendedMonths;
     }
+
+
+    //if new routem first set the creatorId and get creator in any case
 }

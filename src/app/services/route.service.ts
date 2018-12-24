@@ -19,8 +19,14 @@ export class RouteService {
       this.routes = db.collection<SurfRoute>(this.collection_endpoint);
   }
 
-    addRoute(newRoute: any) {
-        this.routes.add({...newRoute});
+    addRoute(newRoute: any): Promise<string|void> {
+        return this.routes.add({...newRoute}).then(function(docRef) {
+            console.log('Route document written with ID: ', docRef.id);
+            return docRef.id;
+        }).catch(function(error) {
+            alert('Failed creating route ' + error);
+            console.error('Error adding document: ', error);
+        });
     }
 
     async updateRoute(id, update) {

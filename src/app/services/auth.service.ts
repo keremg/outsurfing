@@ -43,7 +43,7 @@ export class AuthService {
 
     // Returns
     get currentUserObservable(): any {
-        return this.afAuth.authState
+        return this.afAuth.authState;
     }
 
     // Returns current user UID
@@ -114,7 +114,7 @@ export class AuthService {
     private socialSignIn(provider) {
         return this.afAuth.auth.signInWithPopup(provider)
             .then((credential) =>  {
-                this.authState = credential.user
+                this.authState = credential.user;
             })
             .catch(error => console.log(error));
     }
