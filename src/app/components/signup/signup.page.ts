@@ -1,4 +1,4 @@
-import {Component, Pipe, PipeTransform} from '@angular/core';
+import {Component, ElementRef, Pipe, PipeTransform, ViewChild} from '@angular/core';
 import {
   AlertController,
   LoadingController,
@@ -10,6 +10,9 @@ import { AuthService } from '../../services/auth.service';
 import { UserService } from '../../services/user.service';
 import { SurfUser } from '../../models/surfUser';
 import {AudienceTypeEnum}from '../../AudienceType.enum';
+import leaflet from 'leaflet';
+import L from 'leaflet';
+import '../../../geocoder/Control.Geocoder'
 
 @Component({
   selector: 'app-signup',
@@ -20,7 +23,11 @@ export class SignupPage {
   public signupForm: FormGroup;
   public loading;
     audienceTypeEnum = this.getENUM(AudienceTypeEnum);
-
+    map: any;
+    currentLocation:any = {latlng:{
+            lat:0,
+            lng:0
+        }};
 
 
     constructor(
@@ -40,7 +47,6 @@ export class SignupPage {
       gender: [""],
       isGuide: [""],
       about: [""],
-        recentLocation:[""],
         imagesUrls:[""],
       birthDate: [""],
         tripDifficulties: [""],
@@ -70,7 +76,7 @@ let success =false;
           email: this.signupForm.value.email,
           firstName: this.signupForm.value.firstName,
           lastName: this.signupForm.value.lastName,
-          recentLocation: this.signupForm.value.recentLocation,//TODO
+          recentLocation: this.currentLocation.latlng.lat+","+this.currentLocation.latlng.lng,
           imagesUrls: this.signupForm.value.imagesUrls,//TODO
           phone: this.signupForm.value.phone,
           gender: parseInt(this.signupForm.value.gender.value),
@@ -82,7 +88,7 @@ let success =false;
           tripDurations: this.signupForm.value.tripDurations,
           audienceTypes: this.signupForm.value.audienceTypes,
           travelerRatings: this.signupForm.value.travelerRatings,
-          guideRatings: this.signupForm.value.guideRatings
+          guideRatings: this.signupForm.value.guideRatings,
         }
 
         await this.userService.addUsers(u);
@@ -106,7 +112,53 @@ let success =false;
         this.navCtrl.navigateRoot('home');
     }
   }
+    ionViewDidEnter() {
+        this.loadmap();
+    }
+    loadmap() {
+        this.map = leaflet.map("map").fitWorld();
+        leaflet.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attributions: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="http://mapbox.com">Mapbox</a>',
+            maxZoom: 18
+        }).addTo(this.map);
+        var geocoder = L.Control.Geocoder.nominatim();
+        var control = L.Control.geocoder({
+                geocoder: geocoder
+            }).addTo(this.map);
 
+        this.map.locate({
+            setView: true,
+            maxZoom: 10,
+            timeout:30000,
+            maximumAge: 300000
+        }).on('locationfound', (e) => {
+            this.currentLocation =e;
+
+            if(this.map.SurfMarker)
+                this.map.removeLayer(this.map.SurfMarker);
+            let markerGroup = leaflet.featureGroup();
+            let marker: any = leaflet.marker([e.latitude, e.longitude]).on('click', () => {
+                //alert('Marker clicked');
+            })
+            markerGroup.addLayer(marker);
+            this.map.addLayer(markerGroup);
+            this.map.SurfMarker = markerGroup;
+        }).on('locationerror', (err) => {
+            console.log(err.message);
+        });
+        this.map.on('click', (e) =>{
+            if(this.map.SurfMarker)
+                this.map.removeLayer(this.map.SurfMarker);
+            this.map.surfLatLng =e.latlng;
+            let markerGroup = leaflet.featureGroup();
+            let marker: any = leaflet.marker([e.latlng.lat, e.latlng.lng]).on('click', () => {
+                //alert('Marker clicked');
+            })
+            markerGroup.addLayer(marker);
+            e.sourceTarget.addLayer(markerGroup);
+            this.map.SurfMarker = markerGroup;
+        });
+    }
 
 
     getENUM(ENUM:any): string[] {

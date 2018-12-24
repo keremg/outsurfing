@@ -5,6 +5,7 @@ import {EventService} from '../../services/event.service';
 import {Observable} from 'rxjs';
 import {SurfEvent} from '../../models/surfEvent';
 import {PaginationService} from '../../services/pagination.service';
+import {UserService} from '../../services/user.service';
 
 @Component({
     selector: 'app-home',
@@ -20,14 +21,18 @@ export class HomePage implements OnInit {
         public navCtrl: NavController,
         private authService: AuthService,
         //public eventService: EventService,
-        public page: PaginationService
+        public page: PaginationService,
+        private userService: UserService
     ) {
 
     }
 
 
-    ngOnInit() {
+    async ngOnInit() {
         this.page.init('events', 'key', {reverse: true, prepend: false});
+        await this.userService.getCurrentUser().subscribe(value => {
+            console.log(value)
+        });
     }
 
 

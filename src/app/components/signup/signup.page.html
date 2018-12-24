@@ -6,8 +6,10 @@
 </ion-header>
 
 <ion-content padding no-bounce text-center fullscreen>
+
   <form [formGroup]="signupForm" (submit)="signupUser()" novalidate>
-    <ion-item>
+
+      <ion-item>
       <ion-label *ngIf="!signupForm.controls.email.valid" color="danger" stacked>*</ion-label>
       <ion-label stacked>Email</ion-label>
       <ion-input formControlName="email" type="email" placeholder="Your email address" [class.invalid]="!signupForm.controls.email.valid && blur">
@@ -106,15 +108,17 @@
       </ion-input>
     </ion-item>
     <ion-item>
-      <ion-label stacked>Location</ion-label>
-      <ion-input formControlName="recentLocation" type="text" placeholder="Your about">
-      </ion-input>
+      <ion-label stacked slot="start">Location</ion-label>
+    </ion-item>
+    <ion-item>
+      <div id="map" style="height:200px; width:100%;" slot="start"></div>
     </ion-item>
     <ion-item>
       <ion-label stacked>Images</ion-label>
       <ion-input formControlName="imagesUrls" type="text" placeholder="Your about">
       </ion-input>
     </ion-item>
+
 
 
 
