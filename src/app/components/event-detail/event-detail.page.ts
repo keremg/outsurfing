@@ -4,8 +4,8 @@ import {JoinEventPage} from '../join-event/join-event.page';
 import {ActivatedRoute} from '@angular/router';
 import {EventService} from '../../services/event.service';
 import {RouteService} from '../../services/route.service';
-import {Event} from '../../models/Event'
-import {Route} from '../../models/Route';
+import {SurfEvent} from '../../models/surfEvent'
+import {SurfRoute} from '../../models/surfRoute';
 @Component({
   selector: 'app-event-detail',
   templateUrl: './event-detail.page.html',
@@ -14,8 +14,8 @@ import {Route} from '../../models/Route';
 export class EventDetailPage implements OnInit {
   id: string;
   routeId:string;
-  event: Event;
-  route: Route;
+  event: SurfEvent;
+  route: SurfRoute;
   constructor(private modalController:ModalController,
               private activatedRoute: ActivatedRoute,
               private eventService: EventService,
@@ -52,14 +52,14 @@ export class EventDetailPage implements OnInit {
   }
 
 
-     loadFromEvent(event: Event) {
+     loadFromEvent(event: SurfEvent) {
         //TODO
          document.getElementById('create').style.visibility='hidden';
 
          alert('old event')
     }
 
-     loadFromRoute(route: Route) {
+     loadFromRoute(route: SurfRoute) {
       //TODO
          //should hide the join button
          document.getElementById('join').style.visibility='hidden';

@@ -1,6 +1,6 @@
-import {User} from './User';
+import {SurfUser} from './surfUser';
 
-export class Route {
+export class SurfRoute {
     id: string;
     name: string;
     country: string;

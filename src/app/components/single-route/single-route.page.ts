@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Validators, FormBuilder, FormGroup } from '@angular/forms';
-import {Route} from '../../models/Route';
+import {SurfRoute} from '../../models/surfRoute';
 import * as _ from 'lodash';
-import {User} from '../../models/User';
+import {SurfUser} from '../../models/surfUser';
 import {ActivatedRoute} from '@angular/router';
 //import { ImagePicker } from '@ionic-native/image-picker';
 import {RouteService} from '../../services/route.service';
@@ -19,7 +19,7 @@ declare let window: any;
 export class SingleRoutePage implements OnInit {
     public singleRouteForm: FormGroup;
     selectedFile: File = null;
-    route: Route = new Route();
+    route: SurfRoute = new SurfRoute();
     id: string;
 
 
@@ -100,7 +100,7 @@ export class SingleRoutePage implements OnInit {
 
     }
 
-    editForm(route: Route) {
+    editForm(route: SurfRoute) {
         this.singleRouteForm.patchValue({
             name: route.name,
             //isGuide: route.routeCreator.isGuide, //TODO: Should be out of form, just label

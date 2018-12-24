@@ -1,6 +1,6 @@
-import {User} from './User';
+import {SurfUser} from './surfUser';
 
-export class Event {
+export class SurfEvent {
     id?: string;
     routeId: string; //the route from which the Event was created
     name: string;
@@ -23,9 +23,9 @@ export class Event {
     routeProperties: string[]; //-	e.g. water, swimming, mountains, bicycles, forest, desert, oasis, historical, archeology, ropes
 
     routeCreatorId: string;
-    routeCreator: User;
+    routeCreator: SurfUser;
     eventOrgnizerId: string;
-    eventOrgnizer: User; //will also show organizer's ranking
+    eventOrgnizer: SurfUser; //will also show organizer's ranking
     audienceType: string[]; //singles, couples, with kids, LGBT, elderlies, youngs, women only, men only, etc
     isGuidedevent: boolean;
     priceOfEvent: number;    //default 0, more if isGuidedevent
@@ -35,7 +35,7 @@ export class Event {
     numEventsCreatedFromRoute: number;
     recommendedMonths: number[];
     isEventRequiresCars: boolean; //not all events requires cars handling
-    participants: {user: User, registrationDate: string, isOrganizer: boolean, isGuide: boolean, offeringSeatsInCar: number, needSeatInCar: boolean, userIdOfHostingCar: number, isStandByForCar: boolean, isApproved: boolean, groupEquipmentIBring: string};
+    participants: {user: SurfUser, registrationDate: string, isOrganizer: boolean, isGuide: boolean, offeringSeatsInCar: number, needSeatInCar: boolean, userIdOfHostingCar: number, isStandByForCar: boolean, isApproved: boolean, groupEquipmentIBring: string};
 
 
 }

@@ -1,6 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {Observable} from 'rxjs';
-import {Route} from '../../models/Route';
+import {SurfRoute} from '../../models/surfRoute';
 import {RouteService} from '../../services/route.service';
 import {NavController} from '@ionic/angular';
 import {PaginationService} from '../../services/pagination.service';

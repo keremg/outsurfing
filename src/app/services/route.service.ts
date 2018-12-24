@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
 import {AngularFirestore, AngularFirestoreCollection, AngularFirestoreDocument} from 'angularfire2/firestore';
-import {Route} from '../models/Route';
+import {SurfRoute} from '../models/surfRoute';
 import {Observable} from 'rxjs';
 import {map} from 'rxjs/operators';
-import {Event} from '../models/Event';
+import {SurfEvent} from '../models/surfEvent';
 
 @Injectable({
   providedIn: 'root'
@@ -11,12 +11,12 @@ import {Event} from '../models/Event';
 export class RouteService {
   collection_endpoint = 'routes';
 
-    routes: AngularFirestoreCollection<Route>;
-    private routeDoc: AngularFirestoreDocument<Route>;
+    routes: AngularFirestoreCollection<SurfRoute>;
+    private routeDoc: AngularFirestoreDocument<SurfRoute>;
 
 
   constructor(private db: AngularFirestore) {
-      this.routes = db.collection<Route>(this.collection_endpoint);
+      this.routes = db.collection<SurfRoute>(this.collection_endpoint);
   }
 
     addRoute(newRoute: any) {
@@ -25,17 +25,17 @@ export class RouteService {
 
     async updateRoute(id, update) {
         //Get the task document
-        this.routeDoc = this.db.doc<Route>(`${this.collection_endpoint}/${id}`);
+        this.routeDoc = this.db.doc<SurfRoute>(`${this.collection_endpoint}/${id}`);
         return this.routeDoc.update(update);
     }
 
-    getRoute(id) : Observable<Route>{
-      this.routeDoc = this.db.doc<Route>(`${this.collection_endpoint}/${id}`);
+    getRoute(id) : Observable<SurfRoute>{
+      this.routeDoc = this.db.doc<SurfRoute>(`${this.collection_endpoint}/${id}`);
       let route = this.routeDoc.snapshotChanges().pipe(map(action => {
             if (action.payload.exists === false) {
                 return null;
             } else {
-                const data = action.payload.data() as Route;
+                const data = action.payload.data() as SurfRoute;
                 data.id = action.payload.id;
                 return data;
             }
@@ -43,14 +43,14 @@ export class RouteService {
         return route;
     }
 
-    getRoutes(): Observable<Route[]>{
+    getRoutes(): Observable<SurfRoute[]>{
         return this.db
             .collection(this.collection_endpoint)
             .snapshotChanges()
             .pipe(map(actions => {
                 return actions.map(a => {
                     //Get document data
-                    const data = a.payload.doc.data() as Route;
+                    const data = a.payload.doc.data() as SurfRoute;
                     //Get document id
                     data.id = a.payload.doc.id;
                     //Use spread operator to add the id to the document data

@@ -1,4 +1,4 @@
-export class User {
+export class SurfUser {
     id?: string;
     firstName?: string;
     lastName?: string;

@@ -3,7 +3,7 @@ import {AuthService} from '../../services/auth.service';
 import {NavController} from '@ionic/angular';
 import {EventService} from '../../services/event.service';
 import {Observable} from 'rxjs';
-import {Event} from '../../models/Event';
+import {SurfEvent} from '../../models/surfEvent';
 import {PaginationService} from '../../services/pagination.service';
 
 @Component({

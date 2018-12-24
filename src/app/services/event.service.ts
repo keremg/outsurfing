@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import {AngularFirestore, AngularFirestoreCollection, AngularFirestoreDocument} from 'angularfire2/firestore';
 import {Observable} from 'rxjs';
 import {map} from 'rxjs/operators';
-import {Event} from '../models/Event';
+import {SurfEvent} from '../models/surfEvent';
 
 @Injectable({
   providedIn: 'root'
@@ -10,18 +10,18 @@ import {Event} from '../models/Event';
 export class EventService {
     collection_endpoint = 'events';
 
-    events: AngularFirestoreCollection<Event>;
-    eventDoc: AngularFirestoreDocument<Event>;
+    events: AngularFirestoreCollection<SurfEvent>;
+    eventDoc: AngularFirestoreDocument<SurfEvent>;
 
 
     constructor(private afs: AngularFirestore) {
         this.events = this.afs.collection(this.collection_endpoint, ref => ref.orderBy('region', 'asc'));
     }
 
-     getEvents(): Observable<Event[]> {
+     getEvents(): Observable<SurfEvent[]> {
         return this.events.snapshotChanges().pipe(map(changes => {
             return changes.map(action => {
-                const data = action.payload.doc.data() as Event;
+                const data = action.payload.doc.data() as SurfEvent;
                 data.id = action.payload.doc.id;
                 return data;
             });
@@ -30,13 +30,13 @@ export class EventService {
 
 
 
-     getEvent(id: string): Observable<Event> {
-        this.eventDoc = this.events.doc<Event>(id);
+     getEvent(id: string): Observable<SurfEvent> {
+        this.eventDoc = this.events.doc<SurfEvent>(id);
         return this.eventDoc.snapshotChanges().pipe(map(action => {
             if (action.payload.exists === false) {
                 return null;
             } else {
-                const data = action.payload.data() as Event;
+                const data = action.payload.data() as SurfEvent;
                 data.id = action.payload.id;
                 return data;
             }
@@ -46,13 +46,13 @@ export class EventService {
 
 
 
-    async addEvent(event: Event) {
+    async addEvent(event: SurfEvent) {
         return this.events.add({...event});
     }
 
     async updateEvent(id, update) {
         //Get the task document
-        this.eventDoc = this.afs.doc<Event>(`${this.collection_endpoint}/${id}`);
+        this.eventDoc = this.afs.doc<SurfEvent>(`${this.collection_endpoint}/${id}`);
         return this.eventDoc.update(update);
     }
 

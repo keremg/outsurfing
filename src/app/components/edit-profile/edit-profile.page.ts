@@ -8,7 +8,7 @@ import { FormBuilder, FormGroup, Validators, FormsModule, ReactiveFormsModule } 
 import { EmailValidator } from '../../../validators/email';
 import { AuthService } from '../../services/auth.service';
 import { UserService } from '../../services/user.service';
-import { User } from '../../models/User';
+import { SurfUser } from '../../models/surfUser';
 
 
 @Component({
@@ -66,7 +66,7 @@ let success =false;
         let user = await this.authService.emailSignup(email, password);
         await this.loading.dismiss();
 
-        let u: User = {
+        let u: SurfUser = {
           email: this.signupForm.value.email,
           firstName: this.signupForm.value.firstName,
           lastName: this.signupForm.value.lastName,
