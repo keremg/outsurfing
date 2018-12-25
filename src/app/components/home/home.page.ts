@@ -31,11 +31,9 @@ export class HomePage implements OnInit {
     async ngOnInit() {
         this.page.init('events', 'key', {reverse: true, prepend: false});
         await this.userService.getCurrentUser().subscribe(value => {
-            debugger;
             console.log(value);
         });
         let x = await this.userService.getCurrentUserPromise();
-        debugger;
         console.log(x);
     }
 
