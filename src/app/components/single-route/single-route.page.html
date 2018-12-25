@@ -85,7 +85,7 @@
         <ion-item>
             <!--TODO: take from openStreetMap-->
             <ion-label
-                    *ngIf="!singleRouteForm.controls.routeStartGeolocation.valid"
+                    *ngIf="!singleRouteForm.controls.routeStartGeolocation?.valid"
                     color="danger"
                     stacked
             >*
@@ -96,14 +96,14 @@
                     formControlName="routeStartGeolocation"
                     type="text"
                     placeholder="Start geolocation"
-                    [class.invalid]="!singleRouteForm.controls.routeStartGeolocation.valid && blur"
+                    [class.invalid]="!singleRouteForm.controls.routeStartGeolocation?.valid && blur"
             >
             </ion-input>
         </ion-item>
 
         <ion-item>
             <ion-label
-                    *ngIf="!singleRouteForm.controls.endLocation.valid"
+                    *ngIf="!singleRouteForm.controls.routeEndLocation.valid"
                     color="danger"
                     stacked
             >*
@@ -111,10 +111,10 @@
             >
             <ion-label stacked>End location</ion-label>
             <ion-input
-                    formControlName="endLocation"
+                    formControlName="routeEndLocation"
                     type="text"
                     placeholder="End location"
-                    [class.invalid]="!singleRouteForm.controls.endLocation.valid && blur"
+                    [class.invalid]="!singleRouteForm.controls.routeEndLocation.valid && blur"
             >
             </ion-input>
         </ion-item>
@@ -224,22 +224,41 @@
         </ion-item>
 
 
-
         <ion-item>
-            <ion-label stacked>Difficulty</ion-label>
-            <!--TODO: Allow usage of days -> translate to hours when translated to object, and translate to days if more than 24 hours when showing it-->
-            <ion-input
-                    formControlName="routeDuration"
-                    type="number"
-                    placeholder="Route duration"
-                    [class.invalid]="!singleRouteForm.controls.routeDuration.valid && blur"
-            >
-            </ion-input>
-            <ion-select formControlName="routeDurationUnits" multiple="false">
-                <ion-select-option value="hours">Hours</ion-select-option>
-                <ion-select-option value="days">Days</ion-select-option>
-            </ion-select>
+            <ion-label stacked>Duration</ion-label>
+            <ion-row style="width: 80%" justify-content-end>
+
+                <ion-col size="2">
+                    <ion-input formControlName="routeDuration"
+                               type="number"
+                               placeholder="Route duration"
+                               [class.invalid]="!singleRouteForm.controls.routeDuration.valid && blur"
+                               min="0" max="59" step="1" side="left"></ion-input>
+                </ion-col>
+                <ion-col size="10">
+                    <ion-select formControlName="routeDurationUnits" multiple="false">
+                        <ion-select-option value="hours">Hours</ion-select-option>
+                        <ion-select-option value="days">Days</ion-select-option>
+                    </ion-select>
+                </ion-col>
+            </ion-row>
         </ion-item>
+
+        <!--<ion-item>-->
+            <!--<ion-label stacked>Duration</ion-label>-->
+            <!--&lt;!&ndash;TODO: Allow usage of days -> translate to hours when translated to object, and translate to days if more than 24 hours when showing it&ndash;&gt;-->
+            <!--<ion-input-->
+                    <!--formControlName="routeDuration"-->
+                    <!--type="number"-->
+                    <!--placeholder="Route duration"-->
+                    <!--[class.invalid]="!singleRouteForm.controls.routeDuration.valid && blur"-->
+            <!--&gt;-->
+            <!--</ion-input>-->
+            <!--<ion-select formControlName="routeDurationUnits" multiple="false">-->
+                <!--<ion-select-option value="hours">Hours</ion-select-option>-->
+                <!--<ion-select-option value="days">Days</ion-select-option>-->
+            <!--</ion-select>-->
+        <!--</ion-item>-->
 
         <ion-item>
             <ion-label>Route Properties</ion-label>
@@ -260,10 +279,10 @@
 
         <ion-item>
             <!--TODO: URGENT  make sure we set the routeCreatorId upon creation of route, and that also fetching the user into routeCreator for teh component-->
-            <ion-label stacked>Creator of route: {{route.routeCreator.firstName}} {{route.routeCreator.lastName}}</ion-label>
+            <ion-label stacked>Creator of route: {{route.routeCreator?.firstName}} {{route.routeCreator?.lastName}}</ion-label>
             <!-- TODO show photo of creator-->
-            <ion-label stacked *ngIf="route.routeCreator.isGuide">Creator is a travel-guide :)</ion-label>
-            <ion-input *ngIf="route.routeCreator.isGuide"
+            <ion-label stacked *ngIf="route.routeCreator?.isGuide">Creator is a travel-guide :)</ion-label>
+            <ion-input *ngIf="route.routeCreator?.isGuide"
                     formControlName="guideContactDetails"
                     type="text"
                     placeholder="Guide Contact Details (optional email and/or phone)"
@@ -272,7 +291,7 @@
             >
             </ion-input>
         </ion-item>
-        <ion-item *ngIf="route.routeCreator.isGuide">
+        <ion-item *ngIf="route.routeCreator?.isGuide">
             <ion-label stacked>Offers guidance?</ion-label>
             <ion-checkbox formControlName="isGuidingOffered"
                           color="primary"

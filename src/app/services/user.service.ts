@@ -25,7 +25,7 @@ export class UserService {
                         if (u) {
                             this.currentUser.next(u);
                         }
-                        else{
+                        else {
                             this.currentUser.next(null);
                         }
                     }
@@ -34,7 +34,7 @@ export class UserService {
         });
     }
 
-     getCurrentUser(): Observable<SurfUser>{
+     getCurrentUser(): Observable<SurfUser> {
         return this.currentUser.asObservable();
     }
 
@@ -54,7 +54,6 @@ export class UserService {
     getuser(id: string): Observable<SurfUser> {
         this.userDoc = this.afs.collection('users').doc<SurfUser>(id);
         this.user = this.userDoc.snapshotChanges().pipe(map(action => {
-
             if (action.payload.exists === false) {
                 return null;
             } else {

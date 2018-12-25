@@ -57,6 +57,7 @@ export class SingleRoutePage implements OnInit {
             //TODO: add ability to rank the route (for all users, also in VIEW mode)
             routeDifficulty: ['', Validators.required],
             routeDuration: [0, Validators.required],
+            routeDurationUnits: ['hours'],
             routeProperties: [''],
             isGuidingOffered: [''],
             offeredPrice: [0],
@@ -70,19 +71,27 @@ export class SingleRoutePage implements OnInit {
         window.form = this.singleRouteForm;
 
         this.currentUserId = this.authService.currentUserId;
-        this.currentUser = await this.userService.getuser(this.currentUserId).toPromise().catch((err) => {console.log('ERROR loading user: ' + err)});
+
+        // await this.userService.getuser(this.currentUserId).subscribe(user => {
+        //     debugger;
+        //     this.currentUser = user;
+        //     console.log('currentUser: ' + this.currentUser);
+        // });
+
         console.log('this.currentUser: ', this.currentUser)
-debugger;
         if (this.id) {
             await this.routesService.getRoute(this.id).subscribe(async r => {
               if (r) {
-                  debugger;
                   this.route = r;
-                  if (!this.route.routeCreatorId) {
+                  if (!this.route.routeCreatorId || true) {
                       this.route.routeCreatorId = this.currentUserId; // safety
                   }
+                  console.log('Getting route-creator-id with is of ' + this.route.routeCreatorId);
+                  await this.userService.getuser(this.route.routeCreatorId).subscribe(user => {
+                      this.route.routeCreator = user;
+                  });
 
-                  this.route.routeCreator = await this.userService.getuser(this.route.routeCreatorId).toPromise();
+                  //this.route.routeCreator = await this.userService.getuser(this.route.routeCreatorId).toPromise();
                   this.editForm(this.route);
               }
               else{
@@ -101,7 +110,7 @@ debugger;
 
             // this.route.routeStartLocation = 'Zeelim parking';
             // this.route.routeEndLocation = 'Namer spring';
-            // this.route.routeStartGeolocation = '';
+            this.route.routeStartGeolocation = '';
             // this.route.routeEndGeolocation = '';
             // this.route.imagesUrls = ['file-name-here?'];
             // this.route.mapUrl = 'https://he.wikipedia.org/wiki/%D7%A0%D7%97%D7%9C_%D7%A6%D7%90%D7%9C%D7%99%D7%9D#/media/File:NahalTzeelim01_ST_04.jpg';
@@ -132,6 +141,13 @@ debugger;
 
     editForm(route: SurfRoute) {
         // route -> form   (Populating the form)
+        let durationUnits = 'hours';
+        let duration = route.routeDuration;
+        if (duration >= 24) {
+            duration /= 24;
+            durationUnits = 'days';
+        }
+
         this.singleRouteForm.patchValue({
             name: route.name,
             country: route.country,
@@ -146,7 +162,8 @@ debugger;
             shortDescription: route.shortDescription,
             longDescription: route.longDescription,
             routeDifficulty: route.routeDifficulty,
-            routeDuration: route.routeDuration,
+            routeDuration: duration,
+            routeDurationUnits: durationUnits,
             routeProperties: route.routeProperties,
             isGuidingOffered: route.isGuidingOffered,
             offeredPrice: route.offeredPrice,
@@ -209,28 +226,31 @@ debugger;
     mapFormValuesToRouteModel() {
         //preperation of this.route
         this.route.name = this.singleRouteForm.value.name;
-        this.route.country = this.singleRouteForm.value.country;
-        this.route.state = this.singleRouteForm.value.state;
-        this.route.routeStartLocation = this.singleRouteForm.value.routeStartLocation;
-        this.route.routeEndLocation = this.singleRouteForm.value.routeEndLocation;
-        this.route.routeStartGeolocation = this.singleRouteForm.value.routeStartGeolocation;
-        this.route.routeEndGeolocation = this.singleRouteForm.value.routeEndGeolocation;
-        this.route.imagesUrls = this.singleRouteForm.value.imagesUrls;
-        this.route.mapUrl = this.singleRouteForm.value.mapUrl;
-        this.route.lengthKM = this.singleRouteForm.value.lengthKM;
-        this.route.shortDescription = this.singleRouteForm.value.shortDescription;
-        this.route.longDescription = this.singleRouteForm.value.longDescription;
-        this.route.routeDifficulty = this.singleRouteForm.value.routeDifficulty;
-        this.route.routeDuration = this.singleRouteForm.value.routeDuration;
-        this.route.routeDifficulty = this.singleRouteForm.value.routeDifficulty;
-        this.route.routeDuration = this.singleRouteForm.value.routeDuration;
-        this.route.routeProperties = this.singleRouteForm.value.routeProperties;
-        this.route.isGuidingOffered = this.singleRouteForm.value.isGuidingOffered;
-        this.route.offeredPrice = this.singleRouteForm.value.offeredPrice;
-        this.route.guideContactDetails = this.singleRouteForm.value.guideContactDetails;
-        this.route.entranceFee = this.singleRouteForm.value.entranceFee;
-        this.route.requiredEquipment = this.singleRouteForm.value.requiredEquipment;
-        this.route.recommendedMonths = this.singleRouteForm.value.recommendedMonths;
+        this.route.country = this.singleRouteForm.value.country || '';
+        this.route.state = this.singleRouteForm.value.state || '';
+        this.route.routeStartLocation = this.singleRouteForm.value.routeStartLocation || '';
+        this.route.routeEndLocation = this.singleRouteForm.value.routeEndLocation || '';
+        this.route.routeStartGeolocation = this.singleRouteForm.value.routeStartGeolocation || '';
+        this.route.routeEndGeolocation = this.singleRouteForm.value.routeEndGeolocation || '';
+        this.route.imagesUrls = this.singleRouteForm.value.imagesUrls || '';
+        this.route.mapUrl = this.singleRouteForm.value.mapUrl || '';
+        this.route.lengthKM = this.singleRouteForm.value.lengthKM || '';
+        this.route.shortDescription = this.singleRouteForm.value.shortDescription || '';
+        this.route.longDescription = this.singleRouteForm.value.longDescription || '';
+        this.route.routeDifficulty = this.singleRouteForm.value.routeDifficulty || '';
+
+        let durationHours = this.singleRouteForm.value.routeDuration || 0;
+        if (this.singleRouteForm.value.routeDurationUnits === 'days') {
+            durationHours *= 24;
+        }
+        this.route.routeDuration = durationHours;
+        this.route.routeProperties = this.singleRouteForm.value.routeProperties || '';
+        this.route.isGuidingOffered = this.singleRouteForm.value.isGuidingOffered || false;
+        this.route.offeredPrice = this.singleRouteForm.value.offeredPrice || 0;
+        this.route.guideContactDetails = this.singleRouteForm.value.guideContactDetails || '';
+        this.route.entranceFee = this.singleRouteForm.value.entranceFee || 0;
+        this.route.requiredEquipment = this.singleRouteForm.value.requiredEquipment || '';
+        this.route.recommendedMonths = this.singleRouteForm.value.recommendedMonths || [];
     }
 
 

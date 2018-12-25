@@ -31,7 +31,7 @@ export class HomePage implements OnInit {
     async ngOnInit() {
         this.page.init('events', 'key', {reverse: true, prepend: false});
         await this.userService.getCurrentUser().subscribe(value => {
-            console.log(value)
+            console.log(value);
         });
     }
 
