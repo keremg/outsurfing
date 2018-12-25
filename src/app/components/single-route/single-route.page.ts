@@ -29,7 +29,6 @@ export class SingleRoutePage implements OnInit {
   id: string;
   currentUserId: string;
   currentUser: SurfUser;
-  viewMode: boolean;
 
   constructor(
     private formBuilder: FormBuilder /* private imagePicker: ImagePicker*/,
@@ -84,6 +83,7 @@ export class SingleRoutePage implements OnInit {
 
     console.log('this.currentUser: ', this.currentUser);
     if (this.id) {
+      console.log('entered if');
       await this.routesService.getRoute(this.id).subscribe(async r => {
         if (r) {
           this.route = r;
@@ -102,9 +102,9 @@ export class SingleRoutePage implements OnInit {
             });
 
           if (this.route.routeCreatorId != this.currentUserId) {
-            this.viewMode = true;
+            this.singleRouteForm.disable();
+            console.log('just changed to view mode');
           } else {
-            this.viewMode = false;
           }
 
           //this.route.routeCreator = await this.userService.getuser(this.route.routeCreatorId).toPromise();
@@ -115,8 +115,6 @@ export class SingleRoutePage implements OnInit {
         }
       });
     } else {
-      this.viewMode = false;
-      console.log('im view mode', this.viewMode);
       this.route.routeCreatorId = this.currentUserId;
       this.route.routeCreator = this.currentUser;
 

@@ -22,7 +22,6 @@
         type="text"
         placeholder="route name"
         [class.invalid]="!singleRouteForm.controls.name.valid && blur"
-        [readonly]="viewMode"
       >
       </ion-input>
     </ion-item>
@@ -43,7 +42,6 @@
         type="text"
         placeholder="country"
         [class.invalid]="!singleRouteForm.controls.country.valid && blur"
-        [readonly]="viewMode"
       >
       </ion-input>
     </ion-item>
@@ -63,7 +61,6 @@
         type="text"
         placeholder="state"
         [class.invalid]="!singleRouteForm.controls.state.valid && blur"
-        [readonly]="viewMode"
       >
       </ion-input>
     </ion-item>
@@ -83,7 +80,6 @@
         [class.invalid]="
           !singleRouteForm.controls.routeStartLocation.valid && blur
         "
-        [readonly]="viewMode"
       >
       </ion-input>
     </ion-item>
@@ -104,7 +100,6 @@
         [class.invalid]="
           !singleRouteForm.controls.routeStartGeolocation?.valid && blur
         "
-        [readonly]="viewMode"
       >
       </ion-input>
     </ion-item>
@@ -124,7 +119,6 @@
         [class.invalid]="
           !singleRouteForm.controls.routeEndLocation.valid && blur
         "
-        [readonly]="viewMode"
       >
       </ion-input>
     </ion-item>
@@ -145,7 +139,6 @@
         [class.invalid]="
           !singleRouteForm.controls.routeEndGeolocation.valid && blur
         "
-        [readonly]="viewMode"
       >
       </ion-input>
     </ion-item>
@@ -163,7 +156,7 @@
         placeholder="upload photos"
       >
       </ion-input>
-      <button disabled="viewMode" type="button" (click)="onUpload()">
+      <button [disabled]="viewMode" type="button" (click)="onUpload()">
         Upload
       </button>
     </ion-item>
@@ -180,7 +173,7 @@
         placeholder="upload photos"
       >
       </ion-input>
-      <button disabled="viewMode" type="button" (click)="onMapUpload()">
+      <button [disabled]="viewMode" type="button" (click)="onMapUpload()">
         Upload
       </button>
     </ion-item>
@@ -192,7 +185,6 @@
         type="number"
         placeholder="Length of route"
         [class.invalid]="!singleRouteForm.controls.lengthKM.valid && blur"
-        [readonly]="viewMode"
       >
       </ion-input>
     </ion-item>
@@ -212,7 +204,6 @@
         [class.invalid]="
           !singleRouteForm.controls.shortDescription.valid && blur
         "
-        [readonly]="viewMode"
       >
       </ion-input>
     </ion-item>
@@ -227,7 +218,6 @@
         [class.invalid]="
           !singleRouteForm.controls.longDescription.valid && blur
         "
-        [readonly]="viewMode"
       >
       </ion-input>
     </ion-item>
@@ -237,11 +227,7 @@
       <!--
         TODO: MAYBE when moving from form to DB and when moving from object to form change it from number to string
       -->
-      <ion-select
-        disabled="viewMode"
-        formControlName="routeDifficulty"
-        multiple="false"
-      >
+      <ion-select formControlName="routeDifficulty" multiple="false">
         <ion-select-option value="0">Very easy</ion-select-option>
         <ion-select-option value="1">Easy</ion-select-option>
         <ion-select-option value="2">Moderate</ion-select-option>
@@ -266,15 +252,10 @@
             max="59"
             step="1"
             side="left"
-            [readonly]="viewMode"
           ></ion-input>
         </ion-col>
         <ion-col size="10">
-          <ion-select
-            disabled="viewMode"
-            formControlName="routeDurationUnits"
-            multiple="false"
-          >
+          <ion-select formControlName="routeDurationUnits" multiple="false">
             <ion-select-option value="hours">Hours</ion-select-option>
             <ion-select-option value="days">Days</ion-select-option>
           </ion-select>
@@ -304,11 +285,7 @@
 
     <ion-item>
       <ion-label>Route Properties</ion-label>
-      <ion-select
-        disabled="viewMode"
-        formControlName="routeProperties"
-        multiple="true"
-      >
+      <ion-select formControlName="routeProperties" multiple="true">
         <ion-select-option value="water">Water</ion-select-option>
         <ion-select-option value="swimming">Swimming</ion-select-option>
         <ion-select-option value="mountains" selected
@@ -344,7 +321,6 @@
         [class.invalid]="
           !singleRouteForm.controls.guideContactDetails.valid && blur
         "
-        [readonly]="viewMode"
       >
       </ion-input>
     </ion-item>
@@ -361,7 +337,6 @@
         type="number"
         placeholder="Offered price"
         [class.invalid]="!singleRouteForm.controls.offeredPrice.valid && blur"
-        [readonly]="viewMode"
       >
       </ion-input>
     </ion-item>
@@ -373,7 +348,6 @@
         type="number"
         placeholder="Entrance fee"
         [class.invalid]="!singleRouteForm.controls.entranceFee.valid && blur"
-        [readonly]="viewMode"
       >
       </ion-input>
     </ion-item>
@@ -393,7 +367,6 @@
         [class.invalid]="
           !singleRouteForm.controls.requiredEquipment.valid && blur
         "
-        [readonly]="viewMode"
       >
       </ion-input>
     </ion-item>
@@ -407,11 +380,7 @@
 
     <ion-item>
       <ion-label>Recommended months</ion-label>
-      <ion-select
-        disabled="viewMode"
-        formControlName="recommendedMonths"
-        multiple="true"
-      >
+      <ion-select formControlName="recommendedMonths" multiple="true">
         <ion-select-option value="1">January</ion-select-option>
         <ion-select-option value="2">February</ion-select-option>
         <ion-select-option value="3">March</ion-select-option>
