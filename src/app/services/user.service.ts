@@ -24,9 +24,11 @@ export class UserService {
                 this.getuser(this.authService.currentUserId).subscribe(u => {
                         if (u) {
                             this.currentUser.next(u);
+                            this.currentUser.complete();
                         }
                         else {
                             this.currentUser.next(null);
+                            this.currentUser.complete();
                         }
                     }
                 );
@@ -36,6 +38,10 @@ export class UserService {
 
      getCurrentUser(): Observable<SurfUser> {
         return this.currentUser.asObservable();
+    }
+
+    async getCurrentUserPromise(): Promise<SurfUser> {
+        return this.currentUser.toPromise();
     }
 
     async addUsers(userProfile: any) {
