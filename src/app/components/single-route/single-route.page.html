@@ -80,23 +80,25 @@
     </ion-item>
 
     <ion-item>
-      <!-- TODO: take from openStreetMap -->
       <ion-label
         *ngIf="!singleRouteForm.controls.routeStartGeolocation?.valid"
         color="danger"
         stacked
         >*
       </ion-label>
-      <ion-label stacked>Start Geolocation</ion-label>
+      <ion-label stacked slot="start">Start Geolocation</ion-label>
       <ion-input
-        formControlName="routeStartGeolocation"
-        type="text"
-        placeholder="Start geolocation"
-        [class.invalid]="
+              formControlName="routeStartGeolocation"
+              type="text"
+              placeholder="Start geolocation"
+              [class.invalid]="
           !singleRouteForm.controls.routeStartGeolocation?.valid && blur
         "
       >
       </ion-input>
+    </ion-item>
+    <ion-item>
+      <div id="mapStart" style="height:200px; width:100%;" slot="start"></div>
     </ion-item>
 
     <ion-item>
@@ -119,23 +121,25 @@
     </ion-item>
 
     <ion-item>
-      <!-- TODO: take from openStreetMap -->
       <ion-label
         *ngIf="!singleRouteForm.controls.routeEndGeolocation.valid"
         color="danger"
         stacked
         >*
       </ion-label>
-      <ion-label stacked>End Geolocation</ion-label>
+      <ion-label stacked slot="start">End Geolocation</ion-label>
       <ion-input
-        formControlName="routeEndGeolocation"
-        type="text"
-        placeholder="End geolocation"
-        [class.invalid]="
+              formControlName="routeEndGeolocation"
+              type="text"
+              placeholder="End geolocation"
+              [class.invalid]="
           !singleRouteForm.controls.routeEndGeolocation.valid && blur
         "
       >
       </ion-input>
+    </ion-item>
+    <ion-item>
+      <div id="mapEnd" style="height:200px; width:100%;" slot="start"></div>
     </ion-item>
 
     <ion-item>

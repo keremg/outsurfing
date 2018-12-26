@@ -14,6 +14,9 @@ import {
 import { debug } from 'util';
 import { AuthService } from '../../services/auth.service';
 import { UserService } from '../../services/user.service';
+import leaflet from 'leaflet';
+import L from 'leaflet';
+import '../../../geocoder/Control.Geocoder';
 
 declare let window: any;
 
@@ -290,4 +293,166 @@ export class SingleRoutePage implements OnInit {
   }
 
   //if new routem first set the creatorId and get creator in any case
+
+
+
+    //------------------------------------------------------------------------------------------
+    // map region
+    //------------------------------------------------------------------------------------------
+    mapStart: any;
+  mapEnd: any;
+
+    ionViewDidEnter() {
+        this.loadmapStart();
+        this.loadmapEnd()
+    }
+
+    loadmapStart() {
+        this.mapStart = leaflet.map('mapStart').fitWorld();
+        leaflet.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attributions: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="http://mapbox.com">Mapbox</a>',
+            maxZoom: 18
+        }).addTo(this.mapStart);
+        var geocoder = L.Control.Geocoder.nominatim();
+        var control = L.Control.geocoder({
+            geocoder: geocoder
+        }).on('markgeocode', (e) => {
+            //debugger;
+            this.singleRouteForm.patchValue({
+                routeStartGeolocation : e.geocode.center.lat+','+e.geocode.center.lng,
+                routeStartLocation: e.geocode.name
+            });
+        }).addTo(this.mapStart);
+
+        this.mapStart.locate({
+            setView: true,
+            maxZoom: 10,
+            timeout: 30000,
+            maximumAge: 300000
+        }).on('locationfound', (e) => {
+
+            if (this.mapStart.SurfMarker)
+                this.mapStart.removeLayer(this.mapStart.SurfMarker);
+            let markerGroup = leaflet.featureGroup();
+            let marker: any = leaflet.marker([e.latitude, e.longitude]).on('click', () => {
+                //alert('Marker clicked');
+            });
+            markerGroup.addLayer(marker);
+            this.mapStart.addLayer(markerGroup);
+            this.mapStart.SurfMarker = markerGroup;
+            this.mapStart.surfLatLng = e.latlng;
+            let location = '';
+            geocoder.reverse(e.latlng, this.mapStart.options.crs.scale(this.mapStart.getZoom()), (results)=> {
+                var r = results[0];
+                if (r) {
+                    location =  r.name;
+                }
+                this.singleRouteForm.patchValue({
+                    routeStartGeolocation : this.mapStart.surfLatLng.lat+','+this.mapStart.surfLatLng.lng,
+                    routeStartLocation: location
+                });
+            })
+        }).on('locationerror', (err) => {
+            console.log(err.message);
+        });
+        this.mapStart.on('click', (e) => {
+            if (this.mapStart.SurfMarker)
+                this.mapStart.removeLayer(this.mapStart.SurfMarker);
+            this.mapStart.surfLatLng = e.latlng;
+            let markerGroup = leaflet.featureGroup();
+            let marker: any = leaflet.marker([e.latlng.lat, e.latlng.lng]).on('click', () => {
+                //alert('Marker clicked');
+            });
+            markerGroup.addLayer(marker);
+            e.sourceTarget.addLayer(markerGroup);
+            this.mapStart.SurfMarker = markerGroup;
+            let location = '';
+            geocoder.reverse(e.latlng, this.mapStart.options.crs.scale(this.mapStart.getZoom()), (results)=> {
+                var r = results[0];
+                if (r) {
+                    location =  r.name;
+                }
+                this.singleRouteForm.patchValue({
+                    routeStartGeolocation : this.mapStart.surfLatLng.lat+','+this.mapStart.surfLatLng.lng,
+                    routeStartLocation: location
+                });
+            })
+        });
+    }
+
+    loadmapEnd() {
+        this.mapEnd = leaflet.map('mapEnd').fitWorld();
+        leaflet.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attributions: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="http://mapbox.com">Mapbox</a>',
+            maxZoom: 18
+        }).addTo(this.mapEnd);
+        var geocoder = L.Control.Geocoder.nominatim();
+        var control = L.Control.geocoder({
+            geocoder: geocoder
+        }).on('markgeocode', (e) => {
+          //debugger;
+            this.singleRouteForm.patchValue({
+                routeEndGeolocation : e.geocode.center.lat+','+e.geocode.center.lng,
+                routeEndLocation: e.geocode.name
+            });
+        }).addTo(this.mapEnd);
+
+
+        this.mapEnd.locate({
+            setView: true,
+            maxZoom: 10,
+            timeout: 30000,
+            maximumAge: 300000
+        }).on('locationfound', (e) => {
+
+            if (this.mapEnd.SurfMarker)
+                this.mapEnd.removeLayer(this.mapEnd.SurfMarker);
+            let markerGroup = leaflet.featureGroup();
+            let marker: any = leaflet.marker([e.latitude, e.longitude]).on('click', () => {
+                //alert('Marker clicked');
+            });
+            markerGroup.addLayer(marker);
+            this.mapEnd.addLayer(markerGroup);
+            this.mapEnd.SurfMarker = markerGroup;
+            this.mapEnd.surfLatLng = e.latlng;
+            let location = '';
+            geocoder.reverse(e.latlng, this.mapEnd.options.crs.scale(this.mapEnd.getZoom()), (results)=> {
+                var r = results[0];
+                if (r) {
+                    location =  r.name;
+                }
+                this.singleRouteForm.patchValue({
+                    routeEndGeolocation : this.mapEnd.surfLatLng.lat+','+this.mapEnd.surfLatLng.lng,
+                    routeEndLocation: location
+                });
+            })
+        }).on('locationerror', (err) => {
+            console.log(err.message);
+        });
+
+        this.mapEnd.on('click', (e) => {
+            if (this.mapEnd.SurfMarker)
+                this.mapEnd.removeLayer(this.mapEnd.SurfMarker);
+            this.mapEnd.surfLatLng = e.latlng;
+            let markerGroup = leaflet.featureGroup();
+            let marker: any = leaflet.marker([e.latlng.lat, e.latlng.lng]).on('click', () => {
+                //alert('Marker clicked');
+            });
+            markerGroup.addLayer(marker);
+            e.sourceTarget.addLayer(markerGroup);
+            this.mapEnd.SurfMarker = markerGroup;
+            let location = '';
+            geocoder.reverse(e.latlng, this.mapEnd.options.crs.scale(this.mapEnd.getZoom()), (results)=> {
+                var r = results[0];
+                if (r) {
+                    location =  r.name;
+                }
+                this.singleRouteForm.patchValue({
+                    routeEndGeolocation : this.mapEnd.surfLatLng.lat+','+this.mapEnd.surfLatLng.lng,
+                    routeEndLocation: location
+                });
+            })
+
+        });
+    }
 }
