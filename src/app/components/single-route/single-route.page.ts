@@ -78,7 +78,7 @@ export class SingleRoutePage implements OnInit {
     window.form = this.singleRouteForm;
 
     this.currentUserId = this.authService.currentUserId;
-
+    this.currentUser = await this.userService.getCurrentUserPromise();
     // await this.userService.getuser(this.currentUserId).subscribe(user => {
     //     debugger;
     //     this.currentUser = user;
@@ -104,7 +104,7 @@ export class SingleRoutePage implements OnInit {
               this.route.routeCreator = user;
             });
           debugger;
-          if (this.route.routeCreatorId != this.currentUserId) {
+          if (this.route.routeCreatorId !== this.currentUserId) {
             this.singleRouteForm.disable();
             this.viewMode = true;
             console.log('just changed to view mode');
