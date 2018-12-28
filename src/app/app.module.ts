@@ -16,6 +16,7 @@ import {AngularFireAuthModule} from 'angularfire2/auth';
 import {AngularFireDatabaseModule} from 'angularfire2/database';
 import { environment } from '../environments/environment';
 import {HttpClientModule} from '@angular/common/http';
+import { AngularFireStorageModule } from '@angular/fire/storage';
 
 
 import { AuthService } from './services/auth.service';
@@ -27,7 +28,7 @@ import { Geolocation } from '@ionic-native/geolocation/ngx';
   entryComponents: [],
   imports: [BrowserModule, IonicModule.forRoot(), AppRoutingModule, AppRoutingModule ,
       AngularFireDatabaseModule, HttpClientModule, AngularFireModule.initializeApp(environment.firebase),
-      AngularFirestoreModule, AngularFireAuthModule],
+      AngularFirestoreModule, AngularFireAuthModule, AngularFireStorageModule],
   providers: [
     StatusBar,
     SplashScreen,

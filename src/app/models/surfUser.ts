@@ -3,7 +3,6 @@ export class SurfUser {
     firstName?: string;
     lastName?: string;
     email?: string;
-    imagesUrls?: string[];
     recentLocation?: string;
     about?: string;
     cancellations?: number;

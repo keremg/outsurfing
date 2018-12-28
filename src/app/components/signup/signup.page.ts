@@ -8,7 +8,6 @@ import {FormBuilder, FormGroup, Validators, FormsModule, ReactiveFormsModule} fr
 import {EmailValidator} from '../../../validators/email';
 import {AuthService} from '../../services/auth.service';
 import {UserService} from '../../services/user.service';
-import {SurfUser} from '../../models/surfUser';
 import {AudienceTypeEnum} from '../../AudienceType.enum';
 import leaflet from 'leaflet';
 import L from 'leaflet';
@@ -23,7 +22,6 @@ export class SignupPage {
     public signupForm: FormGroup;
     public loading;
     audienceTypeEnum = this.getENUM(AudienceTypeEnum);
-
 
     constructor(
         public navCtrl: NavController,
@@ -42,7 +40,6 @@ export class SignupPage {
             gender: [''],
             isGuide: [''],
             about: [''],
-            imagesUrls: [''],
             birthDate: [''],
             tripDifficulties: [''],
             tripDurations: [''],
@@ -67,12 +64,11 @@ export class SignupPage {
                 let user = await this.authService.emailSignup(email, password);
                 await this.loading.dismiss();
 
-                let u: SurfUser = {
+                let u = {
                     email: this.signupForm.value.email,
                     firstName: this.signupForm.value.firstName,
                     lastName: this.signupForm.value.lastName,
                     recentLocation: this.map.surfLatLng.lat + ',' + this.map.surfLatLng.lng,
-                    imagesUrls: this.signupForm.value.imagesUrls,//TODO
                     phone: this.signupForm.value.phone,
                     gender: parseInt(this.signupForm.value.gender.value),
                     isGuide: this.signupForm.value.isGuide == 'true',
@@ -121,6 +117,7 @@ export class SignupPage {
     }
 
 
+
     //------------------------------------------------------------------------------------------
     // map region
     //------------------------------------------------------------------------------------------
@@ -157,6 +154,7 @@ export class SignupPage {
             markerGroup.addLayer(marker);
             this.map.addLayer(markerGroup);
             this.map.SurfMarker = markerGroup;
+            this.map.surfLatLng = e.latlng;
         }).on('locationerror', (err) => {
             console.log(err.message);
         });

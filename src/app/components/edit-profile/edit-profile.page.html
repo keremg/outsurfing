@@ -1,5 +1,6 @@
 <ion-header>
   <ion-toolbar>
+    <ion-buttons slot="start"> <ion-back-button defaultHref="home"></ion-back-button> </ion-buttons>
     <ion-title>EditProfile</ion-title>
   </ion-toolbar>
 </ion-header>
@@ -117,7 +118,12 @@
         <ion-select-option value="elderlies" >Elderlies</ion-select-option>
       </ion-select>
     </ion-item>
-
+    <ion-item>
+      <ion-label stacked>Profile picture</ion-label>
+      <img [src]="profileUrl | async" />
+      <input type="file" (change)="uploadFile($event)" />
+      <div>{{ uploadPercent | async }}</div>
+    </ion-item>
 
 
 

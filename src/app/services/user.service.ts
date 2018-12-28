@@ -64,6 +64,7 @@ export class UserService {
                 return null;
             } else {
                 const data = action.payload.data() as SurfUser;
+                data.id = action.payload.id;
                 return data;
             }
 
