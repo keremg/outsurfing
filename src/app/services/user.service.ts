@@ -59,7 +59,7 @@ export class UserService {
     }
 
 
-    async updateUSer(id, update) {
+    async updateUser(id, update) {
         //Get the task document
         this.userDoc = this.afs.doc<SurfUser>(`${this.collection_endpoint}/${id}`);
         return this.userDoc.update(update);
