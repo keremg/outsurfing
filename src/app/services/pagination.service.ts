@@ -98,6 +98,7 @@ export class PaginationService {
                 let values = arr.map(snap => {
                     const data = snap.payload.doc.data()
                     const doc = snap.payload.doc
+                    data.id = snap.payload.doc.id;
                     return { ...data, doc }
                 })
 

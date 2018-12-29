@@ -7,6 +7,7 @@ import { IonicModule } from '@ionic/angular';
 
 
 import { ChooseRoute } from './ChooseRoute.page';
+import {RouteImageComponent} from '../route-image/route-image.component';
 
 @NgModule({
   imports: [
@@ -21,6 +22,6 @@ import { ChooseRoute } from './ChooseRoute.page';
       }
     ])
   ],
-  declarations: [ChooseRoute]
+  declarations: [ChooseRoute,RouteImageComponent]
 })
 export class ChooseRoutePageModule {}
