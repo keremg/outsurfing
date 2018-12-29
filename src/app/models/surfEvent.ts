@@ -9,6 +9,8 @@ export class SurfEvent extends SurfRoute {
         if (surfRoute) {
             Object.keys(surfRoute).forEach(key => {if (key !== 'id') { this[key] = surfRoute[key]; }}  );
             this.routeId = surfRoute.id;
+            this.meetingLocation = surfRoute.routeStartLocation; // as default
+            this.meetingGeolocation = surfRoute.routeStartGeolocation; // as default
         }
     }
 

@@ -15,46 +15,46 @@
               stacked
       >*
       </ion-label>
-      <ion-label stacked>Route name</ion-label>
-      <ion-input formControlName="name" type="text" placeholder="route name">
+      <ion-label stacked>Trip name</ion-label>
+      <ion-input formControlName="name" type="text" placeholder="event name">
       </ion-input>
     </ion-item>
 
     <ion-item>
-      <!--
-        TODO: find component to choose country and state, or maybe using google-maps or openStreetsMap
-      -->
+      <ion-button (click)="openOriginalRoute()">Open Original Route</ion-button>
+    </ion-item>
+    <ion-item>
       <ion-label
-              *ngIf="!singleEventForm.controls.country.valid && !viewMode"
+              *ngIf="!singleEventForm.controls.meetingLocation.valid && !viewMode"
               color="danger"
               stacked
       >*
       </ion-label>
-      <ion-label stacked>Country</ion-label>
+      <ion-label stacked>Meeting location (Car-pool optional meeting place)</ion-label>
       <ion-input
-              formControlName="country"
+              formControlName="meetingLocation"
               type="text"
-              placeholder="country"
-              [class.invalid]="!singleEventForm.controls.country.valid && blur && !viewMode"
+              placeholder="Car-pool optional meeting location"
+              [class.invalid]="
+          !singleEventForm.controls.meetingLocation.valid && blur && !viewMode"
       >
       </ion-input>
     </ion-item>
+
     <ion-item>
-      <!--
-        TODO: find component to choose country and state, or maybe using google-maps or openStreetsMap
-      -->
       <ion-label
-              *ngIf="!singleEventForm.controls.state.valid && !viewMode"
+              *ngIf="!singleEventForm.controls.meetingGeolocation?.valid && !viewMode"
               color="danger"
               stacked
       >*
       </ion-label>
-      <ion-label stacked>State</ion-label>
+      <ion-label stacked slot="start">meeting Geolocation</ion-label>
       <ion-input
-              formControlName="state"
+              formControlName="meetingGeolocation"
               type="text"
-              placeholder="state"
-              [class.invalid]="!singleEventForm.controls.state.valid && blur && !viewMode"
+              placeholder="Meeting location geolocation"
+              [class.invalid]="
+          !singleEventForm.controls.meetingGeolocation?.valid && blur && !viewMode"
       >
       </ion-input>
     </ion-item>
