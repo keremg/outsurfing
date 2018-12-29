@@ -9,7 +9,7 @@
 
 <ion-content padding>
   <form [formGroup]="singleRouteForm" novalidate>
-    <ion-item>
+    <ion-item [class.viewModeClass]="viewMode">
       <ion-label
         *ngIf="!singleRouteForm.controls.name.valid && !viewMode"
         color="danger"
@@ -386,7 +386,7 @@
       </ion-select>
     </ion-item>
     <ion-item>
-      <ion-button block type="button" (click)="updateRoute(true)">EventIt</ion-button>
+      <ion-button block type="submit">EventIt</ion-button>
     </ion-item>
     <ion-item *ngIf="!viewMode">
       <ion-button block type="button" (click)="updateRoute(false)">Save</ion-button>

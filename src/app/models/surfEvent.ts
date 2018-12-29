@@ -1,5 +1,6 @@
 import {SurfUser} from './surfUser';
 import {SurfRoute} from './surfRoute';
+import {SurfParticipant} from './surfParticipant';
 
 export class SurfEvent extends SurfRoute {
 
@@ -61,9 +62,9 @@ export class SurfEvent extends SurfRoute {
     entranceFee: number; //if any
     requiredEquipment: string;
     numEventsCreatedFromRoute: number;
-    recommendedMonths: number[];
     isEventRequiresCars: boolean; //not all events requires cars handling
-    participants: {user: SurfUser, registrationDate: string, isOrganizer: boolean, isGuide: boolean, offeringSeatsInCar: number, needSeatInCar: boolean, userIdOfHostingCar: number, isStandByForCar: boolean, isApproved: boolean, groupEquipmentIBring: string};
+
+    participant: SurfParticipant[];
 
 
     setEventFromRoute(surfRoute: SurfRoute) {
