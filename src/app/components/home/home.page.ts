@@ -1,9 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {AuthService} from '../../services/auth.service';
 import {NavController} from '@ionic/angular';
-import {EventService} from '../../services/event.service';
-import {Observable} from 'rxjs';
-import {SurfEvent} from '../../models/surfEvent';
 import {PaginationService} from '../../services/pagination.service';
 import {UserService} from '../../services/user.service';
 
@@ -29,7 +26,7 @@ export class HomePage implements OnInit {
 
 
     async ngOnInit() {
-        this.page.init('events', 'key', {reverse: true, prepend: false});
+        this.page.init('events', 'name', {reverse: true, prepend: false});
         await this.userService.getCurrentUser().subscribe(value => {
             console.log(value);
         });

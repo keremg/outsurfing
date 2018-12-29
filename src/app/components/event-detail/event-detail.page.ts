@@ -50,6 +50,9 @@ export class EventDetailPage implements OnInit {
 
     async ngOnInit() {
         this.id = this.activatedRoute.snapshot.paramMap.get('id');
+        if(this.id === '0'){
+            delete this.id;
+        }
         this.routeId = this.activatedRoute.snapshot.paramMap.get('route');
 
         this.singleEventForm = this.formBuilder.group({
@@ -84,7 +87,7 @@ export class EventDetailPage implements OnInit {
         this.currentUser = await this.userService.getCurrentUserPromise();
 
 
-        if(this.id && this.id !== '0') {
+        if(this.id) {
             this.eventService.getEvent(this.id).subscribe(value => {
                 if (value) {
                     this.event = value;
@@ -168,7 +171,10 @@ export class EventDetailPage implements OnInit {
         let copyOfEvent = _.cloneDeep(this.event);
 
         //delete junk that the DB shouldn't have
-        delete copyOfEvent.eventOrgnizerId; //remove the property
+        delete copyOfEvent.eventOrgnizer; //remove the property
+        if(copyOfEvent.routeCreator) {
+            delete copyOfEvent.routeCreator;
+        }
         let returnedId;
         if (!this.viewMode && this.id) {
             //update
@@ -180,7 +186,6 @@ export class EventDetailPage implements OnInit {
         }
         this.navCtrl.navigateForward('home');
 
-        this.eventService.addEvent(this.event);
         this.navCtrl.navigateRoot('home');
     }
 
