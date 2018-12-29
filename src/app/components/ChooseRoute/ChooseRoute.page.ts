@@ -54,7 +54,6 @@ export class ChooseRoute implements OnInit {
   }
 
   async routeImageUrl(surfRoute: SurfRoute) {
-    debugger;
     if (surfRoute.imagesUrls && surfRoute.imagesUrls.length > 0) {
       const ref = this.storage.ref(
         'routes/' + surfRoute.id + '/' + surfRoute.imagesUrls[0]

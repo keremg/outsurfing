@@ -47,7 +47,13 @@ export class EventService {
 
 
     async addEvent(event: SurfEvent) {
-        return this.events.add({...event});
+        return this.events.add({...event}).then(function(docRef) {
+            console.log('Route document written with ID: ', docRef.id);
+            return docRef.id;
+        }).catch(function(error) {
+            alert('Failed creating route ' + error);
+            console.error('Error adding document: ', error);
+        });
     }
 
     async updateEvent(id, update) {

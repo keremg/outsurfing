@@ -7,7 +7,8 @@ export class SurfEvent extends SurfRoute {
     constructor(surfRoute?: SurfRoute) {
         super();
         if (surfRoute) {
-            this.setEventFromRoute(surfRoute);
+            Object.keys(surfRoute).forEach(key => {if (key !== 'id') { this[key] = surfRoute[key]; }}  );
+            this.routeId = surfRoute.id;
         }
     }
 
@@ -66,9 +67,4 @@ export class SurfEvent extends SurfRoute {
 
     participant: SurfParticipant[];
 
-
-    setEventFromRoute(surfRoute: SurfRoute) {
-        Object.keys(surfRoute).forEach(key => {if (key !== 'id') { this[key] = surfRoute[key]; }}  );
-        this.routeId = surfRoute.id;
-    }
 }

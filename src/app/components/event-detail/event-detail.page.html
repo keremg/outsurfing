@@ -7,157 +7,386 @@
 
 <ion-content padding>
 
-    <ion-grid>
-      <ion-row>
-        <ion-col size="4" push-md="8">
-          <ion-img src="/assets/images/zeelim_zfira.jpg" class="eventImg"></ion-img>
-          <ion-list>
-            <ion-item>
-              <ion-label>
-                Trip Rating: 9 (17
-                <ion-icon name="contact"></ion-icon>
-                )
-              </ion-label>
-              <ion-label>
-                Level: Medium +
-              </ion-label>
-            </ion-item>
-          </ion-list>
+  <form [formGroup]="singleEventForm" novalidate>
+    <ion-item [class.viewModeClass]="viewMode">
+      <ion-label
+              *ngIf="!singleEventForm.controls.name.valid && !viewMode"
+              color="danger"
+              stacked
+      >*
+      </ion-label>
+      <ion-label stacked>Route name</ion-label>
+      <ion-input formControlName="name" type="text" placeholder="route name">
+      </ion-input>
+    </ion-item>
+
+    <ion-item>
+      <!--
+        TODO: find component to choose country and state, or maybe using google-maps or openStreetsMap
+      -->
+      <ion-label
+              *ngIf="!singleEventForm.controls.country.valid && !viewMode"
+              color="danger"
+              stacked
+      >*
+      </ion-label>
+      <ion-label stacked>Country</ion-label>
+      <ion-input
+              formControlName="country"
+              type="text"
+              placeholder="country"
+              [class.invalid]="!singleEventForm.controls.country.valid && blur && !viewMode"
+      >
+      </ion-input>
+    </ion-item>
+    <ion-item>
+      <!--
+        TODO: find component to choose country and state, or maybe using google-maps or openStreetsMap
+      -->
+      <ion-label
+              *ngIf="!singleEventForm.controls.state.valid && !viewMode"
+              color="danger"
+              stacked
+      >*
+      </ion-label>
+      <ion-label stacked>State</ion-label>
+      <ion-input
+              formControlName="state"
+              type="text"
+              placeholder="state"
+              [class.invalid]="!singleEventForm.controls.state.valid && blur && !viewMode"
+      >
+      </ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label
+              *ngIf="!singleEventForm.controls.routeStartLocation.valid && !viewMode"
+              color="danger"
+              stacked
+      >*
+      </ion-label>
+      <ion-label stacked>Start location</ion-label>
+      <ion-input
+              formControlName="routeStartLocation"
+              type="text"
+              placeholder="Start location"
+              [class.invalid]="
+          !singleEventForm.controls.routeStartLocation.valid && blur && !viewMode"
+      >
+      </ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label
+              *ngIf="!singleEventForm.controls.routeStartGeolocation?.valid && !viewMode"
+              color="danger"
+              stacked
+      >*
+      </ion-label>
+      <ion-label stacked slot="start">Start Geolocation</ion-label>
+      <ion-input
+              formControlName="routeStartGeolocation"
+              type="text"
+              placeholder="Start geolocation"
+              [class.invalid]="
+          !singleEventForm.controls.routeStartGeolocation?.valid && blur && !viewMode"
+      >
+      </ion-input>
+    </ion-item>
+    <ion-item>
+      <div id="mapStart" style="height:200px; width:100%;" slot="start"></div>
+    </ion-item>
+
+    <ion-item>
+      <ion-label
+              *ngIf="!singleEventForm.controls.routeEndLocation.valid && !viewMode"
+              color="danger"
+              stacked
+      >*
+      </ion-label>
+      <ion-label stacked>End location</ion-label>
+      <ion-input
+              formControlName="routeEndLocation"
+              type="text"
+              placeholder="End location"
+              [class.invalid]="
+          !singleEventForm.controls.routeEndLocation.valid && blur && !viewMode"
+      >
+      </ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label
+              *ngIf="!singleEventForm.controls.routeEndGeolocation.valid && !viewMode"
+              color="danger"
+              stacked
+      >*
+      </ion-label>
+      <ion-label stacked slot="start">End Geolocation</ion-label>
+      <ion-input
+              formControlName="routeEndGeolocation"
+              type="text"
+              placeholder="End geolocation"
+              [class.invalid]="
+          !singleEventForm.controls.routeEndGeolocation.valid && blur && !viewMode"
+      >
+      </ion-input>
+    </ion-item>
+    <ion-item>
+      <div id="mapEnd" style="height:200px; width:100%;" slot="start"></div>
+    </ion-item>
+
+    <ion-item>
+      <!--
+        TODO: show the image itself, and make sure we allow multiple maps in DB
+      -->
+      <ion-label stacked>Upload photos</ion-label>
+      <ion-input
+              formControlName="imagesUrls"
+              type="file"
+              accept="image/*"
+              (ionChange)="onFileSelected($event)"
+              placeholder="upload photos"
+      >
+      </ion-input>
+      <button disabled="viewMode" type="button" (click)="onUpload()">
+        Upload
+      </button>
+    </ion-item>
+    <ion-item>
+      <!--
+        TODO: show the image itself, and make sure we allow multiple maps in DB
+      -->
+      <ion-label stacked>Upload photos</ion-label>
+      <ion-input
+              formControlName="mapUrl"
+              type="file"
+              accept="image/*"
+              (ionChange)="onFileSelected($event)"
+              placeholder="upload photos"
+      >
+      </ion-input>
+      <button disabled="viewMode" type="button" (click)="onMapUpload()">
+        Upload
+      </button>
+    </ion-item>
+
+    <ion-item>
+      <ion-label stacked>Length (Km)</ion-label>
+      <ion-input
+              formControlName="lengthKM"
+              type="number"
+              placeholder="Length of route"
+              [class.invalid]="!singleEventForm.controls.lengthKM.valid && blur && !viewMode"
+      >
+      </ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label
+              *ngIf="!singleEventForm.controls.shortDescription.valid && !viewMode"
+              color="danger"
+              stacked
+      >*
+      </ion-label>
+      <ion-label stacked>Short description</ion-label>
+      <ion-input
+              formControlName="shortDescription"
+              type="text"
+              placeholder="Short description"
+              [class.invalid]="
+          !singleEventForm.controls.shortDescription.valid && blur && !viewMode"
+      >
+      </ion-input>
+    </ion-item>
+
+    <!-- TODO: Add route ranking -->
+    <ion-item>
+      <ion-label stacked>Long description</ion-label>
+      <ion-input
+              formControlName="longDescription"
+              type="longDescription"
+              placeholder="Long description"
+              [class.invalid]="
+          !singleEventForm.controls.longDescription.valid && blur && !viewMode"
+      >
+      </ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label>Difficulty</ion-label>
+      <!--
+        TODO: MAYBE when moving from form to DB and when moving from object to form change it from number to string
+      -->
+      <ion-select formControlName="routeDifficulty" multiple="false">
+        <ion-select-option value="0">Very easy</ion-select-option>
+        <ion-select-option value="1">Easy</ion-select-option>
+        <ion-select-option value="2">Moderate</ion-select-option>
+        <ion-select-option value="3">Challenging</ion-select-option>
+        <ion-select-option value="4">Extreme</ion-select-option>
+        <ion-select-option value="5">Very extreme</ion-select-option>
+      </ion-select>
+    </ion-item>
+    <!-- TODO: ION-SECLET VIEWMODE -->
+    <ion-item>
+      <ion-label stacked>Duration</ion-label>
+      <ion-row style="width: 80%" justify-content-end>
+        <ion-col size="2">
+          <ion-input
+                  formControlName="routeDuration"
+                  type="number"
+                  placeholder="Route duration"
+                  [class.invalid]="
+              !singleEventForm.controls.routeDuration.valid && blur && !viewMode"
+                  min="0"
+                  max="59"
+                  step="1"
+                  side="left"
+          ></ion-input>
         </ion-col>
-        <ion-col size="8" pull-md="4">
-
-          <ion-card-header no-padding>
-            <ion-card-title style="font-size: 2em;">
-              <ion-row justify-content-between style="align-items: center;">
-                <ion-col size="9">
-                  <ion-icon name="calendar"></ion-icon>
-                  <ion-text style="font-size: 0.5em;">Event</ion-text>
-                  Zeelim Wadi - Upper part
-                </ion-col>
-
-              </ion-row>
-            </ion-card-title>
-            <ion-card-subtitle>
-              <ion-label padding-end>24/11/2018 08:00am</ion-label>
-              <ion-label padding-end>1 day</ion-label>
-              <ion-label padding-end>Meeting: Tel Aviv, Ben Yehuda 220</ion-label>
-              <ion-label padding-end>Distance to meeting: 5km</ion-label>
-              <ion-label padding-end>Distance to trip: 70km</ion-label>
-            </ion-card-subtitle>
-            <ion-card-subtitle>
-              <ion-label>
-                Type: Water, Hiking, Canyon, Swiming
-              </ion-label>
-              <ion-label>
-                Ages: 20-70
-              </ion-label>
-            </ion-card-subtitle>
-            <!--need to be added from JS-->
-          </ion-card-header>
-          <!--<ion-card-content>-->
-          <ion-grid wrap>
-            <ion-row>
-              <ion-col size="2">
-                <ion-img src="/assets/images/haham.jpg"></ion-img>
-              </ion-col>
-              <ion-col size="4">
-                <ion-item>
-                  Hanuka, Age: 35
-                </ion-item>
-                <ion-item>
-                  Is Guide: Yes
-                </ion-item>
-                <ion-item>
-                  Guide Rating: 8 (544
-                  <ion-icon name="contact"></ion-icon>
-                  )
-                </ion-item>
-                <ion-item>
-                  Traveler Rating: 2 (12
-                  <ion-icon name="contact"></ion-icon>
-                  )
-                </ion-item>
-              </ion-col>
-              <ion-col size="2">
-                <ion-item>
-                  5 participants
-                </ion-item>
-                <ion-grid wrap>
-                  <ion-row size="12">
-                    <ion-col size="4">
-                      <ion-img src="/assets/images/haham.jpg"></ion-img>
-                    </ion-col>
-                    <ion-col size="4">
-                      <ion-img src="/assets/images/haham.jpg"></ion-img>
-                    </ion-col>
-                    <ion-col size="4">
-                      <ion-img src="/assets/images/haham.jpg"></ion-img>
-                    </ion-col>
-                  </ion-row>
-                  <ion-row size="12">
-                    <ion-col size="4">
-                      <ion-img src="/assets/images/haham.jpg"></ion-img>
-                    </ion-col>
-                    <ion-col size="4">
-                      <ion-img src="/assets/images/haham.jpg"></ion-img>
-                    </ion-col>
-                  </ion-row>
-                </ion-grid>
-
-              </ion-col>
-              <ion-col size="4">
-                <ion-item>
-                  <ion-icon name="car" style="font-size: 1em;" padding-end></ion-icon>
-                  6 Available seats
-                </ion-item>
-                <ion-item>
-                  <ion-icon name="cart" style="font-size: 1em;" padding-end></ion-icon>
-                  50$/
-                  <ion-icon name="contact" style="font-size: 1em;"></ion-icon>
-                </ion-item>
-                <ion-item>
-                  <ion-label>
-                    Audience: Single, Couples
-                  </ion-label>
-                </ion-item>
-                <ion-item>
-                  <ion-icon name="log-in">Arrival</ion-icon>
-                  : private cars
-                </ion-item>
-              </ion-col>
-
-            </ion-row>
-            <ion-row>
-              <ion-col>
-                <ion-item>
-                  (Short) Description: Join us to the beautiful Zeelim river, for a day-hike
-                  in a canyon with beautiful water pools, boulders, cliffs, and desert wild
-                  life.
-                  We will start at Zfira-pool at the upper-Zeelim and walk through the whole
-                  canyon until the dead sea.
-                  The trip requires good shape, as we will have cool adventures such as using
-                  ropes, metal ladders, and swimming through water pools
-                </ion-item>
-              </ion-col>
-            </ion-row>
-            <ion-row>
-              <ion-col>
-                <ion-item>
-                  Equipment: hikng shoes, 3 liters of water, food for the day, sun
-                  screen, short sleeves, long sleeves, flash-lights
-                </ion-item>
-              </ion-col>
-            </ion-row>
-          </ion-grid>
-          <!--</ion-card-content>-->
-
-
+        <ion-col size="10">
+          <ion-select formControlName="routeDurationUnits" multiple="false">
+            <ion-select-option value="hours">Hours</ion-select-option>
+            <ion-select-option value="days">Days</ion-select-option>
+          </ion-select>
         </ion-col>
       </ion-row>
-    </ion-grid>
+    </ion-item>
 
+    <!-- <ion-item> -->
+    <!-- <ion-label stacked>Duration</ion-label> -->
+    <!--
+      &lt;!&ndash;TODO: Allow usage of days -> translate to hours when translated to object, and translate to days if more than 24 hours when showing it&ndash;&gt;
+    -->
+    <!-- <ion-input -->
+    <!-- formControlName="routeDuration" -->
+    <!-- type="number" -->
+    <!-- placeholder="Route duration" -->
+    <!--
+      [class.invalid]="!singleEventForm.controls.routeDuration.valid && blur"
+    -->
+    <!-- &gt; -->
+    <!-- </ion-input> -->
+    <!-- <ion-select formControlName="routeDurationUnits" multiple="false"> -->
+    <!-- <ion-select-option value="hours">Hours</ion-select-option> -->
+    <!-- <ion-select-option value="days">Days</ion-select-option> -->
+    <!-- </ion-select> -->
+    <!-- </ion-item> -->
 
-  <ion-button id='join' (click)="onJoin()">join</ion-button>
+    <ion-item>
+      <ion-label>Route Properties</ion-label>
+      <ion-select formControlName="routeProperties" multiple="true">
+        <ion-select-option value="water">Water</ion-select-option>
+        <ion-select-option value="swimming">Swimming</ion-select-option>
+        <ion-select-option value="mountains" selected
+        >Mountains</ion-select-option
+        >
+        <ion-select-option value="bicycles">Bicycles</ion-select-option>
+        <ion-select-option value="forest">Forest</ion-select-option>
+        <ion-select-option value="desert">Desert</ion-select-option>
+        <ion-select-option value="oasis">Oasis</ion-select-option>
+        <ion-select-option value="historical">Historical</ion-select-option>
+        <ion-select-option value="archeology">Archeology</ion-select-option>
+        <ion-select-option value="ropes">Ropes</ion-select-option>
+      </ion-select>
+    </ion-item>
+
+    <ion-item>
+      <!--
+        TODO: URGENT  make sure we set the routeCreatorId upon creation of route, and that also fetching the user into routeCreator for teh component
+      -->
+      <ion-label stacked
+      >Creator of route: {{ route.routeCreator?.firstName }}
+        {{ route.routeCreator?.lastName }}</ion-label
+      >
+      <!-- TODO show photo of creator -->
+      <ion-label stacked *ngIf="route.routeCreator?.isGuide"
+      >Creator is a travel-guide :)</ion-label
+      >
+      <ion-input
+              *ngIf="route.routeCreator?.isGuide"
+              formControlName="guideContactDetails"
+              type="text"
+              placeholder="Guide Contact Details (optional email and/or phone)"
+              [class.invalid]="
+          !singleEventForm.controls.guideContactDetails.valid && blur && !viewMode"
+      >
+      </ion-input>
+    </ion-item>
+    <ion-item *ngIf="route.routeCreator?.isGuide">
+      <ion-label stacked>Offers guidance?</ion-label>
+      <ion-checkbox
+              formControlName="isGuidingOffered"
+              color="primary"
+              checked="false"
+      ></ion-checkbox>
+      <ion-label stacked>Offered Price</ion-label>
+      <ion-input
+              formControlName="offeredPrice"
+              type="number"
+              placeholder="Offered price"
+              [class.invalid]="!singleEventForm.controls.offeredPrice.valid && blur && !viewMode"
+      >
+      </ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label stacked>Entrance fee</ion-label>
+      <ion-input
+              formControlName="entranceFee"
+              type="number"
+              placeholder="Entrance fee"
+              [class.invalid]="!singleEventForm.controls.entranceFee.valid && blur && !viewMode"
+      >
+      </ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label
+              *ngIf="!singleEventForm.controls.requiredEquipment.valid && !viewMode"
+              color="danger"
+              stacked
+      >*
+      </ion-label>
+      <ion-label stacked>Required equipment</ion-label>
+      <ion-input
+              formControlName="requiredEquipment"
+              type="text"
+              placeholder="Required equipment"
+              [class.invalid]="
+          !singleEventForm.controls.requiredEquipment.valid && blur && !viewMode"
+      >
+      </ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label stacked
+      >#Events created from this route:
+        {{ route.numEventsCreatedFromRoute }}</ion-label
+      >
+    </ion-item>
+
+    <ion-item>
+      <ion-label>Recommended months</ion-label>
+      <ion-select formControlName="recommendedMonths" multiple="true">
+        <ion-select-option value="1">January</ion-select-option>
+        <ion-select-option value="2">February</ion-select-option>
+        <ion-select-option value="3">March</ion-select-option>
+        <ion-select-option value="4">April</ion-select-option>
+        <ion-select-option value="5">May</ion-select-option>
+        <ion-select-option value="6">June</ion-select-option>
+        <ion-select-option value="7">July</ion-select-option>
+        <ion-select-option value="8">August</ion-select-option>
+        <ion-select-option value="9">September</ion-select-option>
+        <ion-select-option value="10">October</ion-select-option>
+        <ion-select-option value="11">Novemeber</ion-select-option>
+        <ion-select-option value="12">December</ion-select-option>
+      </ion-select>
+    </ion-item>
+  </form>
+
+  <ion-button id='join' (click)="onJoinEvent()">join</ion-button>
   <ion-button id='create' (click)="onCreate()">Create</ion-button>
 
 </ion-content>
