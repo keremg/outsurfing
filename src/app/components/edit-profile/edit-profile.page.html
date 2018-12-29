@@ -7,15 +7,6 @@
 
 <ion-content padding>
   <form [formGroup]="updateForm" (submit)="updateUser()" novalidate>
-    <ion-item>
-      <ion-label *ngIf="!updateForm.controls.email.valid" color="danger" stacked>*</ion-label>
-      <ion-label stacked>Email</ion-label>
-      <ion-input formControlName="email" type="email" placeholder="Email" [(ngModel)]="email" [class.invalid]="!updateForm.controls.email.valid && blur">
-      </ion-input>
-    </ion-item>
-      <ion-label color="danger" class="error-message" *ngIf="!updateForm.controls.email.valid && updateForm.controls.email.touched" >
-        Please enter a valid email.
-      </ion-label>
 
     <ion-item>
       <ion-label *ngIf="!updateForm.controls.firstName.valid" color="danger" stacked>*</ion-label>

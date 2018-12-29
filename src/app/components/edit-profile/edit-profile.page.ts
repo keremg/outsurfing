@@ -11,6 +11,7 @@ import {UserService} from '../../services/user.service';
 import {SurfUser} from '../../models/surfUser';
 import { AngularFireStorage, AngularFireUploadTask } from '@angular/fire/storage';
 import {Observable} from 'rxjs';
+import { debug } from 'util';
 
 declare let window: any;
 
@@ -46,8 +47,6 @@ export class EditProfilePage implements OnInit {
         const ref = this.storage.ref('users/'+this.currentUser.id+'/profilePic');
         this.profileUrl = ref.getDownloadURL();
         this.updateForm = this.formBuilder.group({
-            email: ['', Validators.compose([Validators.required, EmailValidator.isValid])],
-            password: ['', Validators.compose([Validators.minLength(6), Validators.required])],
             firstName: ['', Validators.compose([Validators.minLength(1), Validators.required])],
             lastName: ['', Validators.compose([Validators.minLength(1), Validators.required])],
             phone: ['', Validators.compose([Validators.pattern('^[0-9]*$'), Validators.minLength(9), Validators.required])],
@@ -70,7 +69,6 @@ export class EditProfilePage implements OnInit {
     
     editForm(user: SurfUser) {
         this.updateForm.patchValue({
-            email: user.email,
             firstName: user.firstName,
             lastName: user.lastName,
             id: user.id,
@@ -83,31 +81,22 @@ export class EditProfilePage implements OnInit {
             birthDate: user.birthDate,
             tripDifficulties: user.tripDifficulties, // Level:  0 - very easy, 1-easy, 2-moderate, 3-challenging, 4-extreme, 5-very extreme
             tripDurations: user.tripDurations, //will represent number of days, so half day should be 0.5 , one hour should be 0.04
-            audienceTypes: user.audienceTypes,
-            travelerRatings: user.travelerRatings,//can be changed to
-            guideRatings:user.guideRatings
-
-
+            audienceTypes: user.audienceTypes
         })
     
     }
 
 
     async updateUser() {
+        debugger;
+        try{
         if (!this.updateForm.valid) {
             console.log(
                 `Need to complete the form, current value: ${this.updateForm.value}`
             );
         } else {
-            const email: string = this.updateForm.value.email;
-            const password: string = this.updateForm.value.password;
             let success = false;
             try {
-                this.loading = await this.loadingCtrl.create();
-                this.loading.present();
-                let user = await this.authService.emailSignup(email, password);
-                await this.loading.dismiss();
-
                 let u = {
                     email: this.updateForm.value.email,
                     firstName: this.updateForm.value.firstName,
@@ -125,27 +114,20 @@ export class EditProfilePage implements OnInit {
                     travelerRatings: this.updateForm.value.travelerRatings,
                     guideRatings: this.updateForm.value.guideRatings
                 };
-
-                await this.userService.addUsers(u);
+    
+                await this.userService.updateUser(this.currentUserId,u);
                 success = true;
-            } catch (error) {
-                try {
-                    await this.authService.deleteCurrentUser();
-                } catch (error) {
-                }
-
-                this.loading.dismiss().then(async () => {
-                    const alert = await this.alertCtrl.create({
-                        message: 'Sign up faild:' + error.message,
-                        buttons: [{text: 'Ok', role: 'cancel'}]
-                    });
-                    alert.present();
-                });
-            }
-            if (success)
                 this.navCtrl.navigateRoot('home');
-        }
+                } catch (error) {
+                    debugger;
+                success = false;
+                }
     }
+}
+catch (error) {
+    debugger
+    }
+}
 
 
     async uploadFile(event) {
