@@ -2,7 +2,7 @@ import {SurfUser} from './surfUser';
 
 export class SurfEvent {
     id?: string;
-    routeId: string; //the route from which the Event was created
+    routeId: string; //@@ the route from which the Event was created
     name: string;
     country: string;
     state: string;

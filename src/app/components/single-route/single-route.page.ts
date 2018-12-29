@@ -304,7 +304,7 @@ export class SingleRoutePage implements OnInit {
 
     ionViewDidEnter() {
         this.loadmapStart();
-        this.loadmapEnd()
+        this.loadmapEnd();
     }
 
     loadmapStart() {
