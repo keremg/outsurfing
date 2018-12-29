@@ -68,6 +68,7 @@ export class SingleRoutePage implements OnInit {
             routeProperties: [''],
             isGuidingOffered: [''],
             offeredPrice: [0],
+            minGroupSizeForGuide: [0],
             guideContactDetails: [''],
             entranceFee: 0,
             requiredEquipment: [''],
@@ -143,6 +144,7 @@ export class SingleRoutePage implements OnInit {
             // this.route.routeCreator = {firstName: 'Tidhar', lastName: 'Seifer', isGuide: true}; //new User(); // {id: 'hgf6yi9', name: 'Adi'};
             this.route.isGuidingOffered = false;
             this.route.offeredPrice = 0; // default 0, more if isGuidingOffered
+            this.route.minGroupSizeForGuide = 0; //default 0, more if isGuidingOffered
             // this.route.guideContactDetails = '0541223681'; // ree text allowing the guide to describe email and/or phone for contacting him/her about guidance
             this.route.entranceFee = 0;
             // this.route.requiredEquipment = 'shoes, pancake';
@@ -199,6 +201,7 @@ export class SingleRoutePage implements OnInit {
             routeProperties: route.routeProperties,
             isGuidingOffered: route.isGuidingOffered,
             offeredPrice: route.offeredPrice,
+            minGroupSizeForGuide: route.minGroupSizeForGuide,
             guideContactDetails: route.guideContactDetails,
             entranceFee: route.entranceFee,
             requiredEquipment: route.requiredEquipment,
@@ -293,6 +296,7 @@ export class SingleRoutePage implements OnInit {
         this.route.isGuidingOffered =
             this.singleRouteForm.value.isGuidingOffered || false;
         this.route.offeredPrice = this.singleRouteForm.value.offeredPrice || 0;
+        this.route.minGroupSizeForGuide = this.singleRouteForm.value.minGroupSizeForGuide || 0;
         this.route.guideContactDetails =
             this.singleRouteForm.value.guideContactDetails || '';
         this.route.entranceFee = this.singleRouteForm.value.entranceFee || 0;

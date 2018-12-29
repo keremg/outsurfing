@@ -330,6 +330,13 @@
         [class.invalid]="!singleRouteForm.controls.offeredPrice.valid && blur && !viewMode"
       >
       </ion-input>
+      <ion-input
+              formControlName="minGroupSizeForGuide"
+              type="number"
+              placeholder="Minimum group required for guidance"
+              [class.invalid]="!singleRouteForm.controls.minGroupSizeForGuide.valid && blur && !viewMode"
+      >
+      </ion-input>
     </ion-item>
 
     <ion-item>
