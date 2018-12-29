@@ -6,55 +6,35 @@
 </ion-header>
 
 <ion-content padding>
-  <form [formGroup]="signupForm" (submit)="signupUser()" novalidate>
+  <form [formGroup]="updateForm" (submit)="updateUser()" novalidate>
     <ion-item>
-      <ion-label *ngIf="!signupForm.controls.email.valid" color="danger" stacked>*</ion-label>
+      <ion-label *ngIf="!updateForm.controls.email.valid" color="danger" stacked>*</ion-label>
       <ion-label stacked>Email</ion-label>
-      <ion-input formControlName="email" type="email" placeholder="Email" [(ngModel)]="email" [class.invalid]="!signupForm.controls.email.valid && blur">
+      <ion-input formControlName="email" type="email" placeholder="Email" [(ngModel)]="email" [class.invalid]="!updateForm.controls.email.valid && blur">
       </ion-input>
     </ion-item>
-      <ion-label color="danger" class="error-message" *ngIf="!signupForm.controls.email.valid && signupForm.controls.email.touched" >
+      <ion-label color="danger" class="error-message" *ngIf="!updateForm.controls.email.valid && updateForm.controls.email.touched" >
         Please enter a valid email.
       </ion-label>
 
     <ion-item>
-      <ion-label *ngIf="!signupForm.controls.password.valid" color="danger" stacked>*</ion-label>
-      <ion-label stacked>Password</ion-label>
-      <ion-input formControlName="password" type="password" placeholder="Your password" [class.invalid]="!signupForm.controls.password.valid && blur">
-      </ion-input>
-    </ion-item>
-    <ion-label color="danger" class="error-message" *ngIf="!signupForm.controls.password.valid && signupForm.controls.password.touched" >
-      Your password needs more than 6 characters.
-    </ion-label>
-
-    <ion-item>
-      <ion-label *ngIf="!signupForm.controls.firstName.valid" color="danger" stacked>*</ion-label>
+      <ion-label *ngIf="!updateForm.controls.firstName.valid" color="danger" stacked>*</ion-label>
       <ion-label stacked>First Name</ion-label>
       <ion-input formControlName="firstName" type="text" placeholder="Your first name">
       </ion-input>
     </ion-item>
-    <ion-label color="danger" class="error-message" *ngIf="!signupForm.controls.firstName.valid && signupForm.controls.firstName.touched" >
+    <ion-label color="danger" class="error-message" *ngIf="!updateForm.controls.firstName.valid && updateForm.controls.firstName.touched" >
       You must fill a first name.
     </ion-label>
 
     <ion-item>
-      <ion-label *ngIf="!signupForm.controls.lastName.valid" color="danger" stacked>*</ion-label>
+      <ion-label *ngIf="!updateForm.controls.lastName.valid" color="danger" stacked>*</ion-label>
       <ion-label stacked>Last Name</ion-label>
       <ion-input formControlName="lastName" type="text" placeholder="Your last name">
       </ion-input>
     </ion-item>
-    <ion-label color="danger" class="error-message" *ngIf="!signupForm.controls.lastName.valid && signupForm.controls.lastName.touched" >
+    <ion-label color="danger" class="error-message" *ngIf="!updateForm.controls.lastName.valid && updateForm.controls.lastName.touched" >
       You must fill a lst name.
-    </ion-label>
-
-    <ion-item>
-      <ion-label *ngIf="!signupForm.controls.userName.valid" color="danger" stacked>*</ion-label>
-      <ion-label stacked>User Name</ion-label>
-      <ion-input formControlName="userName" type="text" placeholder="Your user name">
-      </ion-input>
-    </ion-item>
-    <ion-label color="danger" class="error-message" *ngIf="!signupForm.controls.userName.valid && signupForm.controls.userName.touched" >
-      Your username needs more than 3 characters.
     </ion-label>
 
     <ion-item>
@@ -63,12 +43,12 @@
     </ion-item>
 
     <ion-item>
-      <ion-label *ngIf="!signupForm.controls.phone.valid" color="danger" stacked>*</ion-label>
+      <ion-label *ngIf="!updateForm.controls.phone.valid" color="danger" stacked>*</ion-label>
       <ion-label stacked>Phone number</ion-label>
       <ion-input formControlName="phone" type="tel" placeholder="Your phone number">
       </ion-input>
     </ion-item>
-    <ion-label color="danger" class="error-message" *ngIf="!signupForm.controls.phone.valid && signupForm.controls.phone.touched" >
+    <ion-label color="danger" class="error-message" *ngIf="!updateForm.controls.phone.valid && updateForm.controls.phone.touched" >
       Your phone can contain only numeric value
     </ion-label>
 
@@ -130,7 +110,7 @@
 
 
 
-    <ion-button block type="submit" [disabled]="!signupForm.valid">
+    <ion-button block type="submit" [disabled]="!updateForm.valid">
       Update account
     </ion-button>
   </form>

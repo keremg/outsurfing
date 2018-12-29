@@ -12,6 +12,8 @@ import {SurfUser} from '../../models/surfUser';
 import { AngularFireStorage, AngularFireUploadTask } from '@angular/fire/storage';
 import {Observable} from 'rxjs';
 
+declare let window: any;
+
 
 @Component({
     selector: 'app-edit-profile',
@@ -21,25 +23,33 @@ import {Observable} from 'rxjs';
 export class EditProfilePage implements OnInit {
     public updateForm: FormGroup;
     public loading;
-    public email: string;
+    currentUserId: string;
+    currentUser: SurfUser;
     uploadPercent: Observable<number>;
     profileUrl: Observable<string | null>;
-    user;
      constructor(
         public navCtrl: NavController,
         public authService: AuthService,
         public loadingCtrl: LoadingController,
         public alertCtrl: AlertController,
-        formBuilder: FormBuilder,
+        private formBuilder: FormBuilder,
         private userService: UserService,
         private storage: AngularFireStorage
     ) {
-        this.updateForm = formBuilder.group({
+        window.user = this;
+        
+    }
+
+    async ngOnInit() {
+        this.currentUser = await this.userService.getCurrentUserPromise();
+        this.currentUserId = this.authService.currentUserId;
+        const ref = this.storage.ref('users/'+this.currentUser.id+'/profilePic');
+        this.profileUrl = ref.getDownloadURL();
+        this.updateForm = this.formBuilder.group({
             email: ['', Validators.compose([Validators.required, EmailValidator.isValid])],
             password: ['', Validators.compose([Validators.minLength(6), Validators.required])],
             firstName: ['', Validators.compose([Validators.minLength(1), Validators.required])],
             lastName: ['', Validators.compose([Validators.minLength(1), Validators.required])],
-            userName: ['', Validators.compose([Validators.minLength(3), Validators.required])],
             phone: ['', Validators.compose([Validators.pattern('^[0-9]*$'), Validators.minLength(9), Validators.required])],
             gender: [''],
             isGuide: [''],
@@ -51,16 +61,39 @@ export class EditProfilePage implements OnInit {
             peopleType: [''],
         });
 
+        window.form = this.updateForm;
+        console.log('this.currentUser: ', this.currentUser);
+        this.editForm(this.currentUser);
 
+        
+    }
+    
+    editForm(user: SurfUser) {
+        this.updateForm.patchValue({
+            email: user.email,
+            firstName: user.firstName,
+            lastName: user.lastName,
+            id: user.id,
+            recentLocation: user.recentLocation,
+            about: user.about,
+            cancellations: user.cancellations,
+            gender: user.gender, //0 is male, 1 is female, 2 is other
+            isGuide: user.isGuide,
+            phone: user.phone,
+            birthDate: user.birthDate,
+            tripDifficulties: user.tripDifficulties, // Level:  0 - very easy, 1-easy, 2-moderate, 3-challenging, 4-extreme, 5-very extreme
+            tripDurations: user.tripDurations, //will represent number of days, so half day should be 0.5 , one hour should be 0.04
+            audienceTypes: user.audienceTypes,
+            travelerRatings: user.travelerRatings,//can be changed to
+            guideRatings:user.guideRatings
+
+
+        })
+    
     }
 
-    async ngOnInit() {
-        this.user = await this.userService.getCurrentUserPromise();
-        const ref = this.storage.ref('users/'+this.user.id+'/profilePic');
-        this.profileUrl = ref.getDownloadURL();
-    }
 
-    async signupUser() {
+    async updateUser() {
         if (!this.updateForm.valid) {
             console.log(
                 `Need to complete the form, current value: ${this.updateForm.value}`
@@ -118,7 +151,7 @@ export class EditProfilePage implements OnInit {
     async uploadFile(event) {
         debugger;
         const file = event.target.files[0];
-        const filePath = 'users/'+this.user.id+'/profilePic';
+        const filePath = 'users/'+this.currentUser.id+'/profilePic';
         const task: AngularFireUploadTask = this.storage.upload(filePath, file);
 
         // observe percentage changes
