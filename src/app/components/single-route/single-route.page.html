@@ -8,10 +8,10 @@
 </ion-header>
 
 <ion-content padding>
-  <form [formGroup]="singleRouteForm" (submit)="updateRoute()" novalidate>
+  <form [formGroup]="singleRouteForm" novalidate>
     <ion-item>
       <ion-label
-        *ngIf="!singleRouteForm.controls.name.valid"
+        *ngIf="!singleRouteForm.controls.name.valid && !viewMode"
         color="danger"
         stacked
         >*
@@ -26,7 +26,7 @@
         TODO: find component to choose country and state, or maybe using google-maps or openStreetsMap
       -->
       <ion-label
-        *ngIf="!singleRouteForm.controls.country.valid"
+        *ngIf="!singleRouteForm.controls.country.valid && !viewMode"
         color="danger"
         stacked
         >*
@@ -36,7 +36,7 @@
         formControlName="country"
         type="text"
         placeholder="country"
-        [class.invalid]="!singleRouteForm.controls.country.valid && blur"
+        [class.invalid]="!singleRouteForm.controls.country.valid && blur && !viewMode"
       >
       </ion-input>
     </ion-item>
@@ -45,7 +45,7 @@
         TODO: find component to choose country and state, or maybe using google-maps or openStreetsMap
       -->
       <ion-label
-        *ngIf="!singleRouteForm.controls.state.valid"
+        *ngIf="!singleRouteForm.controls.state.valid && !viewMode"
         color="danger"
         stacked
         >*
@@ -55,14 +55,14 @@
         formControlName="state"
         type="text"
         placeholder="state"
-        [class.invalid]="!singleRouteForm.controls.state.valid && blur"
+        [class.invalid]="!singleRouteForm.controls.state.valid && blur && !viewMode"
       >
       </ion-input>
     </ion-item>
 
     <ion-item>
       <ion-label
-        *ngIf="!singleRouteForm.controls.routeStartLocation.valid"
+        *ngIf="!singleRouteForm.controls.routeStartLocation.valid && !viewMode"
         color="danger"
         stacked
         >*
@@ -73,15 +73,14 @@
         type="text"
         placeholder="Start location"
         [class.invalid]="
-          !singleRouteForm.controls.routeStartLocation.valid && blur
-        "
+          !singleRouteForm.controls.routeStartLocation.valid && blur && !viewMode"
       >
       </ion-input>
     </ion-item>
 
     <ion-item>
       <ion-label
-        *ngIf="!singleRouteForm.controls.routeStartGeolocation?.valid"
+        *ngIf="!singleRouteForm.controls.routeStartGeolocation?.valid && !viewMode"
         color="danger"
         stacked
         >*
@@ -92,8 +91,7 @@
               type="text"
               placeholder="Start geolocation"
               [class.invalid]="
-          !singleRouteForm.controls.routeStartGeolocation?.valid && blur
-        "
+          !singleRouteForm.controls.routeStartGeolocation?.valid && blur && !viewMode"
       >
       </ion-input>
     </ion-item>
@@ -103,7 +101,7 @@
 
     <ion-item>
       <ion-label
-        *ngIf="!singleRouteForm.controls.routeEndLocation.valid"
+        *ngIf="!singleRouteForm.controls.routeEndLocation.valid && !viewMode"
         color="danger"
         stacked
         >*
@@ -114,15 +112,14 @@
         type="text"
         placeholder="End location"
         [class.invalid]="
-          !singleRouteForm.controls.routeEndLocation.valid && blur
-        "
+          !singleRouteForm.controls.routeEndLocation.valid && blur && !viewMode"
       >
       </ion-input>
     </ion-item>
 
     <ion-item>
       <ion-label
-        *ngIf="!singleRouteForm.controls.routeEndGeolocation.valid"
+        *ngIf="!singleRouteForm.controls.routeEndGeolocation.valid && !viewMode"
         color="danger"
         stacked
         >*
@@ -133,8 +130,7 @@
               type="text"
               placeholder="End geolocation"
               [class.invalid]="
-          !singleRouteForm.controls.routeEndGeolocation.valid && blur
-        "
+          !singleRouteForm.controls.routeEndGeolocation.valid && blur && !viewMode"
       >
       </ion-input>
     </ion-item>
@@ -183,14 +179,14 @@
         formControlName="lengthKM"
         type="number"
         placeholder="Length of route"
-        [class.invalid]="!singleRouteForm.controls.lengthKM.valid && blur"
+        [class.invalid]="!singleRouteForm.controls.lengthKM.valid && blur && !viewMode"
       >
       </ion-input>
     </ion-item>
 
     <ion-item>
       <ion-label
-        *ngIf="!singleRouteForm.controls.shortDescription.valid"
+        *ngIf="!singleRouteForm.controls.shortDescription.valid && !viewMode"
         color="danger"
         stacked
         >*
@@ -201,8 +197,7 @@
         type="text"
         placeholder="Short description"
         [class.invalid]="
-          !singleRouteForm.controls.shortDescription.valid && blur
-        "
+          !singleRouteForm.controls.shortDescription.valid && blur && !viewMode"
       >
       </ion-input>
     </ion-item>
@@ -215,8 +210,7 @@
         type="longDescription"
         placeholder="Long description"
         [class.invalid]="
-          !singleRouteForm.controls.longDescription.valid && blur
-        "
+          !singleRouteForm.controls.longDescription.valid && blur && !viewMode"
       >
       </ion-input>
     </ion-item>
@@ -245,8 +239,7 @@
             type="number"
             placeholder="Route duration"
             [class.invalid]="
-              !singleRouteForm.controls.routeDuration.valid && blur
-            "
+              !singleRouteForm.controls.routeDuration.valid && blur && !viewMode"
             min="0"
             max="59"
             step="1"
@@ -318,8 +311,7 @@
         type="text"
         placeholder="Guide Contact Details (optional email and/or phone)"
         [class.invalid]="
-          !singleRouteForm.controls.guideContactDetails.valid && blur
-        "
+          !singleRouteForm.controls.guideContactDetails.valid && blur && !viewMode"
       >
       </ion-input>
     </ion-item>
@@ -335,7 +327,7 @@
         formControlName="offeredPrice"
         type="number"
         placeholder="Offered price"
-        [class.invalid]="!singleRouteForm.controls.offeredPrice.valid && blur"
+        [class.invalid]="!singleRouteForm.controls.offeredPrice.valid && blur && !viewMode"
       >
       </ion-input>
     </ion-item>
@@ -346,14 +338,14 @@
         formControlName="entranceFee"
         type="number"
         placeholder="Entrance fee"
-        [class.invalid]="!singleRouteForm.controls.entranceFee.valid && blur"
+        [class.invalid]="!singleRouteForm.controls.entranceFee.valid && blur && !viewMode"
       >
       </ion-input>
     </ion-item>
 
     <ion-item>
       <ion-label
-        *ngIf="!singleRouteForm.controls.requiredEquipment.valid"
+        *ngIf="!singleRouteForm.controls.requiredEquipment.valid && !viewMode"
         color="danger"
         stacked
         >*
@@ -364,8 +356,7 @@
         type="text"
         placeholder="Required equipment"
         [class.invalid]="
-          !singleRouteForm.controls.requiredEquipment.valid && blur
-        "
+          !singleRouteForm.controls.requiredEquipment.valid && blur && !viewMode"
       >
       </ion-input>
     </ion-item>
@@ -395,10 +386,10 @@
       </ion-select>
     </ion-item>
     <ion-item>
-      <ion-button block type="submit">EventIt</ion-button>
+      <ion-button block type="button" (click)="updateRoute(true)">EventIt</ion-button>
     </ion-item>
     <ion-item *ngIf="!viewMode">
-      <ion-button block type="submit">Save</ion-button>
+      <ion-button block type="button" (click)="updateRoute(false)">Save</ion-button>
     </ion-item>
   </form>
 </ion-content>

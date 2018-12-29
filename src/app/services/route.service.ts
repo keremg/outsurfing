@@ -32,7 +32,7 @@ export class RouteService {
     async updateRoute(id, update) {
         //Get the task document
         this.routeDoc = this.db.doc<SurfRoute>(`${this.collection_endpoint}/${id}`);
-        return this.routeDoc.update(update);
+        return this.routeDoc.update(({...update}));
     }
 
     getRoute(id) : Observable<SurfRoute>{
