@@ -390,7 +390,7 @@ export class SingleRoutePage implements OnInit {
             });
         }
 
-        if(this.id) {//loaded from db
+        if(this.id && this.route.routeStartGeolocation) {//loaded from db
             let loc = this.route.routeStartGeolocation.split(',');
             if (this.mapStart.SurfMarker)
                 this.mapStart.removeLayer(this.mapStart.SurfMarker);
@@ -483,7 +483,7 @@ export class SingleRoutePage implements OnInit {
             });
         }
 
-        if(this.id) {//loaded from db
+        if(this.id && this.route.routeEndGeolocation) {//loaded from db
             let loc = this.route.routeEndGeolocation.split(',');
             if (this.mapEnd.SurfMarker)
                 this.mapEnd.removeLayer(this.mapEnd.SurfMarker);
