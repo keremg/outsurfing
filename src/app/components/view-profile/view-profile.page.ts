@@ -16,7 +16,7 @@ export class ViewProfilePage implements OnInit {
   lastName: string;
   about: string;
   cancellations: number;
-  gender: number; //0 is male, 1 is female, 2 is other
+  gender_string: string;
   isGuide: boolean;
   phone: string;
   birthDate: string;
@@ -28,14 +28,37 @@ export class ViewProfilePage implements OnInit {
   constructor(
     private activatedRoute: ActivatedRoute,
     private userService: UserService) {
-    
-    this.email = "nir";
   }
     
   
   ngOnInit() {
     this.id = this.activatedRoute.snapshot.paramMap.get('id');
-    let user = this.userService.getuser(this.id);
+    this.id = "PY2FTM1P7uZbtOiDDZPYGp7GQqn1";
+   let user;
+    this.userService.getuser(this.id).subscribe(u=>{
+      if(u){
+        user=u;
+        this.email = user.email;
+        this.firstName = user.firstName;
+        this.lastName = user.lastName;
+        if(user.gender == 0){
+          this.gender_string = "Male";
+        }
+        if(user.gender == 1){
+          this.gender_string = "Female";
+        }
+        if(user.gender == 2){
+          this.gender_string = "Other";
+        }
+        this.birthDate = user.birthDate;
+        this.phone = user.phone;
+        this.isGuide = user.isGuide;
+        this.about = user.about;
+        this.tripDifficulties = user.tripDifficulties;
+        this.tripDurations =  user.tripDurations;
+        this.audienceTypes = user.audienceTypes;
+      }
+    })
   }
 
 }

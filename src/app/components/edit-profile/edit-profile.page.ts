@@ -95,6 +95,7 @@ export class EditProfilePage implements OnInit {
                 `Need to complete the form, current value: ${this.updateForm.value}`
             );
         } else {
+            const email: string = this.updateForm.value.email;
             let success = false;
             try {
                 let u = {
@@ -113,8 +114,7 @@ export class EditProfilePage implements OnInit {
                     audienceTypes: this.updateForm.value.audienceTypes,
                     travelerRatings: this.updateForm.value.travelerRatings,
                     guideRatings: this.updateForm.value.guideRatings
-                };
-    
+                };    
                 await this.userService.updateUser(this.currentUserId,u);
                 success = true;
                 this.navCtrl.navigateRoot('home');
