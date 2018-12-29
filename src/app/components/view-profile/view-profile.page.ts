@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { UserService } from '../../services/user.service';
 import {SurfUser} from '../../models/surfUser';
+import {UserReviewsPage} from '../user-reviews/user-reviews.page';
+import {ModalController, NavController} from '@ionic/angular';
 
 
 @Component({
@@ -25,7 +27,10 @@ export class ViewProfilePage implements OnInit {
   audienceTypes: number[];
   travelerRatings: {ranking: number, review: string}[];//can be changed to
   guideRatings: {ranking: number, review: string}[];
+  avgRating: number;
+  numOfRaters: number;
   constructor(
+    private modalController:ModalController,
     private activatedRoute: ActivatedRoute,
     private userService: UserService) {
   }
@@ -57,8 +62,18 @@ export class ViewProfilePage implements OnInit {
         this.tripDifficulties = user.tripDifficulties;
         this.tripDurations =  user.tripDurations;
         this.audienceTypes = user.audienceTypes;
+        this.avgRating = user.avgRating;
+        this.numOfRaters = user.numOfRaters;
       }
     })
   }
+
+  async onShow(){
+    const modal = await this.modalController.create({
+        component: UserReviewsPage,
+        componentProps: { userId: this.id }
+    });
+    return await modal.present();
+}
 
 }
