@@ -22,45 +22,6 @@
     </ion-item>
 
     <ion-item>
-      <!--
-        TODO: find component to choose country and state, or maybe using google-maps or openStreetsMap
-      -->
-      <ion-label
-        *ngIf="!singleRouteForm.controls.country.valid && !viewMode"
-        color="danger"
-        stacked
-        >*
-      </ion-label>
-      <ion-label stacked>Country</ion-label>
-      <ion-input
-        formControlName="country"
-        type="text"
-        placeholder="country"
-        [class.invalid]="!singleRouteForm.controls.country.valid && blur && !viewMode"
-      >
-      </ion-input>
-    </ion-item>
-    <ion-item>
-      <!--
-        TODO: find component to choose country and state, or maybe using google-maps or openStreetsMap
-      -->
-      <ion-label
-        *ngIf="!singleRouteForm.controls.state.valid && !viewMode"
-        color="danger"
-        stacked
-        >*
-      </ion-label>
-      <ion-label stacked>State</ion-label>
-      <ion-input
-        formControlName="state"
-        type="text"
-        placeholder="state"
-        [class.invalid]="!singleRouteForm.controls.state.valid && blur && !viewMode"
-      >
-      </ion-input>
-    </ion-item>
-
-    <ion-item>
       <ion-label
         *ngIf="!singleRouteForm.controls.routeStartLocation.valid && !viewMode"
         color="danger"

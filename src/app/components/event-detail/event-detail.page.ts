@@ -103,8 +103,7 @@ export class EventDetailPage implements OnInit {
         {
             this.routeService.getRoute(this.routeId).subscribe(value => {
                 if( value) {
-                    this.route = value;
-                    this.loadFromRoute(this.route);
+                    this.loadFromRoute(value);
                 }
                 else{
                     //TODO go back
@@ -134,9 +133,9 @@ export class EventDetailPage implements OnInit {
         this.editForm(this.event);
 
         await this.userService
-            .getuser(this.route.routeCreatorId)
+            .getuser(this.event.routeCreatorId)
             .subscribe(user => {
-                this.route.routeCreator = user;
+                this.event.routeCreator = user;
             });
 
         if (this.event.eventOrgnizerId !== this.currentUserId) {
@@ -144,14 +143,11 @@ export class EventDetailPage implements OnInit {
             this.viewMode = true;
             console.log('just changed to view mode');
         }
-        alert('old event')
     }
 
     async loadFromRoute(route: SurfRoute) {
         //should hide the join button
         document.getElementById('join').style.visibility='hidden';
-        alert('create a new event form route')
-        this.route = route;
         this.event = new SurfEvent(route);
 
         this.event.eventOrgnizerId = this.currentUserId;
@@ -197,38 +193,38 @@ export class EventDetailPage implements OnInit {
         return await modal.present();
     }
 
-    editForm(route: SurfEvent) {
-        // route -> form   (Populating the form)
+    editForm(event: SurfEvent) {
+        // event -> form   (Populating the form)
         let durationUnits = 'hours';
-        let duration = route.routeDuration;
+        let duration = event.routeDuration;
         if (duration >= 24) {
             duration /= 24;
             durationUnits = 'days';
         }
 
         this.singleEventForm.patchValue({
-            name: route.name,
-            country: route.country,
-            state: route.state,
-            routeStartLocation: route.routeStartLocation,
-            routeEndLocation: route.routeEndLocation,
-            routeStartGeolocation: route.routeStartGeolocation,
-            routeEndGeolocation: route.routeEndGeolocation,
-            imagesUrls: route.imagesUrls,
-            mapUrl: route.mapUrl,
-            lengthKM: route.lengthKM,
-            shortDescription: route.shortDescription,
-            longDescription: route.longDescription,
-            routeDifficulty: route.routeDifficulty,
+            name: event.name,
+            country: event.country,
+            state: event.state,
+            routeStartLocation: event.routeStartLocation,
+            routeEndLocation: event.routeEndLocation,
+            routeStartGeolocation: event.routeStartGeolocation,
+            routeEndGeolocation: event.routeEndGeolocation,
+            imagesUrls: event.imagesUrls,
+            mapUrl: event.mapUrl,
+            lengthKM: event.lengthKM,
+            shortDescription: event.shortDescription,
+            longDescription: event.longDescription,
+            routeDifficulty: event.routeDifficulty,
             routeDuration: duration,
             routeDurationUnits: durationUnits,
-            routeProperties: route.routeProperties,
-            isGuidingOffered: route.isGuidingOffered,
-            offeredPrice: route.offeredPrice,
-            guideContactDetails: route.guideContactDetails,
-            entranceFee: route.entranceFee,
-            requiredEquipment: route.requiredEquipment,
-            recommendedMonths: route.recommendedMonths
+            routeProperties: event.routeProperties,
+            isGuidingOffered: event.isGuidingOffered,
+            offeredPrice: event.offeredPrice,
+            guideContactDetails: event.guideContactDetails,
+            entranceFee: event.entranceFee,
+            requiredEquipment: event.requiredEquipment,
+            recommendedMonths: event.recommendedMonths
         });
         this.loadmapStart();
         this.loadmapEnd();
@@ -263,43 +259,44 @@ export class EventDetailPage implements OnInit {
 
     mapFormValuesToRouteModel() {
         //preperation of this.route
-        this.route.name = this.singleEventForm.value.name;
-        this.route.country = this.singleEventForm.value.country || '';
-        this.route.state = this.singleEventForm.value.state || '';
-        this.route.routeStartLocation =
+        this.event.name = this.singleEventForm.value.name;
+        this.event.country = this.singleEventForm.value.country || '';
+        this.event.state = this.singleEventForm.value.state || '';
+        this.event.routeStartLocation =
             this.singleEventForm.value.routeStartLocation || '';
-        this.route.routeEndLocation =
+        this.event.routeEndLocation =
             this.singleEventForm.value.routeEndLocation || '';
-        this.route.routeStartGeolocation =
+        this.event.routeStartGeolocation =
             this.singleEventForm.value.routeStartGeolocation || '';
-        this.route.routeEndGeolocation =
+        this.event.routeEndGeolocation =
             this.singleEventForm.value.routeEndGeolocation || '';
-        this.route.imagesUrls = this.singleEventForm.value.imagesUrls || '';
-        this.route.mapUrl = this.singleEventForm.value.mapUrl || '';
-        this.route.lengthKM = this.singleEventForm.value.lengthKM || '';
-        this.route.shortDescription =
+        this.event.imagesUrls = this.singleEventForm.value.imagesUrls || '';
+        this.event.mapUrl = this.singleEventForm.value.mapUrl || '';
+        this.event.lengthKM = this.singleEventForm.value.lengthKM || '';
+        this.event.shortDescription =
             this.singleEventForm.value.shortDescription || '';
-        this.route.longDescription =
+        this.event.longDescription =
             this.singleEventForm.value.longDescription || '';
-        this.route.routeDifficulty =
+        this.event.routeDifficulty =
             this.singleEventForm.value.routeDifficulty || '';
 
         let durationHours = this.singleEventForm.value.routeDuration || 0;
         if (this.singleEventForm.value.routeDurationUnits === 'days') {
             durationHours *= 24;
         }
-        this.route.routeDuration = durationHours;
-        this.route.routeProperties =
+        this.event.routeDuration = durationHours;
+        this.event.routeProperties =
             this.singleEventForm.value.routeProperties || '';
-        this.route.isGuidingOffered =
+        this.event.isGuidingOffered =
             this.singleEventForm.value.isGuidingOffered || false;
-        this.route.offeredPrice = this.singleEventForm.value.offeredPrice || 0;
-        this.route.guideContactDetails =
+        this.event.offeredPrice = this.singleEventForm.value.offeredPrice || 0;
+
+        this.event.guideContactDetails =
             this.singleEventForm.value.guideContactDetails || '';
-        this.route.entranceFee = this.singleEventForm.value.entranceFee || 0;
-        this.route.requiredEquipment =
+        this.event.entranceFee = this.singleEventForm.value.entranceFee || 0;
+        this.event.requiredEquipment =
             this.singleEventForm.value.requiredEquipment || '';
-        this.route.recommendedMonths =
+        this.event.recommendedMonths =
             this.singleEventForm.value.recommendedMonths || [];
     }
 
@@ -332,7 +329,7 @@ export class EventDetailPage implements OnInit {
                 });
             }).addTo(this.mapStart);
 
-            if(!this.id) {
+            if(!this.event.routeStartGeolocation) {
                 this.mapStart.locate({
                     setView: true,
                     maxZoom: 10,
@@ -358,7 +355,9 @@ export class EventDetailPage implements OnInit {
                         }
                         this.singleEventForm.patchValue({
                             routeStartGeolocation: this.mapStart.surfLatLng.lat + ',' + this.mapStart.surfLatLng.lng,
-                            routeStartLocation: location
+                            routeStartLocation: location,
+                            country: r.properties.address.country,
+                            state: r.properties.address.state
                         });
                     });
                 }).on('locationerror', (err) => {
@@ -385,14 +384,16 @@ export class EventDetailPage implements OnInit {
                     }
                     this.singleEventForm.patchValue({
                         routeStartGeolocation: this.mapStart.surfLatLng.lat + ',' + this.mapStart.surfLatLng.lng,
-                        routeStartLocation: location
+                        routeStartLocation: location,
+                        country: r.properties.address.country,
+                        state: r.properties.address.state
                     });
                 });
             });
         }
 
-        if(this.id && this.route.routeStartGeolocation) {//loaded from db
-            let loc = this.route.routeStartGeolocation.split(',');
+        if(this.event.routeStartGeolocation) {//loaded from db
+            let loc = this.event.routeStartGeolocation.split(',');
             if (this.mapStart.SurfMarker)
                 this.mapStart.removeLayer(this.mapStart.SurfMarker);
             let markerGroup = leaflet.featureGroup();
@@ -404,7 +405,7 @@ export class EventDetailPage implements OnInit {
             this.mapStart.SurfMarker = markerGroup;
             this.mapStart.surfLatLng = {lat:loc[0],lng:loc[1]};
 
-            this.mapStart.flyTo(loc, 10)
+            this.mapStart.setView(loc, 10)
         }
     }
 
@@ -425,7 +426,7 @@ export class EventDetailPage implements OnInit {
                     routeEndLocation: e.geocode.name
                 });
             }).addTo(this.mapEnd);
-            if(!this.id) {
+            if(!this.event.routeEndGeolocation) {
                 this.mapEnd.locate({
                     setView: true,
                     maxZoom: 10,
@@ -484,8 +485,8 @@ export class EventDetailPage implements OnInit {
             });
         }
 
-        if(this.id && this.route.routeEndGeolocation) {//loaded from db
-            let loc = this.route.routeEndGeolocation.split(',');
+        if(this.event.routeEndGeolocation) {//loaded from db
+            let loc = this.event.routeEndGeolocation.split(',');
             if (this.mapEnd.SurfMarker)
                 this.mapEnd.removeLayer(this.mapEnd.SurfMarker);
             let markerGroup = leaflet.featureGroup();
@@ -497,7 +498,7 @@ export class EventDetailPage implements OnInit {
             this.mapEnd.SurfMarker = markerGroup;
             this.mapEnd.surfLatLng = {lat:loc[0],lng:loc[1]};
 
-            this.mapEnd.flyTo(loc, 10)
+            this.mapEnd.setView(loc, 10)
         }
     }
 

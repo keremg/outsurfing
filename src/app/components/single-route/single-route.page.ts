@@ -168,8 +168,6 @@ export class SingleRoutePage implements OnInit {
         }
 
 
-
-
         //TODO: What about route-ranks? we should remember who ranked it and allow only one rank from same user to same route
     }
 
@@ -238,7 +236,7 @@ export class SingleRoutePage implements OnInit {
         console.log(fd);
     }
 
-    async updateRoute(eventIt:boolean) {
+    async updateRoute(eventIt: boolean) {
         this.mapFormValuesToRouteModel();
         let copyOfRoute = _.cloneDeep(this.route);
 
@@ -250,15 +248,14 @@ export class SingleRoutePage implements OnInit {
             await this.routesService.updateRoute(this.id, copyOfRoute);
             returnedId = this.id;
         }
-        if(!returnedId) {
+        if (!returnedId) {
             returnedId = await this.routesService.addRoute(copyOfRoute);
         }
 
         if (eventIt) {
             //TODO should event it
             this.navCtrl.navigateForward('EventDetail/0/' + returnedId);
-        }
-        else{
+        } else {
             this.navCtrl.navigateForward('ChooseRoute');
         }
     }
@@ -324,7 +321,7 @@ export class SingleRoutePage implements OnInit {
             attributions: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="http://mapbox.com">Mapbox</a>',
             maxZoom: 18
         }).addTo(this.mapStart);
-        if(!this.viewMode) {
+        if (!this.viewMode) {
             var geocoder = L.Control.Geocoder.nominatim();
             var control = L.Control.geocoder({
                 geocoder: geocoder
@@ -335,7 +332,7 @@ export class SingleRoutePage implements OnInit {
                 });
             }).addTo(this.mapStart);
 
-            if(!this.id) {
+            if (!this.id) {
                 this.mapStart.locate({
                     setView: true,
                     maxZoom: 10,
@@ -361,7 +358,9 @@ export class SingleRoutePage implements OnInit {
                         }
                         this.singleRouteForm.patchValue({
                             routeStartGeolocation: this.mapStart.surfLatLng.lat + ',' + this.mapStart.surfLatLng.lng,
-                            routeStartLocation: location
+                            routeStartLocation: location,
+                            country: r.properties.address.country,
+                            state: r.properties.address.state
                         });
                     });
                 }).on('locationerror', (err) => {
@@ -388,13 +387,16 @@ export class SingleRoutePage implements OnInit {
                     }
                     this.singleRouteForm.patchValue({
                         routeStartGeolocation: this.mapStart.surfLatLng.lat + ',' + this.mapStart.surfLatLng.lng,
-                        routeStartLocation: location
+                        routeStartLocation: location,
+                        country: r.properties.address.country,
+                        state: r.properties.address.state
+
                     });
                 });
             });
         }
 
-        if(this.id && this.route.routeStartGeolocation) {//loaded from db
+        if (this.id && this.route.routeStartGeolocation) {//loaded from db
             let loc = this.route.routeStartGeolocation.split(',');
             if (this.mapStart.SurfMarker)
                 this.mapStart.removeLayer(this.mapStart.SurfMarker);
@@ -405,9 +407,9 @@ export class SingleRoutePage implements OnInit {
             markerGroup.addLayer(marker);
             this.mapStart.addLayer(markerGroup);
             this.mapStart.SurfMarker = markerGroup;
-            this.mapStart.surfLatLng = {lat:loc[0],lng:loc[1]};
+            this.mapStart.surfLatLng = {lat: loc[0], lng: loc[1]};
 
-            this.mapStart.flyTo(loc, 10)
+            this.mapStart.setView(loc, 10);
         }
     }
 
@@ -417,7 +419,7 @@ export class SingleRoutePage implements OnInit {
             attributions: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="http://mapbox.com">Mapbox</a>',
             maxZoom: 18
         }).addTo(this.mapEnd);
-        if(!this.viewMode) {
+        if (!this.viewMode) {
             var geocoder = L.Control.Geocoder.nominatim();
             var control = L.Control.geocoder({
                 geocoder: geocoder
@@ -428,7 +430,7 @@ export class SingleRoutePage implements OnInit {
                     routeEndLocation: e.geocode.name
                 });
             }).addTo(this.mapEnd);
-            if(!this.id) {
+            if (!this.id) {
                 this.mapEnd.locate({
                     setView: true,
                     maxZoom: 10,
@@ -487,7 +489,7 @@ export class SingleRoutePage implements OnInit {
             });
         }
 
-        if(this.id && this.route.routeEndGeolocation) {//loaded from db
+        if (this.id && this.route.routeEndGeolocation) {//loaded from db
             let loc = this.route.routeEndGeolocation.split(',');
             if (this.mapEnd.SurfMarker)
                 this.mapEnd.removeLayer(this.mapEnd.SurfMarker);
@@ -498,9 +500,9 @@ export class SingleRoutePage implements OnInit {
             markerGroup.addLayer(marker);
             this.mapEnd.addLayer(markerGroup);
             this.mapEnd.SurfMarker = markerGroup;
-            this.mapEnd.surfLatLng = {lat:loc[0],lng:loc[1]};
+            this.mapEnd.surfLatLng = {lat: loc[0], lng: loc[1]};
 
-            this.mapEnd.flyTo(loc, 10)
+            this.mapEnd.setView(loc, 10);
         }
     }
 }
