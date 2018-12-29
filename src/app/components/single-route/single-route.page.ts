@@ -91,7 +91,7 @@ export class SingleRoutePage implements OnInit {
         if (r) {
           this.route = r;
 
-          if (!this.route.routeCreatorId || true) {
+          if (!this.route.routeCreatorId) {
             this.route.routeCreatorId = this.currentUserId; // safety
           }
 
