@@ -5,6 +5,7 @@ import {BehaviorSubject, Observable, ReplaySubject, Subject} from 'rxjs';
 import {map} from 'rxjs/operators';
 import {SurfUser} from '../models/surfUser';
 import {AuthService} from './auth.service';
+import {SurfRoute} from '../models/surfRoute';
 
 
 @Injectable({
@@ -15,6 +16,7 @@ export class UserService {
     user: Observable<SurfUser>;
     currentUser: ReplaySubject<SurfUser> = new ReplaySubject(1);
     userId: string;
+    collection_endpoint = 'users';
 
     constructor(private afs: AngularFirestore,
                 private firebaseAuth: AngularFireAuth,
@@ -54,6 +56,13 @@ export class UserService {
             }
         });
         this.afs.collection('users').doc(this.userId).set(userProfile);
+    }
+
+
+    async updateUSer(id, update) {
+        //Get the task document
+        this.userDoc = this.afs.doc<SurfUser>(`${this.collection_endpoint}/${id}`);
+        return this.userDoc.update(update);
     }
 
 
