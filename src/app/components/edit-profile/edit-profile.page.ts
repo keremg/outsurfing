@@ -19,7 +19,7 @@ import {Observable} from 'rxjs';
     styleUrls: ['./edit-profile.page.scss'],
 })
 export class EditProfilePage implements OnInit {
-    public signupForm: FormGroup;
+    public updateForm: FormGroup;
     public loading;
     public email: string;
     uploadPercent: Observable<number>;
@@ -34,7 +34,7 @@ export class EditProfilePage implements OnInit {
         private userService: UserService,
         private storage: AngularFireStorage
     ) {
-        this.signupForm = formBuilder.group({
+        this.updateForm = formBuilder.group({
             email: ['', Validators.compose([Validators.required, EmailValidator.isValid])],
             password: ['', Validators.compose([Validators.minLength(6), Validators.required])],
             firstName: ['', Validators.compose([Validators.minLength(1), Validators.required])],
@@ -61,13 +61,13 @@ export class EditProfilePage implements OnInit {
     }
 
     async signupUser() {
-        if (!this.signupForm.valid) {
+        if (!this.updateForm.valid) {
             console.log(
-                `Need to complete the form, current value: ${this.signupForm.value}`
+                `Need to complete the form, current value: ${this.updateForm.value}`
             );
         } else {
-            const email: string = this.signupForm.value.email;
-            const password: string = this.signupForm.value.password;
+            const email: string = this.updateForm.value.email;
+            const password: string = this.updateForm.value.password;
             let success = false;
             try {
                 this.loading = await this.loadingCtrl.create();
@@ -76,21 +76,21 @@ export class EditProfilePage implements OnInit {
                 await this.loading.dismiss();
 
                 let u = {
-                    email: this.signupForm.value.email,
-                    firstName: this.signupForm.value.firstName,
-                    lastName: this.signupForm.value.lastName,
-                    recentLocation: this.signupForm.value.recentLocation,
-                    phone: this.signupForm.value.phone,
-                    gender: parseInt(this.signupForm.value.gender.value),
-                    isGuide: this.signupForm.value.isGuide == 'true',
-                    about: this.signupForm.value.about,
+                    email: this.updateForm.value.email,
+                    firstName: this.updateForm.value.firstName,
+                    lastName: this.updateForm.value.lastName,
+                    recentLocation: this.updateForm.value.recentLocation,
+                    phone: this.updateForm.value.phone,
+                    gender: parseInt(this.updateForm.value.gender.value),
+                    isGuide: this.updateForm.value.isGuide == 'true',
+                    about: this.updateForm.value.about,
                     cancellations: 0,
-                    birthDate: this.signupForm.value.birthDate,
-                    tripDifficulties: this.signupForm.value.tripDifficulties,
-                    tripDurations: this.signupForm.value.tripDurations,
-                    audienceTypes: this.signupForm.value.audienceTypes,
-                    travelerRatings: this.signupForm.value.travelerRatings,
-                    guideRatings: this.signupForm.value.guideRatings
+                    birthDate: this.updateForm.value.birthDate,
+                    tripDifficulties: this.updateForm.value.tripDifficulties,
+                    tripDurations: this.updateForm.value.tripDurations,
+                    audienceTypes: this.updateForm.value.audienceTypes,
+                    travelerRatings: this.updateForm.value.travelerRatings,
+                    guideRatings: this.updateForm.value.guideRatings
                 };
 
                 await this.userService.addUsers(u);
