@@ -3,13 +3,14 @@ import {AngularFirestore, AngularFirestoreCollection, AngularFirestoreDocument} 
 import {Observable} from 'rxjs';
 import {map} from 'rxjs/operators';
 import {SurfEvent} from '../models/surfEvent';
+import {SurfParticipant} from '../models/surfParticipant';
 
 @Injectable({
   providedIn: 'root'
 })
 export class EventService {
     collection_endpoint = 'events';
-
+    participant_collection_endpoint = 'participants'
     events: AngularFirestoreCollection<SurfEvent>;
     eventDoc: AngularFirestoreDocument<SurfEvent>;
 
@@ -22,6 +23,7 @@ export class EventService {
         return this.events.snapshotChanges().pipe(map(changes => {
             return changes.map(action => {
                 const data = action.payload.doc.data() as SurfEvent;
+                data.participant = this.getParticipants(action.payload.doc.id);
                 data.id = action.payload.doc.id;
                 return data;
             });
@@ -38,8 +40,20 @@ export class EventService {
             } else {
                 const data = action.payload.data() as SurfEvent;
                 data.id = action.payload.id;
+                data.participant = this.getParticipants(id);
+                data.participant.subscribe(v=>console.log(v));
                 return data;
             }
+        }));
+    }
+
+    getParticipants(id: string): Observable<SurfParticipant[]> {
+        return this.events.doc(id).collection(this.participant_collection_endpoint).snapshotChanges().pipe(map(changes => {
+            return changes.map(action => {
+                const data = action.payload.doc.data() as SurfParticipant;
+                data.id = action.payload.doc.id;
+                return data;
+            });
         }));
     }
 
@@ -47,17 +61,36 @@ export class EventService {
 
 
     async addEvent(event: SurfEvent) {
-        return this.events.add({...event}).then(function(docRef) {
+        let pars = event.participant;
+        delete event.participant;
+
+        return this.events.add({...event}).then((docRef) => {
             console.log('Route document written with ID: ', docRef.id);
-            return docRef.id;
+            docRef.collection(this.participant_collection_endpoint).add({...pars[0]}).then(parRef => {
+                return docRef.id;
+            }).catch(function(error) {
+                alert('Failed adding participant' + error);
+                console.error('Error adding participant: ', error);
+            });
         }).catch(function(error) {
             alert('Failed creating route ' + error);
             console.error('Error adding document: ', error);
         });
     }
 
+    async joinEvent(id, participant){
+        //TODO other logic - to updatefields like car and stuff?
+        this.events.doc(id).collection(this.participant_collection_endpoint).add({...participant}).then(parRef => {
+            return parRef.id;
+        }).catch(function(error) {
+            alert('Failed adding participant' + error);
+            console.error('Error adding participant: ', error);
+        });
+    }
+
     async updateEvent(id, update) {
         //Get the task document
+        delete update.participant;
         this.eventDoc = this.afs.doc<SurfEvent>(`${this.collection_endpoint}/${id}`);
         return this.eventDoc.update(update);
     }

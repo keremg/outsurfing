@@ -431,21 +431,21 @@
       <!--participant  -->
 
       <ion-grid>
-        <ion-row *ngFor="let participant of event.participants">
+        <ion-row *ngFor="let p of event.participant | async">
           <ion-col>
-            {{participant.user?.firstName}}
+            {{p.user?.firstName}}
           </ion-col>
           <ion-col>
-            {{participant.user?.lastName}}
+            {{p.user?.lastName}}
           </ion-col>
           <ion-col>
-            {{participant.phone}}
+            {{p.phone}}
           </ion-col>
           <ion-col>
-            {{participant.isGuide? 'Guide': participant.isOrganizer? 'Organizer' : 'Traveller'}}
+            {{p.isGuide? 'Guide': p.isOrganizer? 'Organizer' : 'Traveller'}}
           </ion-col>
           <ion-col>
-            need seat? {{participant.needSeatInCar}}
+            need seat? {{p.needSeatInCar}}
             <!--{{(participant.needSeatInCar && !participant.userIdOfHostingCar) ? 'Need a ride': (participant.needSeatInCar && participant.userIdOfHostingCar)? 'with' + participant.userIdOfHostingCar : participant.offeringSeatsInCar? 'Offers ' + participant.offeringSeatsInCar + ' free seats'}}-->
           </ion-col>
 

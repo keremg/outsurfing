@@ -11,7 +11,7 @@ export class SurfParticipant {
     isGuide: boolean;
     offeringSeatsInCar: number;
     needSeatInCar: boolean;
-    userIdOfHostingCar: number;
+    userIdOfHostingCar: string;
     isStandByForCar: boolean;
     isApproved: boolean;
     groupEquipmentIBring: string;

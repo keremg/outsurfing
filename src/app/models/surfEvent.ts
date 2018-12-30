@@ -1,6 +1,7 @@
 import {SurfUser} from './surfUser';
 import {SurfRoute} from './surfRoute';
 import {SurfParticipant} from './surfParticipant';
+import {Observable} from 'rxjs';
 
 export class SurfEvent extends SurfRoute {
 
@@ -68,6 +69,6 @@ export class SurfEvent extends SurfRoute {
     requiredEquipment: string;
     isEventRequiresCars: boolean; //not all events requires cars handling
 
-    participants: SurfParticipant[];
+    participant: Observable<SurfParticipant[]>;
 
 }

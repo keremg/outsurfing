@@ -1,35 +1,66 @@
 <ion-header>
-  <ion-toolbar>
-    <ion-title>Join Event name</ion-title>
-  </ion-toolbar>
+    <ion-toolbar>
+        <ion-title>Join Event name</ion-title>
+    </ion-toolbar>
 </ion-header>
 
 <ion-content padding>
-  <ion-item>
-    <ion-label>My phone number</ion-label>
-    <ion-input>(default is phone from my account)</ion-input>
-  </ion-item>
-  <ion-item>
-    <ion-label>My contact Email</ion-label>
-    <ion-input>(default is phone from my account)</ion-input>
-  </ion-item>
-  <ion-item>
-    <ion-label>Equipment I’ll bring: (free text) </ion-label>
-    <ion-input></ion-input>
-  </ion-item>
-  <ion-item>
-    <ion-label>I will bring a car?</ion-label>
-    <ion-input> Y/N</ion-input>
-  </ion-item>
-  <ion-item>
-    <ion-label>How many free places you have in your car?</ion-label>
-    <ion-input></ion-input>
-  </ion-item>
-  <ion-item>
-    <ion-label>Message for others (free text)</ion-label>
-    <ion-input></ion-input>
-  </ion-item>
-
-  <ion-button (click)="closeModal()">Join</ion-button>
+    <form [formGroup]="joinEventForm" novalidate>
+        <ion-item>
+            <ion-label
+                    *ngIf="!joinEventForm.controls.phone.valid && !viewMode"
+                    color="danger"
+                    stacked
+            >*
+            </ion-label>
+            <ion-label stacked>My phone number</ion-label>
+            <ion-input formControlName="phone" type="text">(default is phone from my account)</ion-input>
+        </ion-item>
+        <ion-item>
+            <ion-label
+                    *ngIf="!joinEventForm.controls.email.valid && !viewMode"
+                    color="danger"
+                    stacked
+            >*
+            </ion-label>
+            <ion-label stacked>My contact Email</ion-label>
+            <ion-input formControlName="email" type="text">(default is phone from my account)</ion-input>
+        </ion-item>
+        <ion-item>
+            <ion-label
+                    *ngIf="!joinEventForm.controls.equipment.valid && !viewMode"
+                    color="danger"
+                    stacked
+            >*
+            </ion-label>
+            <ion-label stacked>Equipment I’ll bring:</ion-label>
+            <ion-input formControlName="equipment" type="text"></ion-input>
+        </ion-item>
+        <ion-item>
+            <ion-label stacked>I will bring a car?</ion-label>
+            <ion-checkbox formControlName="car" color="primary" checked="false"></ion-checkbox>
+        </ion-item>
+        <ion-item>
+            <ion-label
+                    *ngIf="!joinEventForm.controls.places.valid && !viewMode"
+                    color="danger"
+                    stacked
+            >*
+            </ion-label>
+            <ion-label stacked>How many free places you have in your car?</ion-label>
+            <ion-input formControlName="places" type="number"></ion-input>
+        </ion-item>
+        <ion-item>
+            <ion-label
+                    *ngIf="!joinEventForm.controls.message.valid && !viewMode"
+                    color="danger"
+                    stacked
+            >*
+            </ion-label>
+            <ion-label stacked>Message for others (free text)</ion-label>
+            <ion-input formControlName="message" type="text"></ion-input>
+        </ion-item>
+    </form>
+    <ion-button (click)="joinAndCloseModal()">Join</ion-button>
 
 </ion-content>
