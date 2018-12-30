@@ -396,10 +396,7 @@
     </ion-item>
 
     <ion-item>
-      <ion-label stacked
-      >#Events created from same route before:
-        {{ event.numEventsCreatedFromRoute }}</ion-label
-      >
+      <ion-label stacked>#Events created from same route before:{{ (eventObs|async)?.numEventsCreatedFromRoute }}</ion-label>
     </ion-item>
 
     <ion-item>
@@ -410,7 +407,7 @@
     </ion-item>
 
     <ion-item>
-      <ion-label>Recommended months for this route: {{event.recommendedMonths}}</ion-label>
+      <ion-label>Recommended months for this route: {{(eventObs|async)?.recommendedMonths}}</ion-label>
       <!--<ion-select formControlName="recommendedMonths" multiple="true">-->
         <!--<ion-select-option value="1">January</ion-select-option>-->
         <!--<ion-select-option value="2">February</ion-select-option>-->
@@ -431,21 +428,21 @@
       <!--participant  -->
 
       <ion-grid>
-        <ion-row *ngFor="let p of event.participant | async">
+        <ion-row *ngFor="let par of ((eventObs|async)?.participant|async);">
           <ion-col>
-            {{p.user?.firstName}}
+            {{par.user?.firstName}}
           </ion-col>
           <ion-col>
-            {{p.user?.lastName}}
+            {{par.user?.lastName}}
           </ion-col>
           <ion-col>
-            {{p.phone}}
+            {{par.phone}}
           </ion-col>
           <ion-col>
-            {{p.isGuide? 'Guide': p.isOrganizer? 'Organizer' : 'Traveller'}}
+            {{par.isGuide? 'Guide': par.isOrganizer? 'Organizer' : 'Traveller'}}
           </ion-col>
           <ion-col>
-            need seat? {{p.needSeatInCar}}
+            need seat? {{par.needSeatInCar}}
             <!--{{(participant.needSeatInCar && !participant.userIdOfHostingCar) ? 'Need a ride': (participant.needSeatInCar && participant.userIdOfHostingCar)? 'with' + participant.userIdOfHostingCar : participant.offeringSeatsInCar? 'Offers ' + participant.offeringSeatsInCar + ' free seats'}}-->
           </ion-col>
 
@@ -457,7 +454,10 @@
 
 
 
-  <ion-button id='join' (click)="onJoinEvent()">join</ion-button>
+  <ion-button id='join' (click)="onJoinEvent()">Join</ion-button>
+  <ion-button id='leave' (click)="onLeaveEvent()">Leave</ion-button>
   <ion-button id='create' (click)="onCreate()">Create</ion-button>
+  <ion-button id='save' (click)="onSave()">Save</ion-button>
+  <ion-button id='delete' (click)="onDelete()">Delete</ion-button>
 
 </ion-content>

@@ -61,17 +61,13 @@ export class EventService {
 
 
     async addEvent(event: SurfEvent) {
-        let pars = event.participant;
         delete event.participant;
+        debugger;
 
         return this.events.add({...event}).then((docRef) => {
             console.log('Route document written with ID: ', docRef.id);
-            docRef.collection(this.participant_collection_endpoint).add({...pars[0]}).then(parRef => {
-                return docRef.id;
-            }).catch(function(error) {
-                alert('Failed adding participant' + error);
-                console.error('Error adding participant: ', error);
-            });
+            return docRef.id;
+
         }).catch(function(error) {
             alert('Failed creating route ' + error);
             console.error('Error adding document: ', error);
@@ -80,11 +76,19 @@ export class EventService {
 
     async joinEvent(id, participant){
         //TODO other logic - to updatefields like car and stuff?
-        this.events.doc(id).collection(this.participant_collection_endpoint).add({...participant}).then(parRef => {
-            return parRef.id;
-        }).catch(function(error) {
+        let uid = participant.id;
+        delete participant.id;
+        return this.events.doc(id).collection(this.participant_collection_endpoint).doc(uid).set({...participant}).catch(function(error) {
             alert('Failed adding participant' + error);
             console.error('Error adding participant: ', error);
+        });
+    }
+
+    async leaveEvent(id, uid){
+        //TODO other logic - to updatefields like car and stuff?
+        return this.events.doc(id).collection(this.participant_collection_endpoint).doc(uid).delete().catch(function(error) {
+            alert('Failed deleting participant' + error);
+            console.error('Error deleting participant: ', error);
         });
     }
 
@@ -95,7 +99,12 @@ export class EventService {
         return this.eventDoc.update(update);
     }
 
-
+    async deleteEvent(id) {
+        //Get the task document
+        this.eventDoc = this.afs.doc<SurfEvent>(`${this.collection_endpoint}/${id}`);
+// TODO should delete participants
+        return this.eventDoc.delete();
+    }
 
 
 }

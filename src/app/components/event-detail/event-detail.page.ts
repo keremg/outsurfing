@@ -1,10 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {ModalController, NavController} from '@ionic/angular';
 import {JoinEventPage} from '../join-event/join-event.page';
 import {ActivatedRoute} from '@angular/router';
 import {EventService} from '../../services/event.service';
 import {RouteService} from '../../services/route.service';
-import {SurfEvent} from '../../models/surfEvent'
+import {SurfEvent} from '../../models/surfEvent';
 import {SurfRoute} from '../../models/surfRoute';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {SurfUser} from '../../models/surfUser';
@@ -15,13 +15,16 @@ import leaflet from 'leaflet';
 import L from 'leaflet';
 import '../../../geocoder/Control.Geocoder';
 import {AudienceTypeEnum} from '../../AudienceType.enum';
+import {forEach} from '@angular-devkit/schematics';
+import {SurfParticipant} from '../../models/surfParticipant';
+import {Observable, Subscription} from 'rxjs';
 
 declare let window: any;
 
 @Component({
-  selector: 'app-event-detail',
-  templateUrl: './event-detail.page.html',
-  styleUrls: ['./event-detail.page.scss'],
+    selector: 'app-event-detail',
+    templateUrl: './event-detail.page.html',
+    styleUrls: ['./event-detail.page.scss'],
 })
 export class EventDetailPage implements OnInit {
     audienceTypeEnum = this.getENUM(AudienceTypeEnum);
@@ -34,6 +37,8 @@ export class EventDetailPage implements OnInit {
     viewMode = false;
     routeId: string;
     event: SurfEvent;
+    eventObs: Observable<SurfEvent>;
+    private eventSubscription: Subscription;
 
     constructor(
         private formBuilder: FormBuilder /* private imagePicker: ImagePicker*/,
@@ -56,7 +61,9 @@ export class EventDetailPage implements OnInit {
             delete this.id;
         }
         this.routeId = this.activatedRoute.snapshot.paramMap.get('route');
-
+        if (this.routeId === '0') {
+            delete this.routeId;
+        }
         this.singleEventForm = this.formBuilder.group({
             name: ['', Validators.required],
             country: ['', Validators.required],
@@ -90,7 +97,7 @@ export class EventDetailPage implements OnInit {
             audienceType: [[]],
             isGuidedEvent: [false],
             priceOfEvent: [0],
-            organizerContactDetails:  ['', Validators.required],
+            organizerContactDetails: ['', Validators.required],
             isEventRequiresCars: [true],
             //TODO make sure numEventsCreatedFromRoute is updated!
         });
@@ -101,23 +108,25 @@ export class EventDetailPage implements OnInit {
 
 
         if (this.id) {
-            this.eventService.getEvent(this.id).subscribe(value => {
+            this.eventObs = this.eventService.getEvent(this.id);
+            this.eventSubscription = this.eventObs.subscribe(value => {
                 if (value) {
                     this.event = value;
                     this.loadFromEvent(this.event);//todo should be read only?
+
                 } else {
-                    alert('event does not exist')
+                    alert('event does not exist');
                     this.navCtrl.navigateBack('home');
 
                 }
             });
         } else if (this.routeId) {
             this.routeService.getRoute(this.routeId).subscribe(value => {
-                if ( value) {
+                if (value) {
                     this.loadFromRoute(value);
                 } else {
                     //TODO go back
-                    alert('route does not exist')
+                    alert('route does not exist');
                     this.navCtrl.navigateBack('ChooseRoute');
                 }
             });
@@ -126,10 +135,9 @@ export class EventDetailPage implements OnInit {
     }
 
 
-
     async loadFromEvent(event: SurfEvent) {
         //TODO
-        document.getElementById('create').style.visibility='hidden';
+        document.getElementById('create').style.visibility = 'hidden';
 
         //TODO: get event from db, then should add the orgznizer details:
 
@@ -144,27 +152,41 @@ export class EventDetailPage implements OnInit {
 
         this.editForm(this.event);
 
-        await this.userService
-            .getuser(this.event.routeCreatorId)
-            .subscribe(user => {
-                this.event.routeCreator = user;
-            });
-        await this.userService
-            .getuser(this.event.eventOrganizerId)
-            .subscribe(user => {
-                this.event.eventOrganizer = user;
-            });
 
         if (this.event.eventOrganizerId !== this.currentUserId) {
             this.singleEventForm.disable();
             this.viewMode = true;
+            document.getElementById('save').style.visibility = 'hidden';
             console.log('just changed to view mode');
+            this.event.participant.subscribe(pars => {
+                let joined: boolean = false;
+                if(pars){
+                    pars.forEach( par =>{
+                        if(par.id === this.currentUserId)
+                            joined = true;
+                    });
+                }
+
+                if(joined){
+                    document.getElementById('join').style.visibility = 'hidden';
+                }
+                else{
+                    document.getElementById('leave').style.visibility = 'hidden';
+                }
+            })
+        }
+        else{
+            document.getElementById('join').style.visibility = 'hidden';
+            document.getElementById('leave').style.visibility = 'hidden';
         }
     }
 
     async loadFromRoute(route: SurfRoute) {
         //should hide the join button
-        document.getElementById('join').style.visibility='hidden';
+        document.getElementById('join').style.visibility = 'hidden';
+        document.getElementById('leave').style.visibility = 'hidden';
+        document.getElementById('save').style.visibility = 'hidden';
+
         this.event = new SurfEvent(route);
 
         this.event.eventOrganizerId = this.currentUserId;
@@ -177,48 +199,89 @@ export class EventDetailPage implements OnInit {
         // TODO: defaults
 
 
-        this.editForm(this.event);
 
         await this.userService
-            .getuser(this.event.routeCreatorId)
+            .getuser(this.event.eventOrganizerId)
             .subscribe(user => {
-                this.event.routeCreator = user;
+                this.event.eventOrganizer = user;
             });
+        this.editForm(this.event);
+
 
         //TODO
 
     }
 
+    async onSave() {
+        //update
+        const copyOfEvent = this.getEventObject();
+
+        await this.eventService.updateEvent(this.id, copyOfEvent).then(data => {
+            this.navCtrl.navigateRoot('home');
+        }).catch(data => {
+            this.eventService.deleteEvent(this.id);
+        });
+
+    }
+
+    async onDelete() {
+        this.eventSubscription.unsubscribe();
+        await this.eventService.deleteEvent(this.id).then(data => {
+            this.navCtrl.navigateRoot('home');
+        });
+
+    }
+
     async onCreate() {
-        this.mapFormValuesToRouteModel();
-        const copyOfEvent = _.cloneDeep(this.event);
+        const copyOfEvent = this.getEventObject();
+        let returnedId = await this.eventService.addEvent(copyOfEvent);
 
-        //delete junk that the DB shouldn't have
-        delete copyOfEvent.eventOrganizer; //remove the property
-        if(copyOfEvent.routeCreator) {
-            delete copyOfEvent.routeCreator;
-            delete copyOfEvent.eventOrganizer;
-        }
-        let returnedId;
-        if (!this.viewMode && this.id) {
-            //update
-            await this.eventService.updateEvent(this.id, copyOfEvent);
-            returnedId = this.id;
-        }
-        if (!returnedId) {
-            returnedId = await this.eventService.addEvent(copyOfEvent);
-        }
-        this.navCtrl.navigateForward('home');
+        const modal = await this.modalController.create({
+            component: JoinEventPage,
+            componentProps: {eventId: returnedId}
+        });
+        modal.onDidDismiss().then(data => {
+            if (data.data) {
+                this.navCtrl.navigateRoot('home');
+            } else {
+                this.eventService.deleteEvent(returnedId);
+            }
+        }).catch(data => {
+            this.eventService.deleteEvent(returnedId);
+        });
+        modal.present();
 
-        this.navCtrl.navigateRoot('home');
     }
 
     async onJoinEvent() {
         const modal = await this.modalController.create({
             component: JoinEventPage,
-            componentProps: { eventId: this.id }
+            componentProps: {eventId: this.id}
         });
-        return await modal.present();
+        modal.onDidDismiss().then(data => {
+            if (data) {
+                this.navCtrl.navigateRoot('home');
+            }
+        })
+        return modal.present();
+    }
+
+    async onLeaveEvent() {
+        await this.eventService.leaveEvent(this.id, this.currentUserId);
+        return this.navCtrl.navigateRoot('home');
+    }
+
+    private getEventObject() {
+        this.mapFormValuesToEventModel();
+        const copyOfEvent = _.cloneDeep(this.event);
+
+        //delete junk that the DB shouldn't have
+        delete copyOfEvent.eventOrganizer; //remove the property
+        if (copyOfEvent.routeCreator) {
+            delete copyOfEvent.routeCreator;
+            delete copyOfEvent.eventOrganizer;
+        }
+        return copyOfEvent;
     }
 
     editForm(event: SurfEvent) {
@@ -297,7 +360,7 @@ export class EventDetailPage implements OnInit {
         console.log(fd);
     }
 
-    mapFormValuesToRouteModel() {
+    mapFormValuesToEventModel() {
         //preperation of this.route
         this.event.name = this.singleEventForm.value.name;
         this.event.country = this.singleEventForm.value.country || '';
@@ -338,7 +401,6 @@ export class EventDetailPage implements OnInit {
             this.singleEventForm.value.requiredEquipment || '';
         this.event.recommendedMonths =
             this.singleEventForm.value.recommendedMonths || [];
-
 
 
         this.event.meetingLocation =
@@ -486,13 +548,12 @@ export class EventDetailPage implements OnInit {
             const control = L.Control.geocoder({
                 geocoder: geocoder
             }).on('markgeocode', (e) => {
-                // debugger;
                 this.singleEventForm.patchValue({
                     routeEndGeolocation: e.geocode.center.lat + ',' + e.geocode.center.lng,
                     routeEndLocation: e.geocode.name
                 });
             }).addTo(this.mapEnd);
-            if(!this.event.routeEndGeolocation) {
+            if (!this.event.routeEndGeolocation) {
                 this.mapEnd.locate({
                     setView: true,
                     maxZoom: 10,
@@ -553,7 +614,7 @@ export class EventDetailPage implements OnInit {
             });
         }
 
-        if(this.event.routeEndGeolocation) { // loaded from db
+        if (this.event.routeEndGeolocation) { // loaded from db
             const loc = this.event.routeEndGeolocation.split(',');
             if (this.mapEnd.SurfMarker) {
                 this.mapEnd.removeLayer(this.mapEnd.SurfMarker);

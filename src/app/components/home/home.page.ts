@@ -36,7 +36,7 @@ export class HomePage implements OnInit {
 
 
     ShowEventDetail(eventId: string) {
-        return this.navCtrl.navigateForward('EventDetail/' + eventId + '/');
+        return this.navCtrl.navigateForward('EventDetail/' + eventId + '/0');
     }
 
     logout() {
