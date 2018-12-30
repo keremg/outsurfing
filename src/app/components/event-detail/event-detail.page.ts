@@ -14,6 +14,7 @@ import * as _ from 'lodash';
 import leaflet from 'leaflet';
 import L from 'leaflet';
 import '../../../geocoder/Control.Geocoder';
+import {AudienceTypeEnum} from '../../AudienceType.enum';
 
 declare let window: any;
 
@@ -23,14 +24,15 @@ declare let window: any;
   styleUrls: ['./event-detail.page.scss'],
 })
 export class EventDetailPage implements OnInit {
+    audienceTypeEnum = this.getENUM(AudienceTypeEnum);
     public singleEventForm: FormGroup;
     selectedFile: File = null;
     route: SurfRoute = new SurfRoute();
     id: string;
     currentUserId: string;
     currentUser: SurfUser;
-    viewMode: boolean = false;
-    routeId:string;
+    viewMode = false;
+    routeId: string;
     event: SurfEvent;
 
     constructor(
@@ -40,7 +42,7 @@ export class EventDetailPage implements OnInit {
         public navCtrl: NavController,
         public authService: AuthService,
         private userService: UserService,
-        private modalController:ModalController,
+        private modalController: ModalController,
         private eventService: EventService,
         private routeService: RouteService,
     ) {
@@ -50,7 +52,7 @@ export class EventDetailPage implements OnInit {
 
     async ngOnInit() {
         this.id = this.activatedRoute.snapshot.paramMap.get('id');
-        if(this.id === '0'){
+        if (this.id === '0') {
             delete this.id;
         }
         this.routeId = this.activatedRoute.snapshot.paramMap.get('route');
@@ -78,7 +80,18 @@ export class EventDetailPage implements OnInit {
             guideContactDetails: [''],
             entranceFee: 0,
             requiredEquipment: [''],
-            recommendedMonths: ['']
+            recommendedMonths: [''],
+
+            meetingLocation: ['', Validators.required],
+            meetingGeolocation: [''],
+            meetingTime: ['', Validators.required],
+            routeStartTime: ['', Validators.required],
+            returnTime: ['', Validators.required],
+            audienceType: [[]],
+            isGuidedEvent: [false],
+            priceOfEvent: [0],
+            organizerContactDetails:  ['', Validators.required],
+            isEventRequiresCars: [true],
             //TODO make sure numEventsCreatedFromRoute is updated!
         });
         window.form = this.singleEventForm;
@@ -87,7 +100,7 @@ export class EventDetailPage implements OnInit {
         this.currentUser = await this.userService.getCurrentUserPromise();
 
 
-        if(this.id) {
+        if (this.id) {
             this.eventService.getEvent(this.id).subscribe(value => {
                 if (value) {
                     this.event = value;
@@ -98,14 +111,11 @@ export class EventDetailPage implements OnInit {
 
                 }
             });
-        }
-        else if(this.routeId)
-        {
+        } else if (this.routeId) {
             this.routeService.getRoute(this.routeId).subscribe(value => {
-                if( value) {
+                if ( value) {
                     this.loadFromRoute(value);
-                }
-                else{
+                } else {
                     //TODO go back
                     alert('route does not exist')
                     this.navCtrl.navigateBack('ChooseRoute');
@@ -125,11 +135,13 @@ export class EventDetailPage implements OnInit {
 
         this.event = event;
 
-        if (!this.event.eventOrgnizerId) {
-            this.event.eventOrgnizerId = this.currentUserId; // safety
+        if (!this.event.eventOrganizerId) {
+            this.event.eventOrganizerId = this.currentUserId; // safety
         }
 
-        //this.route.routeCreator = await this.userService.getuser(this.route.routeCreatorId).toPromise();
+        //this.event.routeCreator = await this.userService.getuser(this.event.routeCreatorId).toPromise();
+        //this.event.eventOrganizer = await this.userService.getuser(this.event.eventOrganizerId).toPromise();
+
         this.editForm(this.event);
 
         await this.userService
@@ -137,8 +149,13 @@ export class EventDetailPage implements OnInit {
             .subscribe(user => {
                 this.event.routeCreator = user;
             });
+        await this.userService
+            .getuser(this.event.eventOrganizerId)
+            .subscribe(user => {
+                this.event.eventOrganizer = user;
+            });
 
-        if (this.event.eventOrgnizerId !== this.currentUserId) {
+        if (this.event.eventOrganizerId !== this.currentUserId) {
             this.singleEventForm.disable();
             this.viewMode = true;
             console.log('just changed to view mode');
@@ -150,26 +167,37 @@ export class EventDetailPage implements OnInit {
         document.getElementById('join').style.visibility='hidden';
         this.event = new SurfEvent(route);
 
-        this.event.eventOrgnizerId = this.currentUserId;
-        this.event.eventOrgnizer = this.currentUser;
+        this.event.eventOrganizerId = this.currentUserId;
+        this.event.eventOrganizer = this.currentUser;
+
+        //this.event.routeCreator = await this.userService.getuser(this.event.routeCreatorId).toPromise();
+        ////this.event.eventOrganizer = await this.userService.getuser(this.event.eventOrganizerId).toPromise();
+
 
         // TODO: defaults
 
 
         this.editForm(this.event);
 
+        await this.userService
+            .getuser(this.event.routeCreatorId)
+            .subscribe(user => {
+                this.event.routeCreator = user;
+            });
+
         //TODO
 
     }
 
-    async onCreate(){
+    async onCreate() {
         this.mapFormValuesToRouteModel();
-        let copyOfEvent = _.cloneDeep(this.event);
+        const copyOfEvent = _.cloneDeep(this.event);
 
         //delete junk that the DB shouldn't have
-        delete copyOfEvent.eventOrgnizer; //remove the property
+        delete copyOfEvent.eventOrganizer; //remove the property
         if(copyOfEvent.routeCreator) {
             delete copyOfEvent.routeCreator;
+            delete copyOfEvent.eventOrganizer;
         }
         let returnedId;
         if (!this.viewMode && this.id) {
@@ -177,7 +205,7 @@ export class EventDetailPage implements OnInit {
             await this.eventService.updateEvent(this.id, copyOfEvent);
             returnedId = this.id;
         }
-        if(!returnedId) {
+        if (!returnedId) {
             returnedId = await this.eventService.addEvent(copyOfEvent);
         }
         this.navCtrl.navigateForward('home');
@@ -185,7 +213,7 @@ export class EventDetailPage implements OnInit {
         this.navCtrl.navigateRoot('home');
     }
 
-    async onJoinEvent(){
+    async onJoinEvent() {
         const modal = await this.modalController.create({
             component: JoinEventPage,
             componentProps: { eventId: this.id }
@@ -224,7 +252,19 @@ export class EventDetailPage implements OnInit {
             guideContactDetails: event.guideContactDetails,
             entranceFee: event.entranceFee,
             requiredEquipment: event.requiredEquipment,
-            recommendedMonths: event.recommendedMonths
+            recommendedMonths: event.recommendedMonths,
+
+            meetingLocation: event.meetingLocation,
+            meetingGeolocation: event.meetingGeolocation,
+            meetingTime: event.meetingTime,
+            routeStartTime: event.routeStartTime,
+            returnTime: event.returnTime,
+            audienceType: event.audienceType,
+            isGuidedEvent: event.isGuidedEvent,
+            priceOfEvent: event.priceOfEvent,
+            organizerContactDetails: event.organizerContactDetails,
+            isEventRequiresCars: event.isEventRequiresCars
+
         });
         this.loadmapStart();
         this.loadmapEnd();
@@ -298,6 +338,29 @@ export class EventDetailPage implements OnInit {
             this.singleEventForm.value.requiredEquipment || '';
         this.event.recommendedMonths =
             this.singleEventForm.value.recommendedMonths || [];
+
+
+
+        this.event.meetingLocation =
+            this.singleEventForm.value.meetingLocation || '';
+        this.event.meetingGeolocation =
+            this.singleEventForm.value.meetingGeolocation || '';
+        this.event.meetingTime =
+            this.singleEventForm.value.meetingTime || '';
+        this.event.routeStartTime =
+            this.singleEventForm.value.routeStartTime || '';
+        this.event.returnTime =
+            this.singleEventForm.value.returnTime || '';
+        this.event.audienceType =
+            this.singleEventForm.value.audienceType || '';
+        this.event.isGuidedEvent =
+            this.singleEventForm.value.isGuidedEvent || '';
+        this.event.priceOfEvent =
+            this.singleEventForm.value.priceOfEvent || 0;
+        this.event.organizerContactDetails =
+            this.singleEventForm.value.organizerContactDetails || '';
+        this.event.isEventRequiresCars =
+            this.singleEventForm.value.isEventRequiresCars || false;
     }
 
     //if new routem first set the creatorId and get creator in any case
@@ -318,9 +381,9 @@ export class EventDetailPage implements OnInit {
             attributions: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="http://mapbox.com">Mapbox</a>',
             maxZoom: 18
         }).addTo(this.mapStart);
-        if(!this.viewMode) {
-            var geocoder = L.Control.Geocoder.nominatim();
-            var control = L.Control.geocoder({
+        if (!this.viewMode) {
+            const geocoder = L.Control.Geocoder.nominatim();
+            const control = L.Control.geocoder({
                 geocoder: geocoder
             }).on('markgeocode', (e) => {
                 this.singleEventForm.patchValue({
@@ -329,7 +392,7 @@ export class EventDetailPage implements OnInit {
                 });
             }).addTo(this.mapStart);
 
-            if(!this.event.routeStartGeolocation) {
+            if (!this.event.routeStartGeolocation) {
                 this.mapStart.locate({
                     setView: true,
                     maxZoom: 10,
@@ -337,10 +400,11 @@ export class EventDetailPage implements OnInit {
                     maximumAge: 300000
                 }).on('locationfound', (e) => {
 
-                    if (this.mapStart.SurfMarker)
+                    if (this.mapStart.SurfMarker) {
                         this.mapStart.removeLayer(this.mapStart.SurfMarker);
-                    let markerGroup = leaflet.featureGroup();
-                    let marker: any = leaflet.marker([e.latitude, e.longitude]).on('click', () => {
+                    }
+                    const markerGroup = leaflet.featureGroup();
+                    const marker: any = leaflet.marker([e.latitude, e.longitude]).on('click', () => {
                         //alert('Marker clicked');
                     });
                     markerGroup.addLayer(marker);
@@ -349,7 +413,7 @@ export class EventDetailPage implements OnInit {
                     this.mapStart.surfLatLng = e.latlng;
                     let location = '';
                     geocoder.reverse(e.latlng, this.mapStart.options.crs.scale(this.mapStart.getZoom()), (results) => {
-                        var r = results[0];
+                        const r = results[0];
                         if (r) {
                             location = r.name;
                         }
@@ -366,11 +430,12 @@ export class EventDetailPage implements OnInit {
             }
 
             this.mapStart.on('click', (e) => {
-                if (this.mapStart.SurfMarker)
+                if (this.mapStart.SurfMarker) {
                     this.mapStart.removeLayer(this.mapStart.SurfMarker);
+                }
                 this.mapStart.surfLatLng = e.latlng;
-                let markerGroup = leaflet.featureGroup();
-                let marker: any = leaflet.marker([e.latlng.lat, e.latlng.lng]).on('click', () => {
+                const markerGroup = leaflet.featureGroup();
+                const marker: any = leaflet.marker([e.latlng.lat, e.latlng.lng]).on('click', () => {
                     //alert('Marker clicked');
                 });
                 markerGroup.addLayer(marker);
@@ -378,7 +443,7 @@ export class EventDetailPage implements OnInit {
                 this.mapStart.SurfMarker = markerGroup;
                 let location = '';
                 geocoder.reverse(e.latlng, this.mapStart.options.crs.scale(this.mapStart.getZoom()), (results) => {
-                    var r = results[0];
+                    const r = results[0];
                     if (r) {
                         location = r.name;
                     }
@@ -392,20 +457,21 @@ export class EventDetailPage implements OnInit {
             });
         }
 
-        if(this.event.routeStartGeolocation) {//loaded from db
-            let loc = this.event.routeStartGeolocation.split(',');
-            if (this.mapStart.SurfMarker)
+        if (this.event.routeStartGeolocation) { // loaded from db
+            const loc = this.event.routeStartGeolocation.split(',');
+            if (this.mapStart.SurfMarker) {
                 this.mapStart.removeLayer(this.mapStart.SurfMarker);
-            let markerGroup = leaflet.featureGroup();
-            let marker: any = leaflet.marker(loc).on('click', () => {
+            }
+            const markerGroup = leaflet.featureGroup();
+            const marker: any = leaflet.marker(loc).on('click', () => {
                 //alert('Marker clicked');
             });
             markerGroup.addLayer(marker);
             this.mapStart.addLayer(markerGroup);
             this.mapStart.SurfMarker = markerGroup;
-            this.mapStart.surfLatLng = {lat:loc[0],lng:loc[1]};
+            this.mapStart.surfLatLng = {lat: loc[0], lng: loc[1]};
 
-            this.mapStart.setView(loc, 10)
+            this.mapStart.setView(loc, 10);
         }
     }
 
@@ -415,12 +481,12 @@ export class EventDetailPage implements OnInit {
             attributions: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="http://mapbox.com">Mapbox</a>',
             maxZoom: 18
         }).addTo(this.mapEnd);
-        if(!this.viewMode) {
-            var geocoder = L.Control.Geocoder.nominatim();
-            var control = L.Control.geocoder({
+        if (!this.viewMode) {
+            const geocoder = L.Control.Geocoder.nominatim();
+            const control = L.Control.geocoder({
                 geocoder: geocoder
             }).on('markgeocode', (e) => {
-                //debugger;
+                // debugger;
                 this.singleEventForm.patchValue({
                     routeEndGeolocation: e.geocode.center.lat + ',' + e.geocode.center.lng,
                     routeEndLocation: e.geocode.name
@@ -434,11 +500,12 @@ export class EventDetailPage implements OnInit {
                     maximumAge: 300000
                 }).on('locationfound', (e) => {
 
-                    if (this.mapEnd.SurfMarker)
+                    if (this.mapEnd.SurfMarker) {
                         this.mapEnd.removeLayer(this.mapEnd.SurfMarker);
-                    let markerGroup = leaflet.featureGroup();
-                    let marker: any = leaflet.marker([e.latitude, e.longitude]).on('click', () => {
-                        //alert('Marker clicked');
+                    }
+                    const markerGroup = leaflet.featureGroup();
+                    const marker: any = leaflet.marker([e.latitude, e.longitude]).on('click', () => {
+                        // alert('Marker clicked');
                     });
                     markerGroup.addLayer(marker);
                     this.mapEnd.addLayer(markerGroup);
@@ -446,7 +513,7 @@ export class EventDetailPage implements OnInit {
                     this.mapEnd.surfLatLng = e.latlng;
                     let location = '';
                     geocoder.reverse(e.latlng, this.mapEnd.options.crs.scale(this.mapEnd.getZoom()), (results) => {
-                        var r = results[0];
+                        const r = results[0];
                         if (r) {
                             location = r.name;
                         }
@@ -460,11 +527,12 @@ export class EventDetailPage implements OnInit {
                 });
             }
             this.mapEnd.on('click', (e) => {
-                if (this.mapEnd.SurfMarker)
+                if (this.mapEnd.SurfMarker) {
                     this.mapEnd.removeLayer(this.mapEnd.SurfMarker);
+                }
                 this.mapEnd.surfLatLng = e.latlng;
-                let markerGroup = leaflet.featureGroup();
-                let marker: any = leaflet.marker([e.latlng.lat, e.latlng.lng]).on('click', () => {
+                const markerGroup = leaflet.featureGroup();
+                const marker: any = leaflet.marker([e.latlng.lat, e.latlng.lng]).on('click', () => {
                     //alert('Marker clicked');
                 });
                 markerGroup.addLayer(marker);
@@ -472,7 +540,7 @@ export class EventDetailPage implements OnInit {
                 this.mapEnd.SurfMarker = markerGroup;
                 let location = '';
                 geocoder.reverse(e.latlng, this.mapEnd.options.crs.scale(this.mapEnd.getZoom()), (results) => {
-                    var r = results[0];
+                    const r = results[0];
                     if (r) {
                         location = r.name;
                     }
@@ -485,22 +553,41 @@ export class EventDetailPage implements OnInit {
             });
         }
 
-        if(this.event.routeEndGeolocation) {//loaded from db
-            let loc = this.event.routeEndGeolocation.split(',');
-            if (this.mapEnd.SurfMarker)
+        if(this.event.routeEndGeolocation) { // loaded from db
+            const loc = this.event.routeEndGeolocation.split(',');
+            if (this.mapEnd.SurfMarker) {
                 this.mapEnd.removeLayer(this.mapEnd.SurfMarker);
-            let markerGroup = leaflet.featureGroup();
-            let marker: any = leaflet.marker(loc).on('click', () => {
-                //alert('Marker clicked');
+            }
+            const markerGroup = leaflet.featureGroup();
+            const marker: any = leaflet.marker(loc).on('click', () => {
+                // alert('Marker clicked');
             });
             markerGroup.addLayer(marker);
             this.mapEnd.addLayer(markerGroup);
             this.mapEnd.SurfMarker = markerGroup;
-            this.mapEnd.surfLatLng = {lat:loc[0],lng:loc[1]};
+            this.mapEnd.surfLatLng = {lat: loc[0], lng: loc[1]};
 
-            this.mapEnd.setView(loc, 10)
+            this.mapEnd.setView(loc, 10);
         }
     }
 
+    openOriginalRoute() {
+        const res = confirm('Are you sure you want to open the Route. It will discard any changes you might have made in the event');
+        if (res) {
+            window.open('SingleRoute/' + this.event.routeId, '_blank');
+        }
+    }
+
+    getENUM(ENUM: any): string[] {
+        const myEnum = [];
+        const objectEnum = Object.keys(ENUM);
+        const values = objectEnum.slice(0, objectEnum.length / 2);
+        const keys = objectEnum.slice(objectEnum.length / 2);
+
+        for (let i = 0; i < objectEnum.length / 2; i++) {
+            myEnum.push({key: keys[i], value: values[i]});
+        }
+        return myEnum;
+    }
 
 }

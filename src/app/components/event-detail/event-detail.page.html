@@ -24,20 +24,40 @@
       <ion-button (click)="openOriginalRoute()">Open Original Route</ion-button>
     </ion-item>
     <ion-item>
+      <ion-label>Meeting location is is the optional gathering for car-pooling and starting your drive toward the route start</ion-label>
+    </ion-item>
+
+    <ion-item>
+      <!--https://stackoverflow.com/questions/31907670/saving-the-val-return-from-ionic-datepicker-into-firebase-->
+      <ion-label stacked>Meeting Time</ion-label>
+      <ion-datetime displayFormat="MMM DD, YYYY HH:mm"
+                    pickerFormat="MMM DD, YYYY HH:mm"
+                    formControlName="meetingTime"
+                    [class.invalid]="!singleEventForm.controls.meetingTime.valid && blur && !viewMode">
+
+      </ion-datetime>
+    </ion-item>
+
+    <!--isEventRequiresCars-->
+    <ion-item>
+      <ion-label stacked>Are Cars Required?</ion-label>
+      <ion-checkbox formControlName="isEventRequiresCars" color="primary" checked="false"></ion-checkbox>
+    </ion-item>
+
+    <ion-item>
       <ion-label
               *ngIf="!singleEventForm.controls.meetingLocation.valid && !viewMode"
               color="danger"
               stacked
       >*
       </ion-label>
-      <ion-label stacked>Meeting location (Car-pool optional meeting place)</ion-label>
+      <ion-label stacked>Meeting location</ion-label>
       <ion-input
               formControlName="meetingLocation"
               type="text"
               placeholder="Car-pool optional meeting location"
               [class.invalid]="
-          !singleEventForm.controls.meetingLocation.valid && blur && !viewMode"
-      >
+          !singleEventForm.controls.meetingLocation.valid && blur && !viewMode">
       </ion-input>
     </ion-item>
 
@@ -57,6 +77,17 @@
           !singleEventForm.controls.meetingGeolocation?.valid && blur && !viewMode"
       >
       </ion-input>
+    </ion-item>
+
+    <ion-item>
+      <!--https://stackoverflow.com/questions/31907670/saving-the-val-return-from-ionic-datepicker-into-firebase-->
+      <ion-label stacked>Trip Start Time</ion-label>
+      <ion-datetime displayFormat="MMM DD, YYYY HH:mm"
+                    pickerFormat="MMM DD, YYYY HH:mm"
+                    formControlName="routeStartTime"
+                    [class.invalid]="!singleEventForm.controls.routeStartTime.valid && blur && !viewMode">
+
+      </ion-datetime>
     </ion-item>
 
     <ion-item>
@@ -96,6 +127,17 @@
     </ion-item>
     <ion-item>
       <div id="mapStart" style="height:200px; width:100%;" slot="start"></div>
+    </ion-item>
+
+    <ion-item>
+      <!--https://stackoverflow.com/questions/31907670/saving-the-val-return-from-ionic-datepicker-into-firebase-->
+      <ion-label stacked>Estimated Trip End Time</ion-label>
+      <ion-datetime displayFormat="MMM DD, YYYY HH:mm"
+                    pickerFormat="MMM DD, YYYY HH:mm"
+                    formControlName="returnTime"
+                    [class.invalid]="!singleEventForm.controls.returnTime.valid && blur && !viewMode">
+
+      </ion-datetime>
     </ion-item>
 
     <ion-item>
@@ -279,9 +321,7 @@
       <ion-select formControlName="routeProperties" multiple="true">
         <ion-select-option value="water">Water</ion-select-option>
         <ion-select-option value="swimming">Swimming</ion-select-option>
-        <ion-select-option value="mountains" selected
-        >Mountains</ion-select-option
-        >
+        <ion-select-option value="mountains" selected>Mountains</ion-select-option>
         <ion-select-option value="bicycles">Bicycles</ion-select-option>
         <ion-select-option value="forest">Forest</ion-select-option>
         <ion-select-option value="desert">Desert</ion-select-option>
@@ -294,45 +334,40 @@
 
     <ion-item>
       <!--
-        TODO: URGENT  make sure we set the routeCreatorId upon creation of route, and that also fetching the user into routeCreator for teh component
+        TODO: URGENT  make sure we set the eventOrganizerId upon creation of route, and that also fetching the user into eventOrganizer for teh component
       -->
-      <ion-label stacked
-      >Creator of route: {{ route.routeCreator?.firstName }}
-        {{ route.routeCreator?.lastName }}</ion-label
-      >
+      <ion-label stacked>Creator of event: {{ route.eventOrganizer?.firstName }}
+        {{ route.eventOrganizer?.lastName }}</ion-label>
       <!-- TODO show photo of creator -->
-      <ion-label stacked *ngIf="route.routeCreator?.isGuide"
-      >Creator is a travel-guide :)</ion-label
-      >
+      <ion-label stacked *ngIf="route.eventOrganizer?.isGuide">Event organizer is a travel-guide :)</ion-label>
       <ion-input
-              *ngIf="route.routeCreator?.isGuide"
-              formControlName="guideContactDetails"
+              formControlName="organizerContactDetails"
               type="text"
-              placeholder="Guide Contact Details (optional email and/or phone)"
+              placeholder="Event-Organizer Contact Details (optional email and/or phone)"
               [class.invalid]="
-          !singleEventForm.controls.guideContactDetails.valid && blur && !viewMode"
+          !singleEventForm.controls.organizerContactDetails.valid && blur && !viewMode"
       >
       </ion-input>
     </ion-item>
-    <ion-item *ngIf="route.routeCreator?.isGuide">
-      <ion-label stacked>Offers guidance?</ion-label>
+    <ion-item *ngIf="route.eventOrganizer?.isGuide">
+      <ion-label stacked>Is it a guided trip?</ion-label>
       <ion-checkbox
-              formControlName="isGuidingOffered"
+              formControlName="isGuidedEvent"
               color="primary"
               checked="false"
       ></ion-checkbox>
-      <ion-label stacked>Offered Price</ion-label>
+      <ion-label stacked>Price per person (US$)</ion-label>
       <ion-input
-              formControlName="offeredPrice"
+              formControlName="priceOfEvent"
               type="number"
-              placeholder="Offered price"
-              [class.invalid]="!singleEventForm.controls.offeredPrice.valid && blur && !viewMode"
+              placeholder="Price each traveler should pay you"
+              [class.invalid]="!singleEventForm.controls.priceOfEvent.valid && blur && !viewMode"
       >
       </ion-input>
     </ion-item>
 
     <ion-item>
-      <ion-label stacked>Entrance fee</ion-label>
+      <ion-label stacked>Entrance fee (US$)</ion-label>
       <ion-input
               formControlName="entranceFee"
               type="number"
@@ -362,29 +397,65 @@
 
     <ion-item>
       <ion-label stacked
-      >#Events created from this route:
-        {{ route.numEventsCreatedFromRoute }}</ion-label
+      >#Events created from same route before:
+        {{ event.numEventsCreatedFromRoute }}</ion-label
       >
     </ion-item>
 
     <ion-item>
-      <ion-label>Recommended months</ion-label>
-      <ion-select formControlName="recommendedMonths" multiple="true">
-        <ion-select-option value="1">January</ion-select-option>
-        <ion-select-option value="2">February</ion-select-option>
-        <ion-select-option value="3">March</ion-select-option>
-        <ion-select-option value="4">April</ion-select-option>
-        <ion-select-option value="5">May</ion-select-option>
-        <ion-select-option value="6">June</ion-select-option>
-        <ion-select-option value="7">July</ion-select-option>
-        <ion-select-option value="8">August</ion-select-option>
-        <ion-select-option value="9">September</ion-select-option>
-        <ion-select-option value="10">October</ion-select-option>
-        <ion-select-option value="11">Novemeber</ion-select-option>
-        <ion-select-option value="12">December</ion-select-option>
+      <ion-label>Audience type </ion-label>
+      <ion-select formControlName="audienceType" multiple="true">
+        <ion-select-option *ngFor="let item of audienceTypeEnum" value="{{item.value}}">{{item.key}}</ion-select-option>
       </ion-select>
     </ion-item>
+
+    <ion-item>
+      <ion-label>Recommended months for this route: {{event.recommendedMonths}}</ion-label>
+      <!--<ion-select formControlName="recommendedMonths" multiple="true">-->
+        <!--<ion-select-option value="1">January</ion-select-option>-->
+        <!--<ion-select-option value="2">February</ion-select-option>-->
+        <!--<ion-select-option value="3">March</ion-select-option>-->
+        <!--<ion-select-option value="4">April</ion-select-option>-->
+        <!--<ion-select-option value="5">May</ion-select-option>-->
+        <!--<ion-select-option value="6">June</ion-select-option>-->
+        <!--<ion-select-option value="7">July</ion-select-option>-->
+        <!--<ion-select-option value="8">August</ion-select-option>-->
+        <!--<ion-select-option value="9">September</ion-select-option>-->
+        <!--<ion-select-option value="10">October</ion-select-option>-->
+        <!--<ion-select-option value="11">Novemeber</ion-select-option>-->
+        <!--<ion-select-option value="12">December</ion-select-option>-->
+      <!--</ion-select>-->
+    </ion-item>
+
+    <ion-item>
+      <!--participant  -->
+
+      <ion-grid>
+        <ion-row *ngFor="let participant of event.participants">
+          <ion-col>
+            {{participant.user?.firstName}}
+          </ion-col>
+          <ion-col>
+            {{participant.user?.lastName}}
+          </ion-col>
+          <ion-col>
+            {{participant.phone}}
+          </ion-col>
+          <ion-col>
+            {{participant.isGuide? 'Guide': participant.isOrganizer? 'Organizer' : 'Traveller'}}
+          </ion-col>
+          <ion-col>
+            need seat? {{participant.needSeatInCar}}
+            <!--{{(participant.needSeatInCar && !participant.userIdOfHostingCar) ? 'Need a ride': (participant.needSeatInCar && participant.userIdOfHostingCar)? 'with' + participant.userIdOfHostingCar : participant.offeringSeatsInCar? 'Offers ' + participant.offeringSeatsInCar + ' free seats'}}-->
+          </ion-col>
+
+        </ion-row>
+      </ion-grid>
+    </ion-item>
+
   </form>
+
+
 
   <ion-button id='join' (click)="onJoinEvent()">join</ion-button>
   <ion-button id='create' (click)="onCreate()">Create</ion-button>

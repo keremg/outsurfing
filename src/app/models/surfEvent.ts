@@ -49,6 +49,9 @@ export class SurfEvent extends SurfRoute {
     // iconName: string; //TODO terrain
     // seasons: string;//TODO
 
+    //TODO verify that upone event-create, the organizer is set into eventOrganizerId
+    //TODO verify that if I'm noy eventOrganizedId then I'm in VIEW_MODE
+    //Show date/time choice option (if not view-mode)
     routeId: string; //@@ the route from which the Event was created
     meetingLocation: string;//@@car pool meeting place(s)
     meetingGeolocation: string;//@@car pool meeting place(s)
@@ -56,17 +59,15 @@ export class SurfEvent extends SurfRoute {
     routeStartTime: string; //@@full date&houre  (could be useful for people who comes from other places, can be the 2nd gathering time)
     returnTime: string; //@@full date&houre  (duration of event is returnTime-meetingTime)
 
-    eventOrgnizerId: string;
-    eventOrgnizer: SurfUser; //will also show organizer's ranking
+    eventOrganizerId: string;
+    eventOrganizer: SurfUser; //will also show organizer's ranking
     audienceType: string[]; //singles, couples, with kids, LGBT, elderlies, youngs, women only, men only, etc
-    isGuidedevent: boolean;
-    priceOfEvent: number;    //default 0, more if isGuidedevent
+    isGuidedEvent: boolean;
+    priceOfEvent: number;    //default 0, more if isGuidedEvent
     organizerContactDetails: string; //free text allowing the guide to describe email and/or phone for contacting him/her about event
-    entranceFee: number; //if any
     requiredEquipment: string;
-    numEventsCreatedFromRoute: number;
     isEventRequiresCars: boolean; //not all events requires cars handling
 
-    participant: SurfParticipant[];
+    participants: SurfParticipant[];
 
 }

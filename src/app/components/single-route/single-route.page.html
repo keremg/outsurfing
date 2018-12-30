@@ -283,11 +283,11 @@
         color="primary"
         checked="false"
       ></ion-checkbox>
-      <ion-label stacked>Offered Price</ion-label>
+      <ion-label stacked>Offered Price (US$)</ion-label>
       <ion-input
         formControlName="offeredPrice"
         type="number"
-        placeholder="Offered price"
+        placeholder="Offered price per person"
         [class.invalid]="!singleRouteForm.controls.offeredPrice.valid && blur && !viewMode"
       >
       </ion-input>
@@ -301,7 +301,7 @@
     </ion-item>
 
     <ion-item>
-      <ion-label stacked>Entrance fee</ion-label>
+      <ion-label stacked>Entrance fee (US$)</ion-label>
       <ion-input
         formControlName="entranceFee"
         type="number"
