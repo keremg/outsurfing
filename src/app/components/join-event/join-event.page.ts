@@ -20,7 +20,8 @@ export class JoinEventPage implements OnInit {
     public joinEventForm: FormGroup;
     participant: SurfParticipant = new SurfParticipant();
     user: SurfUser;
-  constructor(private navParams: NavParams, private modalController: ModalController,
+  constructor(private navParams: NavParams,
+              private modalController: ModalController,
               private eventService:EventService,
               private formBuilder: FormBuilder,
               private userService: UserService) { }
@@ -71,6 +72,7 @@ export class JoinEventPage implements OnInit {
             this.participant.userIdOfHostingCar = '';//TODO
 
         }
+        this.participant.approved = 0;
         //this.joinEventForm.value.message;
 
     }

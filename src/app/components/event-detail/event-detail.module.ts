@@ -7,6 +7,7 @@ import { IonicModule } from '@ionic/angular';
 
 import { EventDetailPage } from './event-detail.page';
 import {JoinEventPage} from '../join-event/join-event.page';
+import {ParticipantApprovalPage} from '../participant-approval/participant-approval.page';
 
 const routes: Routes = [
   {
@@ -24,9 +25,10 @@ const routes: Routes = [
       IonicModule,
     RouterModule.forChild(routes)
   ],
-  declarations: [EventDetailPage, JoinEventPage],
+  declarations: [EventDetailPage, JoinEventPage, ParticipantApprovalPage],
     entryComponents: [
-        JoinEventPage
+        JoinEventPage,
+        ParticipantApprovalPage
     ]
 })
 export class EventDetailPageModule {}

@@ -4,6 +4,7 @@ import {Observable} from 'rxjs';
 import {map} from 'rxjs/operators';
 import {SurfEvent} from '../models/surfEvent';
 import {SurfParticipant} from '../models/surfParticipant';
+import {UserService} from './user.service';
 
 @Injectable({
   providedIn: 'root'
@@ -15,7 +16,8 @@ export class EventService {
     eventDoc: AngularFirestoreDocument<SurfEvent>;
 
 
-    constructor(private afs: AngularFirestore) {
+    constructor(private afs: AngularFirestore,
+                private userService: UserService) {
         this.events = this.afs.collection(this.collection_endpoint, ref => ref.orderBy('region', 'asc'));
     }
 
@@ -52,6 +54,7 @@ export class EventService {
             return changes.map(action => {
                 const data = action.payload.doc.data() as SurfParticipant;
                 data.id = action.payload.doc.id;
+                data.user = this.userService.getuser(data.id);
                 return data;
             });
         }));
@@ -78,6 +81,7 @@ export class EventService {
         //TODO other logic - to updatefields like car and stuff?
         let uid = participant.id;
         delete participant.id;
+        delete participant.user;
         return this.events.doc(id).collection(this.participant_collection_endpoint).doc(uid).set({...participant}).catch(function(error) {
             alert('Failed adding participant' + error);
             console.error('Error adding participant: ', error);
@@ -87,6 +91,20 @@ export class EventService {
     async leaveEvent(id, uid){
         //TODO other logic - to updatefields like car and stuff?
         return this.events.doc(id).collection(this.participant_collection_endpoint).doc(uid).delete().catch(function(error) {
+            alert('Failed deleting participant' + error);
+            console.error('Error deleting participant: ', error);
+        });
+    }
+
+    async approveParticipant(id, uid){
+        return this.events.doc(id).collection(this.participant_collection_endpoint).doc(uid).update({approved:1}).catch(function(error) {
+            alert('Failed deleting participant' + error);
+            console.error('Error deleting participant: ', error);
+        });
+    }
+
+    async disapproveParticipant(id, uid){
+        return this.events.doc(id).collection(this.participant_collection_endpoint).doc(uid).update({approved:2}).catch(function(error) {
             alert('Failed deleting participant' + error);
             console.error('Error deleting participant: ', error);
         });

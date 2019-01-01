@@ -18,6 +18,7 @@ import {AudienceTypeEnum} from '../../AudienceType.enum';
 import {forEach} from '@angular-devkit/schematics';
 import {SurfParticipant} from '../../models/surfParticipant';
 import {Observable, Subscription} from 'rxjs';
+import {ParticipantApprovalPage} from '../participant-approval/participant-approval.page';
 
 declare let window: any;
 
@@ -32,7 +33,6 @@ export class EventDetailPage implements OnInit {
     selectedFile: File = null;
     route: SurfRoute = new SurfRoute();
     id: string;
-    currentUserId: string;
     currentUser: SurfUser;
     viewMode = false;
     routeId: string;
@@ -103,7 +103,6 @@ export class EventDetailPage implements OnInit {
         });
         window.form = this.singleEventForm;
 
-        this.currentUserId = this.authService.currentUserId;
         this.currentUser = await this.userService.getCurrentUserPromise();
 
 
@@ -137,14 +136,13 @@ export class EventDetailPage implements OnInit {
 
     async loadFromEvent(event: SurfEvent) {
         //TODO
-        document.getElementById('create').style.visibility = 'hidden';
-
+        this.removeElement('create');
         //TODO: get event from db, then should add the orgznizer details:
 
         this.event = event;
 
         if (!this.event.eventOrganizerId) {
-            this.event.eventOrganizerId = this.currentUserId; // safety
+            this.event.eventOrganizerId = this.currentUser.id; // safety
         }
 
         //this.event.routeCreator = await this.userService.getuser(this.event.routeCreatorId).toPromise();
@@ -152,44 +150,53 @@ export class EventDetailPage implements OnInit {
 
         this.editForm(this.event);
 
-
-        if (this.event.eventOrganizerId !== this.currentUserId) {
+        if (this.event.eventOrganizerId !== this.currentUser.id) {
             this.singleEventForm.disable();
             this.viewMode = true;
-            document.getElementById('save').style.visibility = 'hidden';
+            this.removeElement('save');
+            this.removeElement('approve');
+            this.removeElement('delete');
             console.log('just changed to view mode');
             this.event.participant.subscribe(pars => {
                 let joined: boolean = false;
                 if(pars){
                     pars.forEach( par =>{
-                        if(par.id === this.currentUserId)
+                        if(par.id === this.currentUser.id)
                             joined = true;
                     });
                 }
 
                 if(joined){
-                    document.getElementById('join').style.visibility = 'hidden';
+                    this.removeElement('join');
                 }
                 else{
-                    document.getElementById('leave').style.visibility = 'hidden';
+                    this.removeElement('leave');
                 }
             })
         }
         else{
-            document.getElementById('join').style.visibility = 'hidden';
-            document.getElementById('leave').style.visibility = 'hidden';
+            this.removeElement('join');
+            this.removeElement('leave');
         }
+    }
+
+    removeElement(id: string){
+
+        let ele = document.getElementById(id);
+        ele.parentNode.removeChild(ele);
     }
 
     async loadFromRoute(route: SurfRoute) {
         //should hide the join button
-        document.getElementById('join').style.visibility = 'hidden';
-        document.getElementById('leave').style.visibility = 'hidden';
-        document.getElementById('save').style.visibility = 'hidden';
+        this.removeElement('join');
+        this.removeElement('save');
+        this.removeElement('leave');
+        this.removeElement('approve');
+        this.removeElement('delete');
 
         this.event = new SurfEvent(route);
 
-        this.event.eventOrganizerId = this.currentUserId;
+        this.event.eventOrganizerId = this.currentUser.id;
         this.event.eventOrganizer = this.currentUser;
 
         //this.event.routeCreator = await this.userService.getuser(this.event.routeCreatorId).toPromise();
@@ -266,8 +273,16 @@ export class EventDetailPage implements OnInit {
         return modal.present();
     }
 
+    async onApprove() {
+        const modal = await this.modalController.create({
+            component: ParticipantApprovalPage,
+            componentProps: {eventId: this.id}
+        });
+        return modal.present();
+    }
+
     async onLeaveEvent() {
-        await this.eventService.leaveEvent(this.id, this.currentUserId);
+        await this.eventService.leaveEvent(this.id, this.currentUser.id);
         return this.navCtrl.navigateRoot('home');
     }
 

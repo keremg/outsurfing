@@ -1,0 +1,20 @@
+<ion-header>
+    <ion-toolbar>
+        <ion-title>ParticipantApproval</ion-title>
+    </ion-toolbar>
+</ion-header>
+
+<ion-content padding>
+    <ion-item *ngFor="let participant of this.participants | async">
+        <div *ngIf="participant.approved === 0">
+            {{(participant.user|async)?.firstName}} {{(participant.user|async)?.lastName}}
+            brings {{participant.groupEquipmentIBring}}
+            <ion-button (click)="onApprove(participant.id)">Approve</ion-button>
+            <ion-button (click)="onDisapprove(participant.id)">Disapprove</ion-button>
+        </div>
+
+    </ion-item>
+
+    <ion-button id='close' (click)="onClose()">Close</ion-button>
+
+</ion-content>
