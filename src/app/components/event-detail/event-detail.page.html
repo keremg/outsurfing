@@ -1,464 +1,470 @@
 <ion-header>
-  <ion-toolbar>
-    <ion-buttons slot="start"> <ion-back-button defaultHref="home"></ion-back-button> </ion-buttons>
-    <ion-title>Event name</ion-title>
-  </ion-toolbar>
+    <ion-toolbar>
+        <ion-buttons slot="start">
+            <ion-back-button defaultHref="home"></ion-back-button>
+        </ion-buttons>
+        <ion-title>Event name</ion-title>
+    </ion-toolbar>
 </ion-header>
 
 <ion-content padding>
 
-  <form [formGroup]="singleEventForm" novalidate>
-    <ion-item [class.viewModeClass]="viewMode">
-      <ion-label
-              *ngIf="!singleEventForm.controls.name.valid && !viewMode"
-              color="danger"
-              stacked
-      >*
-      </ion-label>
-      <ion-label stacked>Trip name</ion-label>
-      <ion-input formControlName="name" type="text" placeholder="event name">
-      </ion-input>
-    </ion-item>
+    <form [formGroup]="singleEventForm" novalidate>
+        <ion-item [class.viewModeClass]="viewMode">
+            <ion-label
+                    *ngIf="!singleEventForm.controls.name.valid && !viewMode"
+                    color="danger"
+                    stacked
+            >*
+            </ion-label>
+            <ion-label stacked>Trip name</ion-label>
+            <ion-input formControlName="name" type="text" placeholder="event name">
+            </ion-input>
+        </ion-item>
 
-    <ion-item>
-      <ion-button (click)="openOriginalRoute()">Open Original Route</ion-button>
-    </ion-item>
-    <ion-item>
-      <ion-label>Meeting location is is the optional gathering for car-pooling and starting your drive toward the route start</ion-label>
-    </ion-item>
+        <ion-item>
+            <ion-button (click)="openOriginalRoute()">Open Original Route</ion-button>
+        </ion-item>
+        <ion-item>
+            <ion-label>Meeting location is is the optional gathering for car-pooling and starting your drive toward the
+                route start
+            </ion-label>
+        </ion-item>
 
-    <ion-item>
-      <!--https://stackoverflow.com/questions/31907670/saving-the-val-return-from-ionic-datepicker-into-firebase-->
-      <ion-label stacked>Meeting Time</ion-label>
-      <ion-datetime displayFormat="MMM DD, YYYY HH:mm"
-                    pickerFormat="MMM DD, YYYY HH:mm"
-                    formControlName="meetingTime"
-                    [class.invalid]="!singleEventForm.controls.meetingTime.valid && blur && !viewMode">
+        <ion-item>
+            <!--https://stackoverflow.com/questions/31907670/saving-the-val-return-from-ionic-datepicker-into-firebase-->
+            <ion-label stacked>Meeting Time</ion-label>
+            <ion-datetime displayFormat="MMM DD, YYYY HH:mm"
+                          pickerFormat="MMM DD, YYYY HH:mm"
+                          formControlName="meetingTime"
+                          [class.invalid]="!singleEventForm.controls.meetingTime.valid && blur && !viewMode">
 
-      </ion-datetime>
-    </ion-item>
+            </ion-datetime>
+        </ion-item>
 
-    <!--isEventRequiresCars-->
-    <ion-item>
-      <ion-label stacked>Are Cars Required?</ion-label>
-      <ion-checkbox formControlName="isEventRequiresCars" color="primary" checked="false"></ion-checkbox>
-    </ion-item>
+        <!--isEventRequiresCars-->
+        <ion-item>
+            <ion-label stacked>Are Cars Required?</ion-label>
+            <ion-checkbox formControlName="isEventRequiresCars" color="primary" checked="false"></ion-checkbox>
+        </ion-item>
 
-    <ion-item>
-      <ion-label
-              *ngIf="!singleEventForm.controls.meetingLocation.valid && !viewMode"
-              color="danger"
-              stacked
-      >*
-      </ion-label>
-      <ion-label stacked>Meeting location</ion-label>
-      <ion-input
-              formControlName="meetingLocation"
-              type="text"
-              placeholder="Car-pool optional meeting location"
-              [class.invalid]="
+        <ion-item>
+            <ion-label
+                    *ngIf="!singleEventForm.controls.meetingLocation.valid && !viewMode"
+                    color="danger"
+                    stacked
+            >*
+            </ion-label>
+            <ion-label stacked>Meeting location</ion-label>
+            <ion-input
+                    formControlName="meetingLocation"
+                    type="text"
+                    placeholder="Car-pool optional meeting location"
+                    [class.invalid]="
           !singleEventForm.controls.meetingLocation.valid && blur && !viewMode">
-      </ion-input>
-    </ion-item>
+            </ion-input>
+        </ion-item>
 
-    <ion-item>
-      <ion-label
-              *ngIf="!singleEventForm.controls.meetingGeolocation?.valid && !viewMode"
-              color="danger"
-              stacked
-      >*
-      </ion-label>
-      <ion-label stacked slot="start">meeting Geolocation</ion-label>
-      <ion-input
-              formControlName="meetingGeolocation"
-              type="text"
-              placeholder="Meeting location geolocation"
-              [class.invalid]="
+        <ion-item>
+            <ion-label
+                    *ngIf="!singleEventForm.controls.meetingGeolocation?.valid && !viewMode"
+                    color="danger"
+                    stacked
+            >*
+            </ion-label>
+            <ion-label stacked slot="start">meeting Geolocation</ion-label>
+            <ion-input
+                    formControlName="meetingGeolocation"
+                    type="text"
+                    placeholder="Meeting location geolocation"
+                    [class.invalid]="
           !singleEventForm.controls.meetingGeolocation?.valid && blur && !viewMode"
-      >
-      </ion-input>
-    </ion-item>
+            >
+            </ion-input>
+        </ion-item>
 
-    <ion-item>
-      <!--https://stackoverflow.com/questions/31907670/saving-the-val-return-from-ionic-datepicker-into-firebase-->
-      <ion-label stacked>Trip Start Time</ion-label>
-      <ion-datetime displayFormat="MMM DD, YYYY HH:mm"
-                    pickerFormat="MMM DD, YYYY HH:mm"
-                    formControlName="routeStartTime"
-                    [class.invalid]="!singleEventForm.controls.routeStartTime.valid && blur && !viewMode">
+        <ion-item>
+            <!--https://stackoverflow.com/questions/31907670/saving-the-val-return-from-ionic-datepicker-into-firebase-->
+            <ion-label stacked>Trip Start Time</ion-label>
+            <ion-datetime displayFormat="MMM DD, YYYY HH:mm"
+                          pickerFormat="MMM DD, YYYY HH:mm"
+                          formControlName="routeStartTime"
+                          [class.invalid]="!singleEventForm.controls.routeStartTime.valid && blur && !viewMode">
 
-      </ion-datetime>
-    </ion-item>
+            </ion-datetime>
+        </ion-item>
 
-    <ion-item>
-      <ion-label
-              *ngIf="!singleEventForm.controls.routeStartLocation.valid && !viewMode"
-              color="danger"
-              stacked
-      >*
-      </ion-label>
-      <ion-label stacked>Start location</ion-label>
-      <ion-input
-              formControlName="routeStartLocation"
-              type="text"
-              placeholder="Start location"
-              [class.invalid]="
+        <ion-item>
+            <ion-label
+                    *ngIf="!singleEventForm.controls.routeStartLocation.valid && !viewMode"
+                    color="danger"
+                    stacked
+            >*
+            </ion-label>
+            <ion-label stacked>Start location</ion-label>
+            <ion-input
+                    formControlName="routeStartLocation"
+                    type="text"
+                    placeholder="Start location"
+                    [class.invalid]="
           !singleEventForm.controls.routeStartLocation.valid && blur && !viewMode"
-      >
-      </ion-input>
-    </ion-item>
+            >
+            </ion-input>
+        </ion-item>
 
-    <ion-item>
-      <ion-label
-              *ngIf="!singleEventForm.controls.routeStartGeolocation?.valid && !viewMode"
-              color="danger"
-              stacked
-      >*
-      </ion-label>
-      <ion-label stacked slot="start">Start Geolocation</ion-label>
-      <ion-input
-              formControlName="routeStartGeolocation"
-              type="text"
-              placeholder="Start geolocation"
-              [class.invalid]="
+        <ion-item>
+            <ion-label
+                    *ngIf="!singleEventForm.controls.routeStartGeolocation?.valid && !viewMode"
+                    color="danger"
+                    stacked
+            >*
+            </ion-label>
+            <ion-label stacked slot="start">Start Geolocation</ion-label>
+            <ion-input
+                    formControlName="routeStartGeolocation"
+                    type="text"
+                    placeholder="Start geolocation"
+                    [class.invalid]="
           !singleEventForm.controls.routeStartGeolocation?.valid && blur && !viewMode"
-      >
-      </ion-input>
-    </ion-item>
-    <ion-item>
-      <div id="mapStart" style="height:200px; width:100%;" slot="start"></div>
-    </ion-item>
+            >
+            </ion-input>
+        </ion-item>
+        <ion-item>
+            <div id="mapStart" style="height:200px; width:100%;" slot="start"></div>
+        </ion-item>
 
-    <ion-item>
-      <!--https://stackoverflow.com/questions/31907670/saving-the-val-return-from-ionic-datepicker-into-firebase-->
-      <ion-label stacked>Estimated Trip End Time</ion-label>
-      <ion-datetime displayFormat="MMM DD, YYYY HH:mm"
-                    pickerFormat="MMM DD, YYYY HH:mm"
-                    formControlName="returnTime"
-                    [class.invalid]="!singleEventForm.controls.returnTime.valid && blur && !viewMode">
+        <ion-item>
+            <!--https://stackoverflow.com/questions/31907670/saving-the-val-return-from-ionic-datepicker-into-firebase-->
+            <ion-label stacked>Estimated Trip End Time</ion-label>
+            <ion-datetime displayFormat="MMM DD, YYYY HH:mm"
+                          pickerFormat="MMM DD, YYYY HH:mm"
+                          formControlName="returnTime"
+                          [class.invalid]="!singleEventForm.controls.returnTime.valid && blur && !viewMode">
 
-      </ion-datetime>
-    </ion-item>
+            </ion-datetime>
+        </ion-item>
 
-    <ion-item>
-      <ion-label
-              *ngIf="!singleEventForm.controls.routeEndLocation.valid && !viewMode"
-              color="danger"
-              stacked
-      >*
-      </ion-label>
-      <ion-label stacked>End location</ion-label>
-      <ion-input
-              formControlName="routeEndLocation"
-              type="text"
-              placeholder="End location"
-              [class.invalid]="
+        <ion-item>
+            <ion-label
+                    *ngIf="!singleEventForm.controls.routeEndLocation.valid && !viewMode"
+                    color="danger"
+                    stacked
+            >*
+            </ion-label>
+            <ion-label stacked>End location</ion-label>
+            <ion-input
+                    formControlName="routeEndLocation"
+                    type="text"
+                    placeholder="End location"
+                    [class.invalid]="
           !singleEventForm.controls.routeEndLocation.valid && blur && !viewMode"
-      >
-      </ion-input>
-    </ion-item>
+            >
+            </ion-input>
+        </ion-item>
 
-    <ion-item>
-      <ion-label
-              *ngIf="!singleEventForm.controls.routeEndGeolocation.valid && !viewMode"
-              color="danger"
-              stacked
-      >*
-      </ion-label>
-      <ion-label stacked slot="start">End Geolocation</ion-label>
-      <ion-input
-              formControlName="routeEndGeolocation"
-              type="text"
-              placeholder="End geolocation"
-              [class.invalid]="
+        <ion-item>
+            <ion-label
+                    *ngIf="!singleEventForm.controls.routeEndGeolocation.valid && !viewMode"
+                    color="danger"
+                    stacked
+            >*
+            </ion-label>
+            <ion-label stacked slot="start">End Geolocation</ion-label>
+            <ion-input
+                    formControlName="routeEndGeolocation"
+                    type="text"
+                    placeholder="End geolocation"
+                    [class.invalid]="
           !singleEventForm.controls.routeEndGeolocation.valid && blur && !viewMode"
-      >
-      </ion-input>
-    </ion-item>
-    <ion-item>
-      <div id="mapEnd" style="height:200px; width:100%;" slot="start"></div>
-    </ion-item>
+            >
+            </ion-input>
+        </ion-item>
+        <ion-item>
+            <div id="mapEnd" style="height:200px; width:100%;" slot="start"></div>
+        </ion-item>
 
-    <ion-item>
-      <!--
-        TODO: show the image itself, and make sure we allow multiple maps in DB
-      -->
-      <ion-label stacked>Upload photos</ion-label>
-      <ion-input
-              formControlName="imagesUrls"
-              type="file"
-              accept="image/*"
-              (ionChange)="onFileSelected($event)"
-              placeholder="upload photos"
-      >
-      </ion-input>
-      <button disabled="viewMode" type="button" (click)="onUpload()">
-        Upload
-      </button>
-    </ion-item>
-    <ion-item>
-      <!--
-        TODO: show the image itself, and make sure we allow multiple maps in DB
-      -->
-      <ion-label stacked>Upload photos</ion-label>
-      <ion-input
-              formControlName="mapUrl"
-              type="file"
-              accept="image/*"
-              (ionChange)="onFileSelected($event)"
-              placeholder="upload photos"
-      >
-      </ion-input>
-      <button disabled="viewMode" type="button" (click)="onMapUpload()">
-        Upload
-      </button>
-    </ion-item>
+        <ion-item>
+            <!--
+              TODO: show the image itself, and make sure we allow multiple maps in DB
+            -->
+            <ion-label stacked>Upload photos</ion-label>
+            <ion-input
+                    formControlName="imagesUrls"
+                    type="file"
+                    accept="image/*"
+                    (ionChange)="onFileSelected($event)"
+                    placeholder="upload photos"
+            >
+            </ion-input>
+            <button disabled="viewMode" type="button" (click)="onUpload()">
+                Upload
+            </button>
+        </ion-item>
+        <ion-item>
+            <!--
+              TODO: show the image itself, and make sure we allow multiple maps in DB
+            -->
+            <ion-label stacked>Upload photos</ion-label>
+            <ion-input
+                    formControlName="mapUrl"
+                    type="file"
+                    accept="image/*"
+                    (ionChange)="onFileSelected($event)"
+                    placeholder="upload photos"
+            >
+            </ion-input>
+            <button disabled="viewMode" type="button" (click)="onMapUpload()">
+                Upload
+            </button>
+        </ion-item>
 
-    <ion-item>
-      <ion-label stacked>Length (Km)</ion-label>
-      <ion-input
-              formControlName="lengthKM"
-              type="number"
-              placeholder="Length of route"
-              [class.invalid]="!singleEventForm.controls.lengthKM.valid && blur && !viewMode"
-      >
-      </ion-input>
-    </ion-item>
+        <ion-item>
+            <ion-label stacked>Length (Km)</ion-label>
+            <ion-input
+                    formControlName="lengthKM"
+                    type="number"
+                    placeholder="Length of route"
+                    [class.invalid]="!singleEventForm.controls.lengthKM.valid && blur && !viewMode"
+            >
+            </ion-input>
+        </ion-item>
 
-    <ion-item>
-      <ion-label
-              *ngIf="!singleEventForm.controls.shortDescription.valid && !viewMode"
-              color="danger"
-              stacked
-      >*
-      </ion-label>
-      <ion-label stacked>Short description</ion-label>
-      <ion-input
-              formControlName="shortDescription"
-              type="text"
-              placeholder="Short description"
-              [class.invalid]="
+        <ion-item>
+            <ion-label
+                    *ngIf="!singleEventForm.controls.shortDescription.valid && !viewMode"
+                    color="danger"
+                    stacked
+            >*
+            </ion-label>
+            <ion-label stacked>Short description</ion-label>
+            <ion-input
+                    formControlName="shortDescription"
+                    type="text"
+                    placeholder="Short description"
+                    [class.invalid]="
           !singleEventForm.controls.shortDescription.valid && blur && !viewMode"
-      >
-      </ion-input>
-    </ion-item>
+            >
+            </ion-input>
+        </ion-item>
 
-    <!-- TODO: Add route ranking -->
-    <ion-item>
-      <ion-label stacked>Long description</ion-label>
-      <ion-input
-              formControlName="longDescription"
-              type="longDescription"
-              placeholder="Long description"
-              [class.invalid]="
+        <!-- TODO: Add route ranking -->
+        <ion-item>
+            <ion-label stacked>Long description</ion-label>
+            <ion-input
+                    formControlName="longDescription"
+                    type="longDescription"
+                    placeholder="Long description"
+                    [class.invalid]="
           !singleEventForm.controls.longDescription.valid && blur && !viewMode"
-      >
-      </ion-input>
-    </ion-item>
+            >
+            </ion-input>
+        </ion-item>
 
-    <ion-item>
-      <ion-label>Difficulty</ion-label>
-      <!--
-        TODO: MAYBE when moving from form to DB and when moving from object to form change it from number to string
-      -->
-      <ion-select formControlName="routeDifficulty" multiple="false">
-        <ion-select-option value="0">Very easy</ion-select-option>
-        <ion-select-option value="1">Easy</ion-select-option>
-        <ion-select-option value="2">Moderate</ion-select-option>
-        <ion-select-option value="3">Challenging</ion-select-option>
-        <ion-select-option value="4">Extreme</ion-select-option>
-        <ion-select-option value="5">Very extreme</ion-select-option>
-      </ion-select>
-    </ion-item>
-    <!-- TODO: ION-SECLET VIEWMODE -->
-    <ion-item>
-      <ion-label stacked>Duration</ion-label>
-      <ion-row style="width: 80%" justify-content-end>
-        <ion-col size="2">
-          <ion-input
-                  formControlName="routeDuration"
-                  type="number"
-                  placeholder="Route duration"
-                  [class.invalid]="
+        <ion-item>
+            <ion-label>Difficulty</ion-label>
+            <!--
+              TODO: MAYBE when moving from form to DB and when moving from object to form change it from number to string
+            -->
+            <ion-select formControlName="routeDifficulty" multiple="false">
+                <ion-select-option value="0">Very easy</ion-select-option>
+                <ion-select-option value="1">Easy</ion-select-option>
+                <ion-select-option value="2">Moderate</ion-select-option>
+                <ion-select-option value="3">Challenging</ion-select-option>
+                <ion-select-option value="4">Extreme</ion-select-option>
+                <ion-select-option value="5">Very extreme</ion-select-option>
+            </ion-select>
+        </ion-item>
+        <!-- TODO: ION-SECLET VIEWMODE -->
+        <ion-item>
+            <ion-label stacked>Duration</ion-label>
+            <ion-row style="width: 80%" justify-content-end>
+                <ion-col size="2">
+                    <ion-input
+                            formControlName="routeDuration"
+                            type="number"
+                            placeholder="Route duration"
+                            [class.invalid]="
               !singleEventForm.controls.routeDuration.valid && blur && !viewMode"
-                  min="0"
-                  max="59"
-                  step="1"
-                  side="left"
-          ></ion-input>
-        </ion-col>
-        <ion-col size="10">
-          <ion-select formControlName="routeDurationUnits" multiple="false">
-            <ion-select-option value="hours">Hours</ion-select-option>
-            <ion-select-option value="days">Days</ion-select-option>
-          </ion-select>
-        </ion-col>
-      </ion-row>
-    </ion-item>
+                            min="0"
+                            max="59"
+                            step="1"
+                            side="left"
+                    ></ion-input>
+                </ion-col>
+                <ion-col size="10">
+                    <ion-select formControlName="routeDurationUnits" multiple="false">
+                        <ion-select-option value="hours">Hours</ion-select-option>
+                        <ion-select-option value="days">Days</ion-select-option>
+                    </ion-select>
+                </ion-col>
+            </ion-row>
+        </ion-item>
 
-    <!-- <ion-item> -->
-    <!-- <ion-label stacked>Duration</ion-label> -->
-    <!--
-      &lt;!&ndash;TODO: Allow usage of days -> translate to hours when translated to object, and translate to days if more than 24 hours when showing it&ndash;&gt;
-    -->
-    <!-- <ion-input -->
-    <!-- formControlName="routeDuration" -->
-    <!-- type="number" -->
-    <!-- placeholder="Route duration" -->
-    <!--
-      [class.invalid]="!singleEventForm.controls.routeDuration.valid && blur"
-    -->
-    <!-- &gt; -->
-    <!-- </ion-input> -->
-    <!-- <ion-select formControlName="routeDurationUnits" multiple="false"> -->
-    <!-- <ion-select-option value="hours">Hours</ion-select-option> -->
-    <!-- <ion-select-option value="days">Days</ion-select-option> -->
-    <!-- </ion-select> -->
-    <!-- </ion-item> -->
+        <!-- <ion-item> -->
+        <!-- <ion-label stacked>Duration</ion-label> -->
+        <!--
+          &lt;!&ndash;TODO: Allow usage of days -> translate to hours when translated to object, and translate to days if more than 24 hours when showing it&ndash;&gt;
+        -->
+        <!-- <ion-input -->
+        <!-- formControlName="routeDuration" -->
+        <!-- type="number" -->
+        <!-- placeholder="Route duration" -->
+        <!--
+          [class.invalid]="!singleEventForm.controls.routeDuration.valid && blur"
+        -->
+        <!-- &gt; -->
+        <!-- </ion-input> -->
+        <!-- <ion-select formControlName="routeDurationUnits" multiple="false"> -->
+        <!-- <ion-select-option value="hours">Hours</ion-select-option> -->
+        <!-- <ion-select-option value="days">Days</ion-select-option> -->
+        <!-- </ion-select> -->
+        <!-- </ion-item> -->
 
-    <ion-item>
-      <ion-label>Route Properties</ion-label>
-      <ion-select formControlName="routeProperties" multiple="true">
-        <ion-select-option value="water">Water</ion-select-option>
-        <ion-select-option value="swimming">Swimming</ion-select-option>
-        <ion-select-option value="mountains" selected>Mountains</ion-select-option>
-        <ion-select-option value="bicycles">Bicycles</ion-select-option>
-        <ion-select-option value="forest">Forest</ion-select-option>
-        <ion-select-option value="desert">Desert</ion-select-option>
-        <ion-select-option value="oasis">Oasis</ion-select-option>
-        <ion-select-option value="historical">Historical</ion-select-option>
-        <ion-select-option value="archeology">Archeology</ion-select-option>
-        <ion-select-option value="ropes">Ropes</ion-select-option>
-      </ion-select>
-    </ion-item>
+        <ion-item>
+            <ion-label>Route Properties</ion-label>
+            <ion-select formControlName="routeProperties" multiple="true">
+                <ion-select-option value="water">Water</ion-select-option>
+                <ion-select-option value="swimming">Swimming</ion-select-option>
+                <ion-select-option value="mountains" selected>Mountains</ion-select-option>
+                <ion-select-option value="bicycles">Bicycles</ion-select-option>
+                <ion-select-option value="forest">Forest</ion-select-option>
+                <ion-select-option value="desert">Desert</ion-select-option>
+                <ion-select-option value="oasis">Oasis</ion-select-option>
+                <ion-select-option value="historical">Historical</ion-select-option>
+                <ion-select-option value="archeology">Archeology</ion-select-option>
+                <ion-select-option value="ropes">Ropes</ion-select-option>
+            </ion-select>
+        </ion-item>
 
-    <ion-item>
-      <!--
-        TODO: URGENT  make sure we set the eventOrganizerId upon creation of route, and that also fetching the user into eventOrganizer for teh component
-      -->
-      <ion-label stacked>Creator of event: {{ route.eventOrganizer?.firstName }}
-        {{ route.eventOrganizer?.lastName }}</ion-label>
-      <!-- TODO show photo of creator -->
-      <ion-label stacked *ngIf="route.eventOrganizer?.isGuide">Event organizer is a travel-guide :)</ion-label>
-      <ion-input
-              formControlName="organizerContactDetails"
-              type="text"
-              placeholder="Event-Organizer Contact Details (optional email and/or phone)"
-              [class.invalid]="
+        <ion-item>
+            <!--
+              TODO: URGENT  make sure we set the eventOrganizerId upon creation of route, and that also fetching the user into eventOrganizer for teh component
+            -->
+            <ion-label stacked>Creator of event: {{ route.eventOrganizer?.firstName }}
+                {{ route.eventOrganizer?.lastName }}</ion-label>
+            <!-- TODO show photo of creator -->
+            <ion-label stacked *ngIf="route.eventOrganizer?.isGuide">Event organizer is a travel-guide :)</ion-label>
+            <ion-input
+                    formControlName="organizerContactDetails"
+                    type="text"
+                    placeholder="Event-Organizer Contact Details (optional email and/or phone)"
+                    [class.invalid]="
           !singleEventForm.controls.organizerContactDetails.valid && blur && !viewMode"
-      >
-      </ion-input>
-    </ion-item>
-    <ion-item *ngIf="route.eventOrganizer?.isGuide">
-      <ion-label stacked>Is it a guided trip?</ion-label>
-      <ion-checkbox
-              formControlName="isGuidedEvent"
-              color="primary"
-              checked="false"
-      ></ion-checkbox>
-      <ion-label stacked>Price per person (US$)</ion-label>
-      <ion-input
-              formControlName="priceOfEvent"
-              type="number"
-              placeholder="Price each traveler should pay you"
-              [class.invalid]="!singleEventForm.controls.priceOfEvent.valid && blur && !viewMode"
-      >
-      </ion-input>
-    </ion-item>
+            >
+            </ion-input>
+        </ion-item>
+        <ion-item *ngIf="route.eventOrganizer?.isGuide">
+            <ion-label stacked>Is it a guided trip?</ion-label>
+            <ion-checkbox
+                    formControlName="isGuidedEvent"
+                    color="primary"
+                    checked="false"
+            ></ion-checkbox>
+            <ion-label stacked>Price per person (US$)</ion-label>
+            <ion-input
+                    formControlName="priceOfEvent"
+                    type="number"
+                    placeholder="Price each traveler should pay you"
+                    [class.invalid]="!singleEventForm.controls.priceOfEvent.valid && blur && !viewMode"
+            >
+            </ion-input>
+        </ion-item>
 
-    <ion-item>
-      <ion-label stacked>Entrance fee (US$)</ion-label>
-      <ion-input
-              formControlName="entranceFee"
-              type="number"
-              placeholder="Entrance fee"
-              [class.invalid]="!singleEventForm.controls.entranceFee.valid && blur && !viewMode"
-      >
-      </ion-input>
-    </ion-item>
+        <ion-item>
+            <ion-label stacked>Entrance fee (US$)</ion-label>
+            <ion-input
+                    formControlName="entranceFee"
+                    type="number"
+                    placeholder="Entrance fee"
+                    [class.invalid]="!singleEventForm.controls.entranceFee.valid && blur && !viewMode"
+            >
+            </ion-input>
+        </ion-item>
 
-    <ion-item>
-      <ion-label
-              *ngIf="!singleEventForm.controls.requiredEquipment.valid && !viewMode"
-              color="danger"
-              stacked
-      >*
-      </ion-label>
-      <ion-label stacked>Required equipment</ion-label>
-      <ion-input
-              formControlName="requiredEquipment"
-              type="text"
-              placeholder="Required equipment"
-              [class.invalid]="
+        <ion-item>
+            <ion-label
+                    *ngIf="!singleEventForm.controls.requiredEquipment.valid && !viewMode"
+                    color="danger"
+                    stacked
+            >*
+            </ion-label>
+            <ion-label stacked>Required equipment</ion-label>
+            <ion-input
+                    formControlName="requiredEquipment"
+                    type="text"
+                    placeholder="Required equipment"
+                    [class.invalid]="
           !singleEventForm.controls.requiredEquipment.valid && blur && !viewMode"
-      >
-      </ion-input>
-    </ion-item>
+            >
+            </ion-input>
+        </ion-item>
 
-    <ion-item>
-      <ion-label stacked>#Events created from same route before:{{ (eventObs|async)?.numEventsCreatedFromRoute }}</ion-label>
-    </ion-item>
+        <ion-item>
+            <ion-label stacked>#Events created from same route
+                before:{{ (eventObs|async)?.numEventsCreatedFromRoute }}</ion-label>
+        </ion-item>
 
-    <ion-item>
-      <ion-label>Audience type </ion-label>
-      <ion-select formControlName="audienceType" multiple="true">
-        <ion-select-option *ngFor="let item of audienceTypeEnum" value="{{item.value}}">{{item.key}}</ion-select-option>
-      </ion-select>
-    </ion-item>
+        <ion-item>
+            <ion-label>Audience type</ion-label>
+            <ion-select formControlName="audienceType" multiple="true">
+                <ion-select-option *ngFor="let item of audienceTypeEnum"
+                                   value="{{item.value}}">{{item.key}}</ion-select-option>
+            </ion-select>
+        </ion-item>
 
-    <ion-item>
-      <ion-label>Recommended months for this route: {{(eventObs|async)?.recommendedMonths}}</ion-label>
-      <!--<ion-select formControlName="recommendedMonths" multiple="true">-->
-        <!--<ion-select-option value="1">January</ion-select-option>-->
-        <!--<ion-select-option value="2">February</ion-select-option>-->
-        <!--<ion-select-option value="3">March</ion-select-option>-->
-        <!--<ion-select-option value="4">April</ion-select-option>-->
-        <!--<ion-select-option value="5">May</ion-select-option>-->
-        <!--<ion-select-option value="6">June</ion-select-option>-->
-        <!--<ion-select-option value="7">July</ion-select-option>-->
-        <!--<ion-select-option value="8">August</ion-select-option>-->
-        <!--<ion-select-option value="9">September</ion-select-option>-->
-        <!--<ion-select-option value="10">October</ion-select-option>-->
-        <!--<ion-select-option value="11">Novemeber</ion-select-option>-->
-        <!--<ion-select-option value="12">December</ion-select-option>-->
-      <!--</ion-select>-->
-    </ion-item>
+        <ion-item>
+            <ion-label>Recommended months for this route: {{(eventObs|async)?.recommendedMonths}}</ion-label>
+            <!--<ion-select formControlName="recommendedMonths" multiple="true">-->
+            <!--<ion-select-option value="1">January</ion-select-option>-->
+            <!--<ion-select-option value="2">February</ion-select-option>-->
+            <!--<ion-select-option value="3">March</ion-select-option>-->
+            <!--<ion-select-option value="4">April</ion-select-option>-->
+            <!--<ion-select-option value="5">May</ion-select-option>-->
+            <!--<ion-select-option value="6">June</ion-select-option>-->
+            <!--<ion-select-option value="7">July</ion-select-option>-->
+            <!--<ion-select-option value="8">August</ion-select-option>-->
+            <!--<ion-select-option value="9">September</ion-select-option>-->
+            <!--<ion-select-option value="10">October</ion-select-option>-->
+            <!--<ion-select-option value="11">Novemeber</ion-select-option>-->
+            <!--<ion-select-option value="12">December</ion-select-option>-->
+            <!--</ion-select>-->
+        </ion-item>
 
-    <ion-item>
-      <!--participant  -->
+        <ion-item>
+            <!--participant  -->
 
-      <ion-grid>
-        <ion-row *ngFor="let par of ((eventObs|async)?.participant|async);">
-          <ion-col>
-            {{par.user?.firstName}}
-          </ion-col>
-          <ion-col>
-            {{par.user?.lastName}}
-          </ion-col>
-          <ion-col>
-            {{par.phone}}
-          </ion-col>
-          <ion-col>
-            {{par.isGuide? 'Guide': par.isOrganizer? 'Organizer' : 'Traveller'}}
-          </ion-col>
-          <ion-col>
-            need seat? {{par.needSeatInCar}}
-            <!--{{(participant.needSeatInCar && !participant.userIdOfHostingCar) ? 'Need a ride': (participant.needSeatInCar && participant.userIdOfHostingCar)? 'with' + participant.userIdOfHostingCar : participant.offeringSeatsInCar? 'Offers ' + participant.offeringSeatsInCar + ' free seats'}}-->
-          </ion-col>
+            <ion-grid>
+                <ion-row *ngFor="let par of ((eventObs|async)?.participant|async);">
+                    <div *ngIf="par.approved === 1">
+                        <ion-col>
+                            {{(par.user| async)?.firstName}}
+                        </ion-col>
+                        <ion-col>
+                            {{(par.user| async)?.lastName}}
+                        </ion-col>
+                        <ion-col>
+                            {{par.phone}}
+                        </ion-col>
+                        <ion-col>
+                            {{par.isGuide ? 'Guide' : par.isOrganizer ? 'Organizer' : 'Traveller'}}
+                        </ion-col>
+                        <ion-col>
+                            need seat? {{par.needSeatInCar}}
+                            <!--{{(participant.needSeatInCar && !participant.userIdOfHostingCar) ? 'Need a ride': (participant.needSeatInCar && participant.userIdOfHostingCar)? 'with' + participant.userIdOfHostingCar : participant.offeringSeatsInCar? 'Offers ' + participant.offeringSeatsInCar + ' free seats'}}-->
+                        </ion-col>
+                    </div>
+                </ion-row>
+            </ion-grid>
+        </ion-item>
 
-        </ion-row>
-      </ion-grid>
-    </ion-item>
-
-  </form>
+    </form>
 
 
-
-  <ion-button id='join' (click)="onJoinEvent()">Join</ion-button>
-  <ion-button id='leave' (click)="onLeaveEvent()">Leave</ion-button>
-  <ion-button id='approve' (click)="onApprove()">Approve Participants</ion-button>
-  <ion-button id='create' (click)="onCreate()">Create</ion-button>
-  <ion-button id='save' (click)="onSave()">Save</ion-button>
-  <ion-button id='delete' (click)="onDelete()">Delete</ion-button>
+    <ion-button id='join' (click)="onJoinEvent()">Join</ion-button>
+    <ion-button id='leave' (click)="onLeaveEvent()">Leave</ion-button>
+    <ion-button id='approve' (click)="onApprove()">Approve Participants</ion-button>
+    <ion-button id='create' (click)="onCreate()">Create</ion-button>
+    <ion-button id='save' (click)="onSave()">Save</ion-button>
+    <ion-button id='delete' (click)="onDelete()">Delete</ion-button>
 
 </ion-content>
