@@ -72,7 +72,7 @@ export class JoinEventPage implements OnInit {
             this.participant.userIdOfHostingCar = '';//TODO
 
         }
-        this.participant.approved = 0;
+        this.participant.approved = false;
         //this.joinEventForm.value.message;
 
     }

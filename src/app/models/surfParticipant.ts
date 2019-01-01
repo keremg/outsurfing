@@ -15,5 +15,5 @@ export class SurfParticipant {
     isStandByForCar: boolean;
     isApproved: boolean;
     groupEquipmentIBring: string;
-    approved: number;
+    approved: boolean;
 }

@@ -97,14 +97,14 @@ export class EventService {
     }
 
     async approveParticipant(id, uid){
-        return this.events.doc(id).collection(this.participant_collection_endpoint).doc(uid).update({approved:1}).catch(function(error) {
+        return this.events.doc(id).collection(this.participant_collection_endpoint).doc(uid).update({approved:true}).catch(function(error) {
             alert('Failed deleting participant' + error);
             console.error('Error deleting participant: ', error);
         });
     }
 
     async disapproveParticipant(id, uid){
-        return this.events.doc(id).collection(this.participant_collection_endpoint).doc(uid).update({approved:2}).catch(function(error) {
+        return this.events.doc(id).collection(this.participant_collection_endpoint).doc(uid).update({approved:false}).catch(function(error) {
             alert('Failed deleting participant' + error);
             console.error('Error deleting participant: ', error);
         });

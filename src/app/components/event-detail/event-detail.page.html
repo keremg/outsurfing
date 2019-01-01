@@ -435,7 +435,7 @@
 
             <ion-grid>
                 <ion-row *ngFor="let par of ((eventObs|async)?.participant|async);">
-                    <div *ngIf="par.approved === 1">
+                    <div *ngIf="par.approved === true">
                         <ion-col>
                             {{(par.user| async)?.firstName}}
                         </ion-col>
