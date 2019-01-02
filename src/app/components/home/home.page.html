@@ -12,6 +12,11 @@
             <ion-icon name="funnel"></ion-icon>
             Filter
         </ion-label>
+        <ion-buttons slot="primary" color="primary">
+            <ion-button style="float: right;" slot="primary" color="primary" fill="solid" shape="round" href="home/true">
+                My
+            </ion-button>
+        </ion-buttons>
 
         <ion-buttons slot="end" color="primary">
             <ion-button style="float: right;" slot="end" color="primary" fill="solid" shape="round" href="/ChooseRoute">
@@ -188,7 +193,12 @@
 
 
     </ion-card>
-
+    <div *ngIf="(page.data |async)?.length < 1">
+        <hr>
+        <p>
+            No results found :(
+        </p>
+    </div>
 
     <ion-infinite-scroll id='infinite-scroll' (ionInfinite)="loadData($event)">
         <ion-infinite-scroll-content

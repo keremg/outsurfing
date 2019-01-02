@@ -9,6 +9,7 @@ import 'rxjs/add/operator/take';
 interface QueryConfig {
     path: string, //  path to collection
     field: string, // field to orderBy
+    uid: string,
     limit: number, // limit per query
     reverse: boolean, // reverse order?
     prepend: boolean // prepend to source?
@@ -34,10 +35,11 @@ export class PaginationService {
 
     // Initial query sets options and defines the Observable
     // passing opts will override the defaults
-    init(path: string, field: string, opts?: any) {
+    init(path: string, field: string, opts?: any, uid?: string) {
         this.query = {
             path,
             field,
+            uid,
             limit: 2,
             reverse: false,
             prepend: false,
@@ -45,7 +47,14 @@ export class PaginationService {
         }
 
         const first = this.afs.collection(this.query.path, ref => {
-            return ref
+            let x;
+            if(this.query.uid){
+                x = ref.where(this.query.uid,'>', 0);
+            }
+            else{
+                x=ref;
+            }
+            return x
                 .orderBy(this.query.field, this.query.reverse ? 'desc' : 'asc')
                 .limit(this.query.limit)
         })
@@ -65,14 +74,20 @@ export class PaginationService {
         const cursor = this.getCursor()
 
         const more = this.afs.collection(this.query.path, ref => {
-            return ref
+            let x;
+            if(this.query.uid){
+                x = ref.where(this.query.uid,'>', 0);
+            }
+            else{
+                x=ref;
+            }
+            return x
                 .orderBy(this.query.field, this.query.reverse ? 'desc' : 'asc')
                 .limit(this.query.limit)
                 .startAfter(cursor)
         })
         return this.mapAndUpdate(more)
     }
-
 
     // Determines the doc snapshot to paginate query
     private getCursor() {

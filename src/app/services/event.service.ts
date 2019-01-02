@@ -5,13 +5,14 @@ import {map} from 'rxjs/operators';
 import {SurfEvent} from '../models/surfEvent';
 import {SurfParticipant} from '../models/surfParticipant';
 import {UserService} from './user.service';
+import * as firebase from 'firebase/app';
 
 @Injectable({
   providedIn: 'root'
 })
 export class EventService {
     collection_endpoint = 'events';
-    participant_collection_endpoint = 'participants'
+    participant_collection_endpoint = 'participants';
     events: AngularFirestoreCollection<SurfEvent>;
     eventDoc: AngularFirestoreDocument<SurfEvent>;
 
@@ -80,6 +81,7 @@ export class EventService {
     async joinEvent(id, participant){
         //TODO other logic - to updatefields like car and stuff?
         let uid = participant.id;
+        this.events.doc(id).update({[uid]:1});
         delete participant.id;
         delete participant.user;
         return this.events.doc(id).collection(this.participant_collection_endpoint).doc(uid).set({...participant}).catch(function(error) {
@@ -90,6 +92,7 @@ export class EventService {
 
     async leaveEvent(id, uid){
         //TODO other logic - to updatefields like car and stuff?
+        this.events.doc(id).update({[uid]:firebase.firestore.FieldValue.delete()});
         return this.events.doc(id).collection(this.participant_collection_endpoint).doc(uid).delete().catch(function(error) {
             alert('Failed deleting participant' + error);
             console.error('Error deleting participant: ', error);
@@ -97,6 +100,7 @@ export class EventService {
     }
 
     async approveParticipant(id, uid){
+        this.events.doc(id).update({[uid]:1});
         return this.events.doc(id).collection(this.participant_collection_endpoint).doc(uid).update({approved:true}).catch(function(error) {
             alert('Failed deleting participant' + error);
             console.error('Error deleting participant: ', error);
@@ -104,6 +108,7 @@ export class EventService {
     }
 
     async disapproveParticipant(id, uid){
+        this.events.doc(id).update({[uid]:firebase.firestore.FieldValue.delete()});
         return this.events.doc(id).collection(this.participant_collection_endpoint).doc(uid).update({approved:false}).catch(function(error) {
             alert('Failed deleting participant' + error);
             console.error('Error deleting participant: ', error);

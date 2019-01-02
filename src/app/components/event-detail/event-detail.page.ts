@@ -183,7 +183,12 @@ export class EventDetailPage implements OnInit {
     removeElement(id: string){
 
         let ele = document.getElementById(id);
-        ele.parentNode.removeChild(ele);
+        if(ele) {
+            ele.parentNode.removeChild(ele);
+        }
+        else{
+            console.log(id);
+        }
     }
 
     async loadFromRoute(route: SurfRoute) {

@@ -3,6 +3,8 @@ import {AuthService} from '../../services/auth.service';
 import {NavController} from '@ionic/angular';
 import {PaginationService} from '../../services/pagination.service';
 import {UserService} from '../../services/user.service';
+import {SurfUser} from '../../models/surfUser';
+import {ActivatedRoute} from '@angular/router';
 
 @Component({
     selector: 'app-home',
@@ -12,28 +14,32 @@ import {UserService} from '../../services/user.service';
 })
 
 export class HomePage implements OnInit {
-
+    currentUser:SurfUser;
+    onlyMine:boolean = false;
 
     constructor(
         public navCtrl: NavController,
         private authService: AuthService,
-        //public eventService: EventService,
         public page: PaginationService,
-        private userService: UserService
+        private userService: UserService,
+        private activatedRoute: ActivatedRoute
     ) {
 
     }
 
 
     async ngOnInit() {
-        this.page.init('events', 'name', {reverse: true, prepend: false});
-        await this.userService.getCurrentUser().subscribe(value => {
-            console.log(value);
-        });
-        let x = await this.userService.getCurrentUserPromise();
-        console.log(x);
+        this.currentUser = await this.userService.getCurrentUserPromise();
+        if(this.activatedRoute.snapshot.paramMap.get('mine')){
+            this.onlyMine = true;
+        }
+        if(this.onlyMine){
+            this.page.init('events', this.currentUser.id, {reverse: true, prepend: false}, this.currentUser.id);
+        }
+        else {
+            this.page.init('events', 'name', {reverse: true, prepend: false});
+        }
     }
-
 
     ShowEventDetail(eventId: string) {
         return this.navCtrl.navigateForward('EventDetail/' + eventId + '/0');
