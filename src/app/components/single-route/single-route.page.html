@@ -103,32 +103,24 @@
       <!--
         TODO: show the image itself, and make sure we allow multiple maps in DB
       -->
-      <ion-label stacked>Upload photos</ion-label>
-      <ion-input
-        formControlName="imagesUrls"
-        type="file"
-        accept="image/*"
-        (ionChange)="onFileSelected($event)"
-        placeholder="upload photos"
-      >
-      </ion-input>
-      <button disabled="viewMode" type="button" (click)="onUpload()">
-        Upload
-      </button>
+      <div>
+        <input type="file" accept="image/*" (change)="onFileSelected($event)" id="selectedFile" style="display: none;" />
+        <ion-label float-left>Upload photos</ion-label>
+        <ion-button float-left onclick="document.getElementById('selectedFile').click();">Browse...</ion-button>
+        <!--ion-label float-left id="photos">{{photos}}</ion-label-->
+        <ion-label id="previewPhotos"></ion-label>
+      </div>
     </ion-item>
     <ion-item>
       <!--
         TODO: show the image itself, and make sure we allow multiple maps in DB
       -->
-      <ion-label stacked>Upload photos</ion-label>
-      <ion-input
+      <ion-label stacked>Upload map</ion-label>
+      <input
         formControlName="mapUrl"
         type="file"
         accept="image/*"
-        (ionChange)="onFileSelected($event)"
-        placeholder="upload photos"
-      >
-      </ion-input>
+        (change)="onFileSelected($event)" />
       <button disabled="viewMode" type="button" (click)="onMapUpload()">
         Upload
       </button>

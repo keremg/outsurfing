@@ -17,6 +17,7 @@ import {UserService} from '../../services/user.service';
 import leaflet from 'leaflet';
 import L from 'leaflet';
 import '../../../geocoder/Control.Geocoder';
+import { AngularFireStorage, AngularFireUploadTask } from '@angular/fire/storage';
 
 declare let window: any;
 
@@ -27,12 +28,13 @@ declare let window: any;
 })
 export class SingleRoutePage implements OnInit {
     public singleRouteForm: FormGroup;
-    selectedFile: File = null;
+    selectedFiles: File[] = [];
     route: SurfRoute = new SurfRoute();
     id: string;
     currentUserId: string;
     currentUser: SurfUser;
     viewMode: boolean = false;
+    photos:string = '';
 
     constructor(
         private formBuilder: FormBuilder /* private imagePicker: ImagePicker*/,
@@ -40,7 +42,8 @@ export class SingleRoutePage implements OnInit {
         private routesService: RouteService,
         public navCtrl: NavController,
         public authService: AuthService,
-        private userService: UserService
+        private userService: UserService,
+        private storage: AngularFireStorage
     ) {
         window.route = this;
     }
@@ -210,30 +213,38 @@ export class SingleRoutePage implements OnInit {
     }
 
     onFileSelected(event) {
-        this.selectedFile = <File>event.target.value;
-        console.log(this.selectedFile);
+        this.selectedFiles.push(event.target.files[0]);
+        if(this.photos.length >0)
+            this.photos = this.photos+',';
+        this.photos = this.photos.concat(event.target.files[0].name)
+
+        if (event.target.files && event.target.files[0]) {
+            var reader = new FileReader();
+
+            reader.onload = function(e) {
+                let img = document.createElement('img');
+                img.src = e.target.result;
+                img.height=40;
+                img.width=40;
+                document.getElementById('previewPhotos').appendChild(img);
+            }
+
+            reader.readAsDataURL(event.target.files[0]);
+        }
         // checking the file isn't null
     }
 
     onUpload() {
-        let desc = '';
-        const fd = new FormData();
-        fd.append('image', this.selectedFile, this.selectedFile.name);
         //TODO: upload phooto to server
         //TODO: imageId = Get the link to that photo or ID of that
         //TODO: make sure to delete previous photo first (if we support single photo meanwhile)
         //TODO: this.route.imagesUrls.push(imageId)
-        console.log(fd);
     }
 
     onMapUpload() {
-        let desc = '';
-        const fd = new FormData();
-        fd.append('image', this.selectedFile, this.selectedFile.name);
         //TODO: upload photo to server
         //TODO: imageId = Get the link to that photo or ID of that
         //TODO: this.route.mapUrl = imageId;
-        console.log(fd);
     }
 
     async updateRoute(eventIt: boolean) {
@@ -250,6 +261,19 @@ export class SingleRoutePage implements OnInit {
         }
         if (!returnedId) {
             returnedId = await this.routesService.addRoute(copyOfRoute);
+        }
+        if(this.selectedFiles.length > 0) {
+            let i = 0;
+            let paths=[];
+            for (let file of this.selectedFiles) {
+                let filePath = (new Date()).getTime();
+                let task : AngularFireUploadTask =this.storage.upload('routes/' + returnedId + '/' + filePath, file);
+                await task;
+                paths.push(filePath);
+                i++;
+            }
+            paths = paths.concat(copyOfRoute.imagesUrls)
+            await this.routesService.updateRoute(this.id, {imagesUrls:paths});
         }
 
         if (eventIt) {
