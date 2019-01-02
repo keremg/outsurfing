@@ -50,20 +50,6 @@ export class EventService {
         }));
     }
 
-    getParticipants(id: string): Observable<SurfParticipant[]> {
-        return this.events.doc(id).collection(this.participant_collection_endpoint).snapshotChanges().pipe(map(changes => {
-            return changes.map(action => {
-                const data = action.payload.doc.data() as SurfParticipant;
-                data.id = action.payload.doc.id;
-                data.user = this.userService.getuser(data.id);
-                return data;
-            });
-        }));
-    }
-
-
-
-
     async addEvent(event: SurfEvent) {
         delete event.participant;
         let x = this.getAllSubstrings(event.name);
@@ -76,6 +62,54 @@ export class EventService {
             alert('Failed creating route ' + error);
             console.error('Error adding document: ', error);
         });
+    }
+
+
+    async updateEvent(id, update) {
+        //Get the task document
+        delete update.participant;
+        if(update.name) {
+            let x = this.getAllSubstrings(update.name);
+            update.searchIndex = x;
+        }
+        this.eventDoc = this.afs.doc<SurfEvent>(`${this.collection_endpoint}/${id}`);
+        return this.eventDoc.update(update);
+    }
+
+    async deleteEvent(id) {
+        //Get the task document
+        this.eventDoc = this.afs.doc<SurfEvent>(`${this.collection_endpoint}/${id}`);
+// TODO should delete participants
+        return this.eventDoc.delete();
+    }
+
+
+    getAllSubstrings(str) {
+        var i, j, result = [];
+
+        for (i = 0; i < str.length; i++) {
+            for (j = i + 1; j < str.length + 1; j++) {
+                result.push(str.slice(i, j));
+            }
+        }
+        return result;
+    }
+
+
+
+
+
+    
+
+    getParticipants(id: string): Observable<SurfParticipant[]> {
+        return this.events.doc(id).collection(this.participant_collection_endpoint).snapshotChanges().pipe(map(changes => {
+            return changes.map(action => {
+                const data = action.payload.doc.data() as SurfParticipant;
+                data.id = action.payload.doc.id;
+                data.user = this.userService.getuser(data.id);
+                return data;
+            });
+        }));
     }
 
     async joinEvent(id, participant){
@@ -113,36 +147,6 @@ export class EventService {
             alert('Failed deleting participant' + error);
             console.error('Error deleting participant: ', error);
         });
-    }
-
-    async updateEvent(id, update) {
-        //Get the task document
-        delete update.participant;
-        if(update.name) {
-            let x = this.getAllSubstrings(update.name);
-            update.searchIndex = x;
-        }
-        this.eventDoc = this.afs.doc<SurfEvent>(`${this.collection_endpoint}/${id}`);
-        return this.eventDoc.update(update);
-    }
-
-    async deleteEvent(id) {
-        //Get the task document
-        this.eventDoc = this.afs.doc<SurfEvent>(`${this.collection_endpoint}/${id}`);
-// TODO should delete participants
-        return this.eventDoc.delete();
-    }
-
-
-    getAllSubstrings(str) {
-        var i, j, result = [];
-
-        for (i = 0; i < str.length; i++) {
-            for (j = i + 1; j < str.length + 1; j++) {
-                result.push(str.slice(i, j));
-            }
-        }
-        return result;
     }
 
 }

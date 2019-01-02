@@ -281,7 +281,7 @@ export class EventDetailPage implements OnInit {
     async onApprove() {
         const modal = await this.modalController.create({
             component: ParticipantApprovalPage,
-            componentProps: {eventId: this.id}
+            componentProps: {eventId: this.id, eventOrganizer: this.event.eventOrganizerId}
         });
         return modal.present();
     }

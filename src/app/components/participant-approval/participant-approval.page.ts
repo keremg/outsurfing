@@ -11,6 +11,7 @@ import {SurfParticipant} from '../../models/surfParticipant';
 })
 export class ParticipantApprovalPage implements OnInit {
     private eventID: string;
+    eventOrganizer: string;
     participants: Observable<SurfParticipant[]>;
 
     constructor(private navParams: NavParams,
@@ -20,6 +21,7 @@ export class ParticipantApprovalPage implements OnInit {
 
     ngOnInit() {
         this.eventID = this.navParams.get('eventId');
+        this.eventOrganizer = this.navParams.get('eventOrganizer');
         if(this.eventID) {
             this.participants = this.eventService.getParticipants(this.eventID);
         }

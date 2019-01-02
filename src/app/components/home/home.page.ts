@@ -10,12 +10,14 @@ import {ActivatedRoute} from '@angular/router';
     selector: 'app-home',
     templateUrl: 'home.page.html',
     styleUrls: ['home.page.scss'],
-    providers:[PaginationService],
+    providers: [PaginationService],
 })
 
 export class HomePage implements OnInit {
-    currentUser:SurfUser;
-    onlyMine:boolean = false;
+    currentUser: SurfUser;
+    onlyMine: boolean = false;
+     query: string;
+    searched: boolean;
 
     constructor(
         public navCtrl: NavController,
@@ -30,30 +32,45 @@ export class HomePage implements OnInit {
 
     async ngOnInit() {
         this.currentUser = await this.userService.getCurrentUserPromise();
-        let query = this.activatedRoute.snapshot.paramMap.get('q')
-        if (query == this.currentUser.id) {
+        this.query = this.activatedRoute.snapshot.paramMap.get('q');
+        if (this.query == this.currentUser.id) {
             this.onlyMine = true;
         }
+
         if (this.onlyMine) {
             this.page.init('events', this.currentUser.id, {reverse: true, prepend: false}, this.currentUser.id);
         } else {
-            if(query)
-                this.page.init('events', 'name', {reverse: true, prepend: false}, null, query);
+            if (this.query)
+                this.page.init('events', 'name', {reverse: true, prepend: false}, null, this.query);
             else
                 this.page.init('events', 'name', {reverse: true, prepend: false});
         }
 
-        const searchbar = document.getElementById('search')
-        searchbar.addEventListener('ionChange', (ev) => {
-            let q = (ev as CustomEvent).detail.value;
-            return this.navCtrl.navigateForward('home/' + q);
-
-        })
-
+        const searchbar = document.getElementById('search');
     }
 
-    onMytrips(){
+    search(ev) {
+        let q = (ev as CustomEvent).detail.value;
+        this.navCtrl.navigateRoot('home/' + q);
+    }
+
+    hideElement(id: string, val: boolean) {
+
+        let ele = document.getElementById(id);
+        if (ele) {
+            ele.hidden = val;
+            //ele.parentNode.removeChild(ele);
+        } else {
+            console.log(id);
+        }
+    }
+
+    onMytrips() {
         return this.navCtrl.navigateForward('home/' + this.currentUser.id);
+    }
+
+    onShowAll() {
+        return this.navCtrl.navigateForward('home');
     }
 
     ShowEventDetail(eventId: string) {
