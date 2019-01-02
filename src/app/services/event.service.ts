@@ -66,8 +66,8 @@ export class EventService {
 
     async addEvent(event: SurfEvent) {
         delete event.participant;
-        debugger;
-
+        let x = this.getAllSubstrings(event.name);
+        event.searchIndex = x;
         return this.events.add({...event}).then((docRef) => {
             console.log('Route document written with ID: ', docRef.id);
             return docRef.id;
@@ -118,6 +118,10 @@ export class EventService {
     async updateEvent(id, update) {
         //Get the task document
         delete update.participant;
+        if(update.name) {
+            let x = this.getAllSubstrings(update.name);
+            update.searchIndex = x;
+        }
         this.eventDoc = this.afs.doc<SurfEvent>(`${this.collection_endpoint}/${id}`);
         return this.eventDoc.update(update);
     }
@@ -129,5 +133,16 @@ export class EventService {
         return this.eventDoc.delete();
     }
 
+
+    getAllSubstrings(str) {
+        var i, j, result = [];
+
+        for (i = 0; i < str.length; i++) {
+            for (j = i + 1; j < str.length + 1; j++) {
+                result.push(str.slice(i, j));
+            }
+        }
+        return result;
+    }
 
 }

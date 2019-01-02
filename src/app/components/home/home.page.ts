@@ -30,15 +30,30 @@ export class HomePage implements OnInit {
 
     async ngOnInit() {
         this.currentUser = await this.userService.getCurrentUserPromise();
-        if(this.activatedRoute.snapshot.paramMap.get('mine')){
+        let query = this.activatedRoute.snapshot.paramMap.get('q')
+        if (query == this.currentUser.id) {
             this.onlyMine = true;
         }
-        if(this.onlyMine){
+        if (this.onlyMine) {
             this.page.init('events', this.currentUser.id, {reverse: true, prepend: false}, this.currentUser.id);
+        } else {
+            if(query)
+                this.page.init('events', 'name', {reverse: true, prepend: false}, null, query);
+            else
+                this.page.init('events', 'name', {reverse: true, prepend: false});
         }
-        else {
-            this.page.init('events', 'name', {reverse: true, prepend: false});
-        }
+
+        const searchbar = document.getElementById('search')
+        searchbar.addEventListener('ionChange', (ev) => {
+            let q = (ev as CustomEvent).detail.value;
+            return this.navCtrl.navigateForward('home/' + q);
+
+        })
+
+    }
+
+    onMytrips(){
+        return this.navCtrl.navigateForward('home/' + this.currentUser.id);
     }
 
     ShowEventDetail(eventId: string) {

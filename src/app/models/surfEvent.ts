@@ -70,5 +70,6 @@ export class SurfEvent extends SurfRoute {
     isEventRequiresCars: boolean; //not all events requires cars handling
 
     participant: Observable<SurfParticipant[]>;
+    searchIndex: any[];
 
 }

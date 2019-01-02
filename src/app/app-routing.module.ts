@@ -5,7 +5,7 @@ import { AuthGuardService } from './services/auth-guard.service';
 const routes: Routes = [
   { path: '', redirectTo: 'SignIn', pathMatch: 'full' },
   { path: 'home', loadChildren: './components/home/home.module#HomePageModule',canActivate: [AuthGuardService]},
-    { path: 'home/:mine', loadChildren: './components/home/home.module#HomePageModule',canActivate: [AuthGuardService]},
+    { path: 'home/:q', loadChildren: './components/home/home.module#HomePageModule',canActivate: [AuthGuardService]},
     { path: 'ChooseRoute', loadChildren: './components/ChooseRoute/ChooseRoute.module#ChooseRoutePageModule',canActivate: [AuthGuardService]},
   { path: 'SignIn', loadChildren: './components/SignIn/SignIn.module#SignInModule' },
   { path: 'ResetPassword', loadChildren: './components/reset-password/reset-password.module#ResetPasswordPageModule'},

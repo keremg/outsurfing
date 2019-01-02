@@ -10,6 +10,7 @@ interface QueryConfig {
     path: string, //  path to collection
     field: string, // field to orderBy
     uid: string,
+    text: string,
     limit: number, // limit per query
     reverse: boolean, // reverse order?
     prepend: boolean // prepend to source?
@@ -35,11 +36,12 @@ export class PaginationService {
 
     // Initial query sets options and defines the Observable
     // passing opts will override the defaults
-    init(path: string, field: string, opts?: any, uid?: string) {
+    init(path: string, field: string, opts?: any, uid?: string, text?: string) {
         this.query = {
             path,
             field,
             uid,
+            text,
             limit: 2,
             reverse: false,
             prepend: false,
@@ -54,7 +56,15 @@ export class PaginationService {
             else{
                 x=ref;
             }
-            return x
+
+            let y;
+            if(this.query.text){
+                y = ref.where("searchIndex",'array-contains', this.query.text);
+            }
+            else{
+                y=x;
+            }
+            return y
                 .orderBy(this.query.field, this.query.reverse ? 'desc' : 'asc')
                 .limit(this.query.limit)
         })
@@ -81,7 +91,15 @@ export class PaginationService {
             else{
                 x=ref;
             }
-            return x
+
+            let y;
+            if(this.query.text){
+                y = ref.where("searchIndex",'array-contains', this.query.text);
+            }
+            else{
+                y=x;
+            }
+            return y
                 .orderBy(this.query.field, this.query.reverse ? 'desc' : 'asc')
                 .limit(this.query.limit)
                 .startAfter(cursor)
