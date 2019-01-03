@@ -5,6 +5,7 @@ import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 
 import { HomePage } from './home.page';
+import { RouteImageComponent } from '../route-image/route-image.component';
 
 @NgModule({
   imports: [
@@ -18,9 +19,7 @@ import { HomePage } from './home.page';
       }
     ])
   ],
-  declarations: [HomePage],
-    entryComponents: [
-
-    ]
+  declarations: [HomePage, RouteImageComponent],
+  entryComponents: []
 })
 export class HomePageModule {}

@@ -34,25 +34,33 @@
         type="text"
         placeholder="Start location"
         [class.invalid]="
-          !singleRouteForm.controls.routeStartLocation.valid && blur && !viewMode"
+          !singleRouteForm.controls.routeStartLocation.valid &&
+          blur &&
+          !viewMode
+        "
       >
       </ion-input>
     </ion-item>
 
     <ion-item>
       <ion-label
-        *ngIf="!singleRouteForm.controls.routeStartGeolocation?.valid && !viewMode"
+        *ngIf="
+          !singleRouteForm.controls.routeStartGeolocation?.valid && !viewMode
+        "
         color="danger"
         stacked
         >*
       </ion-label>
       <ion-label stacked slot="start">Start Geolocation</ion-label>
       <ion-input
-              formControlName="routeStartGeolocation"
-              type="text"
-              placeholder="Start geolocation"
-              [class.invalid]="
-          !singleRouteForm.controls.routeStartGeolocation?.valid && blur && !viewMode"
+        formControlName="routeStartGeolocation"
+        type="text"
+        placeholder="Start geolocation"
+        [class.invalid]="
+          !singleRouteForm.controls.routeStartGeolocation?.valid &&
+          blur &&
+          !viewMode
+        "
       >
       </ion-input>
     </ion-item>
@@ -73,7 +81,8 @@
         type="text"
         placeholder="End location"
         [class.invalid]="
-          !singleRouteForm.controls.routeEndLocation.valid && blur && !viewMode"
+          !singleRouteForm.controls.routeEndLocation.valid && blur && !viewMode
+        "
       >
       </ion-input>
     </ion-item>
@@ -87,11 +96,14 @@
       </ion-label>
       <ion-label stacked slot="start">End Geolocation</ion-label>
       <ion-input
-              formControlName="routeEndGeolocation"
-              type="text"
-              placeholder="End geolocation"
-              [class.invalid]="
-          !singleRouteForm.controls.routeEndGeolocation.valid && blur && !viewMode"
+        formControlName="routeEndGeolocation"
+        type="text"
+        placeholder="End geolocation"
+        [class.invalid]="
+          !singleRouteForm.controls.routeEndGeolocation.valid &&
+          blur &&
+          !viewMode
+        "
       >
       </ion-input>
     </ion-item>
@@ -104,10 +116,20 @@
         TODO: show the image itself, and make sure we allow multiple maps in DB
       -->
       <div>
-        <input type="file" accept="image/*" (change)="onFileSelected($event)" id="selectedFile" style="display: none;" />
+        <input
+          type="file"
+          accept="image/*"
+          (change)="onFileSelected($event)"
+          id="selectedFile"
+          style="display: none;"
+        />
         <ion-label float-left>Upload photos</ion-label>
-        <ion-button float-left onclick="document.getElementById('selectedFile').click();">Browse...</ion-button>
-        <!--ion-label float-left id="photos">{{photos}}</ion-label-->
+        <ion-button
+          float-left
+          onclick="document.getElementById('selectedFile').click();"
+          >Browse...</ion-button
+        >
+        <!-- ion-label float-left id="photos">{{photos}}</ion-label -->
         <ion-label id="previewPhotos"></ion-label>
       </div>
     </ion-item>
@@ -120,7 +142,8 @@
         formControlName="mapUrl"
         type="file"
         accept="image/*"
-        (change)="onFileSelected($event)" />
+        (change)="onFileSelected($event)"
+      />
       <button disabled="viewMode" type="button" (click)="onMapUpload()">
         Upload
       </button>
@@ -129,10 +152,13 @@
     <ion-item>
       <ion-label stacked>Length (Km)</ion-label>
       <ion-input
-        formControlName="lengthKM"
+        formControl
+        Name="lengthKM"
         type="number"
         placeholder="Length of route"
-        [class.invalid]="!singleRouteForm.controls.lengthKM.valid && blur && !viewMode"
+        [class.invalid]="
+          !singleRouteForm.controls.lengthKM.valid && blur && !viewMode
+        "
       >
       </ion-input>
     </ion-item>
@@ -150,7 +176,8 @@
         type="text"
         placeholder="Short description"
         [class.invalid]="
-          !singleRouteForm.controls.shortDescription.valid && blur && !viewMode"
+          !singleRouteForm.controls.shortDescription.valid && blur && !viewMode
+        "
       >
       </ion-input>
     </ion-item>
@@ -163,7 +190,8 @@
         type="longDescription"
         placeholder="Long description"
         [class.invalid]="
-          !singleRouteForm.controls.longDescription.valid && blur && !viewMode"
+          !singleRouteForm.controls.longDescription.valid && blur && !viewMode
+        "
       >
       </ion-input>
     </ion-item>
@@ -192,7 +220,8 @@
             type="number"
             placeholder="Route duration"
             [class.invalid]="
-              !singleRouteForm.controls.routeDuration.valid && blur && !viewMode"
+              !singleRouteForm.controls.routeDuration.valid && blur && !viewMode
+            "
             min="0"
             max="59"
             step="1"
@@ -264,7 +293,10 @@
         type="text"
         placeholder="Guide Contact Details (optional email and/or phone)"
         [class.invalid]="
-          !singleRouteForm.controls.guideContactDetails.valid && blur && !viewMode"
+          !singleRouteForm.controls.guideContactDetails.valid &&
+          blur &&
+          !viewMode
+        "
       >
       </ion-input>
     </ion-item>
@@ -280,14 +312,20 @@
         formControlName="offeredPrice"
         type="number"
         placeholder="Offered price per person"
-        [class.invalid]="!singleRouteForm.controls.offeredPrice.valid && blur && !viewMode"
+        [class.invalid]="
+          !singleRouteForm.controls.offeredPrice.valid && blur && !viewMode
+        "
       >
       </ion-input>
       <ion-input
-              formControlName="minGroupSizeForGuide"
-              type="number"
-              placeholder="Minimum group required for guidance"
-              [class.invalid]="!singleRouteForm.controls.minGroupSizeForGuide.valid && blur && !viewMode"
+        formControlName="minGroupSizeForGuide"
+        type="number"
+        placeholder="Minimum group required for guidance"
+        [class.invalid]="
+          !singleRouteForm.controls.minGroupSizeForGuide.valid &&
+          blur &&
+          !viewMode
+        "
       >
       </ion-input>
     </ion-item>
@@ -298,7 +336,9 @@
         formControlName="entranceFee"
         type="number"
         placeholder="Entrance fee"
-        [class.invalid]="!singleRouteForm.controls.entranceFee.valid && blur && !viewMode"
+        [class.invalid]="
+          !singleRouteForm.controls.entranceFee.valid && blur && !viewMode
+        "
       >
       </ion-input>
     </ion-item>
@@ -316,7 +356,8 @@
         type="text"
         placeholder="Required equipment"
         [class.invalid]="
-          !singleRouteForm.controls.requiredEquipment.valid && blur && !viewMode"
+          !singleRouteForm.controls.requiredEquipment.valid && blur && !viewMode
+        "
       >
       </ion-input>
     </ion-item>
@@ -345,11 +386,11 @@
         <ion-select-option value="12">December</ion-select-option>
       </ion-select>
     </ion-item>
-    <ion-item>
-      <ion-button block type="submit">EventIt</ion-button>
-    </ion-item>
+    <ion-item> <ion-button block type="submit">EventIt</ion-button> </ion-item>
     <ion-item *ngIf="!viewMode">
-      <ion-button block type="button" (click)="updateRoute(false)">Save</ion-button>
+      <ion-button block type="button" (click)="updateRoute(false)"
+        >Save</ion-button
+      >
     </ion-item>
   </form>
 </ion-content>
