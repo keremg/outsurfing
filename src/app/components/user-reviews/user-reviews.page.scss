@@ -1,0 +1,27 @@
+.eventData {
+  font-size: 2em;
+}
+
+@media (min-width: 700px){
+  .event {
+    //width:100vw;
+  }
+}
+
+.eventImg{
+  //display: block;
+  width:100%;
+  //margin-left: auto;
+  //margin-right: auto;
+}
+
+.col:nth-of-type(even) {
+  div {
+    background:  #e6f5ff;
+  }
+}
+.col:nth-of-type(odd) {
+  div {
+    background: #ccebff;
+  }
+}
