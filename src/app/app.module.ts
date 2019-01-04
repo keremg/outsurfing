@@ -23,7 +23,7 @@ import { AuthService } from './services/auth.service';
 import { AuthGuardService } from './services/auth-guard.service';
 import { Geolocation } from '@ionic-native/geolocation/ngx';
 import {Ng2ImgMaxModule, Ng2ImgMaxService} from 'ng2-img-max';
-import {SharedModule} from './modules/shared.module';
+import {RouteImageComponentModule} from './components/route-image/route-image.module';
 
 
 @NgModule({
@@ -31,7 +31,7 @@ import {SharedModule} from './modules/shared.module';
   entryComponents: [],
   imports: [BrowserModule, IonicModule.forRoot(), AppRoutingModule, AppRoutingModule ,
       AngularFireDatabaseModule, HttpClientModule, AngularFireModule.initializeApp(environment.firebase),
-      AngularFirestoreModule, AngularFireAuthModule, AngularFireStorageModule, Ng2ImgMaxModule, SharedModule],
+      AngularFirestoreModule, AngularFireAuthModule, AngularFireStorageModule, Ng2ImgMaxModule, RouteImageComponentModule],
   providers: [
     StatusBar,
     SplashScreen,
