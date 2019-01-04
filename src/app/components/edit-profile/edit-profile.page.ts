@@ -1,4 +1,5 @@
 import {Component, OnInit} from '@angular/core';
+import {CompressImageService} from '../../services/compress-image.service';
 import {
     AlertController,
     LoadingController,
@@ -35,7 +36,8 @@ export class EditProfilePage implements OnInit {
         public alertCtrl: AlertController,
         private formBuilder: FormBuilder,
         private userService: UserService,
-        private storage: AngularFireStorage
+        private storage: AngularFireStorage,
+        public compressImageService: CompressImageService
     ) {
          this.updateForm = this.formBuilder.group({
              firstName: ['', Validators.compose([Validators.minLength(1), Validators.required])],
@@ -134,10 +136,14 @@ catch (error) {
         debugger;
         const file = event.target.files[0];
         const filePath = 'users/'+this.currentUser.id+'/profilePic';
-        const task: AngularFireUploadTask = this.storage.upload(filePath, file);
+        this.compressImageService.savedCompressed(file, filePath, this);
+        //debugger;
+
+
+        //const task: AngularFireUploadTask = this.storage.upload(filePath, compress);
         // observe percentage changes
-        this.uploadPercent = task.percentageChanges();
-        return task;
+        //this.uploadPercent = task.percentageChanges();
+        //return task;
 
     }
 
