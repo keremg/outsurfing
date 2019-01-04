@@ -59,8 +59,8 @@ export class SingleRoutePage implements OnInit {
             routeEndLocation: [''],
             routeStartGeolocation: ['', Validators.required],
             routeEndGeolocation: [''],
-            imagesUrls: [[], Validators.required],
-            mapUrl: [''],
+            // imagesUrls: [[], Validators.required],
+            // mapUrl: [''],
             lengthKM: [0, Validators.required],
             shortDescription: ['', Validators.required],
             longDescription: ['', Validators.required],
@@ -123,6 +123,9 @@ export class SingleRoutePage implements OnInit {
         } else {
             this.route.routeCreatorId = this.currentUserId;
             this.route.routeCreator = this.currentUser;
+
+            this.route.imagesUrls = [];
+            this.route.mapUrl = '';
 
             // defaults
             // this.route.name = 'route name';
@@ -191,8 +194,8 @@ export class SingleRoutePage implements OnInit {
             routeEndLocation: route.routeEndLocation,
             routeStartGeolocation: route.routeStartGeolocation,
             routeEndGeolocation: route.routeEndGeolocation,
-            imagesUrls: route.imagesUrls,
-            mapUrl: route.mapUrl,
+            // imagesUrls: route.imagesUrls,
+            // mapUrl: route.mapUrl,
             lengthKM: route.lengthKM,
             shortDescription: route.shortDescription,
             longDescription: route.longDescription,
@@ -249,7 +252,7 @@ export class SingleRoutePage implements OnInit {
 
     async updateRoute(eventIt: boolean) {
         this.mapFormValuesToRouteModel();
-        let copyOfRoute = _.cloneDeep(this.route);
+        const copyOfRoute = _.cloneDeep(this.route);
 
         //delete junk that the DB shouldn't have
         delete copyOfRoute.routeCreator; //remove the property
@@ -262,18 +265,21 @@ export class SingleRoutePage implements OnInit {
         if (!returnedId) {
             returnedId = await this.routesService.addRoute(copyOfRoute);
         }
-        if(this.selectedFiles.length > 0) {
+        this.id = returnedId;
+        if (this.selectedFiles.length > 0) {
             let i = 0;
-            let paths=[];
-            for (let file of this.selectedFiles) {
-                let filePath = (new Date()).getTime();
-                let task : AngularFireUploadTask =this.storage.upload('routes/' + returnedId + '/' + filePath, file);
+            let paths = [];
+            for (const file of this.selectedFiles) {
+                const filePath = 'routes/' + returnedId + '/' + (new Date()).getTime();
+                const task: AngularFireUploadTask = this.storage.upload(filePath, file);
                 await task;
                 paths.push(filePath);
                 i++;
             }
-            paths = paths.concat(copyOfRoute.imagesUrls)
-            await this.routesService.updateRoute(this.id, {imagesUrls:paths});
+            if (copyOfRoute.imagesUrls) {
+                paths = paths.concat(copyOfRoute.imagesUrls);
+            }
+            await this.routesService.updateRoute(this.id, {imagesUrls: paths});
         }
 
         if (eventIt) {
@@ -297,8 +303,8 @@ export class SingleRoutePage implements OnInit {
             this.singleRouteForm.value.routeStartGeolocation || '';
         this.route.routeEndGeolocation =
             this.singleRouteForm.value.routeEndGeolocation || '';
-        this.route.imagesUrls = this.singleRouteForm.value.imagesUrls || '';
-        this.route.mapUrl = this.singleRouteForm.value.mapUrl || '';
+        // this.route.imagesUrls = this.singleRouteForm.value.imagesUrls || [];
+        // this.route.mapUrl = this.singleRouteForm.value.mapUrl || '';
         this.route.lengthKM = this.singleRouteForm.value.lengthKM || '';
         this.route.shortDescription =
             this.singleRouteForm.value.shortDescription || '';
@@ -341,6 +347,7 @@ export class SingleRoutePage implements OnInit {
 
     loadmapStart() {
         this.mapStart = leaflet.map('mapStart').fitWorld();
+        this.mapStart.scrollWheelZoom.disable();
         leaflet.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
             attributions: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="http://mapbox.com">Mapbox</a>',
             maxZoom: 18
@@ -439,6 +446,7 @@ export class SingleRoutePage implements OnInit {
 
     loadmapEnd() {
         this.mapEnd = leaflet.map('mapEnd').fitWorld();
+        this.mapEnd.scrollWheelZoom.disable();
         leaflet.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
             attributions: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="http://mapbox.com">Mapbox</a>',
             maxZoom: 18
@@ -528,5 +536,9 @@ export class SingleRoutePage implements OnInit {
 
             this.mapEnd.setView(loc, 10);
         }
+    }
+
+    routeImageUrl() {
+        return this.route.imagesUrls[0];
     }
 }

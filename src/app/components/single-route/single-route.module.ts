@@ -6,7 +6,7 @@ import { Routes, RouterModule } from '@angular/router';
 import { IonicModule } from '@ionic/angular';
 // import { ImagePicker } from '@ionic-native/image-picker';
 import { SingleRoutePage } from './single-route.page';
-import { Validators, FormBuilder, FormGroup } from '@angular/forms';
+import {SharedModule} from '../../modules/shared.module';
 
 const routes: Routes = [
   {
@@ -21,7 +21,7 @@ const routes: Routes = [
     FormsModule,
     ReactiveFormsModule,
     IonicModule,
-
+    SharedModule,
     RouterModule.forChild(routes)
   ],
   declarations: [SingleRoutePage]

@@ -7,6 +7,7 @@ import { RouterModule } from '@angular/router';
 import { HomePage } from './home.page';
 import { RouteImageComponent } from '../route-image/route-image.component';
 import {RouteImageComponentModule} from '../route-image/route-image.module';
+import {SharedModule} from '../../modules/shared.module';
 
 @NgModule({
   imports: [
@@ -14,6 +15,7 @@ import {RouteImageComponentModule} from '../route-image/route-image.module';
     FormsModule,
     IonicModule,
       RouteImageComponentModule,
+      SharedModule,
       RouterModule.forChild([
       {
         path: '',

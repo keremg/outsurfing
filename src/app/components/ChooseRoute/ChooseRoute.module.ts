@@ -8,6 +8,7 @@ import { IonicModule } from '@ionic/angular';
 
 import { ChooseRoute } from './ChooseRoute.page';
 import {RouteImageComponentModule} from '../route-image/route-image.module';
+import {SharedModule} from '../../modules/shared.module';
 
 @NgModule({
   imports: [
@@ -15,7 +16,8 @@ import {RouteImageComponentModule} from '../route-image/route-image.module';
     FormsModule,
     ReactiveFormsModule,
     IonicModule,
-      RouteImageComponentModule,
+    RouteImageComponentModule,
+    SharedModule,
     RouterModule.forChild([
       {
         path: '',

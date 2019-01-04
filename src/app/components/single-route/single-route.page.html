@@ -131,6 +131,9 @@
         >
         <!-- ion-label float-left id="photos">{{photos}}</ion-label -->
         <ion-label id="previewPhotos"></ion-label>
+        <div *ngIf="route.imagesUrls?.length > 0">
+          <app-route-image imgPath="routes/{{id}}/{{route.imagesUrls[0]}}"></app-route-image>
+        </div>
       </div>
     </ion-item>
     <ion-item>
@@ -139,12 +142,12 @@
       -->
       <ion-label stacked>Upload map</ion-label>
       <input
-        formControlName="mapUrl"
         type="file"
         accept="image/*"
         (change)="onFileSelected($event)"
       />
-      <button disabled="viewMode" type="button" (click)="onMapUpload()">
+      <!--<button disabled="viewMode" type="button" (click)="onMapUpload()">-->
+      <button type="button" (click)="onMapUpload()">
         Upload
       </button>
     </ion-item>
@@ -152,8 +155,7 @@
     <ion-item>
       <ion-label stacked>Length (Km)</ion-label>
       <ion-input
-        formControl
-        Name="lengthKM"
+        formControlName="lengthKM"
         type="number"
         placeholder="Length of route"
         [class.invalid]="
