@@ -6,20 +6,22 @@ import { RouterModule } from '@angular/router';
 
 import { HomePage } from './home.page';
 import { RouteImageComponent } from '../route-image/route-image.component';
+import {RouteImageComponentModule} from '../route-image/route-image.module';
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     IonicModule,
-    RouterModule.forChild([
+      RouteImageComponentModule,
+      RouterModule.forChild([
       {
         path: '',
         component: HomePage
       }
     ])
   ],
-  declarations: [HomePage, RouteImageComponent],
+  declarations: [HomePage],
   entryComponents: []
 })
 export class HomePageModule {}

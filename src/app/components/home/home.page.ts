@@ -7,7 +7,7 @@ import { SurfUser } from '../../models/surfUser';
 import { ActivatedRoute } from '@angular/router';
 import { RouteService } from '../../services/route.service';
 import { Observable } from 'rxjs';
-import { SurfEvent } from '../../models/SurfEvent';
+import { SurfEvent } from '../../models/surfEvent';
 
 @Component({
   selector: 'app-home',
