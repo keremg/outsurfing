@@ -37,6 +37,19 @@ export class EditProfilePage implements OnInit {
         private userService: UserService,
         private storage: AngularFireStorage
     ) {
+         this.updateForm = this.formBuilder.group({
+             firstName: ['', Validators.compose([Validators.minLength(1), Validators.required])],
+             lastName: ['', Validators.compose([Validators.minLength(1), Validators.required])],
+             phone: ['', Validators.compose([Validators.pattern('^[0-9]*$'), Validators.minLength(9), Validators.required])],
+             gender: [''],
+             isGuide: [''],
+             about: [''],
+
+             birthDate: [''],
+             tripLevel: [''],
+             tripDuration: [''],
+             peopleType: [''],
+         });
         window.user = this;
         
     }
@@ -46,19 +59,7 @@ export class EditProfilePage implements OnInit {
         this.currentUserId = this.authService.currentUserId;
         const ref = this.storage.ref('users/'+this.currentUser.id+'/profilePic');
         this.profileUrl = ref.getDownloadURL();
-        this.updateForm = this.formBuilder.group({
-            firstName: ['', Validators.compose([Validators.minLength(1), Validators.required])],
-            lastName: ['', Validators.compose([Validators.minLength(1), Validators.required])],
-            phone: ['', Validators.compose([Validators.pattern('^[0-9]*$'), Validators.minLength(9), Validators.required])],
-            gender: [''],
-            isGuide: [''],
-            about: [''],
 
-            birthDate: [''],
-            tripLevel: [''],
-            tripDuration: [''],
-            peopleType: [''],
-        });
 
         window.form = this.updateForm;
         console.log('this.currentUser: ', this.currentUser);
@@ -82,9 +83,8 @@ export class EditProfilePage implements OnInit {
             tripDifficulties: user.tripDifficulties, // Level:  0 - very easy, 1-easy, 2-moderate, 3-challenging, 4-extreme, 5-very extreme
             tripDurations: user.tripDurations, //will represent number of days, so half day should be 0.5 , one hour should be 0.04
             audienceTypes: user.audienceTypes
-        })
-    
-    }
+        });
+     }
 
 
     async updateUser() {
@@ -95,27 +95,27 @@ export class EditProfilePage implements OnInit {
                 `Need to complete the form, current value: ${this.updateForm.value}`
             );
         } else {
-            const email: string = this.updateForm.value.email;
             let success = false;
             try {
                 let u = {
-                    email: this.updateForm.value.email,
+                    email: this.currentUser.email,
                     firstName: this.updateForm.value.firstName,
                     lastName: this.updateForm.value.lastName,
-                    recentLocation: this.updateForm.value.recentLocation,
+                    recentLocation: "",
                     phone: this.updateForm.value.phone,
-                    gender: parseInt(this.updateForm.value.gender.value),
-                    isGuide: this.updateForm.value.isGuide == 'true',
+                    //gender: parseInt(this.updateForm.value.gender.value),
+                    isGuide: this.updateForm.value.isGuide,
                     about: this.updateForm.value.about,
                     cancellations: 0,
                     birthDate: this.updateForm.value.birthDate,
-                    tripDifficulties: this.updateForm.value.tripDifficulties,
-                    tripDurations: this.updateForm.value.tripDurations,
-                    audienceTypes: this.updateForm.value.audienceTypes,
-                    travelerRatings: this.updateForm.value.travelerRatings,
-                    guideRatings: this.updateForm.value.guideRatings
-                };    
-                await this.userService.updateUser(this.currentUserId,u);
+                    tripDifficulties: "this.updateForm.value.tripDifficulties",
+                    tripDurations: "this.updateForm.value.tripDurations",
+                    audienceTypes: "",
+                    travelerRatings: "this.updateForm.value.travelerRatings",
+                    guideRatings: "this.updateForm.value.guideRatings"
+                };
+                console.log(this.currentUserId, u)
+                await this.userService.updateUser(this.currentUserId, u);
                 success = true;
                 this.navCtrl.navigateRoot('home');
                 } catch (error) {
@@ -135,10 +135,10 @@ catch (error) {
         const file = event.target.files[0];
         const filePath = 'users/'+this.currentUser.id+'/profilePic';
         const task: AngularFireUploadTask = this.storage.upload(filePath, file);
-
         // observe percentage changes
         this.uploadPercent = task.percentageChanges();
         return task;
+
     }
 
 }

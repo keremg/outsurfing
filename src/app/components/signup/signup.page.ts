@@ -71,7 +71,7 @@ export class SignupPage {
                     recentLocation: this.map.surfLatLng.lat + ',' + this.map.surfLatLng.lng,
                     phone: this.signupForm.value.phone,
                     gender: parseInt(this.signupForm.value.gender.value),
-                    isGuide: this.signupForm.value.isGuide == 'true',
+                    isGuide: this.signupForm.value.isGuide,
                     about: this.signupForm.value.about,
                     cancellations: 0,
                     birthDate: this.signupForm.value.birthDate,
