@@ -18,16 +18,16 @@ export class CompressImageService {
 
     async savedCompressed(image, filePath, originalComponent, size): Promise<any> {
         debugger;
-        let addedName = "Large";
+        let addedName = "_Large";
         let width = 600;
         let height = 600;
         if(size === 0){
-            addedName = "Small";
+            addedName = "_Small";
             width = 100;
             height = 100;
         }
         if(size === 1){
-            addedName = "Medium";
+            addedName = "_Medium";
             width = 300;
             height = 300;
         }

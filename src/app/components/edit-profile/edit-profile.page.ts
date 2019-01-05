@@ -153,16 +153,17 @@ catch (error) {
         const file = event.target.files[0];
         const filePath = 'users/'+this.currentUser.id+'/profilePic';
         this.profileUrl = undefined;
-        this.compressImageService.saveImage(file, filePath, this).then((res) => {
-            this.closeLoadingController();
-            if(res) {
-                const ref = this.storage.ref('users/'+this.currentUser.id+'/profilePicLarge');
-                this.profileUrl = ref.getDownloadURL().pipe(map(url => {
-                    const timet = (new Date()).getTime();
-                    return url + "&ttt=" + timet; //against browser cache
-                }));
-            }
-        });
+        let res: any = await this.compressImageService.saveImage(file, filePath, this);
+        //finished uploading and compressing
+        this.closeLoadingController();
+        if(res) {
+            const ref = this.storage.ref('users/'+this.currentUser.id+'/profilePic_Large');
+            this.profileUrl = ref.getDownloadURL().pipe(map(url => {
+                const timet = (new Date()).getTime();
+                return url + "&ttt=" + timet; //against browser cache
+            }));
+        }
+
 
 
 
