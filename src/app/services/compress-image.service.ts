@@ -10,39 +10,41 @@ export class CompressImageService {
     constructor(private ng2ImgMax: Ng2ImgMaxService,
                 private storage: AngularFireStorage) {}
 
-    savedCompressed(image, filePath, originalComponent) {
+
+
+    savedCompressed(image, filePath, originalComponent, size) {
         debugger;
-        this.ng2ImgMax.resizeImage(image, 300,400).subscribe(
+        let addedName = "Small";
+        let width = 100;
+        let height = 100;
+        if(size === 0){
+            addedName = "Medium";
+            width = 300;
+            height = 300;
+        }
+        this.ng2ImgMax.resizeImage(image, width,height).subscribe(
             result => {
                 const compress =  new File([result], result.name , {type: 'image/jpeg'});
                 debugger
-                const task: AngularFireUploadTask = this.storage.upload(filePath, compress);
+                const task: AngularFireUploadTask = this.storage.upload(filePath+addedName, compress);
                 // observe percentage changes
-                originalComponent.uploadPercent = task.percentageChanges();
+                //originalComponent.uploadPercent = task.percentageChanges();
                 //return task;
             },
             error => {
                 console.log('Oh no!', error);
             });
 
-        // .toPromise().then(result => {
-        //     let x =  new File([result], result.name);
-        //     debugger;
-        //     return x;
-        // }).catch(error => {
-        //     console.log('Oh no!', error);
-        // });
+    }
 
-            // .subscribe(
-            // result => {
-            //     let x =  new File([result], result.name);
-            //     debugger;
-            //     return x;
-            // },
-            // error => {
-            //     console.log('Oh no!', error);
-            // }
-        //);
+    saveImage(image, filePath, originalComponent){
+        this.savedCompressed(image, filePath, originalComponent, 0);
+        debugger;
+        this.savedCompressed(image, filePath, originalComponent, 1);
+        debugger;
+        const task: AngularFireUploadTask = this.storage.upload(filePath+"Large", image);
+        debugger;
+        originalComponent.uploadPercent = task.percentageChanges();
     }
 
 

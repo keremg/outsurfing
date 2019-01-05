@@ -136,7 +136,7 @@ catch (error) {
         debugger;
         const file = event.target.files[0];
         const filePath = 'users/'+this.currentUser.id+'/profilePic';
-        this.compressImageService.savedCompressed(file, filePath, this);
+        this.compressImageService.saveImage(file, filePath, this);
         //debugger;
 
 
