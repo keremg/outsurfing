@@ -267,22 +267,11 @@ export class SingleRoutePage implements OnInit {
         }
         // checking the file isn't null
     }
-    onUpload() {
-        //TODO: upload phooto to server
-        //TODO: imageId = Get the link to that photo or ID of that
-        //TODO: make sure to delete previous photo first (if we support single photo meanwhile)
-        //TODO: this.route.imagesUrls.push(imageId)
-    }
-
-    onMapUpload() {
-        //TODO: upload photo to server
-        //TODO: imageId = Get the link to that photo or ID of that
-        //TODO: this.route.mapImagesUrl.push(imageId);
-    }
 
     async updateRoute(eventIt: boolean) {
         this.mapFormValuesToRouteModel();
         const copyOfRoute = _.cloneDeep(this.route);
+        debugger;
 
         //delete junk that the DB shouldn't have
         delete copyOfRoute.routeCreator; //remove the property
@@ -310,6 +299,7 @@ export class SingleRoutePage implements OnInit {
     async uploadPhotos(copyOfRoute) {
         if (this.selectedPhotos.length > 0) {
             let i = 0;
+            debugger;
             let paths = [];
             for (const file of this.selectedPhotos) {
                 const filePath = 'routes/' + this.id + '/' + (new Date()).getTime();
@@ -327,6 +317,7 @@ export class SingleRoutePage implements OnInit {
 
         //Now upload maps-photos:
         if (this.selectedMapsPhotos.length > 0) {
+            debugger;
             let i = 0;
             let paths = [];
             for (const file of this.selectedMapsPhotos) {

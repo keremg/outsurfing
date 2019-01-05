@@ -19,6 +19,8 @@ import {forEach} from '@angular-devkit/schematics';
 import {SurfParticipant} from '../../models/surfParticipant';
 import {Observable, Subscription} from 'rxjs';
 import {ParticipantApprovalPage} from '../participant-approval/participant-approval.page';
+import { AngularFireStorage, AngularFireUploadTask } from '@angular/fire/storage';
+
 
 declare let window: any;
 
@@ -55,8 +57,9 @@ export class EventDetailPage implements OnInit {
         private modalController: ModalController,
         private eventService: EventService,
         private routeService: RouteService,
+        private storage: AngularFireStorage
     ) {
-        window.route = this;
+        window.event = this;
     }
 
 
@@ -229,17 +232,7 @@ export class EventDetailPage implements OnInit {
 
     }
 
-    async onSave() {
-        //update
-        const copyOfEvent = this.getEventObject();
 
-        await this.eventService.updateEvent(this.id, copyOfEvent).then(data => {
-            this.navCtrl.navigateRoot('home');
-        }).catch(data => {
-            this.eventService.deleteEvent(this.id);
-        });
-
-    }
 
     async onDelete() {
         this.eventSubscription.unsubscribe();
@@ -249,26 +242,48 @@ export class EventDetailPage implements OnInit {
 
     }
 
-    async onCreate() {
-        const copyOfEvent = this.getEventObject();
-        let returnedId = await this.eventService.addEvent(copyOfEvent);
+
+
+    async updateEvent(isStayOnPage: boolean) {
+        const copyOfEvent =this.getEventObject();//getting event from from after cleanups
+
+        //delete junk that the DB shouldn't have
+        let returnedId;
+        if (!this.viewMode && this.id) {
+            //update
+            await this.eventService.updateEvent(this.id, copyOfEvent);
+            returnedId = this.id;
+        }
+        if (!returnedId) {
+            returnedId = await this.eventService.addEvent(copyOfEvent);
+        }
+        this.id = returnedId;
+        this.uploadPhotos(copyOfEvent); //both regular photos and maps-photos
 
         const modal = await this.modalController.create({
             component: JoinEventPage,
             componentProps: {eventId: returnedId}
         });
-        modal.onDidDismiss().then(data => {
+
+        if (!isStayOnPage) {
+            this.navCtrl.navigateRoot('home');
+        }
+
+        /*modal.onDidDismiss().then(data => {
             if (data.data) {
                 this.navCtrl.navigateRoot('home');
             } else {
-                this.eventService.deleteEvent(returnedId);
+                //this.eventService.deleteEvent(returnedId);
             }
         }).catch(data => {
-            this.eventService.deleteEvent(returnedId);
+            //this.eventService.deleteEvent(returnedId);
         });
-        modal.present();
-
+        modal.present();*/
     }
+
+
+
+
 
     async onJoinEvent() {
         const modal = await this.modalController.create({
@@ -284,6 +299,7 @@ export class EventDetailPage implements OnInit {
     }
 
     async onApprove() {
+        await this.updateEvent(true);
         const modal = await this.modalController.create({
             component: ParticipantApprovalPage,
             componentProps: {eventId: this.id, eventOrganizer: this.event.eventOrganizerId}
@@ -358,32 +374,105 @@ export class EventDetailPage implements OnInit {
         this.loadmapEnd();
     }
 
-    onFileSelected(event) {
-        this.selectedFile = <File>event.target.value;
-        console.log(this.selectedFile);
+    onImageSelected(event) {
+        this.selectedPhotos.push(event.target.files[0]);
+        if (this.photos.length > 0) {
+            this.photos = this.photos + ',';
+        }
+        this.photos = this.photos.concat(event.target.files[0].name);
+
+        if (event.target.files && event.target.files[0]) {
+            const reader = new FileReader();
+
+            reader.onload = function(e) {
+                const img = document.createElement('img');
+                img.src = e.target.result;
+                img.height = 300;
+                img.width = 400;
+                const div = document.createElement('div');
+                div.appendChild(img);
+                document.getElementById('previewPhotos').appendChild(div);
+            };
+
+            reader.readAsDataURL(event.target.files[0]);
+        }
         // checking the file isn't null
     }
 
-    onUpload() {
-        let desc = '';
-        const fd = new FormData();
-        fd.append('image', this.selectedFile, this.selectedFile.name);
-        //TODO: upload phooto to server
-        //TODO: imageId = Get the link to that photo or ID of that
-        //TODO: make sure to delete previous photo first (if we support single photo meanwhile)
-        //TODO: this.route.imagesUrls.push(imageId)
-        console.log(fd);
+    onMapImageSelected(event) {
+        this.selectedMapsPhotos.push(event.target.files[0]);
+        if (this.mapPhotos.length > 0) {
+            this.mapPhotos = this.mapPhotos + ',';
+        }
+        this.mapPhotos = this.mapPhotos.concat(event.target.files[0].name);
+
+        if (event.target.files && event.target.files[0]) {
+            const reader = new FileReader();
+
+            reader.onload = function(e) {
+                const img = document.createElement('img');
+                img.src = e.target.result;
+                img.height = 300;
+                img.width = 400;
+                const div = document.createElement('div');
+                div.appendChild(img);
+                document.getElementById('previewMapPhotos').appendChild(div);
+            };
+
+            reader.readAsDataURL(event.target.files[0]);
+        }
+        // checking the file isn't null
     }
 
-    onMapUpload() {
-        let desc = '';
-        const fd = new FormData();
-        fd.append('image', this.selectedFile, this.selectedFile.name);
-        //TODO: upload photo to server
-        //TODO: imageId = Get the link to that photo or ID of that
-        //TODO: this.route.mapImagesUrl.push(imageId);
-        console.log(fd);
+
+    async uploadPhotos(copyOfEvent) {
+        if (this.selectedPhotos.length > 0) {
+            let i = 0;
+            let paths = [];
+            for (const file of this.selectedPhotos) {
+                const filePath = 'routes/' + this.id + '/' + (new Date()).getTime();
+                const task: AngularFireUploadTask = this.storage.upload(filePath, file);
+                await task;
+                paths.push(filePath);
+                i++;
+            }
+            if (copyOfEvent.imagesUrls) {
+                paths = paths.concat(copyOfEvent.imagesUrls);
+            }
+            this.route.imagesUrls = paths;
+            await this.eventService.updateEvent(this.id, {imagesUrls: paths});
+        }
+
+        //Now upload maps-photos:
+        if (this.selectedMapsPhotos.length > 0) {
+            let i = 0;
+            let paths = [];
+            for (const file of this.selectedMapsPhotos) {
+                const filePath = 'routes/' + this.id + '/' + (new Date()).getTime();
+                const task: AngularFireUploadTask = this.storage.upload(filePath, file);
+                await task;
+                paths.push(filePath);
+                i++;
+            }
+            if (copyOfEvent.mapImagesUrl) {
+                paths = paths.concat(copyOfEvent.mapImagesUrl);
+            }
+            this.route.mapImagesUrl = paths;
+            await this.eventService.updateEvent(this.id, {mapImagesUrl: paths});
+        }
     }
+
+    // onUpload() {
+    //     let desc = '';
+    //     const fd = new FormData();
+    //     fd.append('image', this.selectedFile, this.selectedFile.name);
+    //     //TODO: upload phooto to server
+    //     //TODO: imageId = Get the link to that photo or ID of that
+    //     //TODO: make sure to delete previous photo first (if we support single photo meanwhile)
+    //     //TODO: this.route.imagesUrls.push(imageId)
+    //     console.log(fd);
+    // }
+
 
     mapFormValuesToEventModel() {
         //preperation of this.route

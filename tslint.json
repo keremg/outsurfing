@@ -3,6 +3,17 @@
     "node_modules/codelyzer"
   ],
   "rules": {
+    "class-name": true,
+    "triple-equals": [
+      true,
+      "allow-null-check"
+    ],
+    "no-var-keyword": true
+
+  }
+
+  /*
+  "rules": {
     "arrow-return-shorthand": true,
     "callable-types": true,
     "class-name": true,
@@ -16,6 +27,10 @@
     },
     "eofline": true,
     "forin": true,
+    "import-blacklist": [
+      true,
+      "rxjs/Rx"
+    ],
     "import-spacing": true,
     "indent": [
       true,
@@ -61,6 +76,7 @@
     ],
     "no-misused-new": true,
     "no-non-null-assertion": true,
+    "no-redundant-jsdoc": true,
     "no-shadowed-variable": true,
     "no-string-literal": false,
     "no-string-throw": true,
@@ -112,19 +128,6 @@
       "check-separator",
       "check-type"
     ],
-    "directive-selector": [
-      true,
-      "attribute",
-      "app",
-      "camelCase"
-    ],
-    "component-selector": [
-      true,
-      "element",
-      "app",
-      "page",
-      "kebab-case"
-    ],
     "no-output-on-prefix": true,
     "use-input-property-decorator": true,
     "use-output-property-decorator": true,
@@ -133,6 +136,8 @@
     "no-output-rename": true,
     "use-life-cycle-interface": true,
     "use-pipe-transform-interface": true,
+    "component-class-suffix": true,
     "directive-class-suffix": true
-  }
+  } */
+
 }
