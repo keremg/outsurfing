@@ -12,6 +12,7 @@ export class RouteImageComponent implements OnInit {
     @Input() sizeToLoad: string; // small, medium, large
     @Input() width: string;
     @Input() height: string;
+    @Input() number: number;
 
     picUrl: Observable<string | null>;
   constructor(private storage: AngularFireStorage) { }

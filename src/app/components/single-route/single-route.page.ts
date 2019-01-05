@@ -39,6 +39,9 @@ export class SingleRoutePage implements OnInit {
     photos: string = '';
     mapPhotos: string = '';
 
+    photoIndex:number = 0;
+    photoMapIndex:number = 0;
+
     loading: HTMLIonLoadingElement;
 
     constructor(
@@ -514,6 +517,8 @@ export class SingleRoutePage implements OnInit {
 
             this.mapStart.setView(loc, 10);
         }
+        document.getElementById('startGeoMap').hidden = true;
+
     }
 
     loadmapEnd() {
@@ -533,39 +538,6 @@ export class SingleRoutePage implements OnInit {
                     routeEndLocation: e.geocode.name
                 });
             }).addTo(this.mapEnd);
-            if (!this.id) {
-                this.mapEnd.locate({
-                    setView: true,
-                    maxZoom: 10,
-                    timeout: 30000,
-                    maximumAge: 300000
-                }).on('locationfound', (e) => {
-
-                    if (this.mapEnd.SurfMarker)
-                        this.mapEnd.removeLayer(this.mapEnd.SurfMarker);
-                    let markerGroup = leaflet.featureGroup();
-                    let marker: any = leaflet.marker([e.latitude, e.longitude]).on('click', () => {
-                        //alert('Marker clicked');
-                    });
-                    markerGroup.addLayer(marker);
-                    this.mapEnd.addLayer(markerGroup);
-                    this.mapEnd.SurfMarker = markerGroup;
-                    this.mapEnd.surfLatLng = e.latlng;
-                    let location = '';
-                    geocoder.reverse(e.latlng, this.mapEnd.options.crs.scale(this.mapEnd.getZoom()), (results) => {
-                        var r = results[0];
-                        if (r) {
-                            location = r.name;
-                        }
-                        this.singleRouteForm.patchValue({
-                            routeEndGeolocation: this.mapEnd.surfLatLng.lat + ',' + this.mapEnd.surfLatLng.lng,
-                            routeEndLocation: location
-                        });
-                    });
-                }).on('locationerror', (err) => {
-                    console.log(err.message);
-                });
-            }
             this.mapEnd.on('click', (e) => {
                 if (this.mapEnd.SurfMarker)
                     this.mapEnd.removeLayer(this.mapEnd.SurfMarker);
@@ -607,9 +579,29 @@ export class SingleRoutePage implements OnInit {
 
             this.mapEnd.setView(loc, 10);
         }
+        document.getElementById('endGeoMap').hidden = true;
     }
 
     routeImageUrl() {
         return this.route.imagesUrls[0];
     }
+
+
+    plusStartText: any = '+';
+    plusEndText: any = '+';
+
+    onPlusStartMap(){
+        document.getElementById('startGeo').hidden = !document.getElementById('startGeo').hidden;
+        document.getElementById('startGeoMap').hidden = !document.getElementById('startGeoMap').hidden;
+        this.plusStartText === '+' ? this.plusStartText = '-' : this.plusStartText = '+';
+        this.mapStart.invalidateSize();
+    }
+
+    onPlusEndMap(){
+        document.getElementById('endGeo').hidden = !document.getElementById('endGeo').hidden;
+        document.getElementById('endGeoMap').hidden = !document.getElementById('endGeoMap').hidden;
+        this.plusEndText === '+' ? this.plusEndText = '-' : this.plusEndText = '+';
+        this.mapEnd.invalidateSize();
+    }
+
 }

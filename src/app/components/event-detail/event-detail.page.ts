@@ -44,7 +44,8 @@ export class EventDetailPage implements OnInit {
     selectedMapsPhotos: File[] = [];
     photos: string = '';
     mapPhotos: string = '';
-
+    photoIndex:number = 0;
+    photoMapIndex:number = 0;
     loading: HTMLIonLoadingElement;
 
     private eventSubscription: Subscription;
@@ -572,6 +573,9 @@ export class EventDetailPage implements OnInit {
     //------------------------------------------------------------------------------------------
     mapStart: any;
     mapEnd: any;
+    plusStartText: any = '+';
+    plusEndText: any = '+';
+
 
     loadmapStart() {
         this.mapStart = leaflet.map('mapStart').fitWorld();
@@ -672,6 +676,9 @@ export class EventDetailPage implements OnInit {
 
             this.mapStart.setView(loc, 10);
         }
+
+        document.getElementById('startGeoMap').hidden = true;
+
     }
 
     loadmapEnd() {
@@ -691,40 +698,6 @@ export class EventDetailPage implements OnInit {
                     routeEndLocation: e.geocode.name
                 });
             }).addTo(this.mapEnd);
-            if (!this.event.routeEndGeolocation) {
-                this.mapEnd.locate({
-                    setView: true,
-                    maxZoom: 10,
-                    timeout: 30000,
-                    maximumAge: 300000
-                }).on('locationfound', (e) => {
-
-                    if (this.mapEnd.SurfMarker) {
-                        this.mapEnd.removeLayer(this.mapEnd.SurfMarker);
-                    }
-                    const markerGroup = leaflet.featureGroup();
-                    const marker: any = leaflet.marker([e.latitude, e.longitude]).on('click', () => {
-                        // alert('Marker clicked');
-                    });
-                    markerGroup.addLayer(marker);
-                    this.mapEnd.addLayer(markerGroup);
-                    this.mapEnd.SurfMarker = markerGroup;
-                    this.mapEnd.surfLatLng = e.latlng;
-                    let location = '';
-                    geocoder.reverse(e.latlng, this.mapEnd.options.crs.scale(this.mapEnd.getZoom()), (results) => {
-                        const r = results[0];
-                        if (r) {
-                            location = r.name;
-                        }
-                        this.singleEventForm.patchValue({
-                            routeEndGeolocation: this.mapEnd.surfLatLng.lat + ',' + this.mapEnd.surfLatLng.lng,
-                            routeEndLocation: location
-                        });
-                    });
-                }).on('locationerror', (err) => {
-                    console.log(err.message);
-                });
-            }
             this.mapEnd.on('click', (e) => {
                 if (this.mapEnd.SurfMarker) {
                     this.mapEnd.removeLayer(this.mapEnd.SurfMarker);
@@ -768,6 +741,9 @@ export class EventDetailPage implements OnInit {
 
             this.mapEnd.setView(loc, 10);
         }
+
+        document.getElementById('endGeoMap').hidden = true;
+
     }
 
     openOriginalRoute() {
@@ -787,6 +763,20 @@ export class EventDetailPage implements OnInit {
             myEnum.push({key: keys[i], value: values[i]});
         }
         return myEnum;
+    }
+
+    onPlusStartMap(){
+        document.getElementById('startGeo').hidden = !document.getElementById('startGeo').hidden;
+        document.getElementById('startGeoMap').hidden = !document.getElementById('startGeoMap').hidden;
+        this.plusStartText === '+' ? this.plusStartText = '-' : this.plusStartText = '+';
+        this.mapStart.invalidateSize();
+    }
+
+    onPlusEndMap(){
+        document.getElementById('endGeo').hidden = !document.getElementById('endGeo').hidden;
+        document.getElementById('endGeoMap').hidden = !document.getElementById('endGeoMap').hidden;
+        this.plusEndText === '+' ? this.plusEndText = '-' : this.plusEndText = '+';
+        this.mapEnd.invalidateSize();
     }
 
 }

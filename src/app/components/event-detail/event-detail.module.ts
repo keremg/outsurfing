@@ -9,6 +9,7 @@ import { EventDetailPage } from './event-detail.page';
 import {JoinEventPage} from '../join-event/join-event.page';
 import {ParticipantApprovalPage} from '../participant-approval/participant-approval.page';
 import {ToolbarComponentModule} from '../toolbar/toolbar.module';
+import {RouteImageComponentModule} from '../route-image/route-image.module';
 
 const routes: Routes = [
   {
@@ -23,6 +24,7 @@ const routes: Routes = [
     FormsModule,
       ReactiveFormsModule,
       ToolbarComponentModule,
+      RouteImageComponentModule,
       IonicModule,
     RouterModule.forChild(routes)
   ],
