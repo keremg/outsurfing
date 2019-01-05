@@ -72,7 +72,7 @@ export class PaginationService {
         this.mapAndUpdate(first)
 
         // Create the observable array for consumption in components
-        this.data = this._data.asObservable()
+        return this.data = this._data.asObservable()
             .scan( (acc, val) => {
                 return this.query.prepend ? val.concat(acc) : acc.concat(val)
             })

@@ -8,6 +8,9 @@ import { ActivatedRoute } from '@angular/router';
 import { RouteService } from '../../services/route.service';
 import { Observable } from 'rxjs';
 import { SurfEvent } from '../../models/surfEvent';
+import {createConsoleLogger} from '@angular-devkit/core/node';
+
+declare let window: any;
 
 @Component({
   selector: 'app-home',
@@ -28,7 +31,9 @@ export class HomePage implements OnInit {
     private userService: UserService,
     private activatedRoute: ActivatedRoute,
     private routeService: RouteService
-  ) {}
+  ) {
+      window.home = this;
+  }
 
   async ngOnInit() {
     this.currentUser = await this.userService.getCurrentUserPromise();
@@ -45,15 +50,24 @@ export class HomePage implements OnInit {
         this.currentUser.id
       );
     } else {
-      if (this.query)
-        this.page.init(
-          'events',
-          'name',
-          { reverse: true, prepend: false },
-          null,
-          this.query
-        );
-      else this.page.init('events', 'name', { reverse: true, prepend: false });
+      if (this.query) {
+          this.page.init(
+              'events',
+              'name',
+              {reverse: true, prepend: false},
+              null,
+              this.query
+          );
+      }
+      else {
+        this.page.init('events', 'name', { reverse: true, prepend: false }).subscribe(events=>{
+          events.forEach(event=>{
+            this.userService.getuser(event.eventOrganizerId).subscribe(res=>{
+                event.eventOrganizer = res;
+            });
+          })
+        });
+      }
     }
 
     const searchbar = document.getElementById('search');
@@ -112,12 +126,14 @@ export class HomePage implements OnInit {
 
   routeImageUrl(surfRoute: SurfEvent) {
     if (surfRoute.imagesUrls && surfRoute.imagesUrls.length > 0) {
-      return surfRoute.imagesUrls[0];
+      console.log(surfRoute.imagesUrls[0]);
+      return 'routes/' + surfRoute.routeId +'/' + surfRoute.imagesUrls[0];
     }
     return '';
   }
 
-  userImageUrl(eventOrganizerId:string){
+  userImageUrl(eventOrganizerId:any){
+    debugger;
     console.log("in users images url",eventOrganizerId);
     if (eventOrganizerId){
       return 'users/'+eventOrganizerId+'/profilePicMedium';
@@ -125,8 +141,9 @@ export class HomePage implements OnInit {
       return '';
   }
 
-  userName(eventOrganizerId:string){
-     this.userService.getuser(eventOrganizerId).toPromise().then(res=>{
+  userName(event:any){
+
+     this.userService.getuser(event).subscribe(res=>{
       return res.firstName;
     });
 
