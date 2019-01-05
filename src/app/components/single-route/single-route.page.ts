@@ -28,13 +28,16 @@ declare let window: any;
 })
 export class SingleRoutePage implements OnInit {
     public singleRouteForm: FormGroup;
-    selectedFiles: File[] = [];
+    selectedPhotos: File[] = [];
+    selectedMapsPhotos: File[] = [];
+
     route: SurfRoute = new SurfRoute();
     id: string;
     currentUserId: string;
     currentUser: SurfUser;
     viewMode: boolean = false;
-    photos:string = '';
+    photos: string = '';
+    mapPhotos: string = '';
 
     constructor(
         private formBuilder: FormBuilder /* private imagePicker: ImagePicker*/,
@@ -60,7 +63,7 @@ export class SingleRoutePage implements OnInit {
             routeStartGeolocation: ['', Validators.required],
             routeEndGeolocation: [''],
             // imagesUrls: [[], Validators.required],
-            // mapUrl: [''],
+            // mapImagesUrl: [[]],
             lengthKM: [0, Validators.required],
             shortDescription: ['', Validators.required],
             longDescription: ['', Validators.required],
@@ -125,7 +128,7 @@ export class SingleRoutePage implements OnInit {
             this.route.routeCreator = this.currentUser;
 
             this.route.imagesUrls = [];
-            this.route.mapUrl = '';
+            this.route.mapImagesUrl = [];
 
             // defaults
             // this.route.name = 'route name';
@@ -137,7 +140,7 @@ export class SingleRoutePage implements OnInit {
             this.route.routeStartGeolocation = '';
             // this.route.routeEndGeolocation = '';
             // this.route.imagesUrls = ['file-name-here?'];
-            // this.route.mapUrl = 'https://he.wikipedia.org/wiki/%D7%A0%D7%97%D7%9C_%D7%A6%D7%90%D7%9C%D7%99%D7%9D#/media/File:NahalTzeelim01_ST_04.jpg';
+            // this.route.mapImagesUrl = ['https://he.wikipedia.org/wiki/%D7%A0%D7%97%D7%9C_%D7%A6%D7%90%D7%9C%D7%99%D7%9D#/media/File:NahalTzeelim01_ST_04.jpg'];
             // this.route.lengthKM = 8;
             // this.route.shortDescription = 'חול אבנים ועוד חול';
             // this.route.longDescription = 'kuk kuu aksu adkscu';
@@ -195,7 +198,7 @@ export class SingleRoutePage implements OnInit {
             routeStartGeolocation: route.routeStartGeolocation,
             routeEndGeolocation: route.routeEndGeolocation,
             // imagesUrls: route.imagesUrls,
-            // mapUrl: route.mapUrl,
+            // mapImagesUrl: route.mapImagesUrl,
             lengthKM: route.lengthKM,
             shortDescription: route.shortDescription,
             longDescription: route.longDescription,
@@ -215,28 +218,55 @@ export class SingleRoutePage implements OnInit {
         this.loadmapEnd();
     }
 
-    onFileSelected(event) {
-        this.selectedFiles.push(event.target.files[0]);
-        if(this.photos.length >0)
-            this.photos = this.photos+',';
-        this.photos = this.photos.concat(event.target.files[0].name)
+    onImageSelected(event) {
+        this.selectedPhotos.push(event.target.files[0]);
+        if (this.photos.length > 0) {
+            this.photos = this.photos + ',';
+        }
+        this.photos = this.photos.concat(event.target.files[0].name);
 
         if (event.target.files && event.target.files[0]) {
-            var reader = new FileReader();
+            const reader = new FileReader();
 
             reader.onload = function(e) {
-                let img = document.createElement('img');
+                const img = document.createElement('img');
                 img.src = e.target.result;
-                img.height=40;
-                img.width=40;
-                document.getElementById('previewPhotos').appendChild(img);
-            }
+                img.height = 300;
+                img.width = 400;
+                const div = document.createElement('div');
+                div.appendChild(img);
+                document.getElementById('previewPhotos').appendChild(div);
+            };
 
             reader.readAsDataURL(event.target.files[0]);
         }
         // checking the file isn't null
     }
 
+    onMapImageSelected(event) {
+        this.selectedMapsPhotos.push(event.target.files[0]);
+        if (this.mapPhotos.length > 0) {
+            this.mapPhotos = this.mapPhotos + ',';
+        }
+        this.mapPhotos = this.mapPhotos.concat(event.target.files[0].name);
+
+        if (event.target.files && event.target.files[0]) {
+            const reader = new FileReader();
+
+            reader.onload = function(e) {
+                const img = document.createElement('img');
+                img.src = e.target.result;
+                img.height = 300;
+                img.width = 400;
+                const div = document.createElement('div');
+                div.appendChild(img);
+                document.getElementById('previewMapPhotos').appendChild(div);
+            };
+
+            reader.readAsDataURL(event.target.files[0]);
+        }
+        // checking the file isn't null
+    }
     onUpload() {
         //TODO: upload phooto to server
         //TODO: imageId = Get the link to that photo or ID of that
@@ -247,7 +277,7 @@ export class SingleRoutePage implements OnInit {
     onMapUpload() {
         //TODO: upload photo to server
         //TODO: imageId = Get the link to that photo or ID of that
-        //TODO: this.route.mapUrl = imageId;
+        //TODO: this.route.mapImagesUrl.push(imageId);
     }
 
     async updateRoute(eventIt: boolean) {
@@ -266,11 +296,23 @@ export class SingleRoutePage implements OnInit {
             returnedId = await this.routesService.addRoute(copyOfRoute);
         }
         this.id = returnedId;
-        if (this.selectedFiles.length > 0) {
+        this.uploadPhotos(copyOfRoute); //both regular photos and maps-photos
+
+
+        if (eventIt) {
+            //TODO should event it
+            this.navCtrl.navigateForward('EventDetail/0/' + returnedId);
+        } else {
+            this.navCtrl.navigateForward('ChooseRoute');
+        }
+    }
+
+    async uploadPhotos(copyOfRoute) {
+        if (this.selectedPhotos.length > 0) {
             let i = 0;
             let paths = [];
-            for (const file of this.selectedFiles) {
-                const filePath = 'routes/' + returnedId + '/' + (new Date()).getTime();
+            for (const file of this.selectedPhotos) {
+                const filePath = 'routes/' + this.id + '/' + (new Date()).getTime();
                 const task: AngularFireUploadTask = this.storage.upload(filePath, file);
                 await task;
                 paths.push(filePath);
@@ -279,14 +321,26 @@ export class SingleRoutePage implements OnInit {
             if (copyOfRoute.imagesUrls) {
                 paths = paths.concat(copyOfRoute.imagesUrls);
             }
+            this.route.imagesUrls = paths;
             await this.routesService.updateRoute(this.id, {imagesUrls: paths});
         }
 
-        if (eventIt) {
-            //TODO should event it
-            this.navCtrl.navigateForward('EventDetail/0/' + returnedId);
-        } else {
-            this.navCtrl.navigateForward('ChooseRoute');
+        //Now upload maps-photos:
+        if (this.selectedMapsPhotos.length > 0) {
+            let i = 0;
+            let paths = [];
+            for (const file of this.selectedMapsPhotos) {
+                const filePath = 'routes/' + this.id + '/' + (new Date()).getTime();
+                const task: AngularFireUploadTask = this.storage.upload(filePath, file);
+                await task;
+                paths.push(filePath);
+                i++;
+            }
+            if (copyOfRoute.mapImagesUrl) {
+                paths = paths.concat(copyOfRoute.mapImagesUrl);
+            }
+            this.route.mapImagesUrl = paths;
+            await this.routesService.updateRoute(this.id, {mapImagesUrl: paths});
         }
     }
 
@@ -304,7 +358,7 @@ export class SingleRoutePage implements OnInit {
         this.route.routeEndGeolocation =
             this.singleRouteForm.value.routeEndGeolocation || '';
         // this.route.imagesUrls = this.singleRouteForm.value.imagesUrls || [];
-        // this.route.mapUrl = this.singleRouteForm.value.mapUrl || '';
+        // this.route.mapImagesUrl = this.singleRouteForm.value.mapImagesUrl || [];
         this.route.lengthKM = this.singleRouteForm.value.lengthKM || '';
         this.route.shortDescription =
             this.singleRouteForm.value.shortDescription || '';

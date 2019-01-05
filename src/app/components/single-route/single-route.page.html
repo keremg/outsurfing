@@ -111,45 +111,62 @@
       <div id="mapEnd" style="height:200px; width:100%;" slot="start"></div>
     </ion-item>
 
-    <ion-item>
-      <!--
-        TODO: show the image itself, and make sure we allow multiple maps in DB
-      -->
+    <!-- trip-photos -->
+    <ion-item style="width: 50%;">
+      <ion-label >Add trip-photos to upload</ion-label>
+      <input
+              type="file"
+              accept="image/*"
+              (change)="onImageSelected($event)"
+              id="selectedImage"
+              style="display: none;"
+      />
+      <ion-button
+              float-left
+              onclick="document.getElementById('selectedImage').click();">
+        Browse...
+      </ion-button>
+    </ion-item>
+    <ion-item style="display: inline-block;"><!-- ion-label float-left id="photos">{{photos}}</ion-label -->
       <div>
-        <input
-          type="file"
-          accept="image/*"
-          (change)="onFileSelected($event)"
-          id="selectedFile"
-          style="display: none;"
-        />
-        <ion-label float-left>Upload photos</ion-label>
-        <ion-button
-          float-left
-          onclick="document.getElementById('selectedFile').click();"
-          >Browse...</ion-button
-        >
-        <!-- ion-label float-left id="photos">{{photos}}</ion-label -->
         <ion-label id="previewPhotos"></ion-label>
-        <div *ngIf="route.imagesUrls?.length > 0">
-          <app-route-image imgPath="routes/{{id}}/{{route.imagesUrls[0]}}"></app-route-image>
-        </div>
       </div>
     </ion-item>
-    <ion-item>
-      <!--
-        TODO: show the image itself, and make sure we allow multiple maps in DB
-      -->
-      <ion-label stacked>Upload map</ion-label>
+    <ion-item style="display: inline-block;">
+      <div>
+        <span *ngFor="let routeUrl of route.imagesUrls; let i = index">
+          <app-route-image imgPath="{{routeUrl}}" sizeToLoad="large" width="400" height="300" ></app-route-image>
+        </span>
+      </div>
+    </ion-item>
+
+    <!-- map-photos -->
+    <ion-item style="width: 50%;">
+      <ion-label >Add map-photos to upload</ion-label>
       <input
-        type="file"
-        accept="image/*"
-        (change)="onFileSelected($event)"
+              type="file"
+              accept="image/*"
+              (change)="onMapImageSelected($event)"
+              id="selectedMapImage"
+              style="display: none;"
       />
-      <!--<button disabled="viewMode" type="button" (click)="onMapUpload()">-->
-      <button type="button" (click)="onMapUpload()">
-        Upload
-      </button>
+      <ion-button
+              float-left
+              onclick="document.getElementById('selectedMapImage').click();">
+        Browse...
+      </ion-button>
+    </ion-item>
+    <ion-item style="display: inline-block;"><!-- ion-label float-left id="photos">{{photos}}</ion-label -->
+      <div>
+        <ion-label id="previewMapPhotos"></ion-label>
+      </div>
+    </ion-item>
+    <ion-item style="display: inline-block;">
+      <div>
+        <span *ngFor="let routeUrl of route.mapImagesUrl; let i = index">
+          <app-route-image imgPath="{{routeUrl}}" sizeToLoad="large" width="400" height="300" ></app-route-image>
+        </span>
+      </div>
     </ion-item>
 
     <ion-item>

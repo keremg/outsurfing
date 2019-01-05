@@ -38,6 +38,11 @@ export class EventDetailPage implements OnInit {
     routeId: string;
     event: SurfEvent;
     eventObs: Observable<SurfEvent>;
+    selectedPhotos: File[] = [];
+    selectedMapsPhotos: File[] = [];
+    photos: string = '';
+    mapPhotos: string = '';
+
     private eventSubscription: Subscription;
 
     constructor(
@@ -73,7 +78,7 @@ export class EventDetailPage implements OnInit {
             routeStartGeolocation: ['', Validators.required],
             routeEndGeolocation: [''],
             imagesUrls: [[], Validators.required],
-            mapUrl: [''],
+            mapImagesUrl: [[]],
             lengthKM: [0, Validators.required],
             shortDescription: ['', Validators.required],
             longDescription: ['', Validators.required],
@@ -322,7 +327,7 @@ export class EventDetailPage implements OnInit {
             routeStartGeolocation: event.routeStartGeolocation,
             routeEndGeolocation: event.routeEndGeolocation,
             imagesUrls: event.imagesUrls,
-            mapUrl: event.mapUrl,
+            mapImagesUrl: event.mapImagesUrl,
             lengthKM: event.lengthKM,
             shortDescription: event.shortDescription,
             longDescription: event.longDescription,
@@ -376,7 +381,7 @@ export class EventDetailPage implements OnInit {
         fd.append('image', this.selectedFile, this.selectedFile.name);
         //TODO: upload photo to server
         //TODO: imageId = Get the link to that photo or ID of that
-        //TODO: this.route.mapUrl = imageId;
+        //TODO: this.route.mapImagesUrl.push(imageId);
         console.log(fd);
     }
 
@@ -393,8 +398,8 @@ export class EventDetailPage implements OnInit {
             this.singleEventForm.value.routeStartGeolocation || '';
         this.event.routeEndGeolocation =
             this.singleEventForm.value.routeEndGeolocation || '';
-        this.event.imagesUrls = this.singleEventForm.value.imagesUrls || '';
-        this.event.mapUrl = this.singleEventForm.value.mapUrl || '';
+        this.event.imagesUrls = this.singleEventForm.value.imagesUrls || [];
+        this.event.mapImagesUrl = this.singleEventForm.value.mapImagesUrl || [];
         this.event.lengthKM = this.singleEventForm.value.lengthKM || '';
         this.event.shortDescription =
             this.singleEventForm.value.shortDescription || '';
@@ -459,6 +464,7 @@ export class EventDetailPage implements OnInit {
 
     loadmapStart() {
         this.mapStart = leaflet.map('mapStart').fitWorld();
+        this.mapStart.scrollWheelZoom.disable();
         leaflet.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
             attributions: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="http://mapbox.com">Mapbox</a>',
             maxZoom: 18
@@ -559,6 +565,7 @@ export class EventDetailPage implements OnInit {
 
     loadmapEnd() {
         this.mapEnd = leaflet.map('mapEnd').fitWorld();
+        this.mapEnd.scrollWheelZoom.disable();
         leaflet.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
             attributions: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="http://mapbox.com">Mapbox</a>',
             maxZoom: 18

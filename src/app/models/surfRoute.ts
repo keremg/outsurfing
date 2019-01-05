@@ -10,7 +10,7 @@ export class SurfRoute {
     routeStartGeolocation: string;
     routeEndGeolocation: string;
     imagesUrls: string[];
-    mapUrl: string;
+    mapImagesUrl: string[];
     lengthKM: number;
     shortDescription: string;
     longDescription: string; // details

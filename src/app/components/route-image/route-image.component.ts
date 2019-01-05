@@ -9,6 +9,9 @@ import { AngularFireStorage } from '@angular/fire/storage';
 })
 export class RouteImageComponent implements OnInit {
     @Input() imgPath: string ;
+    @Input() sizeToLoad: string; // small, medium, large
+    @Input() width: string;
+    @Input() height: string;
 
     picUrl: Observable<string | null>;
   constructor(private storage: AngularFireStorage) { }
