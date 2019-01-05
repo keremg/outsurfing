@@ -1,3 +1,40 @@
 <ion-app>
-  <ion-router-outlet></ion-router-outlet>
+    <ion-menu id='menu' contentId="content" menuId="left" type="overlay" side="start" persistent='true'>
+        <ion-header >
+            <ion-toolbar color="dark">
+                <ion-title>Menu</ion-title>
+            </ion-toolbar>
+        </ion-header>
+
+        <ion-content>
+            <ion-list>
+                <ion-button (click)="onCreateEvent()" id="create" fill="clear" expand="full" size="large"  color="dark">
+                    Create a new event
+                </ion-button>
+                <ion-button (click)="OnShowAll()" id="all" fill="clear" expand="full" size="large"  color="dark">
+                    Events Around you
+                </ion-button>
+                <ion-button (click)="onMytrips()" id="my" fill="clear" expand="full" size="large"  color="dark">
+                    My Events
+                </ion-button>
+                <br><br>
+                <ion-button (click)="onAddRoute()" id="addroute" fill="clear" expand="full" size="large"  color="dark">
+                    Add route
+                </ion-button>
+                <ion-button (click)="onCreateEvent()" id="routes" fill="clear" expand="full" size="large"  color="dark">
+                    Routes around me
+                </ion-button>
+            </ion-list>
+        </ion-content>
+
+        <ion-footer>
+            <ion-toolbar color="dark">
+
+                <ion-button fill="clear" expand="full" size="large"  color="light">
+                    Help
+                </ion-button>
+            </ion-toolbar>
+        </ion-footer>
+    </ion-menu>
+    <ion-router-outlet id="content"></ion-router-outlet>
 </ion-app>

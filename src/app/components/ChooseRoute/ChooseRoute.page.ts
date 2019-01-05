@@ -43,7 +43,7 @@ export class ChooseRoute implements OnInit {
   loadData(event) {
     this.page.more();
 
-    console.log('Done');
+    //console.log('Done');
     event.target.complete();
 
     // App logic to determine if all data is loaded

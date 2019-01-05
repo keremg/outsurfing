@@ -1,29 +1,11 @@
 <ion-header>
   <ion-toolbar padding-horizontal>
-    <ion-back-button slot="start" defaultHref="home"></ion-back-button>
-    <ion-label style="font-size: 2em;" slot="start">
-      OutSurfing - Choose a Route
-    </ion-label>
-    <ion-label slot="start" padding-horizontal>
-      <ion-searchbar></ion-searchbar>
-    </ion-label>
-    <ion-label slot="start" style="font-size: 1.5em;">
-      <ion-icon name="funnel"></ion-icon>
-      Filter
-    </ion-label>
 
-    <ion-buttons slot="end" color="primary">
-      <ion-button
-        style="float: right;"
-        slot="end"
-        color="primary"
-        fill="solid"
-        shape="round"
-        (click)="createNew()"
-      >
-        Create a new route
-      </ion-button>
-    </ion-buttons>
+    <ion-back-button slot="start" defaultHref="home"></ion-back-button>
+    <img slot="primary" width="280" height="40" src="/assets/images/logo.png"/>
+    <ion-label style="font-size: 2em;" slot="primary">
+      Choose a Route
+    </ion-label>
     <ion-buttons slot="end">
       <ion-button>
         <ion-icon slot="icon-only" name="contact"></ion-icon>
@@ -34,9 +16,30 @@
 </ion-header>
 
 <ion-content padding>
-  <!--
-    add filter https://www.joshmorony.com/high-performance-list-filtering-in-ionic-2/
-  -->
+
+
+  <ion-buttons>
+    <ion-searchbar
+            id="search"
+            debounce="1000"
+            *ngIf="!this.onlyMine"
+            (ionChange)="search($event)"
+            value="{{query}}"></ion-searchbar>
+
+    <ion-button
+            style="float: right;"
+            slot="end"
+            color="dark"
+            fill="solid"
+            shape="round"
+            id="filter"
+            *ngIf="!this.onlyMine">
+      <ion-icon name="funnel"></ion-icon>
+      Filter
+    </ion-button>
+  </ion-buttons>
+
+
   <ion-card
     *ngFor="let route of (this.page.data | async); let i = index"
     [attr.data-index]="i"

@@ -88,13 +88,7 @@ export class HomePage implements OnInit {
     }
   }
 
-  onMytrips() {
-    return this.navCtrl.navigateForward('home/' + this.currentUser.id);
-  }
 
-  onShowAll() {
-    return this.navCtrl.navigateForward('home');
-  }
 
   ShowEventDetail(eventId: string) {
     return this.navCtrl.navigateForward('EventDetail/' + eventId + '/0');
