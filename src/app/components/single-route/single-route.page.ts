@@ -39,6 +39,8 @@ export class SingleRoutePage implements OnInit {
     photos: string = '';
     mapPhotos: string = '';
 
+    loading: HTMLIonLoadingElement;
+
     constructor(
         private formBuilder: FormBuilder /* private imagePicker: ImagePicker*/,
         private activatedRoute: ActivatedRoute,
@@ -46,9 +48,14 @@ export class SingleRoutePage implements OnInit {
         public navCtrl: NavController,
         public authService: AuthService,
         private userService: UserService,
-        private storage: AngularFireStorage
+        private storage: AngularFireStorage,
+        public loadingController: LoadingController
     ) {
         window.route = this;
+    }
+
+    async ionViewDidEnter() {
+
     }
 
     async ngOnInit() {
@@ -268,7 +275,22 @@ export class SingleRoutePage implements OnInit {
         // checking the file isn't null
     }
 
+    openLoadingController() {
+        this.loadingController.create({
+            message: 'Saving, please wait...'
+        }).then(res => {
+            this.loading = res;
+            this.loading.present();
+        });
+    }
+    closeLoadingController() {
+        this.loadingController.dismiss().then();
+    }
+
     async updateRoute(eventIt: boolean) {
+
+        this.openLoadingController();
+
         this.mapFormValuesToRouteModel();
         const copyOfRoute = _.cloneDeep(this.route);
         debugger;
@@ -285,8 +307,10 @@ export class SingleRoutePage implements OnInit {
             returnedId = await this.routesService.addRoute(copyOfRoute);
         }
         this.id = returnedId;
-        this.uploadPhotos(copyOfRoute); //both regular photos and maps-photos
-
+        console.log('Before uploadPhotos');
+        await this.uploadPhotos(copyOfRoute); //both regular photos and maps-photos
+        console.log('After uploadPhotos, about to navigate');
+        this.closeLoadingController();
 
         if (eventIt) {
             //TODO should event it
@@ -296,15 +320,16 @@ export class SingleRoutePage implements OnInit {
         }
     }
 
-    async uploadPhotos(copyOfRoute) {
+    async uploadPhotos(copyOfRoute): Promise<boolean> {
+        let i = 0;
         if (this.selectedPhotos.length > 0) {
-            let i = 0;
-            debugger;
             let paths = [];
             for (const file of this.selectedPhotos) {
-                const filePath = 'routes/' + this.id + '/' + (new Date()).getTime();
+                const filePath = 'routes/' + this.id + '/' + (new Date()).getTime() + '_' + i;
+                console.log('About to upload image: ' + filePath);
                 const task: AngularFireUploadTask = this.storage.upload(filePath, file);
                 await task;
+                console.log('Finished to upload image: ' + filePath);
                 paths.push(filePath);
                 i++;
             }
@@ -312,16 +337,16 @@ export class SingleRoutePage implements OnInit {
                 paths = paths.concat(copyOfRoute.imagesUrls);
             }
             this.route.imagesUrls = paths;
+            console.log('About to update route with imageUrls: ' + paths);
             await this.routesService.updateRoute(this.id, {imagesUrls: paths});
+            console.log('Finished to update route with imageUrls: ' + paths);
         }
 
         //Now upload maps-photos:
         if (this.selectedMapsPhotos.length > 0) {
-            debugger;
-            let i = 0;
             let paths = [];
             for (const file of this.selectedMapsPhotos) {
-                const filePath = 'routes/' + this.id + '/' + (new Date()).getTime();
+                const filePath = 'routes/' + this.id + '/' + (new Date()).getTime() + '_' + i;
                 const task: AngularFireUploadTask = this.storage.upload(filePath, file);
                 await task;
                 paths.push(filePath);
@@ -331,8 +356,12 @@ export class SingleRoutePage implements OnInit {
                 paths = paths.concat(copyOfRoute.mapImagesUrl);
             }
             this.route.mapImagesUrl = paths;
+            console.log('About to update route with mapImagesUrl: ' + paths);
             await this.routesService.updateRoute(this.id, {mapImagesUrl: paths});
+            console.log('Finished to update route with mapImagesUrl: ' + paths);
         }
+        console.log('Finished CuploadPhoto()');
+        return true;
     }
 
     mapFormValuesToRouteModel() {
@@ -386,9 +415,6 @@ export class SingleRoutePage implements OnInit {
     //------------------------------------------------------------------------------------------
     mapStart: any;
     mapEnd: any;
-
-    ionViewDidEnter() {
-    }
 
     loadmapStart() {
         this.mapStart = leaflet.map('mapStart').fitWorld();

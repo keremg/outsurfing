@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {ModalController, NavController} from '@ionic/angular';
+import {LoadingController, ModalController, NavController} from '@ionic/angular';
 import {JoinEventPage} from '../join-event/join-event.page';
 import {ActivatedRoute} from '@angular/router';
 import {EventService} from '../../services/event.service';
@@ -45,6 +45,8 @@ export class EventDetailPage implements OnInit {
     photos: string = '';
     mapPhotos: string = '';
 
+    loading: HTMLIonLoadingElement;
+
     private eventSubscription: Subscription;
 
     constructor(
@@ -57,11 +59,16 @@ export class EventDetailPage implements OnInit {
         private modalController: ModalController,
         private eventService: EventService,
         private routeService: RouteService,
-        private storage: AngularFireStorage
+        private storage: AngularFireStorage,
+        public loadingController: LoadingController
     ) {
         window.event = this;
     }
 
+
+    async ionViewDidEnter() {
+
+    }
 
     async ngOnInit() {
         this.id = this.activatedRoute.snapshot.paramMap.get('id');
@@ -244,7 +251,21 @@ export class EventDetailPage implements OnInit {
 
 
 
+    openLoadingController() {
+        this.loadingController.create({
+            message: 'Saving, please wait...'
+        }).then(res => {
+            this.loading = res;
+            this.loading.present();
+        });
+    }
+    closeLoadingController() {
+        this.loadingController.dismiss().then();
+    }
+
     async updateEvent(isStayOnPage: boolean) {
+        this.openLoadingController();
+
         const copyOfEvent =this.getEventObject();//getting event from from after cleanups
 
         //delete junk that the DB shouldn't have
@@ -258,12 +279,14 @@ export class EventDetailPage implements OnInit {
             returnedId = await this.eventService.addEvent(copyOfEvent);
         }
         this.id = returnedId;
-        this.uploadPhotos(copyOfEvent); //both regular photos and maps-photos
+        await this.uploadPhotos(copyOfEvent); //both regular photos and maps-photos
 
         const modal = await this.modalController.create({
             component: JoinEventPage,
             componentProps: {eventId: returnedId}
         });
+
+        this.closeLoadingController();
 
         if (!isStayOnPage) {
             this.navCtrl.navigateRoot('home');
@@ -425,12 +448,12 @@ export class EventDetailPage implements OnInit {
     }
 
 
-    async uploadPhotos(copyOfEvent) {
+    async uploadPhotos(copyOfEvent): Promise<boolean> {
+        let i = 0;
         if (this.selectedPhotos.length > 0) {
-            let i = 0;
             let paths = [];
             for (const file of this.selectedPhotos) {
-                const filePath = 'routes/' + this.id + '/' + (new Date()).getTime();
+                const filePath = 'events/' + this.id + '/' + (new Date()).getTime() + '_' + i;
                 const task: AngularFireUploadTask = this.storage.upload(filePath, file);
                 await task;
                 paths.push(filePath);
@@ -448,7 +471,7 @@ export class EventDetailPage implements OnInit {
             let i = 0;
             let paths = [];
             for (const file of this.selectedMapsPhotos) {
-                const filePath = 'routes/' + this.id + '/' + (new Date()).getTime();
+                const filePath = 'events/' + this.id + '/' + (new Date()).getTime() + '_' + i;
                 const task: AngularFireUploadTask = this.storage.upload(filePath, file);
                 await task;
                 paths.push(filePath);
@@ -460,6 +483,7 @@ export class EventDetailPage implements OnInit {
             this.route.mapImagesUrl = paths;
             await this.eventService.updateEvent(this.id, {mapImagesUrl: paths});
         }
+        return true;
     }
 
     // onUpload() {
@@ -547,9 +571,6 @@ export class EventDetailPage implements OnInit {
     //------------------------------------------------------------------------------------------
     mapStart: any;
     mapEnd: any;
-
-    ionViewDidEnter() {
-    }
 
     loadmapStart() {
         this.mapStart = leaflet.map('mapStart').fitWorld();
