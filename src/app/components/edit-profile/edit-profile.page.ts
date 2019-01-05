@@ -13,6 +13,7 @@ import {SurfUser} from '../../models/surfUser';
 import { AngularFireStorage, AngularFireUploadTask } from '@angular/fire/storage';
 import {Observable} from 'rxjs';
 import { debug } from 'util';
+import {map} from 'rxjs/operators';
 
 declare let window: any;
 
@@ -59,7 +60,7 @@ export class EditProfilePage implements OnInit {
     async ngOnInit() {
         this.currentUser = await this.userService.getCurrentUserPromise();
         this.currentUserId = this.authService.currentUserId;
-        const ref = this.storage.ref('users/'+this.currentUser.id+'/profilePic');
+        const ref = this.storage.ref('users/'+this.currentUser.id+'/profilePicLarge');
         this.profileUrl = ref.getDownloadURL();
 
 
@@ -136,8 +137,30 @@ catch (error) {
         debugger;
         const file = event.target.files[0];
         const filePath = 'users/'+this.currentUser.id+'/profilePic';
-        this.compressImageService.saveImage(file, filePath, this);
+        this.profileUrl = undefined;
+        this.compressImageService.saveImage(file, filePath, this).take(1).toPromise().then((res) => {
+            debugger;
+            console.log("nir");
+            if(res) {
+                const ref = this.storage.ref('users/'+this.currentUser.id+'/profilePicLarge');
+                debugger;
+                this.profileUrl = ref.getDownloadURL().pipe(map(url => {
+                    const timet = (new Date()).getTime();
+                    return url + "&ttt=" + timet;
+                }));
+                debugger;
+            }
+        });
+    //     this.compressImageService.saveImage(file, filePath, this).toPromise().then((res=>{
+    //         console.log("nir");
+    //         if(res){
+    //             const ref = this.storage.ref('users/'+this.currentUser.id+'/profilePicLarge');
+    //             debugger;
+    //             this.profileUrl = ref.getDownloadURL();
+    //             debugger;
+    // }}));
         //debugger;
+
 
 
         //const task: AngularFireUploadTask = this.storage.upload(filePath, compress);
