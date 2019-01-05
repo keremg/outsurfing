@@ -85,7 +85,7 @@
     <ion-grid>
       <ion-row>
         <ion-col size="4" push-md="8">
-          <app-route-image imgPath="{{routeImageUrl(event)}}"></app-route-image>
+        <app-route-image imgPath="{{routeImageUrl(event)}}"></app-route-image>
           <ion-list>
             <ion-item>
               <ion-label>
@@ -136,10 +136,11 @@
           <ion-grid wrap>
             <ion-row>
               <ion-col size="2">
-                <ion-img src="/assets/images/haham.jpg"></ion-img>
+                <!--<app-route-image imgPath="{{userImageUrl(event.eventOrganizerId)}}" height="40%" width="20%"></app-route-image>-->
+
               </ion-col>
               <ion-col size="4">
-                <ion-item> Hanuka, Age: 35 </ion-item>
+                <ion-item> {{userName(event.eventOrganizerId) | async}}, Age: 35 </ion-item>
                 <ion-item> Is Guide: Yes </ion-item>
                 <ion-item>
                   TODO Guide Rating: 8 (544

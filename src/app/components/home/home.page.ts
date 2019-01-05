@@ -112,8 +112,24 @@ export class HomePage implements OnInit {
 
   routeImageUrl(surfRoute: SurfEvent) {
     if (surfRoute.imagesUrls && surfRoute.imagesUrls.length > 0) {
-      return 'routes/' + surfRoute.routeId + '/' + surfRoute.imagesUrls[0];
+      return surfRoute.imagesUrls[0];
     }
     return '';
   }
+
+  userImageUrl(eventOrganizerId:string){
+    console.log("in users images url",eventOrganizerId);
+    if (eventOrganizerId){
+      return 'users/'+eventOrganizerId+'/profilePicMedium';
+    }
+      return '';
+  }
+
+  userName(eventOrganizerId:string){
+     this.userService.getuser(eventOrganizerId).toPromise().then(res=>{
+      return res.firstName;
+    });
+
+  }
+
 }
