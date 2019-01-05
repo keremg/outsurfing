@@ -240,7 +240,9 @@ export class SingleRoutePage implements OnInit {
                 img.src = e.target.result;
                 img.height = 300;
                 img.width = 400;
+                img.setAttribute('float-left','true')
                 const div = document.createElement('div');
+                div.setAttribute('float-left','true')
                 div.appendChild(img);
                 document.getElementById('previewPhotos').appendChild(div);
             };
@@ -293,7 +295,6 @@ export class SingleRoutePage implements OnInit {
 
         this.mapFormValuesToRouteModel();
         const copyOfRoute = _.cloneDeep(this.route);
-        debugger;
 
         //delete junk that the DB shouldn't have
         delete copyOfRoute.routeCreator; //remove the property
@@ -325,7 +326,7 @@ export class SingleRoutePage implements OnInit {
         if (this.selectedPhotos.length > 0) {
             let paths = [];
             for (const file of this.selectedPhotos) {
-                const filePath = 'routes/' + this.id + '/' + (new Date()).getTime() + '_' + i;
+                const filePath =  'routes/' + this.id + '/' + (new Date()).getTime() + '_' + i;
                 console.log('About to upload image: ' + filePath);
                 const task: AngularFireUploadTask = this.storage.upload(filePath, file);
                 await task;
@@ -527,7 +528,6 @@ export class SingleRoutePage implements OnInit {
             var control = L.Control.geocoder({
                 geocoder: geocoder
             }).on('markgeocode', (e) => {
-                //debugger;
                 this.singleRouteForm.patchValue({
                     routeEndGeolocation: e.geocode.center.lat + ',' + e.geocode.center.lng,
                     routeEndLocation: e.geocode.name

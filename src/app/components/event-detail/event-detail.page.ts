@@ -150,9 +150,7 @@ export class EventDetailPage implements OnInit {
 
 
     async loadFromEvent(event: SurfEvent) {
-        //TODO
         this.removeElement('create');
-        //TODO: get event from db, then should add the orgznizer details:
 
         this.event = event;
 
@@ -209,50 +207,43 @@ export class EventDetailPage implements OnInit {
     async loadFromRoute(route: SurfRoute) {
         //should hide the join button
         this.removeElement('join');
-        this.removeElement('save');
         this.removeElement('leave');
         this.removeElement('approve');
         this.removeElement('delete');
 
         this.event = new SurfEvent(route);
 
+        // TODO: defaults
+
         this.event.eventOrganizerId = this.currentUser.id;
         this.event.eventOrganizer = this.currentUser;
-
+        this.event.approvedParticipants=0;
         //this.event.routeCreator = await this.userService.getuser(this.event.routeCreatorId).toPromise();
         ////this.event.eventOrganizer = await this.userService.getuser(this.event.eventOrganizerId).toPromise();
 
 
-        // TODO: defaults
-
-
-
-        await this.userService
-            .getuser(this.event.eventOrganizerId)
-            .subscribe(user => {
-                this.event.eventOrganizer = user;
-            });
         this.editForm(this.event);
 
 
-        //TODO
 
     }
 
 
 
     async onDelete() {
+        this.openLoadingController();
         this.eventSubscription.unsubscribe();
         await this.eventService.deleteEvent(this.id).then(data => {
             this.navCtrl.navigateRoot('home');
         });
+        this.closeLoadingController();
 
     }
 
 
 
     openLoadingController() {
-        this.loadingController.create({
+        return this.loadingController.create({
             message: 'Saving, please wait...'
         }).then(res => {
             this.loading = res;
@@ -264,47 +255,57 @@ export class EventDetailPage implements OnInit {
     }
 
     async updateEvent(isStayOnPage: boolean) {
-        this.openLoadingController();
+        await this.openLoadingController();
 
         const copyOfEvent =this.getEventObject();//getting event from from after cleanups
 
-        //delete junk that the DB shouldn't have
+        //TODO delete junk that the DB shouldn't have
         let returnedId;
         if (!this.viewMode && this.id) {
             //update
             await this.eventService.updateEvent(this.id, copyOfEvent);
             returnedId = this.id;
         }
+        let isNew: boolean = false;
         if (!returnedId) {
+            //create new
             returnedId = await this.eventService.addEvent(copyOfEvent);
+            isNew = true;
         }
         this.id = returnedId;
+        this.closeLoadingController();
+        if(isNew) {
+            const modal = await this.modalController.create({
+                component: JoinEventPage,
+                componentProps: {eventId: returnedId}
+            });
+
+            modal.onDidDismiss().then(data => {
+                if (data.data) {
+                    this.eventService.approveParticipant(returnedId,this.currentUser.id, this.event)
+                    this.finishUpdate(isStayOnPage, copyOfEvent);
+                } else {
+                    this.eventService.deleteEvent(returnedId);
+                }
+            }).catch(data => {
+                this.eventService.deleteEvent(returnedId);
+            });
+            return modal.present();
+        }
+        else{
+            return this.finishUpdate(isStayOnPage, copyOfEvent)
+        }
+    }
+
+    async finishUpdate(isStayOnPage: boolean, copyOfEvent){
+        await this.openLoadingController();
         await this.uploadPhotos(copyOfEvent); //both regular photos and maps-photos
-
-        const modal = await this.modalController.create({
-            component: JoinEventPage,
-            componentProps: {eventId: returnedId}
-        });
-
         this.closeLoadingController();
 
         if (!isStayOnPage) {
             this.navCtrl.navigateRoot('home');
         }
-
-        /*modal.onDidDismiss().then(data => {
-            if (data.data) {
-                this.navCtrl.navigateRoot('home');
-            } else {
-                //this.eventService.deleteEvent(returnedId);
-            }
-        }).catch(data => {
-            //this.eventService.deleteEvent(returnedId);
-        });
-        modal.present();*/
     }
-
-
 
 
 
@@ -322,10 +323,10 @@ export class EventDetailPage implements OnInit {
     }
 
     async onApprove() {
-        await this.updateEvent(true);
+        this.updateEvent(true);
         const modal = await this.modalController.create({
             component: ParticipantApprovalPage,
-            componentProps: {eventId: this.id, eventOrganizer: this.event.eventOrganizerId}
+            componentProps: {eventId: this.id, eventOrganizer: this.event.eventOrganizerId, event:this.event}
         });
         return modal.present();
     }

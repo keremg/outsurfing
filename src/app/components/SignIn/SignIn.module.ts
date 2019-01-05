@@ -5,6 +5,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 
 import { SignInPage } from './SignIn.page';
+import {ToolbarComponentModule} from '../toolbar/toolbar.module';
 
 @NgModule({
   imports: [
@@ -12,6 +13,7 @@ import { SignInPage } from './SignIn.page';
     FormsModule,
     ReactiveFormsModule,
     IonicModule,
+      ToolbarComponentModule,
     RouterModule.forChild([
       {
         path: '',

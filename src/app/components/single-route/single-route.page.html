@@ -1,10 +1,5 @@
 <ion-header>
-  <ion-toolbar>
-    <ion-buttons slot="start">
-      <ion-back-button defaultHref="ChooseRoute"></ion-back-button>
-    </ion-buttons>
-    <ion-title>Create Route</ion-title>
-  </ion-toolbar>
+  <app-toolbar defaultBack="ChooseRoute" title="Edit Route"></app-toolbar>
 </ion-header>
 
 <ion-content padding>
@@ -113,7 +108,7 @@
 
     <!-- trip-photos -->
     <ion-item style="width: 50%;">
-      <ion-label >Add trip-photos to upload</ion-label>
+      <ion-label >Add trip-photos</ion-label>
       <input
               type="file"
               accept="image/*"
@@ -127,16 +122,13 @@
         Browse...
       </ion-button>
     </ion-item>
-    <ion-item style="display: inline-block;"><!-- ion-label float-left id="photos">{{photos}}</ion-label -->
-      <div>
-        <ion-label id="previewPhotos"></ion-label>
-      </div>
-    </ion-item>
     <ion-item style="display: inline-block;">
       <div>
-        <span *ngFor="let routeUrl of route.imagesUrls; let i = index">
-          <app-route-image imgPath="{{routeUrl}}" sizeToLoad="large" width="400" height="300" ></app-route-image>
-        </span>
+        <ion-label id="previewPhotos">
+            <div *ngFor="let routeUrl of route.imagesUrls; let i = index" float-left>
+                <app-route-image [imgPath]="routeUrl" sizeToLoad="large" width="400" height="300" ></app-route-image>
+            </div>
+        </ion-label>
       </div>
     </ion-item>
 
@@ -405,11 +397,9 @@
         <ion-select-option value="12">December</ion-select-option>
       </ion-select>
     </ion-item>
-    <ion-item> <ion-button block type="button" (click)="updateRoute(true)">EventIt</ion-button> </ion-item>
-    <ion-item *ngIf="!viewMode">
-      <ion-button block type="button" (click)="updateRoute(false)">
-        Save
-      </ion-button>
-    </ion-item>
   </form>
+
+        <ion-button block (click)="updateRoute(true)" >EventIt</ion-button>
+        <ion-label block style="font-size: 1em;" *ngIf="!viewMode">or</ion-label>
+        <ion-button block (click)="updateRoute(false)" *ngIf="!viewMode">Just Save</ion-button>
 </ion-content>

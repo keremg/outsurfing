@@ -94,17 +94,6 @@ export class HomePage implements OnInit {
     return this.navCtrl.navigateForward('EventDetail/' + eventId + '/0');
   }
 
-  logout() {
-    this.authService
-      .logoutUser()
-      .then(() => {
-        this.navCtrl.navigateRoot('');
-      })
-      .catch(() => {
-        console.log('error in logout');
-      });
-  }
-
   loadData(event) {
     this.page.more();
 
@@ -120,8 +109,7 @@ export class HomePage implements OnInit {
 
   routeImageUrl(surfRoute: SurfEvent) {
     if (surfRoute.imagesUrls && surfRoute.imagesUrls.length > 0) {
-      console.log(surfRoute.imagesUrls[0]);
-      return 'routes/' + surfRoute.routeId +'/' + surfRoute.imagesUrls[0];
+      return surfRoute.imagesUrls[0];
     }
     return '';
   }

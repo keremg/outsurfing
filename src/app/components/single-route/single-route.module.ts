@@ -7,6 +7,7 @@ import { IonicModule } from '@ionic/angular';
 // import { ImagePicker } from '@ionic-native/image-picker';
 import { SingleRoutePage } from './single-route.page';
 import {RouteImageComponentModule} from '../route-image/route-image.module';
+import {ToolbarComponentModule} from '../toolbar/toolbar.module';
 
 const routes: Routes = [
   {
@@ -22,6 +23,7 @@ const routes: Routes = [
     ReactiveFormsModule,
     IonicModule,
     RouteImageComponentModule,
+      ToolbarComponentModule,
     RouterModule.forChild(routes)
   ],
   declarations: [SingleRoutePage]

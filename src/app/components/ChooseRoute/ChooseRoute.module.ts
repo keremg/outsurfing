@@ -8,6 +8,7 @@ import { IonicModule } from '@ionic/angular';
 
 import { ChooseRoute } from './ChooseRoute.page';
 import {RouteImageComponentModule} from '../route-image/route-image.module';
+import {ToolbarComponentModule} from '../toolbar/toolbar.module';
 
 @NgModule({
   imports: [
@@ -16,6 +17,7 @@ import {RouteImageComponentModule} from '../route-image/route-image.module';
     ReactiveFormsModule,
     IonicModule,
     RouteImageComponentModule,
+      ToolbarComponentModule,
     RouterModule.forChild([
       {
         path: '',

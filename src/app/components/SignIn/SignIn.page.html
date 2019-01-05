@@ -1,9 +1,5 @@
 <ion-header>
-  <ion-toolbar>
-    <ion-title>
-      Sign in to OutSurfing
-    </ion-title>
-  </ion-toolbar>
+  <app-toolbar loggedIn="false" title="Sign in"></app-toolbar>
 </ion-header>
 <ion-content padding no-bounce text-center fullscreen>
   <form [formGroup]="loginForm" (submit)="loginUser()" novalidate>

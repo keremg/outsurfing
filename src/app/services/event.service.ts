@@ -44,7 +44,6 @@ export class EventService {
                 const data = action.payload.data() as SurfEvent;
                 data.id = action.payload.id;
                 data.participant = this.getParticipants(id);
-                data.participant.subscribe(v=>console.log(v));
                 return data;
             }
         }));
@@ -55,7 +54,6 @@ export class EventService {
         let x = this.getAllSubstrings(event.name);
         event.searchIndex = x;
         return this.events.add({...event}).then((docRef) => {
-            console.log('Route document written with ID: ', docRef.id);
             return docRef.id;
 
         }).catch(function(error) {
@@ -133,16 +131,18 @@ export class EventService {
         });
     }
 
-    async approveParticipant(id, uid){
-        this.events.doc(id).update({[uid]:1});
+    async approveParticipant(id, uid, event){
+        debugger;
+        let newApproved : number= event.approvedParticipants+1;
+        this.events.doc(id).update({[uid]:1, approvedParticipants: newApproved});
         return this.events.doc(id).collection(this.participant_collection_endpoint).doc(uid).update({approved:true}).catch(function(error) {
             alert('Failed deleting participant' + error);
             console.error('Error deleting participant: ', error);
         });
     }
 
-    async disapproveParticipant(id, uid){
-        this.events.doc(id).update({[uid]:firebase.firestore.FieldValue.delete()});
+    async disapproveParticipant(id, uid, event){
+        this.events.doc(id).update({[uid]:firebase.firestore.FieldValue.delete(),  approvedParticipants: event.approvedParticipants-1});
         return this.events.doc(id).collection(this.participant_collection_endpoint).doc(uid).update({approved:false}).catch(function(error) {
             alert('Failed deleting participant' + error);
             console.error('Error deleting participant: ', error);

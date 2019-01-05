@@ -6,6 +6,7 @@ import { Routes, RouterModule } from '@angular/router';
 import { IonicModule } from '@ionic/angular';
 
 import { ResetPasswordPage } from './reset-password.page';
+import {ToolbarComponentModule} from '../toolbar/toolbar.module';
 
 const routes: Routes = [
   {
@@ -20,6 +21,7 @@ const routes: Routes = [
     FormsModule,
     ReactiveFormsModule,
     IonicModule,
+      ToolbarComponentModule,
     RouterModule.forChild(routes)
   ],
   declarations: [ResetPasswordPage]

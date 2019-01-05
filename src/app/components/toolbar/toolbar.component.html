@@ -1,0 +1,25 @@
+<ion-toolbar padding-horizontal color="light">
+  <ion-back-button slot="start" [defaultHref]="defaultBack" *ngIf="defaultBack"></ion-back-button>
+  <img slot="start" width="280" height="40" src="/assets/images/logo.png" />
+
+  <ion-label style="font-size: 2em; margin-left: 30px" slot="primary">
+    {{title}}
+  </ion-label>
+
+  <ion-buttons slot="end" color="primary" *ngIf="!loggedIn">
+    <ion-button
+            style="float: right;"
+            slot="end"
+            color="dark"
+            fill="solid"
+            shape="round"
+            (click)="logout()"
+    >
+      logout
+    </ion-button>
+    <ion-button href="/EditProfile">
+      <ion-icon slot="icon-only" name="contact"></ion-icon>
+    </ion-button>
+    <ion-menu-button autoHide="false"></ion-menu-button>
+  </ion-buttons>
+</ion-toolbar>

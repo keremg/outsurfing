@@ -24,6 +24,7 @@ import { AuthGuardService } from './services/auth-guard.service';
 import { Geolocation } from '@ionic-native/geolocation/ngx';
 import {Ng2ImgMaxModule, Ng2ImgMaxService} from 'ng2-img-max';
 import {RouteImageComponentModule} from './components/route-image/route-image.module';
+import {ToolbarComponentModule} from './components/toolbar/toolbar.module';
 
 
 @NgModule({
@@ -31,7 +32,7 @@ import {RouteImageComponentModule} from './components/route-image/route-image.mo
   entryComponents: [],
   imports: [BrowserModule, IonicModule.forRoot(), AppRoutingModule, AppRoutingModule ,
       AngularFireDatabaseModule, HttpClientModule, AngularFireModule.initializeApp(environment.firebase),
-      AngularFirestoreModule, AngularFireAuthModule, AngularFireStorageModule, Ng2ImgMaxModule, RouteImageComponentModule],
+      AngularFirestoreModule, AngularFireAuthModule, AngularFireStorageModule, Ng2ImgMaxModule, RouteImageComponentModule, ToolbarComponentModule],
   providers: [
     StatusBar,
     SplashScreen,

@@ -7,6 +7,7 @@ import { IonicModule } from '@ionic/angular';
 
 
 import { SignupPage } from './signup.page';
+import {ToolbarComponentModule} from '../toolbar/toolbar.module';
 
 const routes: Routes = [
   {
@@ -21,6 +22,7 @@ const routes: Routes = [
     FormsModule,
     ReactiveFormsModule,
     IonicModule,
+      ToolbarComponentModule,
     RouterModule.forChild(routes),
   ],
   declarations: [SignupPage]

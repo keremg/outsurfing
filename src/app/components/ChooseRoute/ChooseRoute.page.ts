@@ -55,7 +55,7 @@ export class ChooseRoute implements OnInit {
 
   routeImageUrl(surfRoute: SurfRoute) {
       if (surfRoute.imagesUrls && surfRoute.imagesUrls.length > 0) {
-          return 'routes/' + surfRoute.id + '/' + surfRoute.imagesUrls[0];
+          return surfRoute.imagesUrls[0];
       }
       return '';
   }
