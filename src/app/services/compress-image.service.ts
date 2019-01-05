@@ -16,7 +16,7 @@ export class CompressImageService {
 
 
 
-    savedCompressed(image, filePath, originalComponent, size) {
+    async savedCompressed(image, filePath, originalComponent, size): Promise<any> {
         debugger;
         let addedName = "Large";
         let width = 600;
@@ -32,19 +32,21 @@ export class CompressImageService {
             height = 300;
         }
 
+        console.log('About to compress image ' + size);
 
-        let res= this.ng2ImgMax.resizeImage(image, width,height).pipe(map(result => {
-            const compress =  new File([result], result.name , {type: 'image/jpeg'});
-            const task: AngularFireUploadTask = this.storage.upload(filePath+addedName, compress);
-            if(size===2) {
-                originalComponent.uploadPercent = task.percentageChanges();
-            }
-            return result;
-            //await task;
-            // return task.then((res) => {
-            //     return true;
-            }));
-        return res;
+        let compressPromise = new Promise (res=> this.ng2ImgMax.resizeImage(image, width,height).subscribe(res) ); //res  or  data=>res(data)
+        let result: any = await compressPromise;
+        console.log('Finished to compress image (about to upload) ' + size);
+        const compress =  new File([result], result.name , {type: 'image/jpeg'});
+        const task: AngularFireUploadTask = this.storage.upload(filePath+addedName, compress);
+        if(size===2) {
+            originalComponent.uploadPercent = task.percentageChanges();
+        }
+        await task;
+        console.log('Finished to uploading image ' + size);
+
+        return result;
+
 
         // }).catch(err => {
         //     console.log('Oh no!', err);
@@ -53,52 +55,22 @@ export class CompressImageService {
         // });
 
 
-      //  return new Promise((resolve, reject) => {
-      //        this.ng2ImgMax.resizeImage(image, width,height).subscribe(
-      //           result => {
-      //               const compress =  new File([result], result.name , {type: 'image/jpeg'});
-      //               const task: AngularFireUploadTask = this.storage.upload(filePath+addedName, compress);
-      //               if(size===2){
-      //                   originalComponent.uploadPercent = task.percentageChanges();
-      //               }
-      //
-      //             //  resolve(true);
-      //               // observe percentage changes
-      //               //originalComponent.uploadPercent = task.percentageChanges();
-      //               //return task;
-      //           },
-      //           error => {
-      //               console.log('Oh no!', error);
-      //               //reject();
-      //               return Promise.resolve(false);
-      //           });
-        // });
-
 
     }
 
-    saveImage(image, filePath, originalComponent): Observable<any>{
-        // return Promise.all([
-        //     this.savedCompressed(image, filePath, originalComponent, 0),
-        //     this.savedCompressed(image, filePath, originalComponent, 1),
-        //     this.savedCompressed(image, filePath, originalComponent, 2)
-        // ]);
-        let sizes = [0,1,2];
-        let observables = sizes.map(index=>{
-            return this.savedCompressed(image, filePath, originalComponent, index);
-        });
-        return forkJoin(observables);
+    async saveImage(image, filePath, originalComponent): Promise<any> {
+        return Promise.all([
+            this.savedCompressed(image, filePath, originalComponent, 0),
+            this.savedCompressed(image, filePath, originalComponent, 1),
+            this.savedCompressed(image, filePath, originalComponent, 2)
+        ]);
+        // let sizes = [0,1,2];
+        // let observables = sizes.map(index=>{
+        //     return this.savedCompressed(image, filePath, originalComponent, index);
+        // });
+        // return forkJoin(observables);
 
-        // return  this.savedCompressed(image, filePath, originalComponent, 2).pipe(map(res=>{
-        //     return this.savedCompressed(image, filePath, originalComponent, 1).pipe(map(res=>{
-        //         return this.savedCompressed(image, filePath, originalComponent, 0).pipe(map(res=>{
-        //             return res;
-        //         }));
-        //     }));
-        // }));
-        //await this.savedCompressed(image, filePath, originalComponent, 1).subscribe();
-        //await this.savedCompressed(image, filePath, originalComponent, 2).subscribe();
-        //return Promise.resolve(true);
+
     }
 
 

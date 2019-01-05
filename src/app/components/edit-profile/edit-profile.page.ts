@@ -28,6 +28,8 @@ export class EditProfilePage implements OnInit {
     public loading;
     currentUserId: string;
     currentUser: SurfUser;
+    loadingElement: HTMLIonLoadingElement;
+
     uploadPercent: Observable<number>;
     profileUrl: Observable<string | null>;
      constructor(
@@ -38,7 +40,8 @@ export class EditProfilePage implements OnInit {
         private formBuilder: FormBuilder,
         private userService: UserService,
         private storage: AngularFireStorage,
-        public compressImageService: CompressImageService
+        public compressImageService: CompressImageService,
+        public loadingController: LoadingController
     ) {
          this.updateForm = this.formBuilder.group({
              firstName: ['', Validators.compose([Validators.minLength(1), Validators.required])],
@@ -133,33 +136,33 @@ catch (error) {
 }
 
 
+    openLoadingController() {
+        this.loadingController.create({
+            message: 'Saving, please wait...'
+        }).then(res => {
+            this.loadingElement = res;
+            this.loadingElement.present();
+        });
+    }
+    closeLoadingController() {
+        this.loadingController.dismiss().then();
+    }
+
     async uploadFile(event) {
-        debugger;
+        this.openLoadingController();
         const file = event.target.files[0];
         const filePath = 'users/'+this.currentUser.id+'/profilePic';
         this.profileUrl = undefined;
-        this.compressImageService.saveImage(file, filePath, this).take(1).toPromise().then((res) => {
-            debugger;
-            console.log("nir");
+        this.compressImageService.saveImage(file, filePath, this).then((res) => {
+            this.closeLoadingController();
             if(res) {
                 const ref = this.storage.ref('users/'+this.currentUser.id+'/profilePicLarge');
-                debugger;
                 this.profileUrl = ref.getDownloadURL().pipe(map(url => {
                     const timet = (new Date()).getTime();
-                    return url + "&ttt=" + timet;
+                    return url + "&ttt=" + timet; //against browser cache
                 }));
-                debugger;
             }
         });
-    //     this.compressImageService.saveImage(file, filePath, this).toPromise().then((res=>{
-    //         console.log("nir");
-    //         if(res){
-    //             const ref = this.storage.ref('users/'+this.currentUser.id+'/profilePicLarge');
-    //             debugger;
-    //             this.profileUrl = ref.getDownloadURL();
-    //             debugger;
-    // }}));
-        //debugger;
 
 
 
