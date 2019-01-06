@@ -24,7 +24,12 @@
         </ion-button>
     </ion-buttons>
 
-
+    <ion-card class="event"
+              (click)="onCreateEvent()">
+        <ion-button id="createEvent" fill="clear" expand="full" size="large"  color="dark">
+            Create New
+        </ion-button>
+    </ion-card>
     <ion-card *ngFor="let event of (this.page.data | async); let i = index"
             [attr.data-index]="i"
             class="event"
@@ -123,8 +128,8 @@
                                     </ion-grid>
                             </ion-col>
                             <ion-col size="4">
-                            <ion-item><ion-label>TODO Distance to meeting: 5km</ion-label></ion-item>
-                                <ion-item><ion-label>TODO Distance to trip: 70km</ion-label></ion-item>
+                            <ion-item *ngIf="event.meetingGeolocation && (location |async)"><ion-label>Distance to meeting: {{getDistance(event.meetingGeolocation,location|async)}}km</ion-label></ion-item>
+                                <ion-item *ngIf="event.routeStartGeolocation && (location |async)"><ion-label>Distance to trip: {{getDistance(event.routeStartGeolocation,location|async)}}km</ion-label></ion-item>
                                 <ion-item *ngIf="event.isEventRequiresCars">
                                     <ion-icon
                                             name="car"
@@ -173,9 +178,7 @@
         </ion-infinite-scroll-content>
     </ion-infinite-scroll>
 
-    <br/><br/><br/><br/>
-    <br/><br/><br/><br/>
-    <br/><br/><br/><br/>
+    <div id="map" ></div>
 
     <!-- TODO: from here all cards are just an example -->
     <!-- <ion-card class="event"> -->

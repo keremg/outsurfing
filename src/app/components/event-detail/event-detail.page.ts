@@ -600,8 +600,8 @@ export class EventDetailPage implements OnInit {
                 geocoder: geocoder
             }).on('markgeocode', (e) => {
                 this.singleEventForm.patchValue({
-                    routeMeetingGeolocation: e.geocode.center.lat + ',' + e.geocode.center.lng,
-                    routeMeetingLocation: e.geocode.name
+                    MeetingGeolocation: e.geocode.center.lat + ',' + e.geocode.center.lng,
+                    MeetingLocation: e.geocode.name
                 });
             }).addTo(this.mapMeeting);
             this.mapMeeting.on('click', (e) => {
@@ -623,8 +623,8 @@ export class EventDetailPage implements OnInit {
                         location = r.name;
                     }
                     this.singleEventForm.patchValue({
-                        routeMeetingGeolocation: this.mapMeeting.surfLatLng.lat + ',' + this.mapMeeting.surfLatLng.lng,
-                        routeMeetingLocation: location
+                        meetingGeolocation: this.mapMeeting.surfLatLng.lat + ',' + this.mapMeeting.surfLatLng.lng,
+                        meetingLocation: location
                     });
                 });
 

@@ -6,9 +6,10 @@ import { UserService } from '../../services/user.service';
 import { SurfUser } from '../../models/surfUser';
 import { ActivatedRoute } from '@angular/router';
 import { RouteService } from '../../services/route.service';
-import { Observable } from 'rxjs';
+import {Observable, ReplaySubject, Subject} from 'rxjs';
 import { SurfEvent } from '../../models/surfEvent';
 import {createConsoleLogger} from '@angular-devkit/core/node';
+import leaflet from 'leaflet';
 
 declare let window: any;
 
@@ -23,6 +24,7 @@ export class HomePage implements OnInit {
   onlyMine: boolean = false;
   query: string;
   searched: boolean;
+  location: ReplaySubject<string[]> = new ReplaySubject(1);
 
   constructor(
     public navCtrl: NavController,
@@ -62,6 +64,7 @@ export class HomePage implements OnInit {
       else {
         this.page.init('events', 'name', { reverse: true, prepend: false });
       }
+      this.locate();
     }
 
     const searchbar = document.getElementById('search');
@@ -132,5 +135,54 @@ export class HomePage implements OnInit {
         return ', Age: '+ Math.abs(ageDate.getUTCFullYear() - 1970);
     }
   }
+
+    onCreateEvent(){
+        return this.navCtrl.navigateRoot('ChooseRoute');
+
+    }
+
+    locate(){
+        leaflet.map('map').fitWorld().locate({
+            timeout: 30000,
+            maximumAge: 300000
+        }).on('locationfound', (e) => {
+          debugger;
+            this.location.next([e.latlng.lat, e.latlng.lng]);
+            this.location.complete();
+        }).on('locationerror', (err) => {
+            console.log(err.message);
+        });
+        document.getElementById('map').hidden = true;
+
+    }
+
+    //This function takes in latitude and longitude of two location and returns the distance between them as the crow flies (in km)
+     getDistance(geoLocation: string, loc: string[])
+    {
+debugger;
+      let lat1, lon1, lat2, lon2;
+      let s = geoLocation.split(',');
+      lat1=s[0];
+      lon1=s[1];
+      lat2=loc[0];
+      lon2=loc[1];
+        var R = 6371; // km
+        var dLat = this.toRad(lat2-lat1);
+        var dLon = this.toRad(lon2-lon1);
+         lat1 = this.toRad(lat1);
+         lat2 = this.toRad(lat2);
+
+        var a = Math.sin(dLat/2) * Math.sin(dLat/2) +
+            Math.sin(dLon/2) * Math.sin(dLon/2) * Math.cos(lat1) * Math.cos(lat2);
+        var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+        var d = R * c;
+        return Math.round(d);
+    }
+
+    // Converts numeric degrees to radians
+     toRad(Value)
+    {
+        return Value * Math.PI / 180;
+    }
 
 }
