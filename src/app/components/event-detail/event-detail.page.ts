@@ -21,6 +21,7 @@ import {Observable, Subscription} from 'rxjs';
 import {ParticipantApprovalPage} from '../participant-approval/participant-approval.page';
 import { AngularFireStorage, AngularFireUploadTask } from '@angular/fire/storage';
 import {CompressImageService} from '../../services/compress-image.service';
+import 'rxjs/add/observable/of';
 
 
 declare let window: any;
@@ -219,7 +220,7 @@ export class EventDetailPage implements OnInit {
         // TODO: defaults
 
         this.event.eventOrganizerId = this.currentUser.id;
-        this.event.eventOrganizer = this.currentUser;
+        this.event.eventOrganizer = Observable.of(this.currentUser);
         this.event.approvedParticipants=0;
         //this.event.routeCreator = await this.userService.getuser(this.event.routeCreatorId).toPromise();
         ////this.event.eventOrganizer = await this.userService.getuser(this.event.eventOrganizerId).toPromise();
@@ -285,7 +286,7 @@ export class EventDetailPage implements OnInit {
 
             modal.onDidDismiss().then(data => {
                 if (data.data) {
-                    this.eventService.approveParticipant(returnedId,this.currentUser.id, this.event)
+                    this.eventService.approveParticipant(returnedId,data.data, this.event)//TODO guy test
                     this.finishUpdate(isStayOnPage, copyOfEvent);
                 } else {
                     this.eventService.deleteEvent(returnedId);
@@ -584,6 +585,9 @@ export class EventDetailPage implements OnInit {
     plusEndText: any = '+';
 
     loadmapMeeting() {
+        if(this.mapMeeting){
+            this.mapMeeting.remove();
+        }
         this.mapMeeting = leaflet.map('mapMeeting').fitWorld();
         this.mapMeeting.scrollWheelZoom.disable();
         leaflet.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -649,6 +653,9 @@ export class EventDetailPage implements OnInit {
     }
 
     loadmapStart() {
+        if(this.mapStart){
+            this.mapStart.remove();
+        }
         this.mapStart = leaflet.map('mapStart').fitWorld();
         this.mapStart.scrollWheelZoom.disable();
         leaflet.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -750,6 +757,9 @@ export class EventDetailPage implements OnInit {
     }
 
     loadmapEnd() {
+        if(this.mapEnd){
+            this.mapEnd.remove();
+        }
         this.mapEnd = leaflet.map('mapEnd').fitWorld();
         this.mapEnd.scrollWheelZoom.disable();
         leaflet.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {

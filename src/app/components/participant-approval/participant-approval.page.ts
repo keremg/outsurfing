@@ -33,11 +33,11 @@ export class ParticipantApprovalPage implements OnInit {
         }
     }
 
-    async onApprove(uid:string){
-      return this.eventService.approveParticipant(this.eventID,uid, this.event)
+    async onApprove(participant:SurfParticipant){
+      return this.eventService.approveParticipant(this.eventID,participant, this.event)
     }
-    async onDisapprove(uid:string){
-        return this.eventService.disapproveParticipant(this.eventID,uid, this.event)
+    async onDisapprove(participant:SurfParticipant){
+        return this.eventService.disapproveParticipant(this.eventID,participant, this.event)
     }
 
     async onClose() {

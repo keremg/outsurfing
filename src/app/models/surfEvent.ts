@@ -61,13 +61,14 @@ export class SurfEvent extends SurfRoute {
     returnTime: string; //@@full date&houre  (duration of event is returnTime-meetingTime)
 
     eventOrganizerId: string;
-    eventOrganizer: SurfUser; //will also show organizer's ranking
+    eventOrganizer: Observable<SurfUser>; //will also show organizer's ranking
     audienceType: string[]; //singles, couples, with kids, LGBT, elderlies, youngs, women only, men only, etc
     isGuidedEvent: boolean;
     priceOfEvent: number;    //default 0, more if isGuidedEvent
     organizerContactDetails: string; //free text allowing the guide to describe email and/or phone for contacting him/her about event
     requiredEquipment: string;
     isEventRequiresCars: boolean; //not all events requires cars handling
+    availableSeats: number;//TODO should add in approve
 
     participant: Observable<SurfParticipant[]>;
     approvedParticipants: number;

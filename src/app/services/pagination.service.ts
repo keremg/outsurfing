@@ -5,6 +5,8 @@ import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/do';
 import 'rxjs/add/operator/scan';
 import 'rxjs/add/operator/take';
+import {EventService} from './event.service';
+import {UserService} from './user.service';
 
 interface QueryConfig {
     path: string, //  path to collection
@@ -32,7 +34,9 @@ export class PaginationService {
     loading: Observable<boolean> = this._loading.asObservable();
 
 
-    constructor(private afs: AngularFirestore) { }
+    constructor(private afs: AngularFirestore,
+                private eventService: EventService,
+                private userService: UserService) { }
 
     // Initial query sets options and defines the Observable
     // passing opts will override the defaults
@@ -132,6 +136,10 @@ export class PaginationService {
                     const data = snap.payload.doc.data()
                     const doc = snap.payload.doc
                     data.id = snap.payload.doc.id;
+                    if(this.query.path === 'events'){
+                        data.participant = this.eventService.getParticipants(data.id);
+                        data.eventOrganizer = this.userService.getuser(data.eventOrganizerId);
+                    }
                     return { ...data, doc }
                 })
 

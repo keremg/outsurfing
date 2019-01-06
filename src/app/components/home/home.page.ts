@@ -60,13 +60,7 @@ export class HomePage implements OnInit {
           );
       }
       else {
-        this.page.init('events', 'name', { reverse: true, prepend: false }).subscribe(events=>{
-          events.forEach(event=>{
-            this.userService.getuser(event.eventOrganizerId).subscribe(res=>{
-                event.eventOrganizer = res;
-            });
-          })
-        });
+        this.page.init('events', 'name', { reverse: true, prepend: false });
       }
     }
 
@@ -129,6 +123,14 @@ export class HomePage implements OnInit {
       return res.firstName;
     });
 
+  }
+
+  getAge(birth){
+    if(birth) {
+        var ageDifMs = Date.now() - new Date(birth).getTime();
+        var ageDate = new Date(ageDifMs); // miliseconds from epoch
+        return ', Age: '+ Math.abs(ageDate.getUTCFullYear() - 1970);
+    }
   }
 
 }

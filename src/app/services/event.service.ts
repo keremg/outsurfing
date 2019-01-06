@@ -44,6 +44,7 @@ export class EventService {
                 const data = action.payload.data() as SurfEvent;
                 data.id = action.payload.id;
                 data.participant = this.getParticipants(id);
+                data.eventOrganizer = this.userService.getuser(data.eventOrganizerId);
                 return data;
             }
         }));
@@ -131,19 +132,23 @@ export class EventService {
         });
     }
 
-    async approveParticipant(id, uid, event){
+    async approveParticipant(id, participant:SurfParticipant, event){
         debugger;
+        //TODO urgent should affect number of seats
         let newApproved : number= event.approvedParticipants+1;
-        this.events.doc(id).update({[uid]:1, approvedParticipants: newApproved});
-        return this.events.doc(id).collection(this.participant_collection_endpoint).doc(uid).update({approved:true}).catch(function(error) {
+        this.events.doc(id).update({[participant.id]:1,
+                                            approvedParticipants: newApproved,
+                                            });
+        return this.events.doc(id).collection(this.participant_collection_endpoint).doc(participant.id).update({approved:true}).catch(function(error) {
             alert('Failed deleting participant' + error);
             console.error('Error deleting participant: ', error);
         });
     }
 
-    async disapproveParticipant(id, uid, event){
-        this.events.doc(id).update({[uid]:firebase.firestore.FieldValue.delete(),  approvedParticipants: event.approvedParticipants-1});
-        return this.events.doc(id).collection(this.participant_collection_endpoint).doc(uid).update({approved:false}).catch(function(error) {
+    async disapproveParticipant(id, participant:SurfParticipant, event){
+        //TODO urgent should affect number of seats
+        this.events.doc(id).update({[participant.id]:firebase.firestore.FieldValue.delete(),  approvedParticipants: event.approvedParticipants-1});
+        return this.events.doc(id).collection(this.participant_collection_endpoint).doc(participant.id).update({approved:false}).catch(function(error) {
             alert('Failed deleting participant' + error);
             console.error('Error deleting participant: ', error);
         });

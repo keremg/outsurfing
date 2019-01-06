@@ -21,12 +21,6 @@
                 <ion-item>
                     <ion-button (click)="openOriginalRoute()">Open Original Route</ion-button>
                 </ion-item>
-                <ion-item>
-                    <ion-label>Meeting location is is the optional gathering for car-pooling and starting your drive
-                        toward the
-                        route start
-                    </ion-label>
-                </ion-item>
 
                 <ion-item>
                     <ion-label
@@ -40,7 +34,8 @@
                     <ion-input
                             formControlName="meetingLocation"
                             type="text"
-                            placeholder="Meeting location"
+                            placeholder="Meeting location is is the optional gathering for car-pooling and starting your
+                            drive toward the route start"
                             [class.invalid]="
           !singleEventForm.controls.meetingLocation.valid && blur && !viewMode"
                     >
@@ -82,7 +77,7 @@
                 <!--isEventRequiresCars-->
                 <ion-item>
                     <ion-label stacked>Are Cars Required?</ion-label>
-                    <ion-checkbox formControlName="isEventRequiresCars" color="primary" checked="false"></ion-checkbox>
+                    <ion-checkbox formControlName="isEventRequiresCars" color="primary" checked="true"></ion-checkbox>
                 </ion-item>
 
                 <ion-item>
@@ -309,21 +304,21 @@
                     <!--
                       TODO: URGENT  make sure we set the eventOrganizerId upon creation of route, and that also fetching the user into eventOrganizer for teh component
                     -->
-                    <ion-label stacked>Creator of event: {{ route.eventOrganizer?.firstName }}
-                        {{ route.eventOrganizer?.lastName }}</ion-label>
+                    <ion-label stacked>Creator of event: {{ (event?.eventOrganizer | async)?.firstName }}
+                        {{ (event?.eventOrganizer | async)?.lastName }}</ion-label>
                     <!-- TODO show photo of creator -->
-                    <ion-label stacked *ngIf="route.eventOrganizer?.isGuide">Event organizer is a travel-guide :)
+                    <ion-label stacked *ngIf="(event?.eventOrganizer | async)?.isGuide">Event organizer is a travel-guide :)
                     </ion-label>
-                    <ion-input
+                    <!--ion-input
                             formControlName="organizerContactDetails"
                             type="text"
                             placeholder="Event-Organizer Contact Details (optional email and/or phone)"
                             [class.invalid]="
           !singleEventForm.controls.organizerContactDetails.valid && blur && !viewMode"
                     >
-                    </ion-input>
+                    </ion-input-->
                 </ion-item>
-                <ion-item *ngIf="route.eventOrganizer?.isGuide">
+                <ion-item *ngIf="(event?.eventOrganizer | async)?.isGuide">
                     <ion-label stacked>Is it a guided trip?</ion-label>
                     <ion-checkbox
                             formControlName="isGuidedEvent"

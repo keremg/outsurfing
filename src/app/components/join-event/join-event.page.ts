@@ -24,23 +24,27 @@ export class JoinEventPage implements OnInit {
               private modalController: ModalController,
               private eventService:EventService,
               private formBuilder: FormBuilder,
-              private userService: UserService) { }
+              private userService: UserService) {
 
-  async ngOnInit() {
-      this.eventID = this.navParams.get('eventId');
-
-
-
-      window.form = this.joinEventForm;
-      this.user = await this.userService.getCurrentUserPromise();
 
       this.joinEventForm = this.formBuilder.group({
-          phone: [this.user.phone, Validators.required],
-          email: [this.user.email, Validators.required],
+          phone: ['', Validators.required],
+          email: ['', Validators.required],
           equipment: [''],
           car: [false, Validators.required],
           places: [0, Validators.required],
           message: ['']
+      });
+      window.form = this.joinEventForm;
+  }
+
+  async ngOnInit() {
+      this.eventID = this.navParams.get('eventId');
+      this.user = await this.userService.getCurrentUserPromise();
+
+      this.joinEventForm.patchValue({
+          phone: this.user.phone,
+          email: this.user.email
       });
   }
 
@@ -54,7 +58,7 @@ export class JoinEventPage implements OnInit {
 
         let returnedId;
         return this.eventService.joinEvent(this.eventID,this.participant).then(()=>{
-            return this.modalController.dismiss(true);
+            return this.modalController.dismiss(this.participant);
         });
     }
 
