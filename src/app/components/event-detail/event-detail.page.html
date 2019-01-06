@@ -29,6 +29,46 @@
                 </ion-item>
 
                 <ion-item>
+                    <ion-label
+                            *ngIf="!singleEventForm.controls.meetingLocation.valid && !viewMode"
+                            color="danger"
+                            stacked
+                    >*
+                    </ion-label>
+                    <ion-button (click)="onPlusMeetingMap()" fill="clear">{{plusMeetingText}}</ion-button>
+                    <ion-label stacked>Meeting location</ion-label>
+                    <ion-input
+                            formControlName="meetingLocation"
+                            type="text"
+                            placeholder="Meeting location"
+                            [class.invalid]="
+          !singleEventForm.controls.meetingLocation.valid && blur && !viewMode"
+                    >
+                    </ion-input>
+                </ion-item>
+
+                <ion-item id="meetingGeo" hidden>
+                    <ion-label
+                            *ngIf="!singleEventForm.controls.meetingGeolocation?.valid && !viewMode"
+                            color="danger"
+                            stacked
+                    >*
+                    </ion-label>
+                    <ion-label stacked slot="start">Meeting Geolocation</ion-label>
+                    <ion-input
+                            formControlName="meetingGeolocation"
+                            type="text"
+                            placeholder="Meeting geolocation"
+                            [class.invalid]="
+          !singleEventForm.controls.meetingGeolocation?.valid && blur && !viewMode"
+                    >
+                    </ion-input>
+                </ion-item>
+                <ion-item id="meetingGeoMap">
+                    <div id="mapMeeting" style="height:200px; width:100%;" slot="start"></div>
+                </ion-item>
+
+                <ion-item>
                     <!--https://stackoverflow.com/questions/31907670/saving-the-val-return-from-ionic-datepicker-into-firebase-->
                     <ion-label stacked>Meeting Time</ion-label>
                     <ion-datetime displayFormat="MMM DD, YYYY HH:mm"
@@ -43,41 +83,6 @@
                 <ion-item>
                     <ion-label stacked>Are Cars Required?</ion-label>
                     <ion-checkbox formControlName="isEventRequiresCars" color="primary" checked="false"></ion-checkbox>
-                </ion-item>
-
-                <ion-item>
-                    <ion-label
-                            *ngIf="!singleEventForm.controls.meetingLocation.valid && !viewMode"
-                            color="danger"
-                            stacked
-                    >*
-                    </ion-label>
-                    <ion-label stacked>Meeting location</ion-label>
-                    <ion-input
-                            formControlName="meetingLocation"
-                            type="text"
-                            placeholder="Car-pool optional meeting location"
-                            [class.invalid]="
-          !singleEventForm.controls.meetingLocation.valid && blur && !viewMode">
-                    </ion-input>
-                </ion-item>
-
-                <ion-item>
-                    <ion-label
-                            *ngIf="!singleEventForm.controls.meetingGeolocation?.valid && !viewMode"
-                            color="danger"
-                            stacked
-                    >*
-                    </ion-label>
-                    <ion-label stacked slot="start">meeting Geolocation</ion-label>
-                    <ion-input
-                            formControlName="meetingGeolocation"
-                            type="text"
-                            placeholder="Meeting location geolocation"
-                            [class.invalid]="
-          !singleEventForm.controls.meetingGeolocation?.valid && blur && !viewMode"
-                    >
-                    </ion-input>
                 </ion-item>
 
                 <ion-item>
@@ -98,7 +103,7 @@
                             stacked
                     >*
                     </ion-label>
-                    <ion-button (click)="onPlusStartMap()">{{plusStartText}}</ion-button>
+                    <ion-button (click)="onPlusStartMap()" fill="clear">{{plusStartText}}</ion-button>
                     <ion-label stacked>Start location</ion-label>
                     <ion-input
                             formControlName="routeStartLocation"
@@ -110,7 +115,7 @@
                     </ion-input>
                 </ion-item>
 
-                <ion-item id="startGeo" hidden>
+                <ion-item id="startGeo">
                     <ion-label
                             *ngIf="!singleEventForm.controls.routeStartGeolocation?.valid && !viewMode"
                             color="danger"
@@ -149,7 +154,7 @@
                             stacked
                     >*
                     </ion-label>
-                    <ion-button (click)="onPlusEndMap()">{{plusEndText}}</ion-button>
+                    <ion-button (click)="onPlusEndMap()" fill="clear">{{plusEndText}}</ion-button>
                     <ion-label stacked>End location</ion-label>
                     <ion-input
                             formControlName="routeEndLocation"

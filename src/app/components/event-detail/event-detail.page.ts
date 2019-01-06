@@ -397,6 +397,7 @@ export class EventDetailPage implements OnInit {
             isEventRequiresCars: event.isEventRequiresCars
 
         });
+        this.loadmapMeeting();
         this.loadmapStart();
         this.loadmapEnd();
     }
@@ -575,11 +576,77 @@ export class EventDetailPage implements OnInit {
     //------------------------------------------------------------------------------------------
     // map region
     //------------------------------------------------------------------------------------------
+    mapMeeting: any;
     mapStart: any;
     mapEnd: any;
-    plusStartText: any = '+';
+    plusMeetingText: any = '+';
+    plusStartText: any = '-';
     plusEndText: any = '+';
 
+    loadmapMeeting() {
+        this.mapMeeting = leaflet.map('mapMeeting').fitWorld();
+        this.mapMeeting.scrollWheelZoom.disable();
+        leaflet.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attributions: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="http://mapbox.com">Mapbox</a>',
+            maxZoom: 18
+        }).addTo(this.mapMeeting);
+        if (!this.viewMode) {
+            const geocoder = L.Control.Geocoder.nominatim();
+            const control = L.Control.geocoder({
+                geocoder: geocoder
+            }).on('markgeocode', (e) => {
+                this.singleEventForm.patchValue({
+                    routeMeetingGeolocation: e.geocode.center.lat + ',' + e.geocode.center.lng,
+                    routeMeetingLocation: e.geocode.name
+                });
+            }).addTo(this.mapMeeting);
+            this.mapMeeting.on('click', (e) => {
+                if (this.mapMeeting.SurfMarker) {
+                    this.mapMeeting.removeLayer(this.mapMeeting.SurfMarker);
+                }
+                this.mapMeeting.surfLatLng = e.latlng;
+                const markerGroup = leaflet.featureGroup();
+                const marker: any = leaflet.marker([e.latlng.lat, e.latlng.lng]).on('click', () => {
+                    //alert('Marker clicked');
+                });
+                markerGroup.addLayer(marker);
+                e.sourceTarget.addLayer(markerGroup);
+                this.mapMeeting.SurfMarker = markerGroup;
+                let location = '';
+                geocoder.reverse(e.latlng, this.mapMeeting.options.crs.scale(this.mapMeeting.getZoom()), (results) => {
+                    const r = results[0];
+                    if (r) {
+                        location = r.name;
+                    }
+                    this.singleEventForm.patchValue({
+                        routeMeetingGeolocation: this.mapMeeting.surfLatLng.lat + ',' + this.mapMeeting.surfLatLng.lng,
+                        routeMeetingLocation: location
+                    });
+                });
+
+            });
+        }
+
+        if (this.event.meetingGeolocation) { // loaded from db
+            const loc = this.event.meetingGeolocation.split(',');
+            if (this.mapMeeting.SurfMarker) {
+                this.mapMeeting.removeLayer(this.mapMeeting.SurfMarker);
+            }
+            const markerGroup = leaflet.featureGroup();
+            const marker: any = leaflet.marker(loc).on('click', () => {
+                // alert('Marker clicked');
+            });
+            markerGroup.addLayer(marker);
+            this.mapMeeting.addLayer(markerGroup);
+            this.mapMeeting.SurfMarker = markerGroup;
+            this.mapMeeting.surfLatLng = {lat: loc[0], lng: loc[1]};
+
+            this.mapMeeting.setView(loc, 10);
+        }
+
+        document.getElementById('meetingGeoMap').hidden = true;
+
+    }
 
     loadmapStart() {
         this.mapStart = leaflet.map('mapStart').fitWorld();
@@ -680,9 +747,6 @@ export class EventDetailPage implements OnInit {
 
             this.mapStart.setView(loc, 10);
         }
-
-        document.getElementById('startGeoMap').hidden = true;
-
     }
 
     loadmapEnd() {
@@ -767,6 +831,13 @@ export class EventDetailPage implements OnInit {
             myEnum.push({key: keys[i], value: values[i]});
         }
         return myEnum;
+    }
+
+    onPlusMeetingMap(){
+        document.getElementById('meetingGeo').hidden = !document.getElementById('meetingGeo').hidden;
+        document.getElementById('meetingGeoMap').hidden = !document.getElementById('meetingGeoMap').hidden;
+        this.plusMeetingText === '+' ? this.plusMeetingText = '-' : this.plusMeetingText = '+';
+        this.mapMeeting.invalidateSize();
     }
 
     onPlusStartMap(){
