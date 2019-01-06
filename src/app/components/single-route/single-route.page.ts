@@ -18,6 +18,7 @@ import leaflet from 'leaflet';
 import L from 'leaflet';
 import '../../../geocoder/Control.Geocoder';
 import { AngularFireStorage, AngularFireUploadTask } from '@angular/fire/storage';
+import {CompressImageService} from '../../services/compress-image.service';
 
 declare let window: any;
 
@@ -52,7 +53,8 @@ export class SingleRoutePage implements OnInit {
         public authService: AuthService,
         private userService: UserService,
         private storage: AngularFireStorage,
-        public loadingController: LoadingController
+        public loadingController: LoadingController,
+        public compressImageService: CompressImageService
     ) {
         window.route = this;
     }
@@ -331,8 +333,9 @@ export class SingleRoutePage implements OnInit {
             for (const file of this.selectedPhotos) {
                 const filePath =  'routes/' + this.id + '/' + (new Date()).getTime() + '_' + i;
                 console.log('About to upload image: ' + filePath);
-                const task: AngularFireUploadTask = this.storage.upload(filePath, file);
-                await task;
+                //const task: AngularFireUploadTask = this.storage.upload(filePath, file);
+                //await task;
+                let res: any = await this.compressImageService.saveImage(file, filePath, this);
                 console.log('Finished to upload image: ' + filePath);
                 paths.push(filePath);
                 i++;
@@ -351,8 +354,9 @@ export class SingleRoutePage implements OnInit {
             let paths = [];
             for (const file of this.selectedMapsPhotos) {
                 const filePath = 'routes/' + this.id + '/' + (new Date()).getTime() + '_' + i;
-                const task: AngularFireUploadTask = this.storage.upload(filePath, file);
-                await task;
+                //const task: AngularFireUploadTask = this.storage.upload(filePath, file);
+                //await task;
+                let res: any = await this.compressImageService.saveImage(file, filePath, this);
                 paths.push(filePath);
                 i++;
             }

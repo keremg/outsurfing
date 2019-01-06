@@ -20,6 +20,7 @@ import {SurfParticipant} from '../../models/surfParticipant';
 import {Observable, Subscription} from 'rxjs';
 import {ParticipantApprovalPage} from '../participant-approval/participant-approval.page';
 import { AngularFireStorage, AngularFireUploadTask } from '@angular/fire/storage';
+import {CompressImageService} from '../../services/compress-image.service';
 
 
 declare let window: any;
@@ -61,7 +62,8 @@ export class EventDetailPage implements OnInit {
         private eventService: EventService,
         private routeService: RouteService,
         private storage: AngularFireStorage,
-        public loadingController: LoadingController
+        public loadingController: LoadingController,
+        public compressImageService: CompressImageService
     ) {
         window.event = this;
     }
@@ -456,8 +458,9 @@ export class EventDetailPage implements OnInit {
             let paths = [];
             for (const file of this.selectedPhotos) {
                 const filePath = 'events/' + this.id + '/' + (new Date()).getTime() + '_' + i;
-                const task: AngularFireUploadTask = this.storage.upload(filePath, file);
-                await task;
+                //const task: AngularFireUploadTask = this.storage.upload(filePath, file);
+                //await task;
+                let res: any = await this.compressImageService.saveImage(file, filePath, this);
                 paths.push(filePath);
                 i++;
             }
@@ -474,8 +477,9 @@ export class EventDetailPage implements OnInit {
             let paths = [];
             for (const file of this.selectedMapsPhotos) {
                 const filePath = 'events/' + this.id + '/' + (new Date()).getTime() + '_' + i;
-                const task: AngularFireUploadTask = this.storage.upload(filePath, file);
-                await task;
+                //const task: AngularFireUploadTask = this.storage.upload(filePath, file);
+                //await task;
+                let res: any = await this.compressImageService.saveImage(file, filePath, this);
                 paths.push(filePath);
                 i++;
             }

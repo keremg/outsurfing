@@ -431,7 +431,7 @@
                 <div>
                     <ion-label id="previewOldPhotos">
                         <div *ngFor="let routeUrl of event?.imagesUrls; let i = index" float-left>
-                            <app-route-image [imgPath]="routeUrl" sizeToLoad="large" width="400" height="300"
+                            <app-route-image [imgPath]="routeUrl+'_Large'" sizeToLoad="Large" width="400" height="300"
                                              [number]="i" *ngIf="photoIndex === i"></app-route-image>
                         </div>
                     </ion-label>
@@ -475,7 +475,7 @@
                 <div>
                     <ion-label id="previewOldMapPhotos">
                         <div *ngFor="let routeUrl of event?.mapImagesUrl; let i = index" float-left>
-                            <app-route-image [imgPath]="routeUrl" sizeToLoad="large" width="400" height="300"
+                            <app-route-image [imgPath]="routeUrl+'_Large'" sizeToLoad="Large" width="400" height="300"
                                              [number]="i" *ngIf="photoMapIndex === i"></app-route-image>
                         </div>
                     </ion-label>

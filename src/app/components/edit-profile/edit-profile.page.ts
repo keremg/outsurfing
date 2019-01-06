@@ -157,7 +157,7 @@ catch (error) {
         //finished uploading and compressing
         this.closeLoadingController();
         if(res) {
-            const ref = this.storage.ref('users/'+this.currentUser.id+'/profilePic_Large');
+            const ref = this.storage.ref('users/'+this.currentUser.id+'/profilePic_Large'); //without _Large for large image, need _Mediun or _Small for smaller versions
             this.profileUrl = ref.getDownloadURL().pipe(map(url => {
                 const timet = (new Date()).getTime();
                 return url + "&ttt=" + timet; //against browser cache

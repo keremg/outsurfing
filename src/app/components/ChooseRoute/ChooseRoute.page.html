@@ -41,7 +41,7 @@
               class="eventImg"
             ></ion-img>
           -->
-            <app-route-image imgPath="{{routeImageUrl(route)}}"></app-route-image>
+            <app-route-image imgPath="{{route.imagesUrls && route.imagesUrls.length>0 && route.imagesUrls[0]+'_Large'}}" sizeToLoad="Large"></app-route-image>
         </ion-col>
         <ion-col size="8">
           <ion-card-header no-padding>
