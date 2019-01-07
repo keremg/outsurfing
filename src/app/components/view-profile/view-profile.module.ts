@@ -7,6 +7,7 @@ import { IonicModule } from '@ionic/angular';
 
 import { ViewProfilePage } from './view-profile.page';
 import {UserReviewsPage} from '../user-reviews/user-reviews.page';
+import {ToolbarComponentModule} from '../toolbar/toolbar.module';
 
 
 const routes: Routes = [
@@ -21,6 +22,7 @@ const routes: Routes = [
     CommonModule,
     FormsModule,
     IonicModule,
+      ToolbarComponentModule,
     RouterModule.forChild(routes)
   ],
   declarations: [ViewProfilePage, UserReviewsPage],
