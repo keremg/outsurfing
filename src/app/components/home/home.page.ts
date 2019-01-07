@@ -159,7 +159,6 @@ export class HomePage implements OnInit {
     //This function takes in latitude and longitude of two location and returns the distance between them as the crow flies (in km)
      getDistance(geoLocation: string, loc: string[])
     {
-debugger;
       let lat1, lon1, lat2, lon2;
       let s = geoLocation.split(',');
       lat1=s[0];

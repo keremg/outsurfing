@@ -1,5 +1,5 @@
 <ion-header>
-<app-toolbar></app-toolbar>
+<app-toolbar [defaultBack]="query ? 'home' : null"></app-toolbar>
 </ion-header>
 
 <ion-content padding>
@@ -9,7 +9,8 @@
                 debounce="1000"
                 *ngIf="!this.onlyMine"
                 (ionChange)="search($event)"
-                value="{{query}}"></ion-searchbar>
+                value="{{query}}"
+                show-cancel-button="false"></ion-searchbar>
 
         <ion-button
                 style="float: right;"
@@ -61,7 +62,9 @@
                                 </ion-col>
                                 <ion-col size="3">
                                         <ion-label style="font-size: 1rem">
-                                            TODO Trip Rating: 9 (17
+                                            TODO Route Rating: {{ event.routeRanking }} ({{
+                                            event.routeNumOfRankers
+                                            }}
                                             <ion-icon name="contact"></ion-icon>
                                             )
                                         </ion-label>

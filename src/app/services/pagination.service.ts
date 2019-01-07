@@ -139,6 +139,10 @@ export class PaginationService {
                     if(this.query.path === 'events'){
                         data.participant = this.eventService.getParticipants(data.id);
                         data.eventOrganizer = this.userService.getuser(data.eventOrganizerId);
+                        data.routeCreator = this.userService.getuser(data.routeCreatorId);
+                    }
+                    if(this.query.path === 'routes'){
+                        data.routeCreator = this.userService.getuser(data.routeCreatorId);
                     }
                     return { ...data, doc }
                 })

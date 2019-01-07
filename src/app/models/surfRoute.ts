@@ -1,4 +1,5 @@
 import {SurfUser} from './surfUser';
+import {Observable} from 'rxjs';
 
 export class SurfRoute {
     id: string;
@@ -22,7 +23,7 @@ export class SurfRoute {
     routeProperties: string[]; // -	e.g. water, swimming, mountains, bicycles, forest, desert, oasis, historical, archeology, ropes
 
   routeCreatorId: string;
-  routeCreator?: SurfUser;
+  routeCreator?: Observable<SurfUser>;
   isGuidingOffered: boolean;
   offeredPrice: number; // default 0, more if isGuidingOffered
   minGroupSizeForGuide: number; //TODO - add to html

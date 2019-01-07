@@ -7,7 +7,9 @@ const routes: Routes = [
   { path: 'home', loadChildren: './components/home/home.module#HomePageModule',canActivate: [AuthGuardService]},
     { path: 'home/:q', loadChildren: './components/home/home.module#HomePageModule',canActivate: [AuthGuardService]},
     { path: 'ChooseRoute', loadChildren: './components/ChooseRoute/ChooseRoute.module#ChooseRoutePageModule',canActivate: [AuthGuardService]},
-  { path: 'SignIn', loadChildren: './components/SignIn/SignIn.module#SignInModule' },
+    { path: 'ChooseRoute/:q', loadChildren: './components/ChooseRoute/ChooseRoute.module#ChooseRoutePageModule',canActivate: [AuthGuardService]},
+
+    { path: 'SignIn', loadChildren: './components/SignIn/SignIn.module#SignInModule' },
   { path: 'ResetPassword', loadChildren: './components/reset-password/reset-password.module#ResetPasswordPageModule'},
   { path: 'SignUp', loadChildren: './components/signup/signup.module#SignupPageModule'},
   { path: 'SingleRoute', loadChildren: './components/single-route/single-route.module#SingleRoutePageModule',canActivate: [AuthGuardService]},

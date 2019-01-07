@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Observable, of } from 'rxjs';
+import {Observable, of, ReplaySubject} from 'rxjs';
 import { SurfRoute } from '../../models/surfRoute';
 import { RouteService } from '../../services/route.service';
 import { NavController } from '@ionic/angular';
@@ -8,6 +8,8 @@ import {
   AngularFireStorage,
   AngularFireUploadTask
 } from '@angular/fire/storage';
+import leaflet from 'leaflet';
+import {ActivatedRoute} from '@angular/router';
 
 @Component({
   selector: 'app-ChooseRoute',
@@ -16,16 +18,36 @@ import {
   providers: [PaginationService]
 })
 export class ChooseRoute implements OnInit {
-  constructor(
+    location: ReplaySubject<string[]> = new ReplaySubject(1);
+    query: string;
+
+    constructor(
     public routeService: RouteService,
     public navCtrl: NavController,
     public page: PaginationService,
+    private activatedRoute: ActivatedRoute,
     private storage: AngularFireStorage
   ) {}
 
   ngOnInit() {
-    //this.routesList = this.routeService.getRoutes();
-    this.page.init('routes', 'name', { reverse: true, prepend: false });
+      this.query = this.activatedRoute.snapshot.paramMap.get('q');
+
+
+      if (this.query) {
+          this.page.init(
+              'routes',
+              'name',
+              {reverse: true, prepend: false},
+              null,
+              this.query
+          );
+      }
+      else {
+          this.page.init('routes', 'name', { reverse: true, prepend: false });
+      }
+
+
+    this.locate();
   }
 
   goToRoute(id) {
@@ -36,8 +58,9 @@ export class ChooseRoute implements OnInit {
     this.navCtrl.navigateForward('SingleRoute');
   }
 
-  eventIt(routeId) {
-    this.navCtrl.navigateForward('EventDetail/0/' + routeId);
+  eventIt(routeId, e) {
+      e.stopPropagation();
+      this.navCtrl.navigateForward('EventDetail/0/' + routeId);
   }
 
   loadData(event) {
@@ -59,4 +82,59 @@ export class ChooseRoute implements OnInit {
       }
       return '';
   }
+
+    locate(){
+        leaflet.map('map').fitWorld().locate({
+            timeout: 30000,
+            maximumAge: 300000
+        }).on('locationfound', (e) => {
+            debugger;
+            this.location.next([e.latlng.lat, e.latlng.lng]);
+            this.location.complete();
+        }).on('locationerror', (err) => {
+            console.log(err.message);
+        });
+        document.getElementById('map').hidden = true;
+
+    }
+
+    //This function takes in latitude and longitude of two location and returns the distance between them as the crow flies (in km)
+    getDistance(geoLocation: string, loc: string[])
+    {
+        let lat1, lon1, lat2, lon2;
+        let s = geoLocation.split(',');
+        lat1=s[0];
+        lon1=s[1];
+        lat2=loc[0];
+        lon2=loc[1];
+        var R = 6371; // km
+        var dLat = this.toRad(lat2-lat1);
+        var dLon = this.toRad(lon2-lon1);
+        lat1 = this.toRad(lat1);
+        lat2 = this.toRad(lat2);
+
+        var a = Math.sin(dLat/2) * Math.sin(dLat/2) +
+            Math.sin(dLon/2) * Math.sin(dLon/2) * Math.cos(lat1) * Math.cos(lat2);
+        var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+        var d = R * c;
+        return Math.round(d);
+    }
+
+    // Converts numeric degrees to radians
+    toRad(Value)
+    {
+        return Value * Math.PI / 180;
+    }
+
+
+    onCreateRoute(){
+        return this.navCtrl.navigateRoot('SingleRoute');
+
+    }
+
+    search(ev) {
+        let q = (ev as CustomEvent).detail.value;
+        this.navCtrl.navigateRoot('ChooseRoute/' + q);
+    }
+
 }

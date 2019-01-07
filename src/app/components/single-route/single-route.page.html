@@ -241,15 +241,15 @@
         TODO: URGENT  make sure we set the routeCreatorId upon creation of route, and that also fetching the user into routeCreator for teh component
       -->
       <ion-label stacked
-        >Creator of route: {{ route.routeCreator?.firstName }}
-        {{ route.routeCreator?.lastName }}</ion-label
+        >Creator of route: {{ (route.routeCreator | async)?.firstName }}
+        {{ (route.routeCreator | async)?.lastName }}</ion-label
       >
       <!-- TODO show photo of creator -->
-      <ion-label stacked *ngIf="route.routeCreator?.isGuide"
+      <ion-label stacked *ngIf="(route.routeCreator | async)?.isGuide"
         >Creator is a travel-guide :)</ion-label
       >
       <ion-input
-        *ngIf="route.routeCreator?.isGuide"
+        *ngIf="(route.routeCreator | async)?.isGuide"
         formControlName="guideContactDetails"
         type="text"
         placeholder="Guide Contact Details (optional email and/or phone)"
@@ -261,7 +261,7 @@
       >
       </ion-input>
     </ion-item>
-    <ion-item *ngIf="route.routeCreator?.isGuide">
+    <ion-item *ngIf="(route.routeCreator | async)?.isGuide">
       <ion-label stacked>Offers guidance?</ion-label>
       <ion-checkbox
         formControlName="isGuidingOffered"

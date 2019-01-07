@@ -19,6 +19,8 @@ import L from 'leaflet';
 import '../../../geocoder/Control.Geocoder';
 import { AngularFireStorage, AngularFireUploadTask } from '@angular/fire/storage';
 import {CompressImageService} from '../../services/compress-image.service';
+import 'rxjs/add/observable/of';
+import {Observable} from 'rxjs';
 
 declare let window: any;
 
@@ -116,11 +118,6 @@ export class SingleRoutePage implements OnInit {
                     console.log(
                         'Getting route-creator-id with is of ' + this.route.routeCreatorId
                     );
-                    await this.userService
-                        .getuser(this.route.routeCreatorId)
-                        .subscribe(user => {
-                            this.route.routeCreator = user;
-                        });
 
                     if (this.route.routeCreatorId !== this.currentUserId) {
                         this.singleRouteForm.disable();
@@ -137,7 +134,7 @@ export class SingleRoutePage implements OnInit {
             });
         } else {
             this.route.routeCreatorId = this.currentUserId;
-            this.route.routeCreator = this.currentUser;
+            this.route.routeCreator = Observable.of(this.currentUser);
 
             this.route.imagesUrls = [];
             this.route.mapImagesUrl = [];
@@ -231,6 +228,7 @@ export class SingleRoutePage implements OnInit {
     }
 
     onImageSelected(event) {
+        debugger;
         this.selectedPhotos.push(event.target.files[0]);
         if (this.photos.length > 0) {
             this.photos = this.photos + ',';
