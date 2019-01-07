@@ -85,7 +85,7 @@
                     <!-- <ion-card-content> -->
                     <ion-grid wrap>
                         <ion-row>
-                            <ion-col size="2">
+                            <ion-col size="2" (click)="onViewProfile(event.eventOrganizerId, $event)">
                                 <ion-item><ion-label style="font-size: 0.8em">Organizer:</ion-label></ion-item>
                                 <app-route-image
                                         imgPath="users/{{event.eventOrganizerId}}/profilePic_Small" sizeToLoad="Small"></app-route-image>
@@ -122,7 +122,7 @@
                                     <ion-grid wrap>
                                         <ion-row size="12">
                                             <div *ngFor="let par of (event?.participant|async);">
-                                                <ion-col size="4" *ngIf="par.approved">
+                                                <ion-col size="4" *ngIf="par.approved" (click)="onViewProfile(par.id, $event)">
                                                     <!--TODO: urgent fix image size-->
                                                     <app-route-image [imgPath]="'users/'+par.id+'/profilePic'+'_Small'" sizeToLoad="Small" width="20px"></app-route-image>
                                                 </ion-col>

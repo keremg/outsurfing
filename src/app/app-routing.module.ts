@@ -15,7 +15,8 @@ const routes: Routes = [
   { path: 'SingleRoute', loadChildren: './components/single-route/single-route.module#SingleRoutePageModule',canActivate: [AuthGuardService]},
 
     { path: 'SingleRoute/:id', loadChildren: './components/single-route/single-route.module#SingleRoutePageModule',canActivate: [AuthGuardService]},
-  { path: 'ViewProfile', loadChildren: './components/view-profile/view-profile.module#ViewProfilePageModule',canActivate: [AuthGuardService]},
+    { path: 'ViewProfile/:uid', loadChildren: './components/view-profile/view-profile.module#ViewProfilePageModule',canActivate: [AuthGuardService]},
+
   { path: 'EditProfile', loadChildren: './components/edit-profile/edit-profile.module#EditProfilePageModule' ,canActivate: [AuthGuardService] },
   { path: 'Admin', loadChildren: './components/admin/admin.module#AdminPageModule',canActivate: [AuthGuardService] },
   { path: 'EventReview', loadChildren: './components/event-review/event-review.module#EventReviewPageModule' ,canActivate: [AuthGuardService]},

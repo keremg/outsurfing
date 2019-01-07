@@ -182,4 +182,9 @@ export class HomePage implements OnInit {
         return Value * Math.PI / 180;
     }
 
+    onViewProfile(uid:string, e) {
+        e.stopPropagation();
+        this.navCtrl.navigateForward('ViewProfile/' + uid);
+
+    }
 }

@@ -37,8 +37,7 @@ export class ViewProfilePage implements OnInit {
     private userService: UserService) {  }
 
   ngOnInit() {
-    this.id = this.activatedRoute.snapshot.paramMap.get('id');
-    this.id = 'PY2FTM1P7uZbtOiDDZPYGp7GQqn1';
+    this.id = this.activatedRoute.snapshot.paramMap.get('uid');
    let user;
     this.userService.getuser(this.id).subscribe(u => {
       if (u) {
