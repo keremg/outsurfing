@@ -170,10 +170,14 @@ catch (error) {
         this.closeLoadingController();
         if(res) {
             const ref = this.storage.ref('users/'+this.currentUser.id+'/profilePic_Large'); //without _Large for large image, need _Mediun or _Small for smaller versions
-            this.profileUrl = ref.getDownloadURL().pipe(map(url => {
+             let du = ref.getDownloadURL();
+             du.pipe(map(url => {
                 const timet = (new Date()).getTime();
-                return url + "&ttt=" + timet; //against browser cache
+                 return url + "&ttt=" + timet; //against browser cache
             }));
+             du.subscribe(res=>{
+                 this.profileUrl = res;
+             })
         }
 
 

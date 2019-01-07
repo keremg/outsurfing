@@ -91,7 +91,7 @@
     </ion-item>
     <ion-item>
       <ion-label stacked>Profile picture</ion-label>
-        <img *ngIf="profileUrl" [src]="profileUrl" width=50% />
+      <img *ngIf="profileUrl" [src]="profileUrl" width="25%"/>
       <input type="file" (change)="uploadFile($event)" />
       <div>{{ uploadPercent | async }}</div>
     </ion-item>
