@@ -427,32 +427,13 @@
         </ion-col>
         <ion-col [size]="4">
             <!-- trip-photos -->
-            <ion-item style="display: inline-block;">
-                <div>
+            <ion-item >
+                <div style="display: inline-block;">
                     <ion-label id="previewOldPhotos">
                         <div *ngFor="let routeUrl of event?.imagesUrls; let i = index" float-left>
                             <app-route-image [imgPath]="routeUrl+'_Large'" sizeToLoad="Large" width="400" height="300"
                                              [number]="i" *ngIf="photoIndex === i"></app-route-image>
                         </div>
-                    </ion-label>
-
-                    <ion-button
-                            (click)="photoIndex >0  ? photoIndex=photoIndex-1 : photoIndex=event?.imagesUrls.length-1" *ngIf="event?.imagesUrls?.length>0">
-                        <
-                    </ion-button>
-                    <ion-button
-                            (click)="photoIndex < event?.imagesUrls.length-1 ? photoIndex=photoIndex+1 : photoIndex=0" *ngIf="event?.imagesUrls?.length>0">
-                        >
-                    </ion-button>
-
-
-                </div>
-            </ion-item>
-            <ion-item style="display: inline-block;">
-                <div>
-                    <ion-label *ngIf="selectedPhotos?.length>0">New photos:</ion-label>
-                    <ion-label id="previewPhotos">
-
                     </ion-label>
                     <input
                             type="file"
@@ -462,42 +443,36 @@
                             style="display: none;"
                     />
                     <ion-button
-                            float-right
+                            float-left
                             onclick="document.getElementById('selectedImage').click();">
                         Add trip photos
                     </ion-button>
+                    <ion-button float-right
+                                (click)="photoIndex < event?.imagesUrls.length-1 ? photoIndex=photoIndex+1 : photoIndex=0" *ngIf="event?.imagesUrls?.length>0">
+                        >
+                    </ion-button>
+                    <ion-button float-right
+                                (click)="photoIndex >0  ? photoIndex=photoIndex-1 : photoIndex=event?.imagesUrls.length-1" *ngIf="event?.imagesUrls?.length>0">
+                        <
+                    </ion-button>
                 </div>
             </ion-item>
-            <ion-item></ion-item>
+            <ion-item *ngIf="selectedPhotos?.length>0">
+                <div style="display: inline-block;">
+                    <ion-label >New photos:</ion-label>
+                    <ion-label id="previewPhotos">
+                    </ion-label>
+                </div>
+            </ion-item>
 
             <!-- map-photos -->
-            <ion-item style="display: inline-block;">
-                <div>
+            <ion-item >
+                <div style="display: inline-block;">
                     <ion-label id="previewOldMapPhotos">
                         <div *ngFor="let routeUrl of event?.mapImagesUrl; let i = index" float-left>
                             <app-route-image [imgPath]="routeUrl+'_Large'" sizeToLoad="Large" width="400" height="300"
                                              [number]="i" *ngIf="photoMapIndex === i"></app-route-image>
                         </div>
-                    </ion-label>
-
-                    <ion-button
-                            (click)="photoMapIndex >0  ? photoMapIndex=photoMapIndex-1 : photoMapIndex=event?.mapImagesUrl.length-1"
-                    *ngIf="event?.mapImagesUrl?.length>0">
-                        <
-                    </ion-button>
-                    <ion-button
-                            (click)="photoMapIndex < event?.mapImagesUrl.length-1 ? photoMapIndex=photoMapIndex+1 : photoMapIndex=0"  *ngIf="event?.mapImagesUrl?.length>0">
-                        >
-                    </ion-button>
-
-
-                </div>
-            </ion-item>
-            <ion-item style="display: inline-block;">
-                <div>
-                    <ion-label *ngIf="selectedMapsPhotos?.length>0">New maps:</ion-label>
-                    <ion-label id="previewMapPhotos">
-
                     </ion-label>
                     <input
                             type="file"
@@ -507,10 +482,27 @@
                             style="display: none;"
                     />
                     <ion-button
-                            float-right
+                            float-left
                             onclick="document.getElementById('selectedMapImage').click();">
                         Add trip map
                     </ion-button>
+                    <ion-button float-right
+                                (click)="photoMapIndex < event?.mapImagesUrl.length-1 ? photoMapIndex=photoMapIndex+1 : photoMapIndex=0"  *ngIf="event?.mapImagesUrl?.length>0">
+                        >
+                    </ion-button>
+                    <ion-button float-right
+                                (click)="photoMapIndex >0  ? photoMapIndex=photoMapIndex-1 : photoMapIndex=event?.mapImagesUrl.length-1"
+                                *ngIf="event?.mapImagesUrl?.length>0">
+                        <
+                    </ion-button>
+
+                </div>
+            </ion-item>
+            <ion-item *ngIf="selectedMapsPhotos?.length>0">
+                <div style="display: inline-block;">
+                    <ion-label >New maps:</ion-label>
+                    <ion-label id="previewMapPhotos">
+                    </ion-label>
                 </div>
             </ion-item>
         </ion-col>

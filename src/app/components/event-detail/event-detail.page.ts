@@ -417,8 +417,7 @@ export class EventDetailPage implements OnInit {
             reader.onload = function(e) {
                 const img = document.createElement('img');
                 img.src = e.target.result;
-                img.height = 300;
-                img.width = 400;
+                img.width = 130;
                 const div = document.createElement('div');
                 div.appendChild(img);
                 document.getElementById('previewPhotos').appendChild(div);
@@ -442,8 +441,7 @@ export class EventDetailPage implements OnInit {
             reader.onload = function(e) {
                 const img = document.createElement('img');
                 img.src = e.target.result;
-                img.height = 300;
-                img.width = 400;
+                img.width = 130;
                 const div = document.createElement('div');
                 div.appendChild(img);
                 document.getElementById('previewMapPhotos').appendChild(div);

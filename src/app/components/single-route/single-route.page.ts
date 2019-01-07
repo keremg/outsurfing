@@ -228,7 +228,6 @@ export class SingleRoutePage implements OnInit {
     }
 
     onImageSelected(event) {
-        debugger;
         this.selectedPhotos.push(event.target.files[0]);
         if (this.photos.length > 0) {
             this.photos = this.photos + ',';
@@ -241,8 +240,7 @@ export class SingleRoutePage implements OnInit {
             reader.onload = function(e) {
                 const img = document.createElement('img');
                 img.src = e.target.result;
-                img.height = 300;
-                img.width = 400;
+                img.width = 130;
                 img.setAttribute('float-left','true')
                 const div = document.createElement('div');
                 div.setAttribute('float-left','true')
@@ -268,8 +266,7 @@ export class SingleRoutePage implements OnInit {
             reader.onload = function(e) {
                 const img = document.createElement('img');
                 img.src = e.target.result;
-                img.height = 300;
-                img.width = 400;
+                img.width = 130;
                 const div = document.createElement('div');
                 div.appendChild(img);
                 document.getElementById('previewMapPhotos').appendChild(div);
@@ -322,6 +319,13 @@ export class SingleRoutePage implements OnInit {
         } else {
             this.navCtrl.navigateForward('ChooseRoute');
         }
+    }
+
+    async deleteRoute() {
+        if (!this.viewMode && this.id) {
+            await this.routesService.deleteRoute(this.id);
+        }
+        return this.navCtrl.navigateRoot('ChooseRoute');
     }
 
     async uploadPhotos(copyOfRoute): Promise<boolean> {

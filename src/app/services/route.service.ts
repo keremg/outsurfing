@@ -77,6 +77,12 @@ export class RouteService {
             }));
     }
 
+    async deleteRoute(id) {
+        //Get the task document
+        this.routeDoc = this.db.doc<SurfRoute>(`${this.collection_endpoint}/${id}`)
+        return this.routeDoc.delete();
+    }
+
     getAllSubstrings(str) {
         var i, j, result = [];
 
