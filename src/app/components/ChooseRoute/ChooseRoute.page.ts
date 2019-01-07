@@ -88,7 +88,6 @@ export class ChooseRoute implements OnInit {
             timeout: 30000,
             maximumAge: 300000
         }).on('locationfound', (e) => {
-            debugger;
             this.location.next([e.latlng.lat, e.latlng.lng]);
             this.location.complete();
         }).on('locationerror', (err) => {

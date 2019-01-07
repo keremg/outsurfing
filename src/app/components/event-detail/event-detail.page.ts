@@ -286,6 +286,7 @@ export class EventDetailPage implements OnInit {
 
             modal.onDidDismiss().then(data => {
                 if (data.data) {
+                    data.data.id = this.currentUser.id;
                     this.eventService.approveParticipant(returnedId,data.data, this.event)//TODO guy test
                     this.finishUpdate(isStayOnPage, copyOfEvent);
                 } else {
