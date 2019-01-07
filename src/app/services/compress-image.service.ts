@@ -17,7 +17,6 @@ export class CompressImageService {
 
 
     async savedCompressed(image, filePath, originalComponent, size): Promise<any> {
-        debugger;
         let addedName = "_Large";
         let width = 600;
         let height = 600;
