@@ -6,11 +6,40 @@
 
 <ion-content padding>
 
-  <ion-item>
-    <ion-label>How much did you enjoy the trip?</ion-label>
-    <rating [(rating)]="rating1"></rating>
-  </ion-item>
-  <ion-item>
+    <ion-label>Trip Review</ion-label>
+    <ion-item>
+        <ion-label>How much did you enjoy the trip?</ion-label>
+        <rating [(rating)]="event_reviews[0]"></rating>
+    </ion-item>
+    <ion-item>
+        <ion-label>How much did the routes were close to their descriptions?</ion-label>
+        <rating [(rating)]="event_reviews[1]"></rating>
+    </ion-item>
+    <ion-item *ngFor="let audience of audiences_strings">
+        How much was it suitable for {{audience}}?
+        <rating [(rating)]="audience_rating[audience]"></rating>
+    </ion-item>
+    <ion-label *ngIf="isGuided">Guide Reviews</ion-label>
+    <ion-item *ngIf="isGuided">
+        <ion-label>How much {{guideName}} was professional?</ion-label>
+        <rating [(rating)]="guide_reviews[0]"></rating>
+    </ion-item>
+    <ion-item *ngIf="isGuided">
+        <ion-label>How much {{guideName}} gave an added value for the trip?</ion-label>
+        <rating [(rating)]="guide_reviews[1]"></rating>
+    </ion-item>
+    <ion-label>participants review</ion-label>
+        <ion-item *ngFor="let participant of participants">
+            <ion-img> </ion-img>
+            How much fun did you had with {{participant}}?
+            <rating [(rating)]="participants_rating[participant]"></rating>
+        </ion-item>
+    <ion-item>
+        <ion-button id='submitReview' (click)="submit()">submit reviews</ion-button>
+    </ion-item>
+
+
+ <!-- <ion-item>
     <ion-label>Guide professionalism</ion-label>
     <rating [(rating)]="rating2"></rating>
   </ion-item>
@@ -27,3 +56,4 @@
     <rating [(rating)]="rating5"></rating>
   </ion-item>
 </ion-content>
+-->
