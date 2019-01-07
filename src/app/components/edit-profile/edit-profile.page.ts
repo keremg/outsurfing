@@ -14,6 +14,8 @@ import { AngularFireStorage, AngularFireUploadTask } from '@angular/fire/storage
 import {Observable} from 'rxjs';
 import { debug } from 'util';
 import {map} from 'rxjs/operators';
+import {ErrorFn} from 'firebase';
+import {promise} from 'selenium-webdriver';
 
 declare let window: any;
 
@@ -31,7 +33,7 @@ export class EditProfilePage implements OnInit {
     loadingElement: HTMLIonLoadingElement;
 
     uploadPercent: Observable<number>;
-    profileUrl: Observable<string | null>;
+    profileUrl: string;
      constructor(
         public navCtrl: NavController,
         public authService: AuthService,
@@ -63,10 +65,20 @@ export class EditProfilePage implements OnInit {
     async ngOnInit() {
         this.currentUser = await this.userService.getCurrentUserPromise();
         this.currentUserId = this.authService.currentUserId;
-        const ref = this.storage.ref('users/'+this.currentUser.id+'/profilePicLarge');
-        this.profileUrl = ref.getDownloadURL();
-
-
+        const ref = await this.storage.ref('users/'+this.currentUser.id+'/profilePic_Large');
+        //this.profileUrl = ref.getDownloadURL();
+        ref.getDownloadURL().toPromise().then(res=>{
+                this.profileUrl =res },
+             async error=>{
+                console.log(error);
+                if(error.code === 'storage/object-not-found'){
+                    const alert = await this.alertCtrl.create({
+                        message: 'It seems you dont have a profile picture. consider uploading one:)',
+                        buttons: [{text: 'ok'}]
+                    });
+                    alert.present();
+                }
+            });
         window.form = this.updateForm;
         console.log('this.currentUser: ', this.currentUser);
         this.editForm(this.currentUser);
@@ -173,5 +185,15 @@ catch (error) {
         //return task;
 
     }
+
+    /*on_no_profile_pic(){
+        if(error.code === 'storage/object-not-found'){
+            const alert = await this.alertCtrl.create({
+                message: 'It seems you dont have a profile picture. consider uploading one:)',
+                buttons: [{text: 'ok'}]
+            });
+            alert.present();
+        }
+    }*/
 
 }

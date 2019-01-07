@@ -99,7 +99,7 @@ export class SignupPage {
                 });
             }
             if (success)
-                this.navCtrl.navigateRoot('home');
+                this.navCtrl.navigateRoot('EditProfile');
         }
     }
 
