@@ -526,7 +526,7 @@ export class EventDetailPage implements OnInit {
         this.event.longDescription =
             this.singleEventForm.value.longDescription || '';
         this.event.routeDifficulty =
-            this.singleEventForm.value.routeDifficulty || '';
+            this.singleEventForm.value.routeDifficulty || 0;
 
         let durationHours = this.singleEventForm.value.routeDuration || 0;
         if (this.singleEventForm.value.routeDurationUnits === 'days') {

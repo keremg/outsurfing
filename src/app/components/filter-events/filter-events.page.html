@@ -1,0 +1,104 @@
+<ion-content padding>
+    <!--
+    lengthKM
+    routeRanking
+    routeDifficulty
+    routeDuration
+    routeProperties
+    price
+    recommendedMonths
+    -->
+
+
+    <form [formGroup]="filterForm" novalidate>
+
+            <ion-item >
+                <ion-checkbox id="0" (ionChange)="check(0)" checked>
+                </ion-checkbox>
+                <ion-label stacked>Length (Km) ></ion-label>
+                <ion-input [disabled]="checkedid!==0"
+                        formControlName="lengthKM"
+                        type="number"
+                >
+                </ion-input>
+            </ion-item>
+
+            <ion-item  >
+                <ion-checkbox id="1"  (ionChange)="check(1)" >
+
+                </ion-checkbox>
+                <ion-label>Difficulty ></ion-label>
+                <ion-select formControlName="routeDifficulty" multiple="false" [disabled]="checkedid!==1">
+                    <ion-select-option value="0">Very easy</ion-select-option>
+                    <ion-select-option value="1">Easy</ion-select-option>
+                    <ion-select-option value="2">Moderate</ion-select-option>
+                    <ion-select-option value="3">Challenging</ion-select-option>
+                    <ion-select-option value="4">Extreme</ion-select-option>
+                    <ion-select-option value="5">Very extreme</ion-select-option>
+                </ion-select>
+            </ion-item>
+
+            <ion-item  >
+                <ion-checkbox id="2" (ionChange)="check(2)">
+
+                </ion-checkbox>
+                <ion-label stacked>Duration ></ion-label>
+                <ion-row style="width: 80%" justify-content-end>
+                    <ion-col size="2">
+                        <ion-input [disabled]="checkedid!==2"
+                                formControlName="routeDuration"
+                                type="number"
+                                placeholder="Route duration"
+                                min="0"
+                                max="59"
+                                step="1"
+                                side="left"
+                        ></ion-input>
+                    </ion-col>
+                    <ion-col size="10">
+                        <ion-select formControlName="routeDurationUnits" multiple="false" [disabled]="checkedid!==2">
+                            <ion-select-option value="hours">Hours</ion-select-option>
+                            <ion-select-option value="days">Days</ion-select-option>
+                        </ion-select>
+                    </ion-col>
+                </ion-row>
+            </ion-item>
+
+        <!--ion-item>
+<ion-label>Route Properties</ion-label>
+<ion-select formControlName="routeProperties" multiple="true">
+    <ion-select-option value="water">Water</ion-select-option>
+    <ion-select-option value="swimming">Swimming</ion-select-option>
+    <ion-select-option value="mountains" selected>Mountains</ion-select-option>
+    <ion-select-option value="bicycles">Bicycles</ion-select-option>
+    <ion-select-option value="forest">Forest</ion-select-option>
+    <ion-select-option value="desert">Desert</ion-select-option>
+    <ion-select-option value="oasis">Oasis</ion-select-option>
+    <ion-select-option value="historical">Historical</ion-select-option>
+    <ion-select-option value="archeology">Archeology</ion-select-option>
+    <ion-select-option value="ropes">Ropes</ion-select-option>
+</ion-select>
+</ion-item-->
+
+        <!--ion-item>
+            <ion-label>Recommended months</ion-label>
+            <ion-select formControlName="recommendedMonths" multiple="true">
+                <ion-select-option value="1">January</ion-select-option>
+                <ion-select-option value="2">February</ion-select-option>
+                <ion-select-option value="3">March</ion-select-option>
+                <ion-select-option value="4">April</ion-select-option>
+                <ion-select-option value="5">May</ion-select-option>
+                <ion-select-option value="6">June</ion-select-option>
+                <ion-select-option value="7">July</ion-select-option>
+                <ion-select-option value="8">August</ion-select-option>
+                <ion-select-option value="9">September</ion-select-option>
+                <ion-select-option value="10">October</ion-select-option>
+                <ion-select-option value="11">Novemeber</ion-select-option>
+                <ion-select-option value="12">December</ion-select-option>
+            </ion-select>
+        </ion-item-->
+    </form>
+
+
+    <ion-button (click)="go()">Filter</ion-button>
+</ion-content>

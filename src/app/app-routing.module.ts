@@ -6,6 +6,8 @@ const routes: Routes = [
   { path: '', redirectTo: 'SignIn', pathMatch: 'full' },
   { path: 'home', loadChildren: './components/home/home.module#HomePageModule',canActivate: [AuthGuardService]},
     { path: 'home/:q', loadChildren: './components/home/home.module#HomePageModule',canActivate: [AuthGuardService]},
+    { path: 'home/:q/:f', loadChildren: './components/home/home.module#HomePageModule',canActivate: [AuthGuardService]},
+
     { path: 'ChooseRoute', loadChildren: './components/ChooseRoute/ChooseRoute.module#ChooseRoutePageModule',canActivate: [AuthGuardService]},
     { path: 'ChooseRoute/:q', loadChildren: './components/ChooseRoute/ChooseRoute.module#ChooseRoutePageModule',canActivate: [AuthGuardService]},
 

@@ -13,6 +13,7 @@ interface QueryConfig {
     field: string, // field to orderBy
     uid: string,
     text: string,
+    filter: any,
     limit: number, // limit per query
     reverse: boolean, // reverse order?
     prepend: boolean // prepend to source?
@@ -40,12 +41,13 @@ export class PaginationService {
 
     // Initial query sets options and defines the Observable
     // passing opts will override the defaults
-    init(path: string, field: string, opts?: any, uid?: string, text?: string) {
+    init(path: string, field: string, opts?: any, uid?: string, text?: string, filter?: any) {
         this.query = {
             path,
             field,
             uid,
             text,
+            filter,
             limit: 2,
             reverse: false,
             prepend: false,
@@ -53,22 +55,32 @@ export class PaginationService {
         }
 
         const first = this.afs.collection(this.query.path, ref => {
-            let x;
+            let x : firebase.firestore.Query;
             if(this.query.uid){
                 x = ref.where(this.query.uid,'>', 0);
             }
-            else{
-                x=ref;
+            else {
+
+                if (this.query.text) {
+                    x = ref.where("searchIndex", 'array-contains', this.query.text);
+                } else {
+                    x = ref;
+                }
+
+                if(this.query.filter){
+                    for(let f in this.query.filter){
+                        if(f && f.length>0) {
+                            x = x.orderBy(f);
+                            x = x.where(f, '>', parseInt(this.query.filter[f]));
+                        }
+                    }
+                }
             }
 
-            let y;
-            if(this.query.text){
-                y = ref.where("searchIndex",'array-contains', this.query.text);
-            }
-            else{
-                y=x;
-            }
-            return y
+
+            console.log(x);
+
+            return x
                 .orderBy(this.query.field, this.query.reverse ? 'desc' : 'asc')
                 .limit(this.query.limit)
         })
@@ -88,22 +100,29 @@ export class PaginationService {
         const cursor = this.getCursor()
 
         const more = this.afs.collection(this.query.path, ref => {
-            let x;
+            let x : firebase.firestore.Query;
             if(this.query.uid){
                 x = ref.where(this.query.uid,'>', 0);
             }
-            else{
-                x=ref;
+            else {
+
+                if (this.query.text) {
+                    x = ref.where("searchIndex", 'array-contains', this.query.text);
+                } else {
+                    x = ref;
+                }
+
+                if(this.query.filter){
+                    for(let f in this.query.filter){
+                        if(f && f.length>0) {
+                            x = x.orderBy(f);
+                            x = x.where(f, '>', parseInt(this.query.filter[f]));
+                        }
+                    }
+                }
             }
 
-            let y;
-            if(this.query.text){
-                y = ref.where("searchIndex",'array-contains', this.query.text);
-            }
-            else{
-                y=x;
-            }
-            return y
+            return x
                 .orderBy(this.query.field, this.query.reverse ? 'desc' : 'asc')
                 .limit(this.query.limit)
                 .startAfter(cursor)

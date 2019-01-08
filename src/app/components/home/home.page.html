@@ -19,14 +19,16 @@
                 fill="solid"
                 shape="round"
                 id="filter"
-                *ngIf="!this.onlyMine">
+                *ngIf="!this.onlyMine"
+                (click)="onFilter($event)">
             <ion-icon name="funnel"></ion-icon>
             Filter
         </ion-button>
     </ion-buttons>
 
     <ion-card class="event"
-              (click)="onCreateEvent()">
+              (click)="onCreateEvent()"
+              *ngIf="!this.onlyMine">
         <ion-button id="createEvent" fill="clear" expand="full" size="large"  color="dark">
             Create New
         </ion-button>

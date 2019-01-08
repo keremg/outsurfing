@@ -48,7 +48,7 @@ export class SingleRoutePage implements OnInit {
     loading: HTMLIonLoadingElement;
 
     constructor(
-        private formBuilder: FormBuilder /* private imagePicker: ImagePicker*/,
+        private formBuilder: FormBuilder,
         private activatedRoute: ActivatedRoute,
         private routesService: RouteService,
         public navCtrl: NavController,
@@ -154,7 +154,7 @@ export class SingleRoutePage implements OnInit {
             // this.route.shortDescription = 'חול אבנים ועוד חול';
             // this.route.longDescription = 'kuk kuu aksu adkscu';
             // this.route.routeRanking = [{ranking: 3, review: 'nice'}];
-            this.route.routeDifficulty = '3'; // Level:  0 - very easy, 1-easy, 2-moderate, 3-challenging, 4-extreme, 5-very extreme
+            this.route.routeDifficulty = 3; // Level:  0 - very easy, 1-easy, 2-moderate, 3-challenging, 4-extreme, 5-very extreme
             // this.route.routeDuration = 1; // will represent number of days, so half day should be 0.5 , one hour should be 0.04
             this.route.routeProperties = []; // ['water', 'desert', 'canyon']; // -	e.g. water, swimming, mountains, bicycles, forest, desert, oasis, historical, archeology, ropes
 
@@ -395,7 +395,7 @@ export class SingleRoutePage implements OnInit {
         this.route.longDescription =
             this.singleRouteForm.value.longDescription || '';
         this.route.routeDifficulty =
-            this.singleRouteForm.value.routeDifficulty || '';
+            this.singleRouteForm.value.routeDifficulty || 0;
 
         let durationHours = this.singleRouteForm.value.routeDuration || 0;
         if (this.singleRouteForm.value.routeDurationUnits === 'days') {
@@ -427,6 +427,9 @@ export class SingleRoutePage implements OnInit {
     mapEnd: any;
 
     loadmapStart() {
+        if(this.mapStart){
+            this.mapStart.remove();
+        }
         this.mapStart = leaflet.map('mapStart').fitWorld();
         this.mapStart.scrollWheelZoom.disable();
         leaflet.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -528,6 +531,9 @@ export class SingleRoutePage implements OnInit {
     }
 
     loadmapEnd() {
+        if(this.mapEnd){
+            this.mapEnd.remove();
+        }
         this.mapEnd = leaflet.map('mapEnd').fitWorld();
         this.mapEnd.scrollWheelZoom.disable();
         leaflet.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {

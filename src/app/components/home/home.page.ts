@@ -1,15 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../../services/auth.service';
-import { NavController } from '@ionic/angular';
+import {NavController, PopoverController} from '@ionic/angular';
 import { PaginationService } from '../../services/pagination.service';
 import { UserService } from '../../services/user.service';
 import { SurfUser } from '../../models/surfUser';
-import { ActivatedRoute } from '@angular/router';
-import { RouteService } from '../../services/route.service';
-import {Observable, ReplaySubject, Subject} from 'rxjs';
+import {ActivatedRoute, Router} from '@angular/router';
+import {ReplaySubject,} from 'rxjs';
 import { SurfEvent } from '../../models/surfEvent';
-import {createConsoleLogger} from '@angular-devkit/core/node';
 import leaflet from 'leaflet';
+import {FilterEventsPage} from '../filter-events/filter-events.page';
 
 declare let window: any;
 
@@ -25,26 +24,30 @@ export class HomePage implements OnInit {
   query: string;
   searched: boolean;
   location: ReplaySubject<string[]> = new ReplaySubject(1);
-
+    filter: {};
+    map:any;
   constructor(
     public navCtrl: NavController,
     private authService: AuthService,
     public page: PaginationService,
     private userService: UserService,
     private activatedRoute: ActivatedRoute,
-    private routeService: RouteService
+    public popoverController: PopoverController
   ) {
       window.home = this;
   }
 
   async ngOnInit() {
     this.currentUser = await this.userService.getCurrentUserPromise();
-    this.query = this.activatedRoute.snapshot.paramMap.get('q');
-    if (this.query == this.currentUser.id) {
-      this.onlyMine = true;
+      this.query = this.activatedRoute.snapshot.paramMap.get('q');
+      this.filter = this.getFilter(this.activatedRoute.snapshot.paramMap.get('f'));
+    if(this.query === '0'){
+        this.query = null;
     }
 
-    if (this.onlyMine) {
+
+    if (this.query == this.currentUser.id) {
+      this.onlyMine = true;
       this.page.init(
         'events',
         this.currentUser.id,
@@ -52,27 +55,47 @@ export class HomePage implements OnInit {
         this.currentUser.id
       );
     } else {
-      if (this.query) {
-          this.page.init(
-              'events',
-              'name',
-              {reverse: true, prepend: false},
-              null,
-              this.query
-          );
-      }
-      else {
-        this.page.init('events', 'name', { reverse: true, prepend: false });
-      }
-      this.locate();
+        this.page.init(
+            'events',
+            'name',
+            {reverse: true, prepend: false},
+            null,
+            this.query,
+            this.filter
+        );
     }
-
+      this.locate();
     const searchbar = document.getElementById('search');
+  }
+
+  getFilter(str:string) {
+      if (str && str.length > 0) {
+          let x = {};
+          let split = str.split('&')
+          for (let f in split) {
+              let kv = split[f].split('.');
+              x[kv[0]] = kv[1];
+          }
+          return x;
+      }
+  }
+
+  getFilterText(){
+      if(this.filter) {
+          let str = '';
+          for (let f in this.filter) {
+                str+= f +'.' +this.filter[f]+'&';
+          }
+          return str;
+      }
+      return '';
   }
 
   search(ev) {
     let q = (ev as CustomEvent).detail.value;
-    this.navCtrl.navigateRoot('home/' + q);
+    if(q !== this.query) {
+        this.navCtrl.navigateRoot('home/' + q +'/'+this.getFilterText());
+    }
   }
 
   hideElement(id: string, val: boolean) {
@@ -141,7 +164,11 @@ export class HomePage implements OnInit {
     }
 
     locate(){
-        leaflet.map('map').fitWorld().locate({
+        if(this.map){
+            this.map.remove();
+        }
+        this.map = leaflet.map('map').fitWorld();
+        this.map.locate({
             timeout: 30000,
             maximumAge: 300000
         }).on('locationfound', (e) => {
@@ -186,5 +213,15 @@ export class HomePage implements OnInit {
         e.stopPropagation();
         this.navCtrl.navigateForward('ViewProfile/' + uid);
 
+    }
+
+    async onFilter(ev){
+
+        const popover = await this.popoverController.create({
+            component: FilterEventsPage,
+            componentProps: {query: this.query,
+            filter: this.filter},
+            event:ev});
+        return await popover.present();
     }
 }

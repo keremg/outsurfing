@@ -20,7 +20,7 @@ import {ActivatedRoute} from '@angular/router';
 export class ChooseRoute implements OnInit {
     location: ReplaySubject<string[]> = new ReplaySubject(1);
     query: string;
-
+map:any;
     constructor(
     public routeService: RouteService,
     public navCtrl: NavController,
@@ -84,7 +84,11 @@ export class ChooseRoute implements OnInit {
   }
 
     locate(){
-        leaflet.map('map').fitWorld().locate({
+        if(this.map){
+            this.map.remove();
+        }
+        this.map=leaflet.map('map').fitWorld();
+        this.map.locate({
             timeout: 30000,
             maximumAge: 300000
         }).on('locationfound', (e) => {

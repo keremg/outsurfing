@@ -91,6 +91,10 @@ $font-path: "../assets/fonts";
   url($font-path + '/MaterialIcons-Regular.ttf') format('truetype');
 }
 
+.popover-content.sc-ion-popover-md{
+  width:500px;
+}
+
 .material-icons {
   font-family: 'Material Icons';
   font-weight: normal;
