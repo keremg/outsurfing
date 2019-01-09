@@ -143,7 +143,8 @@
                                             style="font-size: 1em;"
                                             padding-end
                                     ></ion-icon>
-                                    {{event.availableSeats? event.availableSeats : 0}} Available
+                                    <ion-label *ngIf="event.availableSeats && event.availableSeats < 0" color="danger">OverBooked</ion-label>
+                                    <ion-label *ngIf="!(event.availableSeats && event.availableSeats < 0)">{{event.availableSeats ? event.availableSeats : '0'}} Available</ion-label>
                                 </ion-item>
                                 <ion-item>
                                     <ion-icon name="log-in">Arrival</ion-icon>

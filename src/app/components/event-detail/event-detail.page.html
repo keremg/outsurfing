@@ -81,6 +81,17 @@
                 </ion-item>
 
                 <ion-item>
+                    <ion-label stacked>Available seats</ion-label>
+                    <ion-icon
+                            name="car"
+                            style="font-size: 1em;"
+                            padding-end
+                    ></ion-icon>
+                    <ion-label *ngIf="event.availableSeats && event.availableSeats < 0" color="danger">OverBooked</ion-label>
+                    <ion-label *ngIf="!(event.availableSeats && event.availableSeats < 0)">{{event.availableSeats ? event.availableSeats : '0'}} Available</ion-label>
+                </ion-item>
+
+                <ion-item>
                     <!--https://stackoverflow.com/questions/31907670/saving-the-val-return-from-ionic-datepicker-into-firebase-->
                     <ion-label stacked>Trip Start Time</ion-label>
                     <ion-datetime displayFormat="MMM DD, YYYY HH:mm"
