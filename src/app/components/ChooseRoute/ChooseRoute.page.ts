@@ -183,4 +183,10 @@ map:any;
         return await popover.present();
     }
 
+    onViewProfile(uid:string, e) {
+        e.stopPropagation();
+        this.navCtrl.navigateForward('ViewProfile/' + uid);
+
+    }
+
 }

@@ -104,7 +104,7 @@
                   Donated {{route.isGuidingOffered ? 'by Guide: ': 'by Traveller: '}}{{(route.routeCreator | async)?.firstName }} {{(route.routeCreator | async)?.lastName }}
                 </ion-item>
                 <ion-row>
-                  <ion-col size="3">
+                  <ion-col size="3" (click)="onViewProfile(route.routeCreatorId, $event)">
                     <app-route-image
                             imgPath="users/{{route.routeCreatorId}}/profilePic_Small" sizeToLoad="Small"></app-route-image>
                   </ion-col>
