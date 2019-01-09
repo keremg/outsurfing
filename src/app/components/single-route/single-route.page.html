@@ -372,7 +372,8 @@
                     />
                     <ion-button
                             float-left
-                            onclick="document.getElementById('selectedImage').click();">
+                            onclick="document.getElementById('selectedImage').click();"
+                            *ngIf="!viewMode">
                         Add trip photos
                     </ion-button>
 
@@ -416,7 +417,8 @@
                     />
                     <ion-button
                             float-left
-                            onclick="document.getElementById('selectedMapImage').click();">
+                            onclick="document.getElementById('selectedMapImage').click();"
+                            *ngIf="!viewMode">
                         Add trip map
                     </ion-button>
                     <ion-button float-right
@@ -443,7 +445,7 @@
     </ion-row>
     <ion-item >
         <div class="center">
-        <ion-button block (click)="updateRoute(false)" *ngIf="!viewMode" padding size="large">Save</ion-button>
+        <ion-button block (click)="updateRoute(true)" *ngIf="!viewMode" padding size="large">Save</ion-button>
         <ion-button block href="ChooseRoute" *ngIf="!viewMode" padding color="dark" size="large">Discard</ion-button>
         <ion-button block (click)="deleteRoute()" *ngIf="!viewMode" padding color="danger" size="large">Delete</ion-button>
         </div>

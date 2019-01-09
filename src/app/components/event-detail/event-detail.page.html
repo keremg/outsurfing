@@ -455,7 +455,8 @@
                     />
                     <ion-button
                             float-left
-                            onclick="document.getElementById('selectedImage').click();">
+                            onclick="document.getElementById('selectedImage').click();"
+                            *ngIf="!viewMode">
                         Add trip photos
                     </ion-button>
                     <ion-button float-right
@@ -494,7 +495,8 @@
                     />
                     <ion-button
                             float-left
-                            onclick="document.getElementById('selectedMapImage').click();">
+                            onclick="document.getElementById('selectedMapImage').click();"
+                            *ngIf="!viewMode">
                         Add trip map
                     </ion-button>
                     <ion-button float-right
@@ -521,7 +523,7 @@
 
     <ion-button id='join' (click)="onJoinEvent()">Join</ion-button>
     <ion-button id='leave' (click)="onLeaveEvent()">Leave</ion-button>
-    <ion-button id='rankEvent' (click)="rankEvent()">Rank Route and Participants</ion-button>
+    <ion-button *ngIf="isPastEvent" id='rankEvent' (click)="rankEvent()">Rank Route and Participants</ion-button>
     <ion-button id='approve' (click)="onApprove()">Approve Participants</ion-button>
     <ion-button id='save' (click)="updateEvent(false)">Save</ion-button><!--TODO change label if you create new-->
     <ion-button id='delete' (click)="onDelete()">Delete</ion-button>

@@ -50,6 +50,7 @@ export class EventDetailPage implements OnInit {
     photoIndex:number = 0;
     photoMapIndex:number = 0;
     loading: HTMLIonLoadingElement;
+    isPastEvent = false;
 
     private eventSubscription: Subscription;
 
@@ -131,6 +132,8 @@ export class EventDetailPage implements OnInit {
             this.eventSubscription = this.eventObs.subscribe(value => {
                 if (value) {
                     this.event = value;
+                    let latestTripDate = this.event.returnTime || this.event.routeStartTime || this.event.meetingTime;
+                    this.isPastEvent = (new Date().toISOString().substring(0,19) > latestTripDate);
                     this.loadFromEvent(this.event);//todo should be read only?
 
                 } else {
@@ -313,6 +316,8 @@ export class EventDetailPage implements OnInit {
 
         if (!isStayOnPage) {
             this.navCtrl.navigateRoot('home');
+        } else {
+            this.ngOnInit().then();
         }
     }
 
