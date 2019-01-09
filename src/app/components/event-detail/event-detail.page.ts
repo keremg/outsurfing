@@ -22,6 +22,7 @@ import {ParticipantApprovalPage} from '../participant-approval/participant-appro
 import { AngularFireStorage, AngularFireUploadTask } from '@angular/fire/storage';
 import {CompressImageService} from '../../services/compress-image.service';
 import 'rxjs/add/observable/of';
+import {EventReviewPage} from '../event-review/event-review.page';
 
 
 declare let window: any;
@@ -331,6 +332,15 @@ export class EventDetailPage implements OnInit {
         this.updateEvent(true);
         const modal = await this.modalController.create({
             component: ParticipantApprovalPage,
+            componentProps: {eventId: this.id, eventOrganizer: this.event.eventOrganizerId, event:this.event}
+        });
+        return modal.present();
+    }
+
+    async rankEvent() {
+        await this.updateEvent(true);
+        const modal = await this.modalController.create({
+            component: EventReviewPage,
             componentProps: {eventId: this.id, eventOrganizer: this.event.eventOrganizerId, event:this.event}
         });
         return modal.present();
