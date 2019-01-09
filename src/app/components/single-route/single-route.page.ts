@@ -290,7 +290,9 @@ export class SingleRoutePage implements OnInit {
     }
 
     async updateRoute(eventIt: boolean) {
-
+        if (this.viewMode) {
+            return true;
+        }
         this.openLoadingController();
 
         this.mapFormValuesToRouteModel();

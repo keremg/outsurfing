@@ -260,6 +260,9 @@ export class EventDetailPage implements OnInit {
     }
 
     async updateEvent(isStayOnPage: boolean) {
+        if (this.viewMode) {
+            return true;
+        }
         await this.openLoadingController();
 
         const copyOfEvent =this.getEventObject();//getting event from from after cleanups
