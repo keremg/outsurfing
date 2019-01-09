@@ -88,6 +88,12 @@ export class UserService {
         if(!user.travelerRatings){
             user.travelerRatings = [];
         }
+        if(!user.avgRating){
+            user.avgRating = 0;
+        }
+        if(!user.numOfRaters){
+            user.numOfRaters = 0;
+        }
         user.travelerRatings.push(rev);
         let grade = ((user.avgRating * user.numOfRaters) + rev.grade)/(user.numOfRaters+1)
         return this.updateUser(user.id,{avgRating: grade, numOfRaters: user.numOfRaters+1, travelerRatings:user.travelerRatings})
@@ -96,6 +102,12 @@ export class UserService {
     async addGuideReview(user:SurfUser, rev: SurfReview){
         if(!user.guideRatings){
             user.guideRatings = [];
+        }
+        if(!user.avgGuideRating){
+            user.avgGuideRating = 0;
+        }
+        if(!user.numOfGuideRaters){
+            user.numOfGuideRaters = 0;
         }
         user.guideRatings.push(rev);
         let grade = ((user.avgGuideRating * user.numOfGuideRaters) + rev.grade)/(user.numOfGuideRaters+1)

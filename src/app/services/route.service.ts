@@ -98,6 +98,12 @@ export class RouteService {
         if(!route.reviews){
             route.reviews = [];
         }
+        if(!route.routeRanking){
+            route.routeRanking = 0;
+        }
+        if(!route.routeNumOfRankers){
+            route.routeNumOfRankers = 0;
+        }
       route.reviews.push(rev);
       let grade = ((route.routeRanking * route.routeNumOfRankers) + rev.grade)/(route.routeNumOfRankers+1)
       return this.updateRoute(route.id,{routeRanking: grade, routeNumOfRankers: route.routeNumOfRankers+1, reviews:route.reviews})
