@@ -3,55 +3,68 @@
 </ion-header>
 
 <ion-content padding>
+    <ion-card>
+        <ion-grid>
 
-    <ion-label>Trip Review</ion-label>
-    <ion-item>
-        <ion-label>How much did you enjoy the trip?</ion-label>
-        <rating [(rating)]="event_reviews[0]"></rating>
-    </ion-item>
-    <ion-item>
-        <ion-label>How much did the routes were close to their descriptions?</ion-label>
-        <rating [(rating)]="event_reviews[1]"></rating>
-    </ion-item>
-    <ion-item *ngFor="let audience of audiences_strings">
-        How much was it suitable for {{audience}}?
-        <rating [(rating)]="audience_rating[audience]"></rating>
-    </ion-item>
-    <ion-label *ngIf="isGuided">Guide Reviews</ion-label>
-    <ion-item *ngIf="isGuided">
-        <ion-label>How much {{guideName}} was professional?</ion-label>
-        <rating [(rating)]="guide_reviews[0]"></rating>
-    </ion-item>
-    <ion-item *ngIf="isGuided">
-        <ion-label>How much {{guideName}} gave an added value for the trip?</ion-label>
-        <rating [(rating)]="guide_reviews[1]"></rating>
-    </ion-item>
-    <ion-label>participants review</ion-label>
-        <ion-item *ngFor="let participant of participants">
-            <ion-img> </ion-img>
-            How much fun did you had with {{participant}}?
-            <rating [(rating)]="participants_rating[participant]"></rating>
-        </ion-item>
-    <ion-item>
-        <ion-button id='submitReview' (click)="submit()">submit reviews</ion-button>
-    </ion-item>
+            <ion-card-header >
+                <ion-label>
+                    <ion-text style="font-size: 2rem">How much will you rate the trip? (The route itself)</ion-text>
+
+                </ion-label>
+            <rating style="font-size: 2rem; float:right" [(rating)]="event_review"></rating>
+            </ion-card-header>
+            <ion-row>
+                <ion-col size="2">
+                    <ion-img [src]="event_image"></ion-img>
+                </ion-col>
+                <ion-col>
+                    <ion-input style="font-size: 1rem" type = 'text' placeholder="please leave a comment about your experience"></ion-input>
+                </ion-col>
+            </ion-row>
+        </ion-grid>
+    </ion-card>
+
+    <ion-card  *ngIf="isGuided">
+        <ion-grid>
+
+            <ion-card-header >
+                <ion-label>
+                    <ion-text style="font-size: 2rem">How much will you rate {{guideName}}?</ion-text>
+
+                </ion-label>
+                <rating style="font-size: 2rem; float:right" [(rating)]="guide_review"></rating>
+            </ion-card-header>
+            <ion-row>
+                <ion-col size="2">
+                    <ion-img [src]="guide_image"></ion-img>
+                </ion-col>
+                <ion-col>
+                    <ion-input style="font-size: 1rem" type = 'text' placeholder="please leave a comment about your experience"></ion-input>
+                </ion-col>
+            </ion-row>
+        </ion-grid>
+    </ion-card>
 
 
- <!-- <ion-item>
-    <ion-label>Guide professionalism</ion-label>
-    <rating [(rating)]="rating2"></rating>
-  </ion-item>
-  <ion-item>
-    <ion-label>Guide atitude</ion-label>
-    <rating [(rating)]="rating3"></rating>
-  </ion-item>
-  <ion-item>
-    <ion-label>Guide knowledge</ion-label>
-    <rating [(rating)]="rating4"></rating>
-  </ion-item>
-  <ion-item>
-    <ion-label>Organizer level </ion-label>
-    <rating [(rating)]="rating5"></rating>
-  </ion-item>
-</ion-content>
--->
+
+    <ion-card  *ngFor="let participant of participants_names;let i = index" [attr.data-index]="i">
+        <ion-grid>
+
+            <ion-card-header >
+                <ion-label>
+                    <ion-text style="font-size: 2rem">How much fun did you had with {{participant}}??</ion-text>
+
+                </ion-label>
+                <rating style="font-size: 2rem; float:right" [(rating)]="participants_rating[i]"></rating>
+            </ion-card-header>
+            <ion-row>
+                <ion-col size="2">
+                    <ion-img [src]="participants_imgs[i]"></ion-img>
+                </ion-col>
+                <ion-col>
+                    <ion-input style="font-size: 1rem" type = 'text' placeholder="please leave a comment about your experience"></ion-input>
+                </ion-col>
+            </ion-row>
+        </ion-grid>
+    </ion-card>
+

@@ -1,5 +1,12 @@
 import {Component, OnInit} from '@angular/core';
 import {AudienceTypeEnum} from '../../AudienceType.enum';
+import {UserService} from '../../services/user.service';
+import {EventService} from '../../services/event.service';
+import { SurfEvent} from '../../models/surfEvent';
+import {ModalController, NavParams} from '@ionic/angular';
+import {Observable} from 'rxjs';
+import {SurfParticipant} from '../../models/surfParticipant';
+import {SurfUser} from '../../models/surfUser';
 
 @Component({
   selector: 'app-event-review',
@@ -7,36 +14,55 @@ import {AudienceTypeEnum} from '../../AudienceType.enum';
   styleUrls: ['./event-review.page.scss'],
 })
 export class EventReviewPage implements OnInit {
-    audiences : AudienceTypeEnum[];
-    audiences_strings : string[];
-    audience_rating : {type:string,rating:Number} [];
-    event_reviews: number[];
+    event: SurfEvent;
+    eventID: string;
+    event_image = "./assets/images/zavitan.jpg";
+    guide_image = "./assets/images/haham.jpg";
+    event_review: number;
     isGuided: boolean;
     guideName: string;
-    guide_reviews: number[];
+    guide_review: number;
     participants_rating: {name:string, rating:number} [];
-    participants : string[];
-  constructor() {
-      this.event_reviews = [0,0];
-      this.audiences = [AudienceTypeEnum.Elderlies,AudienceTypeEnum.Couples];
-      this.audiences_strings = ['Elderlies','Couples'];
-      this.audience_rating = [];
-      this.audience_rating.push({type: 'Elderlies', rating: 0});
-      this.audience_rating.push({type: 'Couples', rating: 0});
-      this.isGuided =true;
+    participants :Observable<SurfParticipant[]>;
+    participants_names: string[];
+    participants_imgs: string[];
+    private currentUserID: string;
+    private currentUser: SurfUser;
+  constructor(
+      private userService: UserService,
+      private eventService: EventService,
+      private navParams: NavParams,
+      private modalController: ModalController,
+
+  ) {
+      this.isGuided =false;
       this.guideName = "madrichush";
-      this.guide_reviews = [0,0];
-      this.participants = ['dani','avi'];
-      this.participants_rating = [];
-      this.participants_rating.push({name:'dani', rating: 0});
-      this.participants_rating.push({name:'avi', rating: 0});
-
+      //this.participants = ['dani','avi'];
+      this.participants_imgs = ["./assets/images/haham.jpg","./assets/images/haham.jpg"]
   }
 
-  ngOnInit() {
+  async ngOnInit() {
+      this.currentUserID = this.navParams.get('userId');
+      this.currentUser = this.navParams.get('user');
+      this.eventID = this.navParams.get('eventId');
+      //this.eventOrganizer = this.navParams.get('eventOrganizer');
+      this.event = this.navParams.get('event');
+      if(this.eventID) {
+          this.participants = this.eventService.getParticipants(this.eventID);
+          this.participants.subscribe(p=>{
+              if(p){
+                  for(let user in p){
+                      if(user){
+                          
+                      }
+                  }
+              }
+          });
+
+      }
   }
 
-    submit(){
+    onClose(){
         console.log( this.participants_rating['avi'])
     }
 }
