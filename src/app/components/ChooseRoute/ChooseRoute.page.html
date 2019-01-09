@@ -62,8 +62,8 @@
                   {{ route.name }}
                 </ion-col>
                 <ion-col size="3">
-                  <ion-label style="font-size: 1rem">
-                    TOD Route Rating: {{ route.routeRanking }} ({{
+                  <ion-label style="font-size: 1rem" *ngIf="route.routeRanking">
+                    Route Rating: {{ route.routeRanking }} ({{
                       route.routeNumOfRankers
                     }}
                     <ion-icon name="contact"></ion-icon>
@@ -110,9 +110,12 @@
                   </ion-col>
                   <ion-col size="9">
                     <ion-item *ngIf="route.isGuidingOffered">
-                      TODO Guide Rating: 8 (544
-                      <ion-icon name="contact"></ion-icon>
-                      )
+                      Guide Rating:
+                      <ion-label *ngIf="(route.routeCreator |async)?.avgGuideRating">{{(route.routeCreator |async)?.avgGuideRating}} ({{(route.routeCreator |async)?.numOfGuideRaters}}
+                        <ion-icon name="contact"></ion-icon>
+                        )
+                      </ion-label>
+                      <ion-label *ngIf="!(route.routeCreator |async)?.avgGuideRating">None</ion-label>
                     </ion-item>
                     <!--ion-item>
                       TODO Traveler Rating: 2 (12
