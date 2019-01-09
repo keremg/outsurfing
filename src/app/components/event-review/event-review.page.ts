@@ -26,6 +26,8 @@ export class EventReviewPage implements OnInit {
     participants :Observable<SurfParticipant[]>;
     participants_names: string[];
     participants_imgs: string[];
+    private currentUserID: string;
+    private currentUser: SurfUser;
   constructor(
       private userService: UserService,
       private eventService: EventService,
@@ -36,20 +38,25 @@ export class EventReviewPage implements OnInit {
       this.isGuided =false;
       this.guideName = "madrichush";
       //this.participants = ['dani','avi'];
-      this.participants_rating = [];
-      this.participants_rating.push({name:'dani', rating: 0});
-      this.participants_rating.push({name:'avi', rating: 0});
       this.participants_imgs = ["./assets/images/haham.jpg","./assets/images/haham.jpg"]
   }
 
   async ngOnInit() {
+      this.currentUserID = this.navParams.get('userId');
+      this.currentUser = this.navParams.get('user');
       this.eventID = this.navParams.get('eventId');
       //this.eventOrganizer = this.navParams.get('eventOrganizer');
       this.event = this.navParams.get('event');
       if(this.eventID) {
           this.participants = this.eventService.getParticipants(this.eventID);
           this.participants.subscribe(p=>{
-              console.log(p);
+              if(p){
+                  for(let user in p){
+                      if(user){
+                          
+                      }
+                  }
+              }
           });
 
       }
