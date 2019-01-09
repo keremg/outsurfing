@@ -25,7 +25,7 @@ export class EventReviewPage implements OnInit {
     guide_review: number;
     participants_rating: {name:string, rating:number} [];
     participants: SurfParticipant[];
-    participants_names: string[];
+    participants_names: string[] = []  ;
     participants_imgs: string[];
     participants_ids: string[];
     private currentUserID: string;
@@ -44,16 +44,16 @@ export class EventReviewPage implements OnInit {
   }
 
   async ngOnInit() {
-      this.currentUserID = this.navParams.get('userId');
-      this.currentUser = this.navParams.get('user');
+      this.currentUser = await this.userService.getCurrentUserPromise();
+      this.currentUserID = this.currentUser.id;
       this.eventID = this.navParams.get('eventId');
       //this.eventOrganizer = this.navParams.get('eventOrganizer');
       this.event = this.navParams.get('event');
       if(this.eventID) {
-          this.eventService.getParticipants(this.eventID).subscribe(x=>{
-              this.participants = x;
-          });
+          let participantsPromise = new Promise<SurfParticipant[]>(res => this.eventService.getParticipants(this.eventID).subscribe(res));
+          this.participants = await participantsPromise;
           for(let participant of this.participants) {
+              debugger;
               participant.user.subscribe(u=>{
                   if (u.id === this.currentUserID) {
                       return;
