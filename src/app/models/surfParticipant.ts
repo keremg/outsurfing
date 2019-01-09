@@ -6,14 +6,18 @@ export class SurfParticipant {
     user: Observable<SurfUser>; //will take firstName and lastName from there
     phone: string;
     email: string;
-    registrationDate: string;
+    registrationDate: number;
     isOrganizer: boolean;
     isGuide: boolean;
-    offeringSeatsInCar: number;
-    needSeatInCar: boolean;
-    userIdOfHostingCar: string;
-    isStandByForCar: boolean;
-    isApproved: boolean;
     groupEquipmentIBring: string;
+
+    offeringSeatsInCar: number;
+    //availableSeatsInCar:number;
+
+    needSeatInCar: boolean;
+    //userIdOfHostingCar: string;
+    //isStandByForCar: boolean;
+    //TODO allow cars just for private cars events
+
     approved: boolean;
 }

@@ -6,6 +6,8 @@ import {map} from 'rxjs/operators';
 import {SurfUser} from '../models/surfUser';
 import {AuthService} from './auth.service';
 import {SurfRoute} from '../models/surfRoute';
+import {SurfEvent} from '../models/surfEvent';
+import {SurfReview} from '../models/surfReview';
 
 
 @Injectable({
@@ -80,6 +82,24 @@ export class UserService {
 
         }));
         return this.user;
+    }
+
+    async addReview(user:SurfUser, rev: SurfReview){
+        if(!user.travelerRatings){
+            user.travelerRatings = [];
+        }
+        user.travelerRatings.push(rev);
+        let grade = ((user.avgRating * user.numOfRaters) + rev.grade)/(user.numOfRaters+1)
+        return this.updateUser(user.id,{avgRating: grade, numOfRaters: user.numOfRaters+1, travelerRatings:user.travelerRatings})
+    }
+
+    async addGuideReview(user:SurfUser, rev: SurfReview){
+        if(!user.guideRatings){
+            user.guideRatings = [];
+        }
+        user.guideRatings.push(rev);
+        let grade = ((user.avgGuideRating * user.numOfGuideRaters) + rev.grade)/(user.numOfGuideRaters+1)
+        return this.updateUser(user.id,{avgGuideRating: grade, numOfGuideRaters: user.numOfGuideRaters+1, guideRatings:user.guideRatings})
     }
 
 }

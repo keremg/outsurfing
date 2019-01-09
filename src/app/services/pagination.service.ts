@@ -156,7 +156,10 @@ export class PaginationService {
                     const doc = snap.payload.doc
                     data.id = snap.payload.doc.id;
                     if(this.query.path === 'events'){
-                        data.participant = this.eventService.getParticipants(data.id);
+                        data.participantsObs = this.eventService.getParticipants(data.id);
+                        data.participantsObs.subscribe(pars=>{
+                            data.participants = pars;
+                        })
                         data.eventOrganizer = this.userService.getuser(data.eventOrganizerId);
                         data.routeCreator = this.userService.getuser(data.routeCreatorId);
                     }

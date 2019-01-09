@@ -68,10 +68,12 @@ export class SurfEvent extends SurfRoute {
     organizerContactDetails: string; //free text allowing the guide to describe email and/or phone for contacting him/her about event
     requiredEquipment: string;
     isEventRequiresCars: boolean; //not all events requires cars handling
-    availableSeats: number;//TODO should add in approve
 
-    participant: Observable<SurfParticipant[]>;
+    availableSeats: number;//TODO should add in approve
+    participantsObs: Observable<SurfParticipant[]>;
+    participants: SurfParticipant[];
     approvedParticipants: number;
+
     searchIndex: any[];
 
 }

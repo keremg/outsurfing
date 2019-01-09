@@ -400,7 +400,7 @@
                 </ion-item>
                 <ion-item>
                     <ion-grid>
-                        <ion-row *ngFor="let par of ((eventObs|async)?.participant|async);">
+                        <ion-row *ngFor="let par of ((eventObs|async)?.participantsObs|async);">
                             <div *ngIf="par.approved === true">
                                 <ion-col>
                                     {{(par.user| async)?.firstName}}
@@ -416,7 +416,7 @@
                                 </ion-col>
                                 <ion-col>
                                     need seat? {{par.needSeatInCar}}
-                                    <!--{{(participant.needSeatInCar && !participant.userIdOfHostingCar) ? 'Need a ride': (participant.needSeatInCar && participant.userIdOfHostingCar)? 'with' + participant.userIdOfHostingCar : participant.offeringSeatsInCar? 'Offers ' + participant.offeringSeatsInCar + ' free seats'}}-->
+                                    <!--{{(participantsObs.needSeatInCar && !participantsObs.userIdOfHostingCar) ? 'Need a ride': (participantsObs.needSeatInCar && participantsObs.userIdOfHostingCar)? 'with' + participantsObs.userIdOfHostingCar : participantsObs.offeringSeatsInCar? 'Offers ' + participantsObs.offeringSeatsInCar + ' free seats'}}-->
                                 </ion-col>
                             </div>
                         </ion-row>

@@ -1,3 +1,6 @@
+import {SurfEvent} from './surfEvent';
+import {SurfReview} from './surfReview';
+
 export class SurfUser {
     id?: string;
     firstName?: string;
@@ -13,8 +16,17 @@ export class SurfUser {
     tripDifficulties?: number[]; // Level:  0 - very easy, 1-easy, 2-moderate, 3-challenging, 4-extreme, 5-very extreme
     tripDurations?: number[]; //will represent number of days, so half day should be 0.5 , one hour should be 0.04
     audienceTypes?: number[];
+
+
     avgRating?: number;
     numOfRaters?: number;
-    travelerRatings?: {reviewerId: string, ranking: number, review: string}[];//can be changed to
-    guideRatings?: {ranking: number, review: string}[];
+    travelerRatings: SurfReview[];
+
+
+    avgGuideRating?: number;
+    numOfGuideRaters?: number;
+    guideRatings: SurfReview[];
+
+
+
 }

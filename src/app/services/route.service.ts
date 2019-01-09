@@ -3,8 +3,8 @@ import {AngularFirestore, AngularFirestoreCollection, AngularFirestoreDocument} 
 import {SurfRoute} from '../models/surfRoute';
 import {Observable} from 'rxjs';
 import {map} from 'rxjs/operators';
-import {SurfEvent} from '../models/surfEvent';
 import {UserService} from './user.service';
+import {SurfReview} from '../models/surfReview';
 
 @Injectable({
   providedIn: 'root'
@@ -92,6 +92,15 @@ export class RouteService {
             }
         }
         return result;
+    }
+
+    async addReview(route:SurfRoute, rev: SurfReview){
+        if(!route.reviews){
+            route.reviews = [];
+        }
+      route.reviews.push(rev);
+      let grade = ((route.routeRanking * route.routeNumOfRankers) + rev.grade)/(route.routeNumOfRankers+1)
+      return this.updateRoute(route.id,{routeRanking: grade, routeNumOfRankers: route.routeNumOfRankers+1, reviews:route.reviews})
     }
 
 }

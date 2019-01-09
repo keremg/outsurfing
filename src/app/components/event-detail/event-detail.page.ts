@@ -174,7 +174,7 @@ export class EventDetailPage implements OnInit {
             this.removeElement('approve');
             this.removeElement('delete');
             console.log('just changed to view mode');
-            this.event.participant.subscribe(pars => {
+            this.event.participantsObs.subscribe(pars => {
                 let joined: boolean = false;
                 if(pars){
                     pars.forEach( par =>{
@@ -281,7 +281,7 @@ export class EventDetailPage implements OnInit {
         if(isNew) {
             const modal = await this.modalController.create({
                 component: JoinEventPage,
-                componentProps: {eventId: returnedId}
+                componentProps: {eventId: returnedId, event: this.event}
             });
 
             modal.onDidDismiss().then(data => {
@@ -337,7 +337,7 @@ export class EventDetailPage implements OnInit {
     }
 
     async onLeaveEvent() {
-        await this.eventService.leaveEvent(this.id, this.currentUser.id);
+        await this.eventService.leaveEvent(this.id, this.currentUser.id, this.event);
         return this.navCtrl.navigateRoot('home');
     }
 
@@ -568,6 +568,7 @@ export class EventDetailPage implements OnInit {
             this.singleEventForm.value.organizerContactDetails || '';
         this.event.isEventRequiresCars =
             this.singleEventForm.value.isEventRequiresCars || false;
+        this.event.availableSeats = 0;
     }
 
     //if new routem first set the creatorId and get creator in any case

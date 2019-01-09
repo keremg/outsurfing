@@ -1,5 +1,6 @@
 import {SurfUser} from './surfUser';
 import {Observable} from 'rxjs';
+import {SurfReview} from './surfReview';
 
 export class SurfRoute {
     id: string;
@@ -15,9 +16,7 @@ export class SurfRoute {
     lengthKM: number;
     shortDescription: string;
     longDescription: string; // details
-    //this should be handled in a separated collection: routeRanking: {reviewerId: string, ranking: number, review: string}[];
-    routeRanking: number;
-    routeNumOfRankers: number;
+
     routeDifficulty: number; // Level:  0 - very easy, 1-easy, 2-moderate, 3-challenging, 4-extreme, 5-very extreme
     routeDuration: number; // will represent number of days, so half day should be 0.5 , one hour should be 0.04
     routeProperties: string[]; // -	e.g. water, swimming, mountains, bicycles, forest, desert, oasis, historical, archeology, ropes
@@ -32,6 +31,11 @@ export class SurfRoute {
   requiredEquipment: string;
   numEventsCreatedFromRoute: number;
   recommendedMonths: string[];
+
+  reviews: SurfReview[];
+    //this should be handled in a separated collection: routeRanking: {reviewerId: string, ranking: number, review: string}[];
+    routeRanking: number;
+    routeNumOfRankers: number;
 
   iconName: string; //TODO terrain
   seasons: string; //TODO

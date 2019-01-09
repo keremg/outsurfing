@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import {Injectable} from '@angular/core';
 import {AngularFirestore, AngularFirestoreCollection, AngularFirestoreDocument} from 'angularfire2/firestore';
 import {Observable} from 'rxjs';
 import {map} from 'rxjs/operators';
@@ -8,7 +8,7 @@ import {UserService} from './user.service';
 import * as firebase from 'firebase/app';
 
 @Injectable({
-  providedIn: 'root'
+    providedIn: 'root'
 })
 export class EventService {
     collection_endpoint = 'events';
@@ -22,11 +22,14 @@ export class EventService {
         this.events = this.afs.collection(this.collection_endpoint, ref => ref.orderBy('region', 'asc'));
     }
 
-     getEvents(): Observable<SurfEvent[]> {
+    getEvents(): Observable<SurfEvent[]> {
         return this.events.snapshotChanges().pipe(map(changes => {
             return changes.map(action => {
                 const data = action.payload.doc.data() as SurfEvent;
-                data.participant = this.getParticipants(action.payload.doc.id);
+                data.participantsObs = this.getParticipants(action.payload.doc.id);
+                data.participantsObs.subscribe(pars => {
+                    data.participants = pars;
+                });
                 data.id = action.payload.doc.id;
                 return data;
             });
@@ -34,8 +37,7 @@ export class EventService {
     }
 
 
-
-     getEvent(id: string): Observable<SurfEvent> {
+    getEvent(id: string): Observable<SurfEvent> {
         this.eventDoc = this.events.doc<SurfEvent>(id);
         return this.eventDoc.snapshotChanges().pipe(map(action => {
             if (action.payload.exists === false) {
@@ -43,7 +45,10 @@ export class EventService {
             } else {
                 const data = action.payload.data() as SurfEvent;
                 data.id = action.payload.id;
-                data.participant = this.getParticipants(id);
+                data.participantsObs = this.getParticipants(id);
+                data.participantsObs.subscribe(pars => {
+                    data.participants = pars;
+                });
                 data.eventOrganizer = this.userService.getuser(data.eventOrganizerId);
                 return data;
             }
@@ -51,13 +56,14 @@ export class EventService {
     }
 
     async addEvent(event: SurfEvent) {
-        delete event.participant;
+        delete event.participantsObs;
+        delete event.participants;
         let x = this.getAllSubstrings(event.name);
         event.searchIndex = x;
         return this.events.add({...event}).then((docRef) => {
             return docRef.id;
 
-        }).catch(function(error) {
+        }).catch(function (error) {
             alert('Failed creating route ' + error);
             console.error('Error adding document: ', error);
         });
@@ -66,8 +72,9 @@ export class EventService {
 
     async updateEvent(id, update) {
         //Get the task document
-        delete update.participant;
-        if(update.name) {
+        delete update.participantsObs;
+        delete update.participants;
+        if (update.name) {
             let x = this.getAllSubstrings(update.name);
             update.searchIndex = x;
         }
@@ -95,11 +102,6 @@ export class EventService {
     }
 
 
-
-
-
-    
-
     getParticipants(id: string): Observable<SurfParticipant[]> {
         return this.events.doc(id).collection(this.participant_collection_endpoint).snapshotChanges().pipe(map(changes => {
             return changes.map(action => {
@@ -111,46 +113,76 @@ export class EventService {
         }));
     }
 
-    async joinEvent(id, participant){
-        //TODO other logic - to updatefields like car and stuff?
+    async joinEvent(id, participant, event) {
         let uid = participant.id;
-        this.events.doc(id).update({[uid]:1});
+        this.events.doc(id).update({[uid]: 1});
         delete participant.id;
         delete participant.user;
-        return this.events.doc(id).collection(this.participant_collection_endpoint).doc(uid).set({...participant}).catch(function(error) {
-            alert('Failed adding participant' + error);
-            console.error('Error adding participant: ', error);
+        return this.events.doc(id).collection(this.participant_collection_endpoint).doc(uid).set({...participant}).catch(function (error) {
+            alert('Failed adding participantsObs' + error);
+            console.error('Error adding participantsObs: ', error);
         });
     }
 
-    async leaveEvent(id, uid){
-        //TODO other logic - to updatefields like car and stuff?
-        this.events.doc(id).update({[uid]:firebase.firestore.FieldValue.delete()});
-        return this.events.doc(id).collection(this.participant_collection_endpoint).doc(uid).delete().catch(function(error) {
-            alert('Failed deleting participant' + error);
-            console.error('Error deleting participant: ', error);
+    async leaveEvent(id, uid, event) {
+        let p: any;
+        let newAvialableSeats = event.availableSeats;
+        for (p in event.participants) {
+            if (p.id === uid) {
+                if (p.approved) {
+                    newAvialableSeats -= p.offeringSeatsInCar;
+                }
+            }
+        }
+        this.events.doc(id).update({[uid]: firebase.firestore.FieldValue.delete(), availableSeats: newAvialableSeats});
+        return this.events.doc(id).collection(this.participant_collection_endpoint).doc(uid).delete().catch(function (error) {
+            alert('Failed deleting participantsObs' + error);
+            console.error('Error deleting participantsObs: ', error);
         });
     }
 
-    async approveParticipant(id, participant:SurfParticipant, event){
-        debugger;
-        //TODO urgent should affect number of seats
-        let newApproved : number= event.approvedParticipants+1;
-        this.events.doc(id).update({[participant.id]:1,
-                                            approvedParticipants: newApproved,
-                                            });
-        return this.events.doc(id).collection(this.participant_collection_endpoint).doc(participant.id).update({approved:true}).catch(function(error) {
-            alert('Failed deleting participant' + error);
-            console.error('Error deleting participant: ', error);
+    async approveParticipant(id, participant: SurfParticipant, event) {
+        //if a user is approved - his place in car is saved.
+        let newAvialableSeats = event.availableSeats || 0;
+        if(!participant.needSeatInCar) {
+            newAvialableSeats += participant.offeringSeatsInCar;
+        }
+        else{
+            newAvialableSeats-=1;
+        }
+
+        let newApproved: number = event.approvedParticipants + 1;
+        this.events.doc(id).update({
+            [participant.id]: 1,
+            approvedParticipants: newApproved,
+            availableSeats: newAvialableSeats
+        });
+        return this.events.doc(id).collection(this.participant_collection_endpoint).doc(participant.id).update({approved: true}).catch(function (error) {
+            alert('Failed deleting participantsObs' + error);
+            console.error('Error deleting participantsObs: ', error);
         });
     }
 
-    async disapproveParticipant(id, participant:SurfParticipant, event){
-        //TODO urgent should affect number of seats
-        this.events.doc(id).update({[participant.id]:firebase.firestore.FieldValue.delete(),  approvedParticipants: event.approvedParticipants-1});
-        return this.events.doc(id).collection(this.participant_collection_endpoint).doc(participant.id).update({approved:false}).catch(function(error) {
-            alert('Failed deleting participant' + error);
-            console.error('Error deleting participant: ', error);
+    async disapproveParticipant(id, participant: SurfParticipant, event) {
+        let newAvialableSeats = event.availableSeats || 0;
+        if (participant.approved) {
+            if(!participant.needSeatInCar) {
+                newAvialableSeats -= participant.offeringSeatsInCar;
+            }
+            else{
+                newAvialableSeats+=1;
+            }
+        }
+
+        let newApproved: number = event.approvedParticipants - 1;
+        this.events.doc(id).update({
+            [participant.id]: firebase.firestore.FieldValue.delete(),
+            approvedParticipants: newApproved,
+            availableSeats: newAvialableSeats
+        });
+        return this.events.doc(id).collection(this.participant_collection_endpoint).doc(participant.id).update({approved: false}).catch(function (error) {
+            alert('Failed deleting participantsObs' + error);
+            console.error('Error deleting participantsObs: ', error);
         });
     }
 

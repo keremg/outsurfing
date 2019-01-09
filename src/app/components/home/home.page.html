@@ -63,10 +63,8 @@
                                     {{ event.name }}
                                 </ion-col>
                                 <ion-col size="3">
-                                        <ion-label style="font-size: 1rem">
-                                            TODO Route Rating: {{ event.routeRanking }} ({{
-                                            event.routeNumOfRankers
-                                            }}
+                                        <ion-label style="font-size: 1rem" *ngIf="event.routeRanking">
+                                            Route Rating: {{ event.routeRanking }} ({{event.routeNumOfRankers}}
                                             <ion-icon name="contact"></ion-icon>
                                             )
                                         </ion-label>
@@ -98,9 +96,13 @@
                                 <ion-item> {{(event.eventOrganizer |async)?.firstName}}{{getAge((event.eventOrganizer |async)?.birthDate)}}</ion-item>
                                 <ion-item> Is Guided: {{event.isGuidedEvent ? 'Yes' : 'No'}}</ion-item>
                                 <ion-item *ngIf="event.isGuidedEvent">
-                                    TODO Guide Rating: 8 (544
-                                    <ion-icon name="contact"></ion-icon>
-                                    )
+                                    Guide Rating:
+                                    <ion-label *ngIf="(event.eventOrganizer |async)?.avgGuideRating">{{(event.eventOrganizer |async)?.avgGuideRating}} ({{(event.eventOrganizer |async)?.numOfGuideRaters}}
+                                        <ion-icon name="contact"></ion-icon>
+                                        )
+                                    </ion-label>
+                                    <ion-label *ngIf="!(event.eventOrganizer |async)?.avgGuideRating">None</ion-label>
+
                                 </ion-item>
                                 <ion-item >
                                     <ion-icon
@@ -123,7 +125,7 @@
                                 </ion-item>
                                     <ion-grid wrap>
                                         <ion-row size="12">
-                                            <div *ngFor="let par of (event?.participant|async);">
+                                            <div *ngFor="let par of (event?.participantsObs|async);">
                                                 <ion-col size="4" *ngIf="par.approved" (click)="onViewProfile(par.id, $event)">
                                                     <!--TODO: urgent fix image size-->
                                                     <app-route-image [imgPath]="'users/'+par.id+'/profilePic'+'_Small'" sizeToLoad="Small" width="20px"></app-route-image>
