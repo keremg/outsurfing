@@ -21,11 +21,13 @@ export class EventReviewPage implements OnInit {
     event_review: number;
     isGuided: boolean;
     guideName: string;
+    guideId: string;
     guide_review: number;
     participants_rating: {name:string, rating:number} [];
-    participants :Observable<SurfParticipant[]>;
-    participants_names: string[];
+    participants: SurfParticipant[];
+    participants_names: string[] = []  ;
     participants_imgs: string[];
+    participants_ids: string[];
     private currentUserID: string;
     private currentUser: SurfUser;
   constructor(
@@ -38,28 +40,40 @@ export class EventReviewPage implements OnInit {
       this.isGuided =false;
       this.guideName = "madrichush";
       //this.participants = ['dani','avi'];
-      this.participants_imgs = ["./assets/images/haham.jpg","./assets/images/haham.jpg"]
+      //this.participants_imgs = ["./assets/images/haham.jpg","./assets/images/haham.jpg"]
   }
 
   async ngOnInit() {
-      this.currentUserID = this.navParams.get('userId');
-      this.currentUser = this.navParams.get('user');
+      this.currentUser = await this.userService.getCurrentUserPromise();
+      this.currentUserID = this.currentUser.id;
       this.eventID = this.navParams.get('eventId');
       //this.eventOrganizer = this.navParams.get('eventOrganizer');
       this.event = this.navParams.get('event');
       if(this.eventID) {
-          this.participants = this.eventService.getParticipants(this.eventID);
-          this.participants.subscribe(p=>{
-              if(p){
-                  for(let user in p){
-                      if(user){
-                          
-                      }
+          let participantsPromise = new Promise<SurfParticipant[]>(res => this.eventService.getParticipants(this.eventID).subscribe(res));
+          this.participants = await participantsPromise;
+          for(let participant of this.participants) {
+              debugger;
+              participant.user.subscribe(u=>{
+                  if (u.id === this.currentUserID) {
+                      return;
                   }
-              }
-          });
+                  this.participants_names.push(u.firstName +" "+u.lastName);
+                  this.participants_ids.push(u.id);
+                  this.participants_imgs.push("./assets/images/haham.jpg");
+              });
+
+          }
 
       }
+      this.isGuided = this.event.isGuidedEvent;
+      if(this.isGuided){
+          this.event.eventOrganizer.subscribe(x=>{
+              this.guideName = x.firstName + " " + x.lastName;
+              this.guideId = x.id;
+          });
+      }
+
   }
 
     onClose(){
