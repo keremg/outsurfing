@@ -20,7 +20,7 @@
             fill="solid"
             shape="round"
             id="filter"
-            *ngIf="!this.onlyMine">
+            (click)="onFilter($event)">
       <ion-icon name="funnel"></ion-icon>
       Filter
     </ion-button>
@@ -94,6 +94,7 @@
               <ion-col size="7">
                 <ion-item> Type: {{ route.routeProperties }} </ion-item>
                 <ion-item> Duration: {{ route.routeDuration }} {{route.routeDurationUnits}} </ion-item>
+                <ion-item> Length: {{ route.lengthKM }} </ion-item>
                 <ion-item> Level: {{ route.routeDifficulty }} </ion-item>
                 <ion-item> Seasons: {{ route.seasons }} </ion-item>
 

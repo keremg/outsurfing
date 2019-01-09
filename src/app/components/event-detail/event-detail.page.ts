@@ -97,7 +97,7 @@ export class EventDetailPage implements OnInit {
             shortDescription: ['', Validators.required],
             longDescription: ['', Validators.required],
             //TODO: add ability to rank the route (for all users, also in VIEW mode)
-            routeDifficulty: ['', Validators.required],
+            routeDifficulty: [0, Validators.required],
             routeDuration: [0, Validators.required],
             routeDurationUnits: ['hours'],
             routeProperties: [''],

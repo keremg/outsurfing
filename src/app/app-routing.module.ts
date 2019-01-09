@@ -10,6 +10,7 @@ const routes: Routes = [
 
     { path: 'ChooseRoute', loadChildren: './components/ChooseRoute/ChooseRoute.module#ChooseRoutePageModule',canActivate: [AuthGuardService]},
     { path: 'ChooseRoute/:q', loadChildren: './components/ChooseRoute/ChooseRoute.module#ChooseRoutePageModule',canActivate: [AuthGuardService]},
+    { path: 'ChooseRoute/:q/:f', loadChildren: './components/ChooseRoute/ChooseRoute.module#ChooseRoutePageModule',canActivate: [AuthGuardService]},
 
     { path: 'SignIn', loadChildren: './components/SignIn/SignIn.module#SignInModule' },
   { path: 'ResetPassword', loadChildren: './components/reset-password/reset-password.module#ResetPasswordPageModule'},

@@ -7,6 +7,7 @@ import { IonicModule } from '@ionic/angular';
 
 import { EventReviewPage } from './event-review.page';
 import {RatingComponent} from '../rating/rating.component';
+import {ToolbarComponentModule} from '../toolbar/toolbar.module';
 
 const routes: Routes = [
   {
@@ -20,7 +21,8 @@ const routes: Routes = [
     CommonModule,
     FormsModule,
     IonicModule,
-    RouterModule.forChild(routes)
+      ToolbarComponentModule,
+      RouterModule.forChild(routes)
   ],
   declarations: [EventReviewPage, RatingComponent]
 })

@@ -220,7 +220,8 @@ export class HomePage implements OnInit {
         const popover = await this.popoverController.create({
             component: FilterEventsPage,
             componentProps: {query: this.query,
-            filter: this.filter},
+            filter: this.filter,
+            isRoute:false},
             event:ev});
         return await popover.present();
     }

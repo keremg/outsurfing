@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import {Observable, of, ReplaySubject} from 'rxjs';
 import { SurfRoute } from '../../models/surfRoute';
 import { RouteService } from '../../services/route.service';
-import { NavController } from '@ionic/angular';
+import {NavController, PopoverController} from '@ionic/angular';
 import { PaginationService } from '../../services/pagination.service';
 import {
   AngularFireStorage,
@@ -10,6 +10,7 @@ import {
 } from '@angular/fire/storage';
 import leaflet from 'leaflet';
 import {ActivatedRoute} from '@angular/router';
+import {FilterEventsPage} from '../filter-events/filter-events.page';
 
 @Component({
   selector: 'app-ChooseRoute',
@@ -21,30 +22,35 @@ export class ChooseRoute implements OnInit {
     location: ReplaySubject<string[]> = new ReplaySubject(1);
     query: string;
 map:any;
+    filter: {};
+
+
     constructor(
     public routeService: RouteService,
     public navCtrl: NavController,
     public page: PaginationService,
     private activatedRoute: ActivatedRoute,
-    private storage: AngularFireStorage
-  ) {}
+    private storage: AngularFireStorage,
+    public popoverController: PopoverController
+
+    ) {}
 
   ngOnInit() {
       this.query = this.activatedRoute.snapshot.paramMap.get('q');
+      this.filter = this.getFilter(this.activatedRoute.snapshot.paramMap.get('f'));
+      if(this.query === '0'){
+          this.query = null;
+      }
 
 
-      if (this.query) {
           this.page.init(
               'routes',
               'name',
               {reverse: true, prepend: false},
               null,
-              this.query
+              this.query,
+              this.filter
           );
-      }
-      else {
-          this.page.init('routes', 'name', { reverse: true, prepend: false });
-      }
 
 
     this.locate();
@@ -135,9 +141,46 @@ map:any;
 
     }
 
+
+    getFilter(str:string) {
+        if (str && str.length > 0) {
+            let x = {};
+            let split = str.split('&')
+            for (let f in split) {
+                let kv = split[f].split('.');
+                x[kv[0]] = kv[1];
+            }
+            return x;
+        }
+    }
+
+    getFilterText(){
+        if(this.filter) {
+            let str = '';
+            for (let f in this.filter) {
+                str+= f +'.' +this.filter[f]+'&';
+            }
+            return str;
+        }
+        return '';
+    }
+
     search(ev) {
         let q = (ev as CustomEvent).detail.value;
-        this.navCtrl.navigateRoot('ChooseRoute/' + q);
+        if(q !== this.query) {
+            this.navCtrl.navigateRoot('ChooseRoute/' + q +'/'+this.getFilterText());
+        }
+    }
+
+    async onFilter(ev){
+
+        const popover = await this.popoverController.create({
+            component: FilterEventsPage,
+            componentProps: {query: this.query,
+                filter: this.filter,
+            isRoute:true},
+            event:ev});
+        return await popover.present();
     }
 
 }

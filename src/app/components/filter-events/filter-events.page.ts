@@ -12,6 +12,7 @@ export class FilterEventsPage implements OnInit {
   query:string;
   filter:any;
     public filterForm: FormGroup;
+    isRoute:boolean = false;
 
 
     constructor(private navCtrl: NavController,
@@ -22,6 +23,7 @@ export class FilterEventsPage implements OnInit {
   ngOnInit() {
       this.query = this.navParams.get('query');
       this.filter = this.navParams.get('filter');
+      this.isRoute = this.navParams.get('isRoute');
       if(!this.query)
         this.query='0'
 
@@ -72,7 +74,12 @@ export class FilterEventsPage implements OnInit {
           this.filter['routeDuration'] = this.filterForm.value.routeDuration;
       }
 
-      this.navCtrl.navigateRoot('home'+this.query+this.getFilterText());
+      let base;
+      if(this.isRoute)
+          base = 'ChooseRoute';
+      else
+          base='home';
+      this.navCtrl.navigateRoot(base+this.query+this.getFilterText());
   }
 
     getFilterText(){
