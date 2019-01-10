@@ -8,14 +8,14 @@
                     <ion-text style="font-size: 2rem">How much will you rate the trip? (The route itself)</ion-text>
 
                 </ion-label>
-            <rating style="font-size: 2rem; float:right" [(rating)]="event_review"></rating>
+            <rating style="font-size: 2rem; float:right" [(rating)]="event_rating"></rating>
             </ion-card-header>
             <ion-row>
                 <ion-col size="2">
                     <ion-img [src]="event_image"></ion-img>
                 </ion-col>
                 <ion-col>
-                    <ion-input style="font-size: 1rem" type = 'text' placeholder="please leave a comment about your experience"></ion-input>
+                    <ion-input [(ngModel)]="event_comment" style="font-size: 1rem" type = 'text' placeholder="please leave a comment about your experience"></ion-input>
                 </ion-col>
             </ion-row>
         </ion-grid>
@@ -29,14 +29,14 @@
                     <ion-text style="font-size: 2rem">How much will you rate {{guideName}}?</ion-text>
 
                 </ion-label>
-                <rating style="font-size: 2rem; float:right" [(rating)]="guide_review"></rating>
+                <rating style="font-size: 2rem; float:right" [(rating)]="guide_rating"></rating>
             </ion-card-header>
             <ion-row>
                 <ion-col size="2">
                     <ion-img [src]="guide_image"></ion-img>
                 </ion-col>
                 <ion-col>
-                    <ion-input style="font-size: 1rem" type = 'text' placeholder="please leave a comment about your experience"></ion-input>
+                    <ion-input [(ngModel)]="guide_comment" style="font-size: 1rem" type = 'text' placeholder="please leave a comment about your experience"></ion-input>
                 </ion-col>
             </ion-row>
         </ion-grid>
@@ -59,9 +59,11 @@
                     <ion-img [src]="participants_imgs[i]"></ion-img>
                 </ion-col>
                 <ion-col>
-                    <ion-input style="font-size: 1rem" type = 'text' placeholder="please leave a comment about your experience"></ion-input>
+                    <ion-input [(ngModel)]="participants_comments[i]" style="font-size: 1rem" type = 'text' placeholder="please leave a comment about your experience"></ion-input>
                 </ion-col>
             </ion-row>
         </ion-grid>
     </ion-card>
+    <ion-button id='close' (click)="onClose()">Submit Rating</ion-button>
+
 </ion-content>
