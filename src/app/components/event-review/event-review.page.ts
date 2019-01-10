@@ -20,7 +20,7 @@ export class EventReviewPage implements OnInit {
     event: SurfEvent;
     route: SurfRoute;
     eventID: string;
-    event_image = "./assets/images/zavitan.jpg";
+    routeUrl: string;// "./assets/images/zavitan.jpg";
     guide_image = "./assets/images/haham.jpg";
     event_rating: number;
     isGuided: boolean;
@@ -48,10 +48,7 @@ export class EventReviewPage implements OnInit {
       private routeService: RouteService,
 
   ) {
-      //this.isGuided =false;
-      //this.guideName = "madrichush";
-      //this.participants = ['dani','avi'];
-      //this.participants_imgs = ["./assets/images/haham.jpg","./assets/images/haham.jpg"]
+      this.routeUrl = "routes/GO8a4ElzDUIBY6kz6Njs/1546895478281_0";
   }
 
   async ngOnInit() {
@@ -63,11 +60,9 @@ export class EventReviewPage implements OnInit {
       if(this.eventID) {
           let routePromise = new Promise<SurfRoute>(res=> this.routeService.getRoute(this.event.routeId).subscribe(res));
           this.route = await routePromise;
-
           let participantsPromise = new Promise<SurfParticipant[]>(res => this.eventService.getParticipants(this.eventID).subscribe(res));
           this.participants = await participantsPromise;
           for(let participant of this.participants) {
-              debugger;
               participant.user.subscribe(u=>{
                   if (u.id === this.currentUserID) {
                       return;
@@ -124,7 +119,7 @@ export class EventReviewPage implements OnInit {
     
     async onClose(){
       let time = (new Date()).getTime();
-      //await this.routeService.addReview(this.route,this.build_review_for_event(time));
+      await this.routeService.addReview(this.route,this.build_review_for_event(time));
       if(this.isGuided){
           await this.userService.addGuideReview(this.guide,this.build_review_for_guide(time))
       }
