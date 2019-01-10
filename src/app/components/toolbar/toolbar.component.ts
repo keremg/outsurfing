@@ -9,6 +9,7 @@ import {NavController} from '@ionic/angular';
 })
 export class ToolbarComponent implements OnInit {
 
+  currentUserId: string;
   constructor(private authService: AuthService,
               private navCtrl: NavController) { }
     @Input() defaultBack: string ;
@@ -19,6 +20,7 @@ export class ToolbarComponent implements OnInit {
       if(this.loggedIn === null){
           this.loggedIn=true;
       }
+      this.currentUserId = this.authService.currentUserId;
   }
 
     logout() {

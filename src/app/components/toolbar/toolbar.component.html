@@ -18,7 +18,8 @@
       logout
     </ion-button>
     <ion-button href="/EditProfile">
-      <ion-icon slot="icon-only" name="contact"></ion-icon>
+      <app-route-image imgPath="users/{{currentUserId}}/profilePic_Small" sizeToLoad="Small" width="30px" height="30px"></app-route-image>
+      <!--<ion-icon slot="icon-only" name="contact"></ion-icon>-->
     </ion-button>
     <ion-menu-button autoHide="false"></ion-menu-button>
   </ion-buttons>

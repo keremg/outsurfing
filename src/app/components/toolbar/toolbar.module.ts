@@ -6,6 +6,7 @@ import {IonicModule} from '@ionic/angular';
 import {RouterModule} from '@angular/router';
 import {ChooseRoute} from '../ChooseRoute/ChooseRoute.page';
 import {ToolbarComponent} from './toolbar.component';
+import {RouteImageComponentModule} from '../route-image/route-image.module';
 
 
 
@@ -13,6 +14,7 @@ import {ToolbarComponent} from './toolbar.component';
     imports: [
         CommonModule,
         IonicModule,
+        RouteImageComponentModule
     ],
   declarations: [ToolbarComponent],
     exports: [
