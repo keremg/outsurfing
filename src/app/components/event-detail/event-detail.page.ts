@@ -631,7 +631,8 @@ export class EventDetailPage implements OnInit {
             this.singleEventForm.value.organizerContactDetails || '';
         this.event.isEventRequiresCars =
             this.singleEventForm.value.isEventRequiresCars || false;
-        this.event.availableSeats = 0;
+        this.event.availableSeats = this.event.availableSeats || 0;
+        this.event.isPastEvent = this.event.isPastEvent || false;
     }
 
     //if new routem first set the creatorId and get creator in any case

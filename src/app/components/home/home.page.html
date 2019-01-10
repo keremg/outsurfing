@@ -60,7 +60,7 @@
                                 <ion-col size="9">
                                     <ion-icon name="calendar"></ion-icon>
                                     <ion-text style="font-size: 0.5em;">Event</ion-text>
-                                    {{ event.name }}
+                                    {{ event.name }} <ion-label color="danger">{{event.isPastEvent? 'Past':null}}</ion-label>
                                 </ion-col>
                                 <ion-col size="3">
                                         <ion-label style="font-size: 1rem" *ngIf="event.routeRanking">

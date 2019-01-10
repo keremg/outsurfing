@@ -75,14 +75,13 @@ export class PaginationService {
                         }
                     }
                 }
+                x = x.where('isPastEvent', '==', false)
             }
-
-
-            console.log(x);
-
             return x
                 .orderBy(this.query.field, this.query.reverse ? 'desc' : 'asc')
+                //.orderBy('isPastEvent')
                 .limit(this.query.limit)
+
         })
 
         this.mapAndUpdate(first)
@@ -120,10 +119,13 @@ export class PaginationService {
                         }
                     }
                 }
+                x = x.where('isPastEvent', '==', false)
+
             }
 
             return x
                 .orderBy(this.query.field, this.query.reverse ? 'desc' : 'asc')
+                //.orderBy('isPastEvent')
                 .limit(this.query.limit)
                 .startAfter(cursor)
         })

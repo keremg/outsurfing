@@ -75,5 +75,6 @@ export class SurfEvent extends SurfRoute {
     approvedParticipants: number;
 
     searchIndex: any[];
+    isPastEvent:true;
 
 }
