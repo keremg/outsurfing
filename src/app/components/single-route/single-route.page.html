@@ -18,6 +18,16 @@
                     </ion-input>
                 </ion-item>
 
+                <ion-item [class.viewModeClass]="viewMode"  *ngIf="route.routeRanking">
+                    <ion-label>
+                        Route Rating: {{ route.routeRanking }} ({{
+                        route.routeNumOfRankers
+                        }}
+                        <ion-icon name="contact"></ion-icon>
+                        )
+                    </ion-label> TODO: add reviews button
+                </ion-item>
+
                 <ion-item>
                     <ion-label
                             *ngIf="!singleRouteForm.controls.routeStartLocation.valid && !viewMode"

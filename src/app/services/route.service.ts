@@ -5,12 +5,14 @@ import {Observable} from 'rxjs';
 import {map} from 'rxjs/operators';
 import {UserService} from './user.service';
 import {SurfReview} from '../models/surfReview';
+import {SurfParticipant} from '../models/surfParticipant';
 
 @Injectable({
   providedIn: 'root'
 })
 export class RouteService {
   collection_endpoint = 'routes';
+    review_collection_endpoint = 'reviews';
 
     routes: AngularFirestoreCollection<SurfRoute>;
     private routeDoc: AngularFirestoreDocument<SurfRoute>;
@@ -95,18 +97,42 @@ export class RouteService {
     }
 
     async addReview(route:SurfRoute, rev: SurfReview){
-        if(!route.reviews){
-            route.reviews = [];
-        }
         if(!route.routeRanking){
             route.routeRanking = 0;
         }
         if(!route.routeNumOfRankers){
             route.routeNumOfRankers = 0;
         }
-      route.reviews.push(rev);
-      let grade = ((route.routeRanking * route.routeNumOfRankers) + rev.grade)/(route.routeNumOfRankers+1)
-      return this.updateRoute(route.id,{routeRanking: grade, routeNumOfRankers: route.routeNumOfRankers+1, reviews:route.reviews})
+        delete rev.id;
+
+        this.db.doc<SurfRoute>(`${this.collection_endpoint}/${route.id}`).collection(this.review_collection_endpoint).add({...rev}).catch(function (error) {
+            alert('Failed adding review' + error);
+            console.error('Error adding review: ', error);
+        });
+
+      let grade = ((route.routeRanking * route.routeNumOfRankers) + rev.grade)/(route.routeNumOfRankers+1);
+      return this.updateRoute(route.id,{routeRanking: grade, routeNumOfRankers: route.routeNumOfRankers+1});
+    }
+
+    getRouteReviews(id: string): Observable<SurfReview[]> {
+        return this.db.doc<SurfRoute>(`${this.collection_endpoint}/${id}`).collection(this.review_collection_endpoint).snapshotChanges().pipe(map(changes => {
+            return changes.map(action => {
+                const data = action.payload.doc.data() as SurfReview;
+                data.id = action.payload.doc.id;
+                return data;
+            });
+        }));
+    }
+
+    ReviewAlreadyExist(routeId, uid, fromEventId) : Observable<boolean>{
+        return this.db.doc<SurfRoute>(`${this.collection_endpoint}/${routeId}`).collection(this.review_collection_endpoint, ref => {
+            return ref.where('reviewerId', '==', uid)
+                .where('forEventId', '==', fromEventId);
+        }).snapshotChanges().pipe(map((action:any) => {
+            if(action && action.length >0 && action[0].payload.doc.exists  )
+                return true;
+            else return false;
+        }));
     }
 
 }

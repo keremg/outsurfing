@@ -1,5 +1,6 @@
 import {SurfEvent} from './surfEvent';
 import {SurfReview} from './surfReview';
+import {Observable} from 'rxjs';
 
 export class SurfUser {
     id?: string;
@@ -20,12 +21,9 @@ export class SurfUser {
 
     avgRating?: number;
     numOfRaters?: number;
-    travelerRatings: SurfReview[];
-
 
     avgGuideRating?: number;
     numOfGuideRaters?: number;
-    guideRatings: SurfReview[];
 
 
 

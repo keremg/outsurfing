@@ -19,6 +19,9 @@ export class UserService {
     currentUser: ReplaySubject<SurfUser> = new ReplaySubject(1);
     userId: string;
     collection_endpoint = 'users';
+    review_collection_endpoint = 'reviews';
+    guide_review_collection_endpoint = 'guideReviews';
+
 
     constructor(private afs: AngularFirestore,
                 private firebaseAuth: AngularFireAuth,
@@ -85,33 +88,83 @@ export class UserService {
     }
 
     async addReview(user:SurfUser, rev: SurfReview){
-        if(!user.travelerRatings){
-            user.travelerRatings = [];
-        }
         if(!user.avgRating){
             user.avgRating = 0;
         }
         if(!user.numOfRaters){
             user.numOfRaters = 0;
         }
-        user.travelerRatings.push(rev);
+        delete rev.id;
+
+
+        this.afs.doc<SurfUser>(`${this.collection_endpoint}/${user.id}`).collection(this.review_collection_endpoint).add({...rev}).catch(function (error) {
+            alert('Failed adding review' + error);
+            console.error('Error adding review: ', error);
+        });
+
         let grade = ((user.avgRating * user.numOfRaters) + rev.grade)/(user.numOfRaters+1)
-        return this.updateUser(user.id,{avgRating: grade, numOfRaters: user.numOfRaters+1, travelerRatings:user.travelerRatings})
+        return this.updateUser(user.id,{avgRating: grade, numOfRaters: user.numOfRaters+1})
+    }
+
+    getUserReviews(id: string): Observable<SurfReview[]> {
+        return this.afs.doc<SurfUser>(`${this.collection_endpoint}/${id}`).collection(this.review_collection_endpoint).snapshotChanges().pipe(map(changes => {
+            return changes.map(action => {
+                const data = action.payload.doc.data() as SurfReview;
+                data.id = action.payload.doc.id;
+                return data;
+            });
+        }));
+    }
+
+    ReviewAlreadyExist(uid, fromUid, fromEventId) : Observable<boolean>{
+        return this.afs.doc<SurfUser>(`${this.collection_endpoint}/${uid}`).collection(this.review_collection_endpoint, ref => {
+            return ref.where('reviewerId', '==', fromUid)
+                .where('forEventId', '==', fromEventId);
+        }).snapshotChanges().pipe(map((action:any) => {
+            if(action && action.length >0 && action[0].payload.doc.exists  )
+                return true;
+            else return false;
+        }));
     }
 
     async addGuideReview(user:SurfUser, rev: SurfReview){
-        if(!user.guideRatings){
-            user.guideRatings = [];
+        if(!user.avgRating){
+            user.avgRating = 0;
         }
-        if(!user.avgGuideRating){
-            user.avgGuideRating = 0;
+        if(!user.numOfRaters){
+            user.numOfRaters = 0;
         }
-        if(!user.numOfGuideRaters){
-            user.numOfGuideRaters = 0;
-        }
-        user.guideRatings.push(rev);
+        delete rev.id;
+
+
+        this.afs.doc<SurfUser>(`${this.collection_endpoint}/${user.id}`).collection(this.guide_review_collection_endpoint).add({...rev}).catch(function (error) {
+            alert('Failed adding review' + error);
+            console.error('Error adding review: ', error);
+        });
+
         let grade = ((user.avgGuideRating * user.numOfGuideRaters) + rev.grade)/(user.numOfGuideRaters+1)
-        return this.updateUser(user.id,{avgGuideRating: grade, numOfGuideRaters: user.numOfGuideRaters+1, guideRatings:user.guideRatings})
+        return this.updateUser(user.id,{avgGuideRating: grade, numOfGuideRaters: user.numOfGuideRaters+1})
+    }
+
+    getGuideReviews(id: string): Observable<SurfReview[]> {
+        return this.afs.doc<SurfUser>(`${this.collection_endpoint}/${id}`).collection(this.guide_review_collection_endpoint).snapshotChanges().pipe(map(changes => {
+            return changes.map(action => {
+                const data = action.payload.doc.data() as SurfReview;
+                data.id = action.payload.doc.id;
+                return data;
+            });
+        }));
+    }
+
+    GuideReviewAlreadyExist(uid, fromUid, fromEventId) : Observable<boolean>{
+        return this.afs.doc<SurfUser>(`${this.collection_endpoint}/${uid}`).collection(this.guide_review_collection_endpoint, ref => {
+            return ref.where('reviewerId', '==', fromUid)
+                .where('forEventId', '==', fromEventId);
+        }).snapshotChanges().pipe(map((action:any) => {
+            if(action && action.length >0 && action[0].payload.doc.exists  )
+                return true;
+            else return false;
+        }));
     }
 
 }

@@ -33,7 +33,7 @@ export class EventReviewPage implements OnInit {
     participants_names: string[] = []  ;
     participants_imgs: string[] = [];
     participants_ids: string[] = [] ;
-    event_comment: string;
+    event_comment: string = '';
     guide_comment: string;
     user_list: SurfUser[] = [];
     guide: SurfUser;
@@ -75,6 +75,11 @@ export class EventReviewPage implements OnInit {
 
           }
 
+          this.routeService.ReviewAlreadyExist(this.event.routeId, this.currentUserID, this.eventID).subscribe(res=>{
+              if (res)
+                  alert('Review already exist');
+                  this.modalController.dismiss();
+          });
       }
       this.isGuided = this.event.isGuidedEvent;
       if(this.isGuided){

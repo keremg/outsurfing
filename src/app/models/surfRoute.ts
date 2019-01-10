@@ -32,7 +32,6 @@ export class SurfRoute {
   numEventsCreatedFromRoute: number;
   recommendedMonths: string[];
 
-  reviews: SurfReview[];
     //this should be handled in a separated collection: routeRanking: {reviewerId: string, ranking: number, review: string}[];
     routeRanking: number;
     routeNumOfRankers: number;
