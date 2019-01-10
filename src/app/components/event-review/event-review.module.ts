@@ -8,6 +8,8 @@ import { IonicModule } from '@ionic/angular';
 import { EventReviewPage } from './event-review.page';
 import {RatingComponent} from '../rating/rating.component';
 import {ToolbarComponentModule} from '../toolbar/toolbar.module';
+import {RouteImageComponentModule} from '../route-image/route-image.module';
+import {RouteImageComponent} from '../route-image/route-image.component';
 
 const routes: Routes = [
   {
@@ -22,8 +24,9 @@ const routes: Routes = [
     FormsModule,
     IonicModule,
       ToolbarComponentModule,
-      RouterModule.forChild(routes)
+      RouterModule.forChild(routes),
+      RouteImageComponentModule
   ],
-  declarations: [EventReviewPage, RatingComponent]
+  declarations: [EventReviewPage, RatingComponent,RouteImageComponent]
 })
 export class EventReviewPageModule {}

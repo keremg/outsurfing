@@ -12,7 +12,8 @@
             </ion-card-header>
             <ion-row>
                 <ion-col size="2">
-                    <ion-img [src]="event_image"></ion-img>
+                    <app-route-image [imgPath]="routeUrl+'_Medium'" sizeToLoad="Medium" width="150" height="100"
+                                     [number]="0"></app-route-image>
                 </ion-col>
                 <ion-col>
                     <ion-input [(ngModel)]="event_comment" style="font-size: 1rem" type = 'text' placeholder="please leave a comment about your experience"></ion-input>
