@@ -18,6 +18,22 @@
                     </ion-input>
                 </ion-item>
 
+                <ion-item *ngIf="joined && isApprovedForTrip" >
+                    <div style="background-color: #10dc60">
+                        <ion-label>You are registered and approved for this trip :-)</ion-label>
+                    </div>
+                </ion-item>
+                <ion-item *ngIf="joined && !isApprovedForTrip">
+                    <div style="background-color: #ffd31a">
+                        <ion-label >Your still pending for approval of the organizer of this trip</ion-label>
+                    </div>
+                </ion-item>
+                <ion-item *ngIf="isOrganizerOfTrip">
+                    <div style="background-color: fuchsia;">
+                        <ion-label >Your are the organizer of this trip</ion-label>
+                    </div>
+                </ion-item>
+
                 <ion-item>
                     <ion-button (click)="openOriginalRoute()">Open Original Route</ion-button>
                 </ion-item>
@@ -398,49 +414,25 @@
 
                 <ion-item>
                     <ion-label>Recommended months for this route: {{(eventObs|async)?.recommendedMonths}}</ion-label>
-                    <!--<ion-select formControlName="recommendedMonths" multiple="true">-->
-                    <!--<ion-select-option value="1">January</ion-select-option>-->
-                    <!--<ion-select-option value="2">February</ion-select-option>-->
-                    <!--<ion-select-option value="3">March</ion-select-option>-->
-                    <!--<ion-select-option value="4">April</ion-select-option>-->
-                    <!--<ion-select-option value="5">May</ion-select-option>-->
-                    <!--<ion-select-option value="6">June</ion-select-option>-->
-                    <!--<ion-select-option value="7">July</ion-select-option>-->
-                    <!--<ion-select-option value="8">August</ion-select-option>-->
-                    <!--<ion-select-option value="9">September</ion-select-option>-->
-                    <!--<ion-select-option value="10">October</ion-select-option>-->
-                    <!--<ion-select-option value="11">Novemeber</ion-select-option>-->
-                    <!--<ion-select-option value="12">December</ion-select-option>-->
-                    <!--</ion-select>-->
                 </ion-item>
 
-                <ion-item>
-                    <ion-label>Participants:</ion-label>
+                <ion-item *ngIf="joined && isApprovedForTrip" >
+                    <div style="background-color: #10dc60">
+                        <ion-label>You are registered and approved for this trip :-)</ion-label>
+                    </div>
                 </ion-item>
-                <ion-item>
-                    <ion-grid>
-                        <ion-row *ngFor="let par of ((eventObs|async)?.participantsObs|async);">
-                            <div *ngIf="par.approved === true">
-                                <ion-col>
-                                    {{(par.user| async)?.firstName}}
-                                </ion-col>
-                                <ion-col>
-                                    {{(par.user| async)?.lastName}}
-                                </ion-col>
-                                <ion-col>
-                                    {{par.phone}}
-                                </ion-col>
-                                <ion-col>
-                                    {{par.isGuide ? 'Guide' : par.isOrganizer ? 'Organizer' : 'Traveller'}}
-                                </ion-col>
-                                <ion-col>
-                                    need seat? {{par.needSeatInCar}}
-                                    <!--{{(participantsObs.needSeatInCar && !participantsObs.userIdOfHostingCar) ? 'Need a ride': (participantsObs.needSeatInCar && participantsObs.userIdOfHostingCar)? 'with' + participantsObs.userIdOfHostingCar : participantsObs.offeringSeatsInCar? 'Offers ' + participantsObs.offeringSeatsInCar + ' free seats'}}-->
-                                </ion-col>
-                            </div>
-                        </ion-row>
-                    </ion-grid>
+                <ion-item *ngIf="joined && !isApprovedForTrip">
+                    <div style="background-color: #ffd31a">
+                        <ion-label >Your still pending for approval of the organizer of this trip</ion-label>
+                    </div>
                 </ion-item>
+                <ion-item *ngIf="isOrganizerOfTrip">
+                    <div style="background-color: fuchsia;">
+                        <ion-label >Your are the organizer{{event?.isGuidedEvent?' and guide': ''}} of this trip</ion-label>
+                    </div>
+                </ion-item>
+
+
 
             </form>
         </ion-col>
@@ -529,11 +521,73 @@
         </ion-col>
     </ion-row>
 
-    <ion-button *ngIf="!isPastEvent" id='join' (click)="onJoinEvent()">Join</ion-button>
-    <ion-button *ngIf="!isPastEvent" id='leave' (click)="onLeaveEvent()">Leave</ion-button>
+    <ion-item>
+        <ion-label>Participants:</ion-label>
+    </ion-item>
+    <ion-item>
+        <ion-grid >
+            <ion-row >
+                <ion-col size="2">
+                    Participant
+                </ion-col>
+                <ion-col size="2">
+                    Contact
+                </ion-col>
+                <ion-col size="2">
+                    Cars
+                </ion-col>
+                <ion-col size="2">
+                    Ranking
+                </ion-col>
+                <ion-col size="3">
+                    Equipment I bring
+                    <!--{{(participantsObs.needSeatInCar && !participantsObs.userIdOfHostingCar) ? 'Need a ride': (participantsObs.needSeatInCar && participantsObs.userIdOfHostingCar)? 'with' + participantsObs.userIdOfHostingCar : participantsObs.offeringSeatsInCar? 'Offers ' + participantsObs.offeringSeatsInCar + ' free seats'}}-->
+                </ion-col>
+                <ion-col size="1">
+                    Joining Status
+                    <!--{{(participantsObs.needSeatInCar && !participantsObs.userIdOfHostingCar) ? 'Need a ride': (participantsObs.needSeatInCar && participantsObs.userIdOfHostingCar)? 'with' + participantsObs.userIdOfHostingCar : participantsObs.offeringSeatsInCar? 'Offers ' + participantsObs.offeringSeatsInCar + ' free seats'}}-->
+                </ion-col>
+            </ion-row>
+            <ion-row *ngFor="let par of ((eventObs|async)?.participantsObs|async);" style="background-color: #d1fcc8; " margin-vertical>
+                <ng-container *ngIf="par.approved === true">
+                    <ion-col size="2">
+                        <app-route-image imgPath="users/{{par.id}}/profilePic_Medium" sizeToLoad="Medium" ></app-route-image>
+                    </ion-col>
+                    <ion-col size="2">
+                        <ion-item>{{(par.user| async)?.firstName}} {{(par.user| async)?.lastName}} {{getAge((par.user| async)?.birthDate)}}</ion-item>
+                        <ion-item>{{par.phone}}</ion-item>
+                        <ion-item>{{par.email}}</ion-item>
+                    </ion-col>
+                    <ion-col size="2">
+                        <ng-container>{{par.needSeatInCar? 'Needs a ride': par.offeringSeatsInCar? 'Brings a car' : 'Will arrive by myself'}}</ng-container>
+                        <ng-container>{{par.offeringSeatsInCar? 'Offering ' + par.offeringSeatsInCar + ' seats' :''}}</ng-container>
+                    </ion-col>
+                    <ion-col size="2">
+                        <ng-container>{{par.isGuide? 'Trip Guide': par.isOrganizer? 'Trip organizer' : 'Traveller'}}</ng-container>
+                        <ng-container>Rating: {{par.isGuide? (par.user| async)?.avgGuideRating : (par.user| async)?.avgRating}}</ng-container>
+                        <ng-container>%Cancellations: {{(par.user| async)?.cancellations}}</ng-container> <!-- TODO: rating and cancellations should be calculated with TOTAL# of total and total cancelled -->
+                    </ion-col>
+                    <ion-col size="3">
+                        {{par.groupEquipmentIBring}}
+
+                        <!--{{(participantsObs.needSeatInCar && !participantsObs.userIdOfHostingCar) ? 'Need a ride': (participantsObs.needSeatInCar && participantsObs.userIdOfHostingCar)? 'with' + participantsObs.userIdOfHostingCar : participantsObs.offeringSeatsInCar? 'Offers ' + participantsObs.offeringSeatsInCar + ' free seats'}}-->
+                    </ion-col>
+                    <ion-col size="1">
+                        {{par.approved? 'Approved' : 'Pending'}}
+                        <!--{{(participantsObs.needSeatInCar && !participantsObs.userIdOfHostingCar) ? 'Need a ride': (participantsObs.needSeatInCar && participantsObs.userIdOfHostingCar)? 'with' + participantsObs.userIdOfHostingCar : participantsObs.offeringSeatsInCar? 'Offers ' + participantsObs.offeringSeatsInCar + ' free seats'}}-->
+                    </ion-col>
+
+
+                </ng-container>
+            </ion-row>
+        </ion-grid>
+    </ion-item>
+
+    <ion-button *ngIf="!isPastEvent && !joined && event?.eventOrganizerId !== currentUser?.id && !isNewEvent" id='join' (click)="onJoinEvent()">Join</ion-button>
+    <ion-button *ngIf="!isPastEvent && joined && event?.eventOrganizerId !== currentUser?.id && !isNewEvent" id='leave' (click)="onLeaveEvent()">Leave</ion-button>
     <ion-button *ngIf="isPastEvent" id='rankEvent' (click)="rankEvent()">Rank Route and Participants</ion-button>
-    <ion-button *ngIf="!isPastEvent" id='approve' (click)="onApprove()">Approve Participants</ion-button>
-    <ion-button *ngIf="!isPastEvent" id='save' (click)="updateEvent(false)">Save</ion-button><!--TODO change label if you create new-->
-    <ion-button *ngIf="!isPastEvent" id='delete' (click)="onDelete()">Delete</ion-button>
+    <ion-button *ngIf="!isPastEvent && !viewMode && !isNewEvent" id='approve' (click)="onApprove()">Approve Participants</ion-button>
+    <ion-button *ngIf="!isPastEvent && !viewMode" id='save' (click)="updateEvent(true)">Save</ion-button><!--TODO change label if you create new-->
+    <ion-button *ngIf="!isPastEvent && !viewMode && !isNewEvent" id='delete' (click)="onDelete()">Delete</ion-button>
     TODO: should show if approved or not
 </ion-content>

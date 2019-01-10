@@ -52,6 +52,10 @@ export class EventDetailPage implements OnInit {
     loading: HTMLIonLoadingElement;
     isPastEvent = false;
     currentDate: string = new Date().toISOString();
+    joined = false; //current user already asked to join the event
+    isApprovedForTrip = false;
+    isNewEvent = false; // (started from route)
+    isOrganizerOfTrip = false;
 
 
     private eventSubscription: Subscription;
@@ -90,12 +94,12 @@ export class EventDetailPage implements OnInit {
         this.singleEventForm = this.formBuilder.group({
             name: ['', Validators.required],
             country: ['', Validators.required],
-            state: ['', Validators.required],
+            state: [''],
             routeStartLocation: ['', Validators.required],
             routeEndLocation: [''],
             routeStartGeolocation: ['', Validators.required],
             routeEndGeolocation: [''],
-            imagesUrls: [[], Validators.required],
+            imagesUrls: [[]],
             mapImagesUrl: [[]],
             lengthKM: [0, Validators.required],
             shortDescription: ['', Validators.required],
@@ -116,7 +120,7 @@ export class EventDetailPage implements OnInit {
             meetingGeolocation: [''],
             meetingTime: ['', Validators.required],
             routeStartTime: ['', Validators.required],
-            returnTime: ['', Validators.required],
+            returnTime: [''],
             audienceType: [[]],
             isGuidedEvent: [false],
             priceOfEvent: [0],
@@ -135,7 +139,7 @@ export class EventDetailPage implements OnInit {
                 if (value) {
                     this.event = value;
                     let latestTripDate = this.event.returnTime || this.event.routeStartTime || this.event.meetingTime;
-                    this.isPastEvent = (new Date().toISOString().substring(0, 19) > latestTripDate);
+                    this.isPastEvent = (new Date().toISOString().substring(0, 19) > latestTripDate); //TODO bring back to true
                     if (this.isPastEvent) {
                         this.viewMode = true;
                         this.singleEventForm.disable();
@@ -164,12 +168,11 @@ export class EventDetailPage implements OnInit {
 
 
     async loadFromEvent(event: SurfEvent) {
-        this.removeElement('create');
-
         this.event = event;
 
         if (!this.event.eventOrganizerId) {
             this.event.eventOrganizerId = this.currentUser.id; // safety
+            this.isOrganizerOfTrip = true;
         }
 
         //this.event.routeCreator = await this.userService.getuser(this.event.routeCreatorId).toPromise();
@@ -178,32 +181,23 @@ export class EventDetailPage implements OnInit {
         this.editForm(this.event);
 
         if (this.event.eventOrganizerId !== this.currentUser.id) {
+            this.isOrganizerOfTrip = false;
             this.singleEventForm.disable();
             this.viewMode = true;
-            this.removeElement('save');
-            this.removeElement('approve');
-            this.removeElement('delete');
             console.log('just changed to view mode');
             this.event.participantsObs.subscribe(pars => {
-                let joined: boolean = false;
                 if(pars){
                     pars.forEach( par =>{
-                        if(par.id === this.currentUser.id)
-                            joined = true;
+                        if(par.id === this.currentUser.id) {
+                            this.joined = true;
+                            this.isApprovedForTrip = par.approved;
+                        }
                     });
-                }
-
-                if(joined){
-                    this.removeElement('join');
-                }
-                else{
-                    this.removeElement('leave');
                 }
             })
         }
         else{
-            this.removeElement('join');
-            this.removeElement('leave');
+            this.isOrganizerOfTrip = true;
         }
     }
 
@@ -220,6 +214,7 @@ export class EventDetailPage implements OnInit {
 
     async loadFromRoute(route: SurfRoute) {
         //should hide the join button
+        this.isNewEvent = true;
         this.removeElement('join');
         this.removeElement('leave');
         this.removeElement('approve');
@@ -231,6 +226,7 @@ export class EventDetailPage implements OnInit {
 
         this.event.eventOrganizerId = this.currentUser.id;
         this.event.eventOrganizer = Observable.of(this.currentUser);
+        this.isOrganizerOfTrip = true;
         this.event.approvedParticipants=0;
         this.event.meetingTime = this.currentDate;
         this.event.routeStartTime = this.currentDate;
@@ -272,6 +268,11 @@ export class EventDetailPage implements OnInit {
 
     async updateEvent(isStayOnPage: boolean) {
         if (this.viewMode) {
+            return true;
+        }
+        //if (!this.singleEventForm.valid) {
+        if (!this.singleEventForm.value.name || !this.singleEventForm.value.routeStartTime || (!this.singleEventForm.value.returnTime && !this.singleEventForm.value.routeDuration)) {
+            alert("Some mandatory fields are missing (name of event, trip start time, duration and return time), please complete the data and save again");
             return true;
         }
         await this.openLoadingController();
@@ -559,6 +560,10 @@ export class EventDetailPage implements OnInit {
             durationHours *= 24;
         }
         this.event.routeDuration = durationHours;
+        if (!this.event.routeDuration && this.event.routeStartTime && this.event.returnTime) {
+            this.event.routeDuration = this.getHoursDifference(this.event.routeStartTime, this.event.returnTime);
+        }
+
         this.event.routeProperties =
             this.singleEventForm.value.routeProperties || '';
         this.event.isGuidingOffered =
@@ -890,4 +895,16 @@ export class EventDetailPage implements OnInit {
         this.mapEnd.invalidateSize();
     }
 
+    getAge(birth){
+        if(birth) {
+            let ageDifMs = Date.now() - new Date(birth).getTime();
+            let ageDate = new Date(ageDifMs); // miliseconds from epoch
+            return '' + Math.abs(ageDate.getUTCFullYear() - 1970);
+        }
+    }
+    getHoursDifference(firstDateStr, secondDateStr) {
+        let dateDiffSeconds = new Date(secondDateStr).getTime() - new Date(firstDateStr).getTime();
+        return Math.round(dateDiffSeconds/60);
+
+    }
 }
