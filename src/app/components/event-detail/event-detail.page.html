@@ -64,10 +64,16 @@
                 </ion-item>
 
                 <ion-item>
-                    <!--https://stackoverflow.com/questions/31907670/saving-the-val-return-from-ionic-datepicker-into-firebase-->
+                    <ion-label
+                            *ngIf="!singleEventForm.controls.meetingGeolocation?.valid && !viewMode"
+                            color="danger"
+                            stacked
+                    >*
+                    </ion-label>
                     <ion-label stacked>Meeting Time</ion-label>
                     <ion-datetime displayFormat="MMM DD, YYYY HH:mm"
                                   pickerFormat="MMM DD, YYYY HH:mm"
+                                  [min]="currentDate" max="2030"
                                   formControlName="meetingTime"
                                   [class.invalid]="!singleEventForm.controls.meetingTime.valid && blur && !viewMode">
 
@@ -80,7 +86,7 @@
                     <ion-checkbox formControlName="isEventRequiresCars" color="primary" checked="true"></ion-checkbox>
                 </ion-item>
 
-                <ion-item>
+                <ion-item *ngIf="singleEventForm.value.isEventRequiresCars">
                     <ion-label stacked>Available seats</ion-label>
                     <ion-icon
                             name="car"
@@ -97,6 +103,7 @@
                     <ion-datetime displayFormat="MMM DD, YYYY HH:mm"
                                   pickerFormat="MMM DD, YYYY HH:mm"
                                   formControlName="routeStartTime"
+                                  [min]="currentDate" max="2030"
                                   [class.invalid]="!singleEventForm.controls.routeStartTime.valid && blur && !viewMode">
 
                     </ion-datetime>
@@ -148,6 +155,7 @@
                     <ion-datetime displayFormat="MMM DD, YYYY HH:mm"
                                   pickerFormat="MMM DD, YYYY HH:mm"
                                   formControlName="returnTime"
+                                  [min]="currentDate" max="2030"
                                   [class.invalid]="!singleEventForm.controls.returnTime.valid && blur && !viewMode">
 
                     </ion-datetime>
@@ -521,11 +529,11 @@
         </ion-col>
     </ion-row>
 
-    <ion-button id='join' (click)="onJoinEvent()">Join</ion-button>
-    <ion-button id='leave' (click)="onLeaveEvent()">Leave</ion-button>
+    <ion-button *ngIf="!isPastEvent" id='join' (click)="onJoinEvent()">Join</ion-button>
+    <ion-button *ngIf="!isPastEvent" id='leave' (click)="onLeaveEvent()">Leave</ion-button>
     <ion-button *ngIf="isPastEvent" id='rankEvent' (click)="rankEvent()">Rank Route and Participants</ion-button>
-    <ion-button id='approve' (click)="onApprove()">Approve Participants</ion-button>
-    <ion-button id='save' (click)="updateEvent(false)">Save</ion-button><!--TODO change label if you create new-->
-    <ion-button id='delete' (click)="onDelete()">Delete</ion-button>
+    <ion-button *ngIf="!isPastEvent" id='approve' (click)="onApprove()">Approve Participants</ion-button>
+    <ion-button *ngIf="!isPastEvent" id='save' (click)="updateEvent(false)">Save</ion-button><!--TODO change label if you create new-->
+    <ion-button *ngIf="!isPastEvent" id='delete' (click)="onDelete()">Delete</ion-button>
     TODO: should show if approved or not
 </ion-content>

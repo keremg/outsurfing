@@ -51,6 +51,8 @@ export class EventDetailPage implements OnInit {
     photoMapIndex:number = 0;
     loading: HTMLIonLoadingElement;
     isPastEvent = false;
+    currentDate: String = new Date().toISOString();
+
 
     private eventSubscription: Subscription;
 
@@ -133,7 +135,11 @@ export class EventDetailPage implements OnInit {
                 if (value) {
                     this.event = value;
                     let latestTripDate = this.event.returnTime || this.event.routeStartTime || this.event.meetingTime;
-                    this.isPastEvent = (new Date().toISOString().substring(0,19) > latestTripDate);
+                    this.isPastEvent = (new Date().toISOString().substring(0, 19) > latestTripDate);
+                    if (this.isPastEvent) {
+                        this.viewMode = true;
+                        this.singleEventForm.disable();
+                    }
                     this.loadFromEvent(this.event);//todo should be read only?
 
                 } else {
@@ -226,6 +232,8 @@ export class EventDetailPage implements OnInit {
         this.event.eventOrganizerId = this.currentUser.id;
         this.event.eventOrganizer = Observable.of(this.currentUser);
         this.event.approvedParticipants=0;
+        this.event.meetingTime = this.currentDate;
+        this.event.routeStartTime = this.currentDate;
         //this.event.routeCreator = await this.userService.getuser(this.event.routeCreatorId).toPromise();
         ////this.event.eventOrganizer = await this.userService.getuser(this.event.eventOrganizerId).toPromise();
 
@@ -571,9 +579,9 @@ export class EventDetailPage implements OnInit {
         this.event.meetingGeolocation =
             this.singleEventForm.value.meetingGeolocation || '';
         this.event.meetingTime =
-            this.singleEventForm.value.meetingTime || '';
+            this.singleEventForm.value.meetingTime || this.currentDate;
         this.event.routeStartTime =
-            this.singleEventForm.value.routeStartTime || '';
+            this.singleEventForm.value.routeStartTime || this.currentDate;
         this.event.returnTime =
             this.singleEventForm.value.returnTime || '';
         this.event.audienceType =
