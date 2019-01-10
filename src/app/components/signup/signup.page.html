@@ -75,22 +75,15 @@
     <ion-item>
       <ion-label>Trips Difficulties</ion-label>
       <ion-select formControlName="tripDifficulties" multiple="true">
-        <ion-select-option value="0">Very easy</ion-select-option>
-        <ion-select-option value="1">Easy</ion-select-option>
-        <ion-select-option value="2" selected>Moderate</ion-select-option>
-        <ion-select-option value="3">Challenging</ion-select-option>
-        <ion-select-option value="4">Extreme</ion-select-option>
-        <ion-select-option value="5">Very extreme</ion-select-option>
+        <ion-select-option *ngFor="let item of difficultiesEnum" value="{{item.value}}">{{item.key}}</ion-select-option>
       </ion-select>
     </ion-item>
     <ion-item>
       <ion-label>Trips Duration</ion-label>
         <!--ion-range dual-knobs="true" formControlName="tripDurations" min="0.04" max = ""></ion-range-->
       <ion-select formControlName="tripDurations" multiple="true">
-        <ion-select-option value="365">Few days</ion-select-option>
-        <ion-select-option value="2">Camp+hike</ion-select-option>
-        <ion-select-option value="1" selected>Full day</ion-select-option>
-        <ion-select-option value="0.5">Few hours</ion-select-option>
+        <ion-select-option *ngFor="let item of durationEnum" value="{{item.value}}">{{item.key}}</ion-select-option>
+
       </ion-select>
     </ion-item>
     <ion-item>

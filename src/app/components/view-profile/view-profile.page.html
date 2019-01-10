@@ -1,43 +1,65 @@
 <ion-header>
     <app-toolbar defaultBack="home" title="View Profile"></app-toolbar>
 </ion-header>
-
+<!--TODO bold titles-->
 <ion-content padding>
-    <ion-item>
-      <ion-label stacked>email: {{email}}</ion-label>
-    </ion-item>
-    <ion-item>
-      <ion-label stacked>First Name: {{firstName}}</ion-label>
-    </ion-item>
-    <ion-item>
-      <ion-label stacked>Last Name: {{lastName}}</ion-label>
-    </ion-item>
-    <ion-item>
-      <ion-label stacked>Birth Date: {{birthDate}}</ion-label>
-    </ion-item>
-    <ion-item>
-      <ion-label stacked>Phone Number: {{phone}}</ion-label>
-    </ion-item>
-    <ion-item>
-      <ion-label>Gender: {{gender_string}}</ion-label>
-    </ion-item>
-    <ion-item>
-      <ion-label stacked>Guide: {{isGuide}}</ion-label>
-    </ion-item>
-    <ion-item>
-      <ion-label stacked>About: {{about}}</ion-label>
-    </ion-item>
-    <ion-item>
-      <ion-label>Trips level: {{tripDifficulties}}</ion-label>
-    </ion-item>
-    <ion-item>
-      <ion-label>Trips Duration: {{tripDurations}}</ion-label>
-    </ion-item>
-    <ion-item>
-      <ion-label>People type: {{audienceTypes}} </ion-label>
-    </ion-item>
-    <ion-item>
-      <ion-label>Total Rating: {{avgRating}} by {{numOfRaters}} traveler(s) </ion-label>
-    </ion-item>
-    <ion-button id='showReview' (click)="onShow()">show all reviews</ion-button>
+    <ion-row>
+        <ion-col size="8">
+            <ion-item>
+                <ion-label style="font-size: 1.5em">{{firstName}} {{lastName}}</ion-label>
+                 <ion-label>is Guide: {{isGuide}}</ion-label>
+            </ion-item>
+
+
+            <ion-row>
+                <ion-col size="6">
+                    <ion-item>
+                        <ion-label>Total Rating: {{avgRating}} by {{numOfRaters}} traveler(s) </ion-label>
+                    </ion-item>
+                    <ion-button id='showReview' (click)="onShow()">show all reviews</ion-button>
+                </ion-col>
+                <ion-col size="6" *ngIf="isGuide">
+                    <ion-item >
+                    <ion-label>Total Guide Rating: {{user.guideRatings}} by {{user.numOfGuideRaters}} traveler(s) </ion-label>
+                    </ion-item>
+                    <ion-button id='showGuideReview' (click)="onShowGuide()">show all reviews</ion-button>
+                </ion-col>
+
+            </ion-row>
+
+
+
+
+
+
+<br><br>
+            <ion-item>
+                <ion-label style="font-size: 1.5em">More details:</ion-label>
+            </ion-item>
+            <ion-item>
+                <ion-label>Birth Date: {{birthDate}}, </ion-label>
+                <ion-label>Gender: {{gender_string}}</ion-label>
+            </ion-item>
+            <ion-item>
+                <ion-label>About: {{about}}</ion-label>
+            </ion-item>
+<br><br>
+            <ion-item>
+                <ion-label style="font-size: 1.5em">Preferred properties:</ion-label>
+            </ion-item>
+            <ion-item>
+                <ion-label>Trips Difficulties: {{tripDifficulties}}</ion-label>
+            </ion-item>
+            <ion-item>
+                <ion-label>Trips Duration: {{tripDurations}}</ion-label>
+            </ion-item>
+            <ion-item>
+                <ion-label>Audience type: {{audienceTypes}} </ion-label>
+            </ion-item>
+
+        </ion-col>
+        <ion-col size="4">
+            <img *ngIf="profileUrl" [src]="profileUrl"/>
+        </ion-col>
+    </ion-row>
 </ion-content>

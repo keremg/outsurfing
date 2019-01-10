@@ -16,6 +16,9 @@ import { debug } from 'util';
 import {map} from 'rxjs/operators';
 import {ErrorFn} from 'firebase';
 import {promise} from 'selenium-webdriver';
+import {AudienceTypeEnum} from '../../AudienceType.enum';
+import {DifficultiesEnum} from '../../enums/Difficulties.enum';
+import {DurationEnum} from '../../enums/Duration.enum';
 
 declare let window: any;
 
@@ -31,10 +34,14 @@ export class EditProfilePage implements OnInit {
     currentUserId: string;
     currentUser: SurfUser;
     loadingElement: HTMLIonLoadingElement;
-
+    audienceTypeEnum = this.getENUM(AudienceTypeEnum);
     uploadPercent: Observable<number>;
     profileUrl: string;
-     constructor(
+    difficultiesEnum = this.getENUM(DifficultiesEnum);
+    durationEnum = this.getENUM(DurationEnum);
+
+
+    constructor(
         public navCtrl: NavController,
         public authService: AuthService,
         public loadingCtrl: LoadingController,
@@ -55,8 +62,8 @@ export class EditProfilePage implements OnInit {
 
              birthDate: [''],
              tripLevel: [''],
-             tripDuration: [''],
              peopleType: [''],
+             tripDurations: [''],
          });
         window.user = this;
         
@@ -94,13 +101,13 @@ export class EditProfilePage implements OnInit {
             recentLocation: user.recentLocation,
             about: user.about,
             cancellations: user.cancellations,
-            gender: user.gender, //0 is male, 1 is female, 2 is other
+            gender: user.gender.toString(), //0 is male, 1 is female, 2 is other
             isGuide: user.isGuide,
             phone: user.phone,
             birthDate: user.birthDate,
-            tripDifficulties: user.tripDifficulties, // Level:  0 - very easy, 1-easy, 2-moderate, 3-challenging, 4-extreme, 5-very extreme
+            tripLevel: user.tripDifficulties, // Level:  0 - very easy, 1-easy, 2-moderate, 3-challenging, 4-extreme, 5-very extreme
             tripDurations: user.tripDurations, //will represent number of days, so half day should be 0.5 , one hour should be 0.04
-            audienceTypes: user.audienceTypes
+            peopleType: user.audienceTypes
         });
      }
 
@@ -121,16 +128,13 @@ export class EditProfilePage implements OnInit {
                     lastName: this.updateForm.value.lastName,
                     recentLocation: "",
                     phone: this.updateForm.value.phone,
-                    //gender: parseInt(this.updateForm.value.gender.value),
+                    gender: parseInt(this.updateForm.value.gender),
                     isGuide: this.updateForm.value.isGuide,
                     about: this.updateForm.value.about,
-                    cancellations: 0,
                     birthDate: this.updateForm.value.birthDate,
-                    tripDifficulties: "this.updateForm.value.tripDifficulties",
-                    tripDurations: "this.updateForm.value.tripDurations",
-                    audienceTypes: "",
-                    travelerRatings: "this.updateForm.value.travelerRatings",
-                    guideRatings: "this.updateForm.value.guideRatings"
+                    tripDifficulties: this.updateForm.value.tripLevel,
+                    tripDurations: this.updateForm.value.tripDurations,
+                    audienceTypes: this.updateForm.value.peopleType
                 };
                 console.log(this.currentUserId, u)
                 await this.userService.updateUser(this.currentUserId, u);
@@ -188,6 +192,19 @@ catch (error) {
         //this.uploadPercent = task.percentageChanges();
         //return task;
 
+    }
+
+
+    getENUM(ENUM: any): string[] {
+        let myEnum = [];
+        let objectEnum = Object.keys(ENUM);
+        const values = objectEnum.slice(0, objectEnum.length / 2);
+        const keys = objectEnum.slice(objectEnum.length / 2);
+
+        for (let i = 0; i < objectEnum.length / 2; i++) {
+            myEnum.push({key: keys[i], value: values[i]});
+        }
+        return myEnum;
     }
 
     /*on_no_profile_pic(){

@@ -1,4 +1,4 @@
-import {Component, ElementRef, Pipe, PipeTransform, ViewChild} from '@angular/core';
+import {Component, ElementRef, OnInit, Pipe, PipeTransform, ViewChild} from '@angular/core';
 import {
     AlertController,
     LoadingController,
@@ -12,16 +12,23 @@ import {AudienceTypeEnum} from '../../AudienceType.enum';
 import leaflet from 'leaflet';
 import L from 'leaflet';
 import '../../../geocoder/Control.Geocoder';
+import {DifficultiesEnum} from '../../enums/Difficulties.enum';
+import {DurationEnum} from '../../enums/Duration.enum';
 
 @Component({
     selector: 'app-signup',
     templateUrl: './signup.page.html',
     styleUrls: ['./signup.page.scss'],
 })
-export class SignupPage {
+export class SignupPage implements OnInit{
     public signupForm: FormGroup;
     public loading;
     audienceTypeEnum = this.getENUM(AudienceTypeEnum);
+    difficultiesEnum = this.getENUM(DifficultiesEnum);
+    durationEnum = this.getENUM(DurationEnum);
+    audienceDefaults=["0","1","2","3","4","5","6","7"];
+    durationDefaults=["1"];
+    diffDefaults=["2"];
 
     constructor(
         public navCtrl: NavController,
@@ -37,15 +44,21 @@ export class SignupPage {
             firstName: ['', Validators.compose([Validators.minLength(1), Validators.required])],
             lastName: ['', Validators.compose([Validators.minLength(1), Validators.required])],
             phone: ['', Validators.compose([Validators.pattern('^[0-9]*$'), Validators.minLength(9), Validators.required])],
-            gender: [''],
+            gender: [0],
             isGuide: [''],
             about: [''],
             birthDate: [''],
-            tripDifficulties: [''],
-            tripDurations: [''],
+            tripDifficulties: [[2]],
+            tripDurations: [[1]],
             audienceTypes: [''],
-            travelerRatings: [''],
-            guideRatings: ['']
+        });
+    }
+
+    async ngOnInit() {
+        this.signupForm.patchValue({
+            tripDifficulties: this.diffDefaults, // Level:  0 - very easy, 1-easy, 2-moderate, 3-challenging, 4-extreme, 5-very extreme
+            tripDurations: this.durationDefaults, //will represent number of days, so half day should be 0.5 , one hour should be 0.04
+            audienceTypes: this.audienceDefaults
         });
     }
 
@@ -62,15 +75,14 @@ export class SignupPage {
                 this.loading = await this.loadingCtrl.create();
                 this.loading.present();
                 let user = await this.authService.emailSignup(email, password);
-                await this.loading.dismiss();
-
+                debugger;
                 let u = {
                     email: this.signupForm.value.email,
                     firstName: this.signupForm.value.firstName,
                     lastName: this.signupForm.value.lastName,
                     recentLocation: this.map.surfLatLng.lat + ',' + this.map.surfLatLng.lng,
                     phone: this.signupForm.value.phone,
-                    gender: parseInt(this.signupForm.value.gender.value),
+                    gender: parseInt(this.signupForm.value.gender),
                     isGuide: this.signupForm.value.isGuide,
                     about: this.signupForm.value.about,
                     cancellations: 0,
@@ -78,12 +90,12 @@ export class SignupPage {
                     tripDifficulties: this.signupForm.value.tripDifficulties,
                     tripDurations: this.signupForm.value.tripDurations,
                     audienceTypes: this.signupForm.value.audienceTypes,
-                    travelerRatings: this.signupForm.value.travelerRatings,
-                    guideRatings: this.signupForm.value.guideRatings,
                 };
 
                 await this.userService.addUsers(u);
                 success = true;
+                await this.loading.dismiss();
+
             } catch (error) {
                 try {
                     await this.authService.deleteCurrentUser();
@@ -171,6 +183,7 @@ export class SignupPage {
             this.map.SurfMarker = markerGroup;
         });
     }
+
 
 
 

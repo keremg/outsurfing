@@ -5,6 +5,10 @@ import {SurfUser} from '../../models/surfUser';
 import {UserReviewsPage} from '../user-reviews/user-reviews.page';
 import {ModalController, NavController} from '@ionic/angular';
 import {PaginationService} from '../../services/pagination.service';
+import {AudienceTypeEnum} from '../../AudienceType.enum';
+import {DurationEnum} from '../../enums/Duration.enum';
+import {DifficultiesEnum} from '../../enums/Difficulties.enum';
+import { AngularFireStorage, AngularFireUploadTask } from '@angular/fire/storage';
 
 
 @Component({
@@ -19,52 +23,87 @@ export class ViewProfilePage implements OnInit {
   firstName: string;
   lastName: string;
   about: string;
-  cancellations: number;
   gender_string: string;
   isGuide: boolean;
   phone: string;
   birthDate: string;
-  tripDifficulties: number[]; // Level:  0 - very easy, 1-easy, 2-moderate, 3-challenging, 4-extreme, 5-very extreme
-  tripDurations: number[]; //will represent number of days, so half day should be 0.5 , one hour should be 0.04
-  audienceTypes: number[];
-  travelerRatings: {ranking: number, review: string}[];//can be changed to
-  guideRatings: {ranking: number, review: string}[];
+  tripDifficulties: string; // Level:  0 - very easy, 1-easy, 2-moderate, 3-challenging, 4-extreme, 5-very extreme
+  tripDurations: string; //will represent number of days, so half day should be 0.5 , one hour should be 0.04
+  audienceTypes: string;
+
   avgRating: number;
   numOfRaters: number;
-  constructor(
+    profileUrl:string;
+    user: SurfUser;
+
+    constructor(
     private modalController: ModalController,
     private activatedRoute: ActivatedRoute,
-    private userService: UserService) {  }
+    private userService: UserService,
+    private storage: AngularFireStorage,
+  ) {  }
 
-  ngOnInit() {
+  async ngOnInit() {
     this.id = this.activatedRoute.snapshot.paramMap.get('uid');
-   let user;
     this.userService.getuser(this.id).subscribe(u => {
       if (u) {
-        user = u;
-        this.email = user.email;
-        this.firstName = user.firstName;
-        this.lastName = user.lastName;
-        if (user.gender === 0) {
+        this.user = u;
+        this.email = this.user.email;
+        this.firstName = this.user.firstName;
+        this.lastName = this.user.lastName;
+        if (this.user.gender === 0) {
           this.gender_string = 'Male';
         }
-        if (user.gender === 1) {
+        if (this.user.gender === 1) {
           this.gender_string = 'Female';
         }
-        if (user.gender === 2) {
+        if (this.user.gender === 2) {
           this.gender_string = 'Other';
         }
-        this.birthDate = user.birthDate;
-        this.phone = user.phone;
-        this.isGuide = user.isGuide;
-        this.about = user.about;
-        this.tripDifficulties = user.tripDifficulties;
-        this.tripDurations =  user.tripDurations;
-        this.audienceTypes = user.audienceTypes;
-        this.avgRating = user.avgRating;
-        this.numOfRaters = user.numOfRaters;
+        this.birthDate = this.user.birthDate;
+        this.phone = this.user.phone;
+        this.isGuide = this.user.isGuide;
+        this.about = this.user.about;
+
+          this.audienceTypes='';
+          for(let dif in this.user.audienceTypes){
+              if(dif !== "0" )
+                  this.audienceTypes = this.audienceTypes + ',';
+
+              this.audienceTypes = this.audienceTypes + AudienceTypeEnum[this.user.audienceTypes[dif]];
+          }
+
+          this.tripDurations='';
+          for(let dif in this.user.tripDurations){
+              if(dif !== "0" )
+                  this.tripDurations = this.tripDurations + ',';
+
+              this.tripDurations = this.tripDurations + DurationEnum[this.user.tripDurations[dif]];
+          }
+
+          this.tripDifficulties='';
+          for(let dif in this.user.tripDifficulties){
+              if(dif !== "0" )
+                  this.tripDifficulties = this.tripDifficulties + ',';
+
+              this.tripDifficulties = this.tripDifficulties + DifficultiesEnum[this.user.tripDifficulties[dif]];
+          }
+          this.avgRating = this.user.avgRating;
+        this.numOfRaters = this.user.numOfRaters;
+
+
       }
     });
+
+      const ref = this.storage.ref('users/'+this.id+'/profilePic_Large');
+      ref.getDownloadURL().toPromise().then(res=>{
+              this.profileUrl =res },
+          async error=>{
+              console.log(error);
+          });
+
+
+
   }
 
   async onShow() {
@@ -74,5 +113,13 @@ export class ViewProfilePage implements OnInit {
     });
     return await modal.present();
 }
+
+    async onShowGuide() {//TODO urgent
+        const modal = await this.modalController.create({
+            component: UserReviewsPage,
+            componentProps: { userId: this.id }
+        });
+        return await modal.present();
+    }
 
 }
