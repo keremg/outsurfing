@@ -51,7 +51,7 @@ export class EventDetailPage implements OnInit {
     photoMapIndex:number = 0;
     loading: HTMLIonLoadingElement;
     isPastEvent = false;
-    currentDate: String = new Date().toISOString();
+    currentDate: string = new Date().toISOString();
 
 
     private eventSubscription: Subscription;
