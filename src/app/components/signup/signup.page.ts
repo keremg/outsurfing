@@ -27,8 +27,8 @@ export class SignupPage implements OnInit{
     difficultiesEnum = this.getENUM(DifficultiesEnum);
     durationEnum = this.getENUM(DurationEnum);
     audienceDefaults=["0","1","2","3","4","5","6","7"];
-    durationDefaults=["1"];
-    diffDefaults=["2"];
+    durationDefaults=["0","1","2","365"];
+    diffDefaults=["0","1","2","3","4","5"];
 
     constructor(
         public navCtrl: NavController,
@@ -48,8 +48,8 @@ export class SignupPage implements OnInit{
             isGuide: [''],
             about: [''],
             birthDate: [''],
-            tripDifficulties: [[2]],
-            tripDurations: [[1]],
+            tripDifficulties: [''],
+            tripDurations: [''],
             audienceTypes: [''],
         });
     }
