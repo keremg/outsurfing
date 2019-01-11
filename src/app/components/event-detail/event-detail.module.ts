@@ -12,6 +12,7 @@ import {ToolbarComponentModule} from '../toolbar/toolbar.module';
 import {RouteImageComponentModule} from '../route-image/route-image.module';
 import {EventReviewPage} from '../event-review/event-review.page';
 import {RatingComponent} from '../rating/rating.component';
+import { ParticipantsLinesComponent } from '../participants-lines/participants-lines.component';
 
 const routes: Routes = [
   {
@@ -30,7 +31,7 @@ const routes: Routes = [
       IonicModule,
     RouterModule.forChild(routes)
   ],
-  declarations: [EventDetailPage, JoinEventPage, ParticipantApprovalPage, EventReviewPage, RatingComponent],
+  declarations: [EventDetailPage, JoinEventPage, ParticipantApprovalPage, EventReviewPage, RatingComponent, ParticipantsLinesComponent],
     entryComponents: [
         JoinEventPage,
       ParticipantApprovalPage,

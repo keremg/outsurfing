@@ -525,7 +525,7 @@
         <ion-label>Participants:</ion-label>
     </ion-item>
     <ion-item>
-        <ion-grid >
+        <ion-grid style="width: 90%">
             <ion-row >
                 <ion-col size="2">
                     Participant
@@ -544,42 +544,18 @@
                     <!--{{(participantsObs.needSeatInCar && !participantsObs.userIdOfHostingCar) ? 'Need a ride': (participantsObs.needSeatInCar && participantsObs.userIdOfHostingCar)? 'with' + participantsObs.userIdOfHostingCar : participantsObs.offeringSeatsInCar? 'Offers ' + participantsObs.offeringSeatsInCar + ' free seats'}}-->
                 </ion-col>
                 <ion-col size="1">
-                    Joining Status
+                    Joining?
                     <!--{{(participantsObs.needSeatInCar && !participantsObs.userIdOfHostingCar) ? 'Need a ride': (participantsObs.needSeatInCar && participantsObs.userIdOfHostingCar)? 'with' + participantsObs.userIdOfHostingCar : participantsObs.offeringSeatsInCar? 'Offers ' + participantsObs.offeringSeatsInCar + ' free seats'}}-->
                 </ion-col>
             </ion-row>
-            <ion-row *ngFor="let par of ((eventObs|async)?.participantsObs|async);" style="background-color: #d1fcc8; " margin-vertical>
-                <ng-container *ngIf="par.approved === true">
-                    <ion-col size="2">
-                        <app-route-image imgPath="users/{{par.id}}/profilePic_Medium" sizeToLoad="Medium" ></app-route-image>
-                    </ion-col>
-                    <ion-col size="2">
-                        <ion-item>{{(par.user| async)?.firstName}} {{(par.user| async)?.lastName}} {{getAge((par.user| async)?.birthDate)}}</ion-item>
-                        <ion-item>{{par.phone}}</ion-item>
-                        <ion-item>{{par.email}}</ion-item>
-                    </ion-col>
-                    <ion-col size="2">
-                        <ng-container>{{par.needSeatInCar? 'Needs a ride': par.offeringSeatsInCar? 'Brings a car' : 'Will arrive by myself'}}</ng-container>
-                        <ng-container>{{par.offeringSeatsInCar? 'Offering ' + par.offeringSeatsInCar + ' seats' :''}}</ng-container>
-                    </ion-col>
-                    <ion-col size="2">
-                        <ng-container>{{par.isGuide? 'Trip Guide': par.isOrganizer? 'Trip organizer' : 'Traveller'}}</ng-container>
-                        <ng-container>Rating: {{par.isGuide? (par.user| async)?.avgGuideRating : (par.user| async)?.avgRating}}</ng-container>
-                        <ng-container>%Cancellations: {{(par.user| async)?.cancellations}}</ng-container> <!-- TODO: rating and cancellations should be calculated with TOTAL# of total and total cancelled -->
-                    </ion-col>
-                    <ion-col size="3">
-                        {{par.groupEquipmentIBring}}
-
-                        <!--{{(participantsObs.needSeatInCar && !participantsObs.userIdOfHostingCar) ? 'Need a ride': (participantsObs.needSeatInCar && participantsObs.userIdOfHostingCar)? 'with' + participantsObs.userIdOfHostingCar : participantsObs.offeringSeatsInCar? 'Offers ' + participantsObs.offeringSeatsInCar + ' free seats'}}-->
-                    </ion-col>
-                    <ion-col size="1">
-                        {{par.approved? 'Approved' : 'Pending'}}
-                        <!--{{(participantsObs.needSeatInCar && !participantsObs.userIdOfHostingCar) ? 'Need a ride': (participantsObs.needSeatInCar && participantsObs.userIdOfHostingCar)? 'with' + participantsObs.userIdOfHostingCar : participantsObs.offeringSeatsInCar? 'Offers ' + participantsObs.offeringSeatsInCar + ' free seats'}}-->
-                    </ion-col>
-
-
-                </ng-container>
-            </ion-row>
+            <participants-lines
+                    [eventObs]="eventObs"
+                    [isApprovedLines]="true"
+            ></participants-lines>
+            <participants-lines
+                    [eventObs]="eventObs"
+                    [isApprovedLines]="false"
+            ></participants-lines>
         </ion-grid>
     </ion-item>
 

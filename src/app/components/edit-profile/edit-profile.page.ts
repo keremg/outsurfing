@@ -10,9 +10,9 @@ import {EmailValidator} from '../../../validators/email';
 import {AuthService} from '../../services/auth.service';
 import {UserService} from '../../services/user.service';
 import {SurfUser} from '../../models/surfUser';
-import { AngularFireStorage, AngularFireUploadTask } from '@angular/fire/storage';
+import {AngularFireStorage, AngularFireUploadTask} from '@angular/fire/storage';
 import {Observable} from 'rxjs';
-import { debug } from 'util';
+import {debug} from 'util';
 import {map} from 'rxjs/operators';
 import {ErrorFn} from 'firebase';
 import {promise} from 'selenium-webdriver';
@@ -52,33 +52,34 @@ export class EditProfilePage implements OnInit {
         public compressImageService: CompressImageService,
         public loadingController: LoadingController
     ) {
-         this.updateForm = this.formBuilder.group({
-             firstName: ['', Validators.compose([Validators.minLength(1), Validators.required])],
-             lastName: ['', Validators.compose([Validators.minLength(1), Validators.required])],
-             phone: ['', Validators.compose([Validators.pattern('^[0-9]*$'), Validators.minLength(9), Validators.required])],
-             gender: [''],
-             isGuide: [''],
-             about: [''],
+        this.updateForm = this.formBuilder.group({
+            firstName: ['', Validators.compose([Validators.minLength(1), Validators.required])],
+            lastName: ['', Validators.compose([Validators.minLength(1), Validators.required])],
+            phone: ['', Validators.compose([Validators.pattern('^[0-9]*$'), Validators.minLength(9), Validators.required])],
+            gender: [''],
+            isGuide: [''],
+            about: [''],
 
-             birthDate: [''],
-             tripLevel: [''],
-             peopleType: [''],
-             tripDurations: [''],
-         });
+            birthDate: [''],
+            tripLevel: [''],
+            peopleType: [''],
+            tripDurations: [''],
+        });
         window.user = this;
-        
+
     }
 
     async ngOnInit() {
         this.currentUser = await this.userService.getCurrentUserPromise();
         this.currentUserId = this.authService.currentUserId;
-        const ref = await this.storage.ref('users/'+this.currentUser.id+'/profilePic_Large');
+        const ref = await this.storage.ref('users/' + this.currentUser.id + '/profilePic_Large');
         //this.profileUrl = ref.getDownloadURL();
-        ref.getDownloadURL().toPromise().then(res=>{
-                this.profileUrl =res },
-             async error=>{
+        ref.getDownloadURL().toPromise().then(res => {
+                this.profileUrl = res;
+            },
+            async error => {
                 console.log(error);
-                if(error.code === 'storage/object-not-found'){
+                if (error.code === 'storage/object-not-found') {
                     const alert = await this.alertCtrl.create({
                         message: 'It seems you dont have a profile picture. consider uploading one:)',
                         buttons: [{text: 'ok'}]
@@ -90,9 +91,9 @@ export class EditProfilePage implements OnInit {
         console.log('this.currentUser: ', this.currentUser);
         this.editForm(this.currentUser);
 
-        
+
     }
-    
+
     editForm(user: SurfUser) {
         this.updateForm.patchValue({
             firstName: user.firstName,
@@ -109,47 +110,47 @@ export class EditProfilePage implements OnInit {
             tripDurations: user.tripDurations, //will represent number of days, so half day should be 0.5 , one hour should be 0.04
             peopleType: user.audienceTypes
         });
-     }
+    }
 
 
     async updateUser() {
         debugger;
-        try{
-        if (!this.updateForm.valid) {
-            console.log(
-                `Need to complete the form, current value: ${this.updateForm.value}`
-            );
-        } else {
-            let success = false;
-            try {
-                let u = {
-                    email: this.currentUser.email,
-                    firstName: this.updateForm.value.firstName,
-                    lastName: this.updateForm.value.lastName,
-                    recentLocation: "",
-                    phone: this.updateForm.value.phone,
-                    gender: parseInt(this.updateForm.value.gender),
-                    isGuide: this.updateForm.value.isGuide,
-                    about: this.updateForm.value.about,
-                    birthDate: this.updateForm.value.birthDate,
-                    tripDifficulties: this.updateForm.value.tripLevel,
-                    tripDurations: this.updateForm.value.tripDurations,
-                    audienceTypes: this.updateForm.value.peopleType
-                };
-                console.log(this.currentUserId, u)
-                await this.userService.updateUser(this.currentUserId, u);
-                success = true;
-                this.navCtrl.navigateRoot('home');
+        try {
+            if (!this.updateForm.valid) {
+                console.log(
+                    `Need to complete the form, current value: ${this.updateForm.value}`
+                );
+            } else {
+                let success = false;
+                try {
+                    let u = {
+                        email: this.currentUser.email,
+                        firstName: this.updateForm.value.firstName,
+                        lastName: this.updateForm.value.lastName,
+                        recentLocation: '',
+                        phone: this.updateForm.value.phone,
+                        gender: parseInt(this.updateForm.value.gender),
+                        isGuide: this.updateForm.value.isGuide,
+                        about: this.updateForm.value.about,
+                        birthDate: this.updateForm.value.birthDate,
+                        tripDifficulties: this.updateForm.value.tripLevel,
+                        tripDurations: this.updateForm.value.tripDurations,
+                        audienceTypes: this.updateForm.value.peopleType
+                    };
+                    console.log(this.currentUserId, u);
+                    await this.userService.updateUser(this.currentUserId, u);
+                    success = true;
+                    //this.navCtrl.navigateRoot('home');
+                    this.ngOnInit().then();
                 } catch (error) {
                     debugger;
-                success = false;
+                    success = false;
                 }
+            }
+        } catch (error) {
+            debugger;
+        }
     }
-}
-catch (error) {
-    debugger
-    }
-}
 
 
     openLoadingController() {
@@ -160,6 +161,7 @@ catch (error) {
             this.loadingElement.present();
         });
     }
+
     closeLoadingController() {
         this.loadingController.dismiss().then();
     }
@@ -167,24 +169,22 @@ catch (error) {
     async uploadFile(event) {
         this.openLoadingController();
         const file = event.target.files[0];
-        const filePath = 'users/'+this.currentUser.id+'/profilePic';
+        const filePath = 'users/' + this.currentUser.id + '/profilePic';
         this.profileUrl = undefined;
         let res: any = await this.compressImageService.saveImage(file, filePath, this);
         //finished uploading and compressing
         this.closeLoadingController();
-        if(res) {
-            const ref = this.storage.ref('users/'+this.currentUser.id+'/profilePic_Large'); //without _Large for large image, need _Mediun or _Small for smaller versions
-             let du = ref.getDownloadURL();
-             du.pipe(map(url => {
+        if (res) {
+            const ref = this.storage.ref('users/' + this.currentUser.id + '/profilePic_Large'); //without _Large for large image, need _Mediun or _Small for smaller versions
+            let du = ref.getDownloadURL();
+            du.pipe(map(url => {
                 const timet = (new Date()).getTime();
-                 return url + "&ttt=" + timet; //against browser cache
+                return url + '&ttt=' + timet; //against browser cache
             }));
-             du.subscribe(res=>{
-                 this.profileUrl = res;
-             })
+            du.subscribe(res => {
+                this.profileUrl = res;
+            });
         }
-
-
 
 
         //const task: AngularFireUploadTask = this.storage.upload(filePath, compress);

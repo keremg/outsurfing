@@ -167,4 +167,12 @@ export class UserService {
         }));
     }
 
+    getAge(birthDay) {
+        if(birthDay) {
+            let ageDifMs = Date.now() - new Date(birthDay).getTime();
+            let ageDate = new Date(ageDifMs); // miliseconds from epoch
+            return '' + Math.abs(ageDate.getUTCFullYear() - 1970);
+        }
+    }
+
 }

@@ -19,5 +19,6 @@ export class SurfParticipant {
     //isStandByForCar: boolean;
     //TODO allow cars just for private cars events
 
+    messageToOthers: string;
     approved: boolean;
 }

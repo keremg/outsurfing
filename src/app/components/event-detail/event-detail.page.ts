@@ -185,20 +185,37 @@ export class EventDetailPage implements OnInit {
             this.singleEventForm.disable();
             this.viewMode = true;
             console.log('just changed to view mode');
-            this.event.participantsObs.subscribe(pars => {
-                if(pars){
-                    pars.forEach( par =>{
-                        if(par.id === this.currentUser.id) {
-                            this.joined = true;
-                            this.isApprovedForTrip = par.approved;
-                        }
-                    });
-                }
-            })
         }
         else{
             this.isOrganizerOfTrip = true;
         }
+        this.updateEventBasedOnParticipants();
+
+    }
+
+    async updateEventBasedOnParticipants() {
+        this.event.participantsObs.subscribe(pars => {
+            if(pars){
+                let placesInCars = 0;
+                pars.forEach( par =>{
+                    if(par.id === this.currentUser.id) {
+                        //Just update component for easy info
+                        this.joined = true;
+                        this.isApprovedForTrip = par.approved;
+                    }
+                    // Only for approved ones count the cars-seats
+                    if (par.approved) {
+                        if (par.needSeatInCar) {
+                            placesInCars--;
+                        }
+                        if (par.offeringSeatsInCar > 0) {
+                            placesInCars += par.offeringSeatsInCar;
+                        }
+                    }
+                });
+                this.event.availableSeats = placesInCars;
+            }
+        });
     }
 
     removeElement(id: string){
@@ -294,16 +311,23 @@ export class EventDetailPage implements OnInit {
         }
         this.id = returnedId;
         this.closeLoadingController();
+
+        // If user created a new event now
         if(isNew) {
             const modal = await this.modalController.create({
                 component: JoinEventPage,
                 componentProps: {eventId: returnedId, event: this.event}
             });
 
-            modal.onDidDismiss().then(data => {
+            modal.onDidDismiss().then(async data => {
                 if (data.data) {
                     data.data.id = this.currentUser.id;
-                    this.eventService.approveParticipant(returnedId,data.data, this.event)//TODO guy test
+                    data.data.isOrganizer = true;
+                    data.data.isGuide = this.event.isGuidedEvent;
+                    this.eventService.approveParticipant(returnedId,data.data, this.event); //TODO guy test
+                    await this.updateEventBasedOnParticipants();
+                    copyOfEvent.availableSeats = this.event.availableSeats;
+                    await this.eventService.updateEvent(this.id, copyOfEvent); // remember available seats
                     this.finishUpdate(isStayOnPage, copyOfEvent);
                 } else {
                     this.eventService.deleteEvent(returnedId);
@@ -337,9 +361,12 @@ export class EventDetailPage implements OnInit {
             component: JoinEventPage,
             componentProps: {eventId: this.id}
         });
-        modal.onDidDismiss().then(data => {
+        modal.onDidDismiss().then(async data => {
             if (data) {
-                this.navCtrl.navigateRoot('home');
+                //await this.updateEventBasedOnParticipants();  // NO because if still pending we don't count it!
+                //await this.eventService.updateEvent(this.id, {availableSeats: this.event.availableSeats}); // remember available seats
+                //this.navCtrl.navigateRoot('home');
+                this.ngOnInit().then();
             }
         })
         return modal.present();
@@ -350,6 +377,10 @@ export class EventDetailPage implements OnInit {
         const modal = await this.modalController.create({
             component: ParticipantApprovalPage,
             componentProps: {eventId: this.id, eventOrganizer: this.event.eventOrganizerId, event:this.event}
+        });
+        modal.onDidDismiss().then(async data => {
+            await this.updateEventBasedOnParticipants();  // NO because if still pending we don't count it!
+            await this.eventService.updateEvent(this.id, {availableSeats: this.event.availableSeats}); // remember available seats
         });
         return modal.present();
     }
@@ -365,7 +396,8 @@ export class EventDetailPage implements OnInit {
 
     async onLeaveEvent() {
         await this.eventService.leaveEvent(this.id, this.currentUser.id, this.event);
-        return this.navCtrl.navigateRoot('home');
+        //return this.navCtrl.navigateRoot('home');
+        this.ngOnInit().then();
     }
 
     private getEventObject() {
@@ -895,13 +927,6 @@ export class EventDetailPage implements OnInit {
         this.mapEnd.invalidateSize();
     }
 
-    getAge(birth){
-        if(birth) {
-            let ageDifMs = Date.now() - new Date(birth).getTime();
-            let ageDate = new Date(ageDifMs); // miliseconds from epoch
-            return '' + Math.abs(ageDate.getUTCFullYear() - 1970);
-        }
-    }
     getHoursDifference(firstDateStr, secondDateStr) {
         let dateDiffSeconds = new Date(secondDateStr).getTime() - new Date(firstDateStr).getTime();
         return Math.round(dateDiffSeconds/60);
