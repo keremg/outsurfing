@@ -1,0 +1,42 @@
+<ng-container *ngFor="let participant of ((eventObs|async)?.participantsObs|async);">
+    <ion-row [ngClass]="{'approved-lines': isApprovedLines, 'pending-lines': !isApprovedLines}"
+             *ngIf="participant.approved === isApprovedLines"
+             margin-vertical>
+
+        <ion-col size="2">
+            <app-route-image imgPath="users/{{participant.id}}/profilePic_Medium" sizeToLoad="Medium"></app-route-image>
+        </ion-col>
+        <ion-col size="2">
+            <ion-label>{{(participant.user| async)?.firstName}} {{(participant.user| async)?.lastName}} {{getAge((participant.user| async)?.birthDate)}}</ion-label>
+            <ion-label text-wrap>{{participant.phone}}</ion-label>
+            <ion-label text-wrap>{{participant.email}}</ion-label>
+        </ion-col>
+        <ion-col size="2">
+            <ion-label text-wrap>{{participant.needSeatInCar ? 'Needs a ride' : participant.offeringSeatsInCar ? 'Brings a car' : 'Will arrive by myself'}}</ion-label>
+            <ion-label>{{participant.offeringSeatsInCar ? 'Offering ' + participant.offeringSeatsInCar + ' seats' : ''}}</ion-label>
+        </ion-col>
+        <ion-col size="2">
+            <ion-label>{{participant.isGuide ? 'Trip Guide' : participant.isOrganizer ? 'Trip organizer' : 'Traveller'}}</ion-label>
+            <ion-label text-wrap *ngIf="participant.isGuide">
+                Rating: {{(participant.user| async)?.avgGuideRating}} ({{(participant.user| async)?.numOfGuideRaters}} <ion-icon name="contact"></ion-icon>)
+            </ion-label>
+            <ion-label text-wrap *ngIf="!participant.isGuide">
+                Rating: {{(participant.user| async)?.avgRating}} ({{(participant.user| async)?.numOfRaters}} <ion-icon name="contact"></ion-icon>)
+            </ion-label>
+            <ion-label text-wrap>Cancellations: {{(participant.user| async)?.cancellations}} out of {{(participant.user| async)?.cancellations}}</ion-label>
+            <!-- TODO: rating and cancellations should be calculated with TOTAL# of total and total cancelled -->
+        </ion-col>
+        <ion-col size="3">
+            <ion-label text-wrap>Equipment: {{participant.groupEquipmentIBring}}</ion-label>
+            <ion-label text-wrap>Message: {{participant.messageToOthers}}</ion-label>
+            <!--{{(participantsObs.needSeatInCar && !participantsObs.userIdOfHostingCar) ? 'Need a ride': (participantsObs.needSeatInCar && participantsObs.userIdOfHostingCar)? 'with' + participantsObs.userIdOfHostingCar : participantsObs.offeringSeatsInCar? 'Offers ' + participantsObs.offeringSeatsInCar + ' free seats'}}-->
+        </ion-col>
+        <ion-col size="1">
+            <ion-label>{{participant.approved ? 'Approved' : 'Pending'}}</ion-label>
+            <ion-label></ion-label>
+            <ion-label text-wrap>Requested: {{participant.registrationDate | date:'medium'}}}</ion-label>
+            <!--{{(participantsObs.needSeatInCar && !participantsObs.userIdOfHostingCar) ? 'Need a ride': (participantsObs.needSeatInCar && participantsObs.userIdOfHostingCar)? 'with' + participantsObs.userIdOfHostingCar : participantsObs.offeringSeatsInCar? 'Offers ' + participantsObs.offeringSeatsInCar + ' free seats'}}-->
+        </ion-col>
+
+    </ion-row>
+</ng-container>

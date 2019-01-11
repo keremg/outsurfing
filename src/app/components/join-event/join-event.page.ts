@@ -81,7 +81,7 @@ export class JoinEventPage implements OnInit {
 
         }
         this.participant.approved = false;
-        //this.joinEventForm.value.message;
+        this.participant.messageToOthers = this.joinEventForm.value.message;
 
     }
 }

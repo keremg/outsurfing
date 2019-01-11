@@ -90,7 +90,14 @@ export class SignupPage implements OnInit{
                     tripDifficulties: this.signupForm.value.tripDifficulties,
                     tripDurations: this.signupForm.value.tripDurations,
                     audienceTypes: this.signupForm.value.audienceTypes,
-                };
+                    numOfEventsParticipated: 0,
+                    avgRating: 0,
+                    numOfRaters: 0,
+                    avgGuideRating: 0,
+                    numOfGuideRaters: 0
+
+
+            };
 
                 await this.userService.addUsers(u);
                 success = true;
