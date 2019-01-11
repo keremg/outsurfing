@@ -1,0 +1,98 @@
+<ion-header>
+  <div *ngIf="route">
+    <ion-toolbar>
+      <ion-title>{{ route.name }} reviews</ion-title>
+    </ion-toolbar>
+  </div>
+</ion-header>
+
+<ion-content padding>
+  <ion-card>
+    <ion-grid>
+      <ion-row>
+        <ion-col>
+          <ion-card-header no-padding>
+            <ion-card-title style="font-size: 2em;">
+              <ion-row justify-content-between style="align-items: center;">
+                <div *ngIf="route">
+                  <ion-col> {{ route.name }} </ion-col>
+                  <ion-col> grade: {{ route.routeRanking }} </ion-col>
+                </div>
+              </ion-row>
+            </ion-card-title>
+            <!-- need to be added from JS -->
+          </ion-card-header>
+          <!-- <ion-card-content> -->
+          <ion-grid wrap>
+            <ion-row>
+              <ion-col size="4">
+                <div *ngIf="route">
+                  <app-route-image
+                    [imgPath]="
+                      route.imagesUrls &&
+                      route.imagesUrls.length > 0 &&
+                      route.imagesUrls[0] + '_Large'
+                    "
+                    sizeToLoad="Large"
+                    width="20px"
+                  ></app-route-image>
+                </div>
+              </ion-col>
+            </ion-row>
+          </ion-grid>
+          <!-- </ion-card-content> -->
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </ion-card>
+  <ion-card *ngFor="let review of (reviews | async)">
+    <ion-grid>
+      <ion-row>
+        <ion-col>
+          <ion-item>
+            <app-route-image
+              [imgPath]="
+                'users/' + review.reviewerId + '/profilePic' + '_Small'
+              "
+              sizeToLoad="Small"
+              width="20px"
+            ></app-route-image>
+            <ion-icon name="contact"></ion-icon>
+
+            <rating
+              style="font-size: 2rem; float:right"
+              [(rating)]="review.grade"
+            ></rating>
+
+            <div text-right>{{ review.review }}</div>
+          </ion-item>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </ion-card>
+  <!--
+    <ion-infinite-scroll id="infinite-scroll" (ionInfinite)="loadData($review)">
+      <ion-infinite-scroll-content
+        loadingSpinner="bubbles"
+        loadingText="Loading more data..."
+      >
+      </ion-infinite-scroll-content>
+    </ion-infinite-scroll>
+  -->
+
+  <br /><br /><br /><br />
+  <br /><br /><br /><br />
+  <br /><br /><br /><br />
+
+  <!--
+    <ion-fab vertical="bottom" horizontal="start" slot="fixed">
+      <ion-fab-button> <ion-icon name="arrow-dropup"></ion-icon> </ion-fab-button>
+    </ion-fab>
+  -->
+  <!--
+    add filter https://www.joshmorony.com/high-performance-list-filtering-in-ionic-2/
+  -->
+  <ion-fab-button (click)="closeModal()">
+    <ion-icon name="close"></ion-icon>
+  </ion-fab-button>
+</ion-content>
