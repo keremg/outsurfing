@@ -52,11 +52,10 @@ export class EventReviewPage implements OnInit {
       private routeService: RouteService,
 
   ) {
-      this.routeUrl = "routes/GO8a4ElzDUIBY6kz6Njs/1546895478281_0";
+      //this.routeUrl = "routes/GO8a4ElzDUIBY6kz6Njs/1546895478281_0";
   }
 
   async ngOnInit() {
-      debugger;
       this.currentUser = await this.userService.getCurrentUserPromise();
       this.currentUserID = this.currentUser.id;
       this.eventID = this.navParams.get('eventId');
@@ -65,30 +64,33 @@ export class EventReviewPage implements OnInit {
       if(this.eventID) {
           let routePromise = new Promise<SurfRoute>(res=> this.routeService.getRoute(this.event.routeId).subscribe(res));
           this.route = await routePromise;
+          this.routeUrl = this.route.imagesUrls[0];
+          debugger;
           let participantsPromise = new Promise<SurfParticipant[]>(res => this.eventService.getParticipants(this.eventID).subscribe(res));
           this.participants = await participantsPromise;
           for(let participant of this.participants) {
               if(!participant.approved){
                   continue;
               }
-              participant.user.subscribe(u=>{
-                  if (u.id === this.currentUserID) {
-                      return;
-                  }
-                  this.user_list.push(u);
-                  this.participants_names.push(u.firstName +" "+u.lastName);
-                  this.participants_ids.push(u.id);
-                  this.participants_imgs.push("./assets/images/haham.jpg");
-                  this.isParticipantRevExist.push(false);
-              });
-
+              let resPromise = new Promise<SurfUser>(u =>participant.user.subscribe(u));
+              let res = await resPromise;
+              if (res.id === this.currentUserID) {
+                  continue;
+              }
+              this.user_list.push(res);
+              this.participants_names.push(res.firstName +" "+res.lastName);
+              this.participants_ids.push(res.id);
+              this.participants_imgs.push("./assets/images/haham.jpg");
+              this.isParticipantRevExist.push(false);
           }
           let allParticipantsRevExist= true;
-          for(let participant of this.user_list) {
+          for(let index = 0;index<this.user_list.length;index++){
+              let participant = this.user_list[index];
               let resPromise = new Promise<boolean>(res => this.userService.ReviewAlreadyExist(participant.id, this.currentUserID, this.eventID).subscribe(res)) ;
-              allParticipantsRevExist = await resPromise;
-              if(!allParticipantsRevExist) {
-                  break;
+              this.isParticipantRevExist[index] =  await resPromise;
+              debugger;
+              if(!this.isParticipantRevExist[index]) {
+                  allParticipantsRevExist = false;
               }
           }
           if(this.isGuided){
@@ -97,7 +99,6 @@ export class EventReviewPage implements OnInit {
           }
           let resPromise = new Promise<boolean>(res=>this.routeService.ReviewAlreadyExist(this.event.routeId, this.currentUserID, this.eventID).subscribe(res));
           this.isRouteRevExist = await resPromise;
-          debugger;
           if(this.isRouteRevExist && this.isGuideRevExist && allParticipantsRevExist){
               alert('Review already exist');
               this.modalController.dismiss();
@@ -115,7 +116,6 @@ export class EventReviewPage implements OnInit {
 
   }
     build_review_for_user(index,time){
-        debugger;
         let review = new SurfReview();
         review.reviewerId = this.currentUserID;
         review.forEventId = this.eventID;
@@ -125,7 +125,6 @@ export class EventReviewPage implements OnInit {
             review.review = '';
         }
         review.reviewTime = time;
-        debugger;
         return review;
     }
 
@@ -155,7 +154,6 @@ export class EventReviewPage implements OnInit {
         if(rev.grade){
             await this.routeService.addReview(this.route, rev);
         }
-        debugger;
         if (this.isGuided) {
             rev =  this.build_review_for_guide(time);
             if(rev.grade){
@@ -163,14 +161,11 @@ export class EventReviewPage implements OnInit {
             }
         }
         for (let i = 0; i < this.user_list.length; i++) {
-            debugger;
             rev = this.build_review_for_user(i, time);
             if(rev.grade){
                 await this.userService.addReview(this.user_list[i], rev )
             }
-            debugger;
         }
-        debugger;
         return this.modalController.dismiss();
     }
 }

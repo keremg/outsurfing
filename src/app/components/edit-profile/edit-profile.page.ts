@@ -58,6 +58,7 @@ export class EditProfilePage implements OnInit {
         this.updateForm = this.formBuilder.group({
             firstName: ['', Validators.compose([Validators.minLength(1), Validators.required])],
             lastName: ['', Validators.compose([Validators.minLength(1), Validators.required])],
+            email: [''],
             phone: ['', Validators.compose([Validators.pattern('^[0-9]*$'), Validators.minLength(9), Validators.required])],
             gender: [''],
             isGuide: [''],
@@ -101,6 +102,7 @@ export class EditProfilePage implements OnInit {
         this.updateForm.patchValue({
             firstName: user.firstName,
             lastName: user.lastName,
+            email: user.email,
             id: user.id,
             recentLocation: user.recentLocation,
             about: user.about,
