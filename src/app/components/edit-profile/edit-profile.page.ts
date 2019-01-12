@@ -40,6 +40,7 @@ export class EditProfilePage implements OnInit {
     profileUrl: string;
     difficultiesEnum = this.getENUM(DifficultiesEnum);
     durationEnum = this.getENUM(DurationEnum);
+    guideButton: boolean = false;
 
 
     constructor(
@@ -210,17 +211,19 @@ export class EditProfilePage implements OnInit {
     }
 
     async onShow() {
+        this.guideButton = false;
         const modal = await this.modalController.create({
             component: UserReviewsPage,
-            componentProps: { userId: this.currentUserId }
+            componentProps: { userId: this.currentUserId, button: this.guideButton }
         });
         return await modal.present();
     }
 
-    async onShowGuide() {//TODO urgent
+    async onShowGuide() {
+        this.guideButton = true;
         const modal = await this.modalController.create({
             component: UserReviewsPage,
-            componentProps: { userId: this.currentUserId }
+            componentProps: { userId: this.currentUserId, button: this.guideButton }
         });
         return await modal.present();
     }
