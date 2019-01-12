@@ -65,7 +65,7 @@ export class ViewProfilePage implements OnInit {
         }
         this.birthDate = this.user.birthDate;
         this.phone = this.user.phone;
-        this.isGuide = this.user.isGuide;
+        this.isGuide = this.user.isGuide || false;
         this.about = this.user.about;
 
         this.audienceTypes = '';

@@ -343,6 +343,7 @@ export class EventDetailPage implements OnInit {
                 }
             }).catch(data => {
                 this.eventService.deleteEvent(returnedId);
+                console.log(data);
             });
             return modal.present();
         }
