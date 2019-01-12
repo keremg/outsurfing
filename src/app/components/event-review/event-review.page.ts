@@ -63,6 +63,9 @@ export class EventReviewPage implements OnInit {
           let participantsPromise = new Promise<SurfParticipant[]>(res => this.eventService.getParticipants(this.eventID).subscribe(res));
           this.participants = await participantsPromise;
           for(let participant of this.participants) {
+              if(!participant.approved){
+                  continue;
+              }
               participant.user.subscribe(u=>{
                   if (u.id === this.currentUserID) {
                       return;
@@ -78,6 +81,7 @@ export class EventReviewPage implements OnInit {
           this.routeService.ReviewAlreadyExist(this.event.routeId, this.currentUserID, this.eventID).subscribe(res=>{
               if (res)
                   alert('Review already exist');
+                  debugger;
                   this.modalController.dismiss();
           });
       }
@@ -122,15 +126,16 @@ export class EventReviewPage implements OnInit {
         return review;
     }
     
-    async onClose(){
-      let time = (new Date()).getTime();
-      await this.routeService.addReview(this.route,this.build_review_for_event(time));
-      if(this.isGuided){
-          await this.userService.addGuideReview(this.guide,this.build_review_for_guide(time))
-      }
-      for(let i=0;i< this.user_list.length;i++ ){
-          await this.userService.addReview(this.user_list[i],this.build_review_for_user(i,time))
-      }
-      console.log( this.participants_rating[0])
+    async onClose() {
+        let time = (new Date()).getTime();
+        await this.routeService.addReview(this.route, this.build_review_for_event(time));
+        if (this.isGuided) {
+            await this.userService.addGuideReview(this.guide, this.build_review_for_guide(time))
+        }
+        for (let i = 0; i < this.user_list.length; i++) {
+            await this.userService.addReview(this.user_list[i], this.build_review_for_user(i, time))
+        }
+        debugger;
+        return this.modalController.dismiss();
     }
 }

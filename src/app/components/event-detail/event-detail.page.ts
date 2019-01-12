@@ -144,6 +144,7 @@ export class EventDetailPage implements OnInit {
                         this.viewMode = true;
                         this.singleEventForm.disable();
                     }
+
                     this.loadFromEvent(this.event);//todo should be read only?
 
                 } else {
@@ -197,6 +198,7 @@ export class EventDetailPage implements OnInit {
         this.event.participantsObs.subscribe(pars => {
             if(pars){
                 let placesInCars = 0;
+                this.joined = false;
                 pars.forEach( par =>{
                     if(par.id === this.currentUser.id) {
                         //Just update component for easy info
@@ -361,6 +363,7 @@ export class EventDetailPage implements OnInit {
             component: JoinEventPage,
             componentProps: {eventId: this.id}
         });
+        debugger;
         modal.onDidDismiss().then(async data => {
             if (data) {
                 //await this.updateEventBasedOnParticipants();  // NO because if still pending we don't count it!
@@ -387,10 +390,12 @@ export class EventDetailPage implements OnInit {
 
     async rankEvent() {
         await this.updateEvent(true);
+        debugger;
         const modal = await this.modalController.create({
             component: EventReviewPage,
             componentProps: {eventId: this.id, eventOrganizer: this.event.eventOrganizerId, event:this.event}
         });
+        debugger;
         return modal.present();
     }
 
