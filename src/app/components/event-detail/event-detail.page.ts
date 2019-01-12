@@ -196,7 +196,7 @@ export class EventDetailPage implements OnInit {
     }
 
     async updateEventBasedOnParticipants() {
-        this.event.participantsObs.subscribe(pars => {
+        this.event.participantsObs && this.event.participantsObs.subscribe(pars => {
             if(pars){
                 let placesInCars = 0;
                 this.joined = false; // until proven otherwise
@@ -333,10 +333,10 @@ export class EventDetailPage implements OnInit {
                     data.data.id = this.currentUser.id;
                     data.data.isOrganizer = true;
                     data.data.isGuide = this.event.isGuidedEvent;
-                    this.eventService.approveParticipant(returnedId,data.data, this.event); //TODO guy test
+                    await this.eventService.approveParticipant(returnedId,data.data, this.event); //TODO guy test
                     await this.updateEventBasedOnParticipants();
-                    copyOfEvent.availableSeats = this.event.availableSeats;
-                    await this.eventService.updateEvent(this.id, copyOfEvent); // remember available seats
+                    //copyOfEvent.availableSeats = this.event.availableSeats;
+                    //await this.eventService.updateEvent(this.id, copyOfEvent); // remember available seats
                     this.finishUpdate(isStayOnPage, copyOfEvent);
                 } else {
                     this.eventService.deleteEvent(returnedId);
