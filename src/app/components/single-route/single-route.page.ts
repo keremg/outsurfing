@@ -295,9 +295,6 @@ export class SingleRoutePage implements OnInit {
   }
 
   async updateRoute(eventIt: boolean) {
-    if (this.viewMode) {
-      return true;
-    }
     this.openLoadingController();
 
     this.mapFormValuesToRouteModel();
@@ -306,23 +303,26 @@ export class SingleRoutePage implements OnInit {
     //delete junk that the DB shouldn't have
     delete copyOfRoute.routeCreator; //remove the property
     let returnedId;
-    if (!this.viewMode && this.id) {
-      //update
-      await this.routesService.updateRoute(this.id, copyOfRoute);
-      returnedId = this.id;
+    if (!this.viewMode) {
+      if (this.id) {
+        //update
+        await this.routesService.updateRoute(this.id, copyOfRoute);
+        returnedId = this.id;
+      }
+      if (!returnedId) { // Add
+        returnedId = await this.routesService.addRoute(copyOfRoute);
+      }
+      this.id = returnedId;
+
+      console.log('Before uploadPhotos');
+      await this.uploadPhotos(copyOfRoute); //both regular photos and maps-photos
+      console.log('After uploadPhotos, about to navigate');
+      this.closeLoadingController();
     }
-    if (!returnedId) {
-      returnedId = await this.routesService.addRoute(copyOfRoute);
-    }
-    this.id = returnedId;
-    console.log('Before uploadPhotos');
-    await this.uploadPhotos(copyOfRoute); //both regular photos and maps-photos
-    console.log('After uploadPhotos, about to navigate');
-    this.closeLoadingController();
 
     if (eventIt) {
       //TODO should event it
-      this.navCtrl.navigateForward('EventDetail/0/' + returnedId);
+      this.navCtrl.navigateForward('EventDetail/0/' + this.id);
     } else {
       this.navCtrl.navigateForward('ChooseRoute');
     }
