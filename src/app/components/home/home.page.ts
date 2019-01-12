@@ -27,6 +27,7 @@ export class HomePage implements OnInit {
     location: ReplaySubject<string[]> = new ReplaySubject(1);
     filter: {};
     map: any;
+    title: string;
 
     constructor(
         public navCtrl: NavController,
@@ -49,14 +50,31 @@ export class HomePage implements OnInit {
         }
 
 
-        if (this.query == this.currentUser.id) {
+        if (this.query === this.currentUser.id) {
             this.onlyMine = true;
             this.page.init(
                 'events',
                 this.currentUser.id,
                 {reverse: true, prepend: false},
-                this.currentUser.id
+                this.currentUser.id,
+                null,
+                this.filter
             );
+
+            this.page.data.subscribe(res=>{
+                if(res && res.length > 0) {
+                    let noShows: boolean = true;
+                    for (let i in res) {
+                        if (res[i].shouldShow) {
+                            noShows = false;
+                        }
+                    }
+                    if (noShows) {
+                        this.page._loading.next(false);
+                        this.loadData(null)
+                    }
+                }
+            })
         } else {
             this.page.init(
                 'events',
@@ -78,6 +96,8 @@ export class HomePage implements OnInit {
                 }
             }
         });
+
+        this.title=this.getTitle();
     }
 
     getFilter(str: string) {
@@ -129,7 +149,8 @@ export class HomePage implements OnInit {
         this.page.more();
 
         console.log('Done');
-        event.target.complete();
+        if(event)
+            event.target.complete();
 
         // App logic to determine if all data is loaded
         // and disable the infinite scroll
@@ -236,5 +257,15 @@ export class HomePage implements OnInit {
             event: ev
         });
         return await popover.present();
+    }
+
+    getTitle(): string {
+        if (this.query === this.currentUser.id) {
+            if(this.filter && this.filter['past'] )
+                return 'Past events'
+            else
+                return 'My events'
+        }
+        return 'Home';
     }
 }

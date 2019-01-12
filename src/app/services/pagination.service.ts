@@ -24,7 +24,7 @@ export class PaginationService {
 
     // Source data
     private _done = new BehaviorSubject(false);
-    private _loading = new BehaviorSubject(false);
+    _loading = new BehaviorSubject(false);
     private _data = new BehaviorSubject([]);
 
     private query: QueryConfig;
@@ -167,6 +167,13 @@ export class PaginationService {
                     }
                     if(this.query.path === 'routes'){
                         data.routeCreator = this.userService.getuser(data.routeCreatorId);
+                    }
+                    if(!this.query.uid || (data.isPastEvent === false && (!this.query.filter || !this.query.filter['past'])))
+                    {
+                        data.shouldShow = true;
+                    }
+                    else if( data.isPastEvent === true && this.query.filter && this.query.filter['past']){
+                        data.shouldShow = true;
                     }
                     return { ...data, doc }
                 })

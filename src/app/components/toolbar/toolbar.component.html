@@ -7,16 +7,6 @@
   </ion-label>
 
   <ion-buttons slot="end" color="primary" *ngIf="!loggedIn">
-    <ion-button
-            style="float: right;"
-            slot="end"
-            color="dark"
-            fill="solid"
-            shape="round"
-            (click)="logout()"
-    >
-      logout
-    </ion-button>
     <ion-button href="/EditProfile">
       <app-route-image imgPath="users/{{currentUserId}}/profilePic_Small" sizeToLoad="Small" width="30px" height="30px" alt="Me"></app-route-image>
       <!--<ion-icon slot="icon-only" name="contact"></ion-icon>-->

@@ -22,16 +22,4 @@ export class ToolbarComponent implements OnInit {
       }
       this.currentUserId = this.authService.currentUserId;
   }
-
-    logout() {
-        this.authService
-            .logoutUser()
-            .then(() => {
-                this.navCtrl.navigateRoot('');
-            })
-            .catch(() => {
-                console.log('error in logout');
-            });
-    }
-
 }

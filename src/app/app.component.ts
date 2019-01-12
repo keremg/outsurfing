@@ -9,6 +9,7 @@ import * as firebase from 'firebase/app';
 import 'firebase/auth';
 import { UserService } from './services/user.service';
 import { SurfUser } from './models/surfUser';
+import {AuthService} from './services/auth.service';
 
 @Component({
   selector: 'app-root',
@@ -23,7 +24,8 @@ export class AppComponent implements OnInit {
     private statusBar: StatusBar,
     private userService: UserService,
     private navCtrl: NavController,
-    private menuCtrl: MenuController
+    private menuCtrl: MenuController,
+    private authService: AuthService
   ) {
     this.initializeApp();
   }
@@ -44,6 +46,11 @@ export class AppComponent implements OnInit {
     return this.navCtrl.navigateRoot('home/' + this.currentUser.id);
   }
 
+    onMyPasttrips() {
+        this.menuCtrl.close();
+        return this.navCtrl.navigateRoot('home/' + this.currentUser.id+'/past.true');
+    }
+
   OnShowAll() {
     this.menuCtrl.close();
     return this.navCtrl.navigateRoot('home');
@@ -58,4 +65,15 @@ export class AppComponent implements OnInit {
     this.menuCtrl.close();
     return this.navCtrl.navigateRoot('SingleRoute');
   }
+
+    logout() {
+        this.authService
+            .logoutUser()
+            .then(() => {
+                this.navCtrl.navigateRoot('');
+            })
+            .catch(() => {
+                console.log('error in logout');
+            });
+    }
 }

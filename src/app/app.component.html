@@ -17,12 +17,21 @@
                 <ion-button (click)="onMytrips()" id="my" fill="clear" expand="full" size="large"  color="dark">
                     My Events
                 </ion-button>
+                <ion-button (click)="onMyPasttrips()" id="my" fill="clear" expand="full" size="large"  color="dark">
+                    Past Events
+                </ion-button>
                 <br><br>
                 <ion-button (click)="onAddRoute()" id="addroute" fill="clear" expand="full" size="large"  color="dark">
                     Add route
                 </ion-button>
                 <ion-button (click)="onCreateEvent()" id="routes" fill="clear" expand="full" size="large"  color="dark">
                     Routes around me
+                </ion-button>
+                <br>
+                <ion-button
+                        fill="clear" expand="full" size="large"  color="dark"
+                        (click)="logout()">
+                    logout
                 </ion-button>
             </ion-list>
         </ion-content>
