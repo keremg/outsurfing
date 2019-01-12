@@ -23,19 +23,23 @@ export class ParticipantsLinesComponent implements OnInit {
   @Input() isPastEvent: boolean = true;
   @Input() isUserApproved: boolean = false;// Only approved user is allowed to see email and phone
   @Output() updated: EventEmitter<any> = new EventEmitter();
+  @Output() editParticipant: EventEmitter<any> = new EventEmitter();
 
   ngOnInit() {
   }
 
   async onApprove(participant:SurfParticipant){
     let res = await this.eventService.approveParticipant(this.eventID, participant, this.event);
-    this.updated.emit(true);
+    this.updated.emit({res: true});
   }
   async onDisapprove(participant:SurfParticipant){
     let res = await this.eventService.disapproveParticipant(this.eventID, participant, this.event);
-    this.updated.emit(false);
+    this.updated.emit({res: false});
   }
 
+  async onEdit(participant:SurfParticipant) {
+    this.editParticipant.emit({participant: participant});//onJoinEvent
+  }
 
 
   getAge(birthDay) {

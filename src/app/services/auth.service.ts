@@ -17,10 +17,11 @@ export class AuthService {
     constructor(private afAuth: AngularFireAuth) {
         this.afAuth.authState.subscribe((auth) => {
             this.authState = auth;
-            if( auth)
+            if(auth) {
                 this.logIns.next(true);
-            else
+            } else {
                 this.logIns.next(false);
+            }
 
         });
     }

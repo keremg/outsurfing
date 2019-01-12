@@ -36,7 +36,7 @@
             <ion-button (click)="onApprove(participant)" *ngIf="isOrganizerMode && !participant.approved && !participant.isOrganizer">Approve</ion-button>
             <ion-button (click)="onDisapprove(participant)" *ngIf="isOrganizerMode && participant.approved && !participant.isOrganizer">Disapprove</ion-button>
 
-            <ion-button (click)="onEdit(participant)" *ngIf="currentUserId==participant.id && !isPastEvent">Edit</ion-button>
+            <ion-button (click)="onEdit(participant)" *ngIf="currentUserId===participant.id && !isPastEvent">Edit</ion-button>
 
             <ion-label></ion-label>
             <ion-label text-wrap>{{participant.isOrganizer? 'Started:':'Requested:'}} {{participant.registrationDate | date:'medium'}}}</ion-label>

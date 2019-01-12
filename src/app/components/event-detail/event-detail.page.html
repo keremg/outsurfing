@@ -558,6 +558,7 @@
                     [isPastEvent]="isPastEvent"
                     [isUserApproved]="isApprovedForTrip"
                     (updated)="onUpdatesOfParticipants()"
+                    (editParticipant)="onEditParticipant($event)"
             ></participants-lines>
             <participants-lines
                     [eventObs]="eventObs"
@@ -569,6 +570,7 @@
                     [isPastEvent]="isPastEvent"
                     [isUserApproved]="isApprovedForTrip"
                     (updated)="onUpdatesOfParticipants()"
+                    (editParticipant)="onEditParticipant($event)"
             ></participants-lines>
         </ion-grid>
     </ion-item>

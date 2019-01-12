@@ -141,7 +141,7 @@ export class EventDetailPage implements OnInit {
                 if (value) {
                     this.event = value;
                     let latestTripDate = this.event.returnTime || this.event.routeStartTime || this.event.meetingTime;
-                    this.isPastEvent = (new Date().toISOString().substring(0, 19) > latestTripDate); //TODO bring back to true
+                    this.isPastEvent = (new Date().toISOString().substring(0, 19) > latestTripDate); //TODO: bring back to true
                     if (this.isPastEvent) {
                         this.viewMode = true;
                         this.singleEventForm.disable();
@@ -335,7 +335,6 @@ export class EventDetailPage implements OnInit {
                     data.data.id = this.currentUser.id;
                     data.data.isOrganizer = true;
                     data.data.isGuide = this.event.isGuidedEvent;
-                    debugger;
                     await this.eventService.approveParticipant(returnedId,data.data, this.event); //TODO guy test
                     await this.updateEventBasedOnParticipants();
                     //copyOfEvent.availableSeats = this.event.availableSeats;
@@ -360,21 +359,22 @@ export class EventDetailPage implements OnInit {
         await this.uploadPhotos(copyOfEvent); //both regular photos and maps-photos
         this.closeLoadingController();
 
-        if (!isStayOnPage) {
-            this.navCtrl.navigateRoot('home');
-        } else {
+        if (isStayOnPage) {
             this.navCtrl.navigateRoot('EventDetail/' +this.id+'/0')
+        } else {
+            this.navCtrl.navigateRoot('home');
         }
     }
 
+    onEditParticipant(event) {
+        this.onJoinEvent(event.participant).then();
+    }
 
-
-    async onJoinEvent() {
+    async onJoinEvent(participant?: SurfParticipant) {
         const modal = await this.modalController.create({
             component: JoinEventPage,
-            componentProps: {eventId: this.id}
+            componentProps: {eventId: this.id, event: this.event, participant: participant}
         });
-        debugger;
         modal.onDidDismiss().then(async data => {
             if (data) {
                 //await this.updateEventBasedOnParticipants();  // NO because if still pending we don't count it!

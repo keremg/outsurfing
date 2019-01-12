@@ -121,9 +121,11 @@ export class UserService {
             return ref.where('reviewerId', '==', fromUid)
                 .where('forEventId', '==', fromEventId);
         }).snapshotChanges().pipe(map((action:any) => {
-            if(action && action.length >0 && action[0].payload.doc.exists  )
+            if(action && action.length >0 && action[0].payload.doc.exists) {
                 return true;
-            else return false;
+            } else {
+                return false;
+            }
         }));
     }
 
@@ -161,9 +163,11 @@ export class UserService {
             return ref.where('reviewerId', '==', fromUid)
                 .where('forEventId', '==', fromEventId);
         }).snapshotChanges().pipe(map((action:any) => {
-            if(action && action.length >0 && action[0].payload.doc.exists  )
+            if(action && action.length >0 && action[0].payload.doc.exists) {
                 return true;
-            else return false;
+            } else {
+                return false;
+            }
         }));
     }
 

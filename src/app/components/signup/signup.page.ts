@@ -117,8 +117,9 @@ export class SignupPage implements OnInit{
                     alert.present();
                 });
             }
-            if (success)
+            if (success) {
                 this.navCtrl.navigateRoot('EditProfile');
+            }
         }
     }
 
@@ -164,8 +165,9 @@ export class SignupPage implements OnInit{
             maximumAge: 300000
         }).on('locationfound', (e) => {
 
-            if (this.map.SurfMarker)
+            if (this.map.SurfMarker) {
                 this.map.removeLayer(this.map.SurfMarker);
+            }
             let markerGroup = leaflet.featureGroup();
             let marker: any = leaflet.marker([e.latitude, e.longitude]).on('click', () => {
                 //alert('Marker clicked');
@@ -178,8 +180,9 @@ export class SignupPage implements OnInit{
             console.log(err.message);
         });
         this.map.on('click', (e) => {
-            if (this.map.SurfMarker)
+            if (this.map.SurfMarker) {
                 this.map.removeLayer(this.map.SurfMarker);
+            }
             this.map.surfLatLng = e.latlng;
             let markerGroup = leaflet.featureGroup();
             let marker: any = leaflet.marker([e.latlng.lat, e.latlng.lng]).on('click', () => {

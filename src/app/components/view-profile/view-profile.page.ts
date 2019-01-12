@@ -70,7 +70,7 @@ export class ViewProfilePage implements OnInit {
 
         this.audienceTypes = '';
         for (let dif in this.user.audienceTypes) {
-          if (dif !== '0') this.audienceTypes = this.audienceTypes + ',';
+          if (dif !== '0') {this.audienceTypes = this.audienceTypes + ',';}
 
           this.audienceTypes =
             this.audienceTypes + AudienceTypeEnum[this.user.audienceTypes[dif]];
@@ -78,7 +78,7 @@ export class ViewProfilePage implements OnInit {
 
         this.tripDurations = '';
         for (let dif in this.user.tripDurations) {
-          if (dif !== '0') this.tripDurations = this.tripDurations + ',';
+          if (dif !== '0') {this.tripDurations = this.tripDurations + ',';}
 
           this.tripDurations =
             this.tripDurations + DurationEnum[this.user.tripDurations[dif]];
@@ -86,7 +86,7 @@ export class ViewProfilePage implements OnInit {
 
         this.tripDifficulties = '';
         for (let dif in this.user.tripDifficulties) {
-          if (dif !== '0') this.tripDifficulties = this.tripDifficulties + ',';
+          if (dif !== '0') {this.tripDifficulties = this.tripDifficulties + ',';}
 
           this.tripDifficulties =
             this.tripDifficulties +

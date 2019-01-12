@@ -119,7 +119,6 @@ export class EditProfilePage implements OnInit {
 
 
     async updateUser() {
-        debugger;
         try {
             if (!this.updateForm.valid) {
                 console.log(

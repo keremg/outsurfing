@@ -91,7 +91,7 @@ export class EventService {
 
 
     getAllSubstrings(str) {
-        var i, j, result = [];
+        let i, j, result = [];
 
         for (i = 0; i < str.length; i++) {
             for (j = i + 1; j < str.length + 1; j++) {
@@ -121,6 +121,17 @@ export class EventService {
         return this.events.doc(id).collection(this.participant_collection_endpoint).doc(uid).set({...participant}).catch(function (error) {
             alert('Failed adding participantsObs' + error);
             console.error('Error adding participantsObs: ', error);
+        });
+    }
+
+    async editParticipantOfEvent(id, participant, event) {
+        let uid = participant.id;
+        this.events.doc(id).update({[uid]: 1});
+        delete participant.id;
+        delete participant.user;
+        return this.events.doc(id).collection(this.participant_collection_endpoint).doc(uid).update({...participant}).catch(function (error) {
+            alert('Failed updating participantsObs' + error);
+            console.error('Error updating participantsObs: ', error);
         });
     }
 

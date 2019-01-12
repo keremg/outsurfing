@@ -1,6 +1,6 @@
 <ion-header>
     <ion-toolbar>
-        <ion-title>Join Event name</ion-title>
+        <ion-title>{{(isEditParticipant? 'Edit Participation in Event ':'Join Event ') + event?.name}}</ion-title>
     </ion-toolbar>
 </ion-header>
 
@@ -61,6 +61,6 @@
             <ion-input formControlName="message" type="text"></ion-input>
         </ion-item>
     </form>
-    <ion-button (click)="joinAndCloseModal()">Join</ion-button>
+    <ion-button (click)="joinAndCloseModal()">{{isEditParticipant? 'Save' : 'Join'}}</ion-button>
 
 </ion-content>

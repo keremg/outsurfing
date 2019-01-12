@@ -24,8 +24,9 @@ export class FilterEventsPage implements OnInit {
       this.query = this.navParams.get('query');
       this.filter = this.navParams.get('filter');
       this.isRoute = this.navParams.get('isRoute');
-      if(!this.query)
-        this.query='0'
+      if(!this.query) {
+          this.query = '0';
+      }
 
       this.query='/'+this.query+'/';
 
@@ -75,10 +76,11 @@ export class FilterEventsPage implements OnInit {
       }
 
       let base;
-      if(this.isRoute)
+      if(this.isRoute) {
           base = 'ChooseRoute';
-      else
-          base='home';
+      } else {
+          base = 'home';
+      }
       this.navCtrl.navigateRoot(base+this.query+this.getFilterText());
   }
 

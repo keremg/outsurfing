@@ -170,8 +170,9 @@ export class HomePage implements OnInit {
         this.page.more();
 
         console.log('Done');
-        if(event)
+        if(event) {
             event.target.complete();
+        }
 
         // App logic to determine if all data is loaded
         // and disable the infinite scroll
@@ -205,8 +206,8 @@ export class HomePage implements OnInit {
 
     getAge(birth) {
         if (birth) {
-            var ageDifMs = Date.now() - new Date(birth).getTime();
-            var ageDate = new Date(ageDifMs); // miliseconds from epoch
+            let ageDifMs = Date.now() - new Date(birth).getTime();
+            let ageDate = new Date(ageDifMs); // miliseconds from epoch
             return ', Age: ' + Math.abs(ageDate.getUTCFullYear() - 1970);
         }
     }
@@ -242,16 +243,16 @@ export class HomePage implements OnInit {
         lon1 = s[1];
         lat2 = loc[0];
         lon2 = loc[1];
-        var R = 6371; // km
-        var dLat = this.toRad(lat2 - lat1);
-        var dLon = this.toRad(lon2 - lon1);
+        let R = 6371; // km
+        let dLat = this.toRad(lat2 - lat1);
+        let dLon = this.toRad(lon2 - lon1);
         lat1 = this.toRad(lat1);
         lat2 = this.toRad(lat2);
 
-        var a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+        let a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
             Math.sin(dLon / 2) * Math.sin(dLon / 2) * Math.cos(lat1) * Math.cos(lat2);
-        var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-        var d = R * c;
+        let c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+        let d = R * c;
         return Math.round(d);
     }
 
@@ -282,10 +283,11 @@ export class HomePage implements OnInit {
 
     getTitle(): string {
         if (this.query === this.currentUser.id) {
-            if(this.filter && this.filter['past'] )
+            if(this.filter && this.filter['past']) {
                 return 'Past events'
-            else
+            } else {
                 return 'My events'
+            }
         }
         return 'Home';
     }
@@ -293,7 +295,7 @@ export class HomePage implements OnInit {
     getAudienceText(types){
         let res: string = '';
         for (let dif in types) {
-            if (dif !== '0') res = res + ',';
+            if (dif !== '0') {res = res + ',';}
 
             res = res + AudienceTypeEnum[types[dif]];
         }

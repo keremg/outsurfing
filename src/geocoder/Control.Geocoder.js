@@ -356,8 +356,9 @@ var Control = {
         this._map.removeLayer(this._geocodeMarker);
       }
 
-        if(this._map.SurfMarker)
-            this._map.removeLayer(this._map.SurfMarker);
+        if(this._map.SurfMarker) {
+          this._map.removeLayer(this._map.SurfMarker);
+        }
 
       this._geocodeMarker = new L.Marker(result.center)
         .bindPopup(result.html || result.name)
