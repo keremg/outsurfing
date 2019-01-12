@@ -4,7 +4,7 @@ import { SurfUser } from '../../models/surfUser';
 import { UserService } from '../../services/user.service';
 import { RouterModule, Routes } from '@angular/router';
 import { PaginationService } from '../../services/pagination.service';
-import { SurfReview } from '../../models/SurfReview';
+import { SurfReview } from '../../models/surfReview';
 import { Observable } from 'rxjs';
 import { Colors } from '../../colors.enum';
 

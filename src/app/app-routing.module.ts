@@ -27,7 +27,7 @@ const routes: Routes = [
 
   { path: 'JoinEvent', loadChildren: './components/join-event/join-event.module#JoinEventPageModule' ,canActivate: [AuthGuardService]},
   { path: 'UserReviews', loadChildren: './components/user-reviews/user-reviews.module#UserReviewsPageModule' },
-  { path: 'ParticipantApproval', loadChildren: './components/participant-approval/participant-approval.module#ParticipantApprovalPageModule' },  { path: 'single-route-reviews', loadChildren: './components/single-route-reviews/single-route-reviews.module#SingleRouteReviewsPageModule' },
+  { path: 'ParticipantApproval', loadChildren: './components/participant-approval/participant-approval.module#ParticipantApprovalPageModule' },
 
 
 
