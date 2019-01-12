@@ -25,6 +25,7 @@ import { Geolocation } from '@ionic-native/geolocation/ngx';
 import {Ng2ImgMaxModule, Ng2ImgMaxService} from 'ng2-img-max';
 import {RouteImageComponentModule} from './components/route-image/route-image.module';
 import {ToolbarComponentModule} from './components/toolbar/toolbar.module';
+import {UserReviewsPageModule} from './components/user-reviews/user-reviews.module';
 
 
 @NgModule({
@@ -32,7 +33,8 @@ import {ToolbarComponentModule} from './components/toolbar/toolbar.module';
   entryComponents: [],
   imports: [BrowserModule, IonicModule.forRoot(), AppRoutingModule, AppRoutingModule ,
       AngularFireDatabaseModule, HttpClientModule, AngularFireModule.initializeApp(environment.firebase),
-      AngularFirestoreModule, AngularFireAuthModule, AngularFireStorageModule, Ng2ImgMaxModule, RouteImageComponentModule, ToolbarComponentModule],
+      AngularFirestoreModule, AngularFireAuthModule, AngularFireStorageModule, Ng2ImgMaxModule, RouteImageComponentModule, ToolbarComponentModule,
+      UserReviewsPageModule],
   providers: [
     StatusBar,
     SplashScreen,

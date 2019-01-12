@@ -26,7 +26,6 @@ const routes: Routes = [
     { path: 'EventDetail/:id/:route', loadChildren: './components/event-detail/event-detail.module#EventDetailPageModule' ,canActivate: [AuthGuardService]},
 
   { path: 'JoinEvent', loadChildren: './components/join-event/join-event.module#JoinEventPageModule' ,canActivate: [AuthGuardService]},
-  { path: 'UserReviews', loadChildren: './components/user-reviews/user-reviews.module#UserReviewsPageModule' },
   { path: 'ParticipantApproval', loadChildren: './components/participant-approval/participant-approval.module#ParticipantApprovalPageModule' },
 
 

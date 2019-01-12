@@ -2,7 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {CompressImageService} from '../../services/compress-image.service';
 import {
     AlertController,
-    LoadingController,
+    LoadingController, ModalController,
     NavController
 } from '@ionic/angular';
 import {FormBuilder, FormGroup, Validators, FormsModule, ReactiveFormsModule} from '@angular/forms';
@@ -19,6 +19,7 @@ import {promise} from 'selenium-webdriver';
 import {AudienceTypeEnum} from '../../AudienceType.enum';
 import {DifficultiesEnum} from '../../enums/Difficulties.enum';
 import {DurationEnum} from '../../enums/Duration.enum';
+import {UserReviewsPage} from '../user-reviews/user-reviews.page';
 
 declare let window: any;
 
@@ -49,6 +50,7 @@ export class EditProfilePage implements OnInit {
         private formBuilder: FormBuilder,
         private userService: UserService,
         private storage: AngularFireStorage,
+        private modalController: ModalController,
         public compressImageService: CompressImageService,
         public loadingController: LoadingController
     ) {
@@ -205,6 +207,22 @@ export class EditProfilePage implements OnInit {
             myEnum.push({key: keys[i], value: values[i]});
         }
         return myEnum;
+    }
+
+    async onShow() {
+        const modal = await this.modalController.create({
+            component: UserReviewsPage,
+            componentProps: { userId: this.currentUserId }
+        });
+        return await modal.present();
+    }
+
+    async onShowGuide() {//TODO urgent
+        const modal = await this.modalController.create({
+            component: UserReviewsPage,
+            componentProps: { userId: this.currentUserId }
+        });
+        return await modal.present();
     }
 
     /*on_no_profile_pic(){

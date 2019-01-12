@@ -9,6 +9,7 @@ import { ViewProfilePage } from './view-profile.page';
 import { UserReviewsPage } from '../user-reviews/user-reviews.page';
 import { ToolbarComponentModule } from '../toolbar/toolbar.module';
 import {RatingComponentModule} from '../rating/rating.module';
+import {UserReviewsPageModule} from '../user-reviews/user-reviews.module';
 const routes: Routes = [
   {
     path: '',
@@ -24,9 +25,10 @@ const routes: Routes = [
     RouteImageComponentModule,
     ToolbarComponentModule,
       RatingComponentModule,
+      UserReviewsPageModule,
     RouterModule.forChild(routes)
   ],
-  declarations: [ViewProfilePage, UserReviewsPage],
+  declarations: [ViewProfilePage],
   entryComponents: [UserReviewsPage]
 })
 export class ViewProfilePageModule {}

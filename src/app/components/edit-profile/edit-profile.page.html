@@ -3,92 +3,124 @@
 </ion-header>
 
 <ion-content padding>
-  <form [formGroup]="updateForm" (submit)="updateUser()" novalidate>
+    <ion-row>
+        <ion-col>
+            <form [formGroup]="updateForm" (submit)="updateUser()" novalidate>
 
-    <ion-item>
-      <ion-label *ngIf="!updateForm.controls.firstName.valid" color="danger" stacked>*</ion-label>
-      <ion-label stacked>First Name</ion-label>
-      <ion-input formControlName="firstName" type="text" placeholder="Your first name">
-      </ion-input>
-    </ion-item>
-    <ion-label color="danger" class="error-message" *ngIf="!updateForm.controls.firstName.valid && updateForm.controls.firstName.touched" >
-      You must fill a first name.
-    </ion-label>
+                <ion-item size="9">
+                    <ion-label *ngIf="!updateForm.controls.firstName.valid" color="danger" stacked>*</ion-label>
+                    <ion-label stacked>First Name</ion-label>
+                    <ion-input formControlName="firstName" type="text" placeholder="Your first name">
+                    </ion-input>
+                </ion-item>
+                <ion-label color="danger" class="error-message"
+                           *ngIf="!updateForm.controls.firstName.valid && updateForm.controls.firstName.touched">
+                    You must fill a first name.
+                </ion-label>
 
-    <ion-item>
-      <ion-label *ngIf="!updateForm.controls.lastName.valid" color="danger" stacked>*</ion-label>
-      <ion-label stacked>Last Name</ion-label>
-      <ion-input formControlName="lastName" type="text" placeholder="Your last name">
-      </ion-input>
-    </ion-item>
-    <ion-label color="danger" class="error-message" *ngIf="!updateForm.controls.lastName.valid && updateForm.controls.lastName.touched" >
-      You must fill a lst name.
-    </ion-label>
+                <ion-item>
+                    <ion-label *ngIf="!updateForm.controls.lastName.valid" color="danger" stacked>*</ion-label>
+                    <ion-label stacked>Last Name</ion-label>
+                    <ion-input formControlName="lastName" type="text" placeholder="Your last name">
+                    </ion-input>
+                </ion-item>
+                <ion-label color="danger" class="error-message"
+                           *ngIf="!updateForm.controls.lastName.valid && updateForm.controls.lastName.touched">
+                    You must fill a lst name.
+                </ion-label>
 
-    <ion-item>
-      <ion-label stacked>Birth date</ion-label>
-      <ion-datetime formControlName="birthDate" displayFormat="MM DD YYYY" placeholder="Select Date"></ion-datetime>
-    </ion-item>
+                <ion-item>
+                    <ion-label stacked>Birth date</ion-label>
+                    <ion-datetime formControlName="birthDate" displayFormat="MM DD YYYY"
+                                  placeholder="Select Date"></ion-datetime>
+                </ion-item>
 
-    <ion-item>
-      <ion-label *ngIf="!updateForm.controls.phone.valid" color="danger" stacked>*</ion-label>
-      <ion-label stacked>Phone number</ion-label>
-      <ion-input formControlName="phone" type="tel" placeholder="Your phone number">
-      </ion-input>
-    </ion-item>
-    <ion-label color="danger" class="error-message" *ngIf="!updateForm.controls.phone.valid && updateForm.controls.phone.touched" >
-      Your phone can contain only numeric value
-    </ion-label>
+                <ion-item>
+                    <ion-label *ngIf="!updateForm.controls.phone.valid" color="danger" stacked>*</ion-label>
+                    <ion-label stacked>Phone number</ion-label>
+                    <ion-input formControlName="phone" type="tel" placeholder="Your phone number">
+                    </ion-input>
+                </ion-item>
+                <ion-label color="danger" class="error-message"
+                           *ngIf="!updateForm.controls.phone.valid && updateForm.controls.phone.touched">
+                    Your phone can contain only numeric value
+                </ion-label>
 
-    <ion-item>
-      <ion-label>Gender</ion-label>
-      <ion-select formControlName="gender">
-        <ion-select-option value="0">Male</ion-select-option>
-        <ion-select-option value="1">Female</ion-select-option>
-        <ion-select-option value="2">Other</ion-select-option>
-      </ion-select>
-    </ion-item>
-    <ion-item>
-      <ion-label stacked>Guide</ion-label>
-      <ion-checkbox formControlName="isGuide" color="primary"></ion-checkbox>
-    </ion-item>
-    <ion-item>
-      <ion-label stacked>About myself</ion-label>
-      <ion-input formControlName="about" type="text" placeholder="Your about">
-      </ion-input>
-    </ion-item>
-    <ion-item>
-      <ion-label>Trips level</ion-label>
-      <ion-select formControlName="tripLevel" multiple="true">
-        <ion-select-option *ngFor="let item of difficultiesEnum" value="{{item.value}}">{{item.key}}</ion-select-option>
-      </ion-select>
-    </ion-item>
-    <ion-item>
-      <ion-label>Trips Duration</ion-label>
-      <ion-select formControlName="tripDurations" multiple="true">
-        <ion-select-option *ngFor="let item of durationEnum" value="{{item.value}}">{{item.key}}</ion-select-option>
-      </ion-select>
-    </ion-item>
-    <ion-item>
-      <ion-label>People type </ion-label>
-      <ion-select formControlName="peopleType" multiple="true">
-        <ion-select-option *ngFor="let item of audienceTypeEnum" value="{{item.value}}">{{item.key}}</ion-select-option>
-      </ion-select>
-    </ion-item>
-    <ion-item>
-      <ion-label stacked>Profile picture</ion-label>
-      <img *ngIf="profileUrl" [src]="profileUrl" width="25%"/>
-      <input type="file" (change)="uploadFile($event)" />
-      <div>{{ uploadPercent | async }}</div>
-    </ion-item>
+                <ion-item>
+                    <ion-label>Gender</ion-label>
+                    <ion-select formControlName="gender">
+                        <ion-select-option value="0">Male</ion-select-option>
+                        <ion-select-option value="1">Female</ion-select-option>
+                        <ion-select-option value="2">Other</ion-select-option>
+                    </ion-select>
+                </ion-item>
+                <ion-item>
+                    <ion-label stacked>Guide</ion-label>
+                    <ion-checkbox formControlName="isGuide" color="primary"></ion-checkbox>
+                </ion-item>
+                <ion-item>
+                    <ion-label stacked>About myself</ion-label>
+                    <ion-input formControlName="about" type="text" placeholder="Your about">
+                    </ion-input>
+                </ion-item>
+                <ion-item>
+                    <ion-label>Trips level</ion-label>
+                    <ion-select formControlName="tripLevel" multiple="true">
+                        <ion-select-option *ngFor="let item of difficultiesEnum"
+                                           value="{{item.value}}">{{item.key}}</ion-select-option>
+                    </ion-select>
+                </ion-item>
+                <ion-item>
+                    <ion-label>Trips Duration</ion-label>
+                    <ion-select formControlName="tripDurations" multiple="true">
+                        <ion-select-option *ngFor="let item of durationEnum"
+                                           value="{{item.value}}">{{item.key}}</ion-select-option>
+                    </ion-select>
+                </ion-item>
+                <ion-item>
+                    <ion-label>People type</ion-label>
+                    <ion-select formControlName="peopleType" multiple="true">
+                        <ion-select-option *ngFor="let item of audienceTypeEnum"
+                                           value="{{item.value}}">{{item.key}}</ion-select-option>
+                    </ion-select>
+                </ion-item>
 
+                <ion-button block type="submit" [disabled]="!updateForm.valid">
+                    Update account
+                </ion-button>
+            </form>
+        </ion-col>
 
-
-
-
-
-    <ion-button block type="submit" [disabled]="!updateForm.valid">
-      Update account
-    </ion-button>
-  </form>
+        <ion-col size="3">
+            <ion-item>
+                <img *ngIf="profileUrl" [src]="profileUrl"/>
+            </ion-item>
+            <ion-item>
+                <input
+                        type="file"
+                        accept="image/*"
+                        (change)="uploadFile($event)"
+                        id="selectedImage"
+                        style="display: none;"
+                />
+                <ion-button
+                        float-left
+                        onclick="document.getElementById('selectedImage').click();"
+                        *ngIf="!viewMode"
+                >
+                    Update profile picture
+                </ion-button>
+                <div>{{ uploadPercent && (uploadPercent | async) !== 100 ? (uploadPercent| async) : ''  }}</div>
+            </ion-item>
+            <ion-item>
+                <ion-label>Total Rating: {{currentUser?.avgRating}} by {{currentUser?.numOfRaters}} traveler(s)</ion-label>
+            </ion-item>
+            <ion-button id='showReview' (click)="onShow()">show all reviews</ion-button>
+            <ion-item *ngIf="currentUser?.isGuide">
+                <ion-label>Total Guide Rating: {{currentUser?.avgGuideRating}} by {{currentUser?.numOfGuideRaters}}traveler(s)
+                </ion-label>
+            </ion-item>
+            <ion-button *ngIf="currentUser?.isGuide" id='showGuideReview' (click)="onShowGuide()">show all reviews</ion-button>
+        </ion-col>
+    </ion-row>
 </ion-content>
