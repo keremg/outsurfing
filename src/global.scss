@@ -10,3 +10,19 @@
 @import "~@ionic/angular/css/text-transformation.css";
 @import "~@ionic/angular/css/flex-utils.css";
 
+
+//.surf-big-modal-css .modal-wrapper {
+.surf-big-modal-css  .modal-wrapper{
+
+    //height: 20%;
+  //top: 80%;
+  width: 80% !important;
+  height: 80% !important;
+  //height: 20%;
+  //top: 80%;
+  //position: absolute;
+  display: block;
+
+  //position: absolute;
+  //display: block;
+}

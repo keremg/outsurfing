@@ -11,20 +11,22 @@ import {SurfEvent} from '../../models/surfEvent';
   styleUrls: ['./participant-approval.page.scss'],
 })
 export class ParticipantApprovalPage implements OnInit {
-    private eventID: string;
+    eventID: string;
+    eventObs: Observable<SurfEvent>;
     eventOrganizer: string;
     event: SurfEvent;
     participants: Observable<SurfParticipant[]>;
 
     constructor(private navParams: NavParams,
                 private modalController: ModalController,
-                private eventService: EventService,) {
+                private eventService: EventService) {
     }
 
     ngOnInit() {
         this.eventID = this.navParams.get('eventId');
         this.eventOrganizer = this.navParams.get('eventOrganizer');
         this.event = this.navParams.get('event');
+        this.eventObs = this.navParams.get('eventObs');
         if(this.eventID) {
             this.participants = this.eventService.getParticipants(this.eventID);
             this.participants.subscribe(p=>{

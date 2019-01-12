@@ -26,15 +26,20 @@
             <ion-label text-wrap>Cancellations: {{(participant.user| async)?.cancellations}} out of {{(participant.user| async)?.cancellations}}</ion-label>
             <!-- TODO: rating and cancellations should be calculated with TOTAL# of total and total cancelled -->
         </ion-col>
-        <ion-col size="3">
+        <ion-col size="2">
             <ion-label text-wrap>Equipment: {{participant.groupEquipmentIBring}}</ion-label>
             <ion-label text-wrap>Message: {{participant.messageToOthers}}</ion-label>
             <!--{{(participantsObs.needSeatInCar && !participantsObs.userIdOfHostingCar) ? 'Need a ride': (participantsObs.needSeatInCar && participantsObs.userIdOfHostingCar)? 'with' + participantsObs.userIdOfHostingCar : participantsObs.offeringSeatsInCar? 'Offers ' + participantsObs.offeringSeatsInCar + ' free seats'}}-->
         </ion-col>
-        <ion-col size="1">
-            <ion-label>{{participant.approved ? 'Approved' : 'Pending'}}</ion-label>
+        <ion-col size="2">
+            <ion-label>{{participant.isGuide? 'Trip Guide' : participant.isOrganizer? 'Trip organizer' : participant.approved? 'Approved' : 'Pending'}}</ion-label>
+            <ion-button (click)="onApprove(participant)" *ngIf="isOrganizerMode && !participant.approved && !participant.isOrganizer">Approve</ion-button>
+            <ion-button (click)="onDisapprove(participant)" *ngIf="isOrganizerMode && participant.approved && !participant.isOrganizer">Disapprove</ion-button>
+
+            <ion-button (click)="onEdit(participant)" *ngIf="currentUserId==participant.id && !isPastEvent">Edit</ion-button>
+
             <ion-label></ion-label>
-            <ion-label text-wrap>Requested: {{participant.registrationDate | date:'medium'}}}</ion-label>
+            <ion-label text-wrap>{{participant.isOrganizer? 'Started:':'Requested:'}} {{participant.registrationDate | date:'medium'}}}</ion-label>
             <!--{{(participantsObs.needSeatInCar && !participantsObs.userIdOfHostingCar) ? 'Need a ride': (participantsObs.needSeatInCar && participantsObs.userIdOfHostingCar)? 'with' + participantsObs.userIdOfHostingCar : participantsObs.offeringSeatsInCar? 'Offers ' + participantsObs.offeringSeatsInCar + ' free seats'}}-->
         </ion-col>
 
