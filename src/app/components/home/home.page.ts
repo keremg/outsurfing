@@ -29,6 +29,7 @@ export class HomePage implements OnInit {
     filter: {};
     map: any;
     title: string;
+    onInitHappenedLast : boolean = false;
 
     constructor(
         public navCtrl: NavController,
@@ -43,6 +44,8 @@ export class HomePage implements OnInit {
     }
 
     async ngOnInit() {
+        this.onInitHappenedLast = true;
+
         this.currentUser = await this.userService.getCurrentUserPromise();
         this.query = this.activatedRoute.snapshot.paramMap.get('q');
         this.filter = this.getFilter(this.activatedRoute.snapshot.paramMap.get('f'));
@@ -50,12 +53,6 @@ export class HomePage implements OnInit {
             this.query = null;
         }
 
-
-
-        this.title=this.getTitle();
-    }
-
-    ionViewWillEnter(){
         if (this.query === this.currentUser.id) {
             this.onlyMine = true;
             this.page.init(
@@ -114,7 +111,14 @@ export class HomePage implements OnInit {
             }
         });
 
-        debugger;
+        this.title=this.getTitle();
+    }
+
+    ionViewDidEnter(){
+        if(!this.onInitHappenedLast){
+            window.location.reload(true);
+        }
+        this.onInitHappenedLast = false;
     }
 
     getFilter(str: string) {

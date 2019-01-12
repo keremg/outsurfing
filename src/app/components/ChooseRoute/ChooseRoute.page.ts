@@ -23,6 +23,7 @@ export class ChooseRoute implements OnInit {
     query: string;
 map:any;
     filter: {};
+    onInitHappenedLast : boolean = false;
 
 
     constructor(
@@ -36,6 +37,7 @@ map:any;
     ) {}
 
   ngOnInit() {
+      this.onInitHappenedLast = true;
       this.query = this.activatedRoute.snapshot.paramMap.get('q');
       this.filter = this.getFilter(this.activatedRoute.snapshot.paramMap.get('f'));
       if(this.query === '0'){
@@ -55,6 +57,13 @@ map:any;
 
     this.locate();
   }
+
+    ionViewDidEnter(){
+        if(!this.onInitHappenedLast){
+            window.location.reload(true);
+        }
+        this.onInitHappenedLast = false;
+    }
 
   goToRoute(id) {
     this.navCtrl.navigateForward('SingleRoute/' + id);
