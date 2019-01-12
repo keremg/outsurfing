@@ -318,6 +318,8 @@ export class EventDetailPage implements OnInit {
             isNew = true;
         }
         this.id = returnedId;
+        this.event.id = this.id;
+        copyOfEvent.id = this.id;
         this.closeLoadingController();
 
         // If user created a new event now
@@ -333,6 +335,7 @@ export class EventDetailPage implements OnInit {
                     data.data.id = this.currentUser.id;
                     data.data.isOrganizer = true;
                     data.data.isGuide = this.event.isGuidedEvent;
+                    debugger;
                     await this.eventService.approveParticipant(returnedId,data.data, this.event); //TODO guy test
                     await this.updateEventBasedOnParticipants();
                     //copyOfEvent.availableSeats = this.event.availableSeats;
