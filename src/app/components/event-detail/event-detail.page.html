@@ -18,7 +18,7 @@
                     </ion-input>
                 </ion-item>
 
-                <ion-item *ngIf="joined && isApprovedForTrip" >
+                <ion-item *ngIf="joined && isApprovedForTrip && !isOrganizerOfTrip" >
                     <div style="background-color: #10dc60">
                         <ion-label>You are registered and approved for this trip :-)</ion-label>
                     </div>
@@ -416,7 +416,7 @@
                     <ion-label>Recommended months for this route: {{(eventObs|async)?.recommendedMonths}}</ion-label>
                 </ion-item>
 
-                <ion-item *ngIf="joined && isApprovedForTrip" >
+                <ion-item *ngIf="joined && isApprovedForTrip && !isOrganizerOfTrip" >
                     <div style="background-color: #10dc60">
                         <ion-label>You are registered and approved for this trip :-)</ion-label>
                     </div>
@@ -539,11 +539,11 @@
                 <ion-col size="2">
                     Ranking
                 </ion-col>
-                <ion-col size="3">
+                <ion-col size="2">
                     Equipment I bring
                     <!--{{(participantsObs.needSeatInCar && !participantsObs.userIdOfHostingCar) ? 'Need a ride': (participantsObs.needSeatInCar && participantsObs.userIdOfHostingCar)? 'with' + participantsObs.userIdOfHostingCar : participantsObs.offeringSeatsInCar? 'Offers ' + participantsObs.offeringSeatsInCar + ' free seats'}}-->
                 </ion-col>
-                <ion-col size="1">
+                <ion-col size="2">
                     Joining?
                     <!--{{(participantsObs.needSeatInCar && !participantsObs.userIdOfHostingCar) ? 'Need a ride': (participantsObs.needSeatInCar && participantsObs.userIdOfHostingCar)? 'with' + participantsObs.userIdOfHostingCar : participantsObs.offeringSeatsInCar? 'Offers ' + participantsObs.offeringSeatsInCar + ' free seats'}}-->
                 </ion-col>
@@ -551,18 +551,42 @@
             <participants-lines
                     [eventObs]="eventObs"
                     [isApprovedLines]="true"
+                    [isOrganizerMode]="isOrganizerOfTrip && !isPastEvent && !viewMode"
+                    [event]="event"
+                    [eventID]="id"
+                    [currentUserId]="currentUser.id"
+                    [isPastEvent]="isPastEvent"
+                    (updated)="onUpdatesOfParticipants()"
             ></participants-lines>
             <participants-lines
                     [eventObs]="eventObs"
                     [isApprovedLines]="false"
+                    [isOrganizerMode]="isOrganizerOfTrip && !isPastEvent && !viewMode"
+                    [event]="event"
+                    [eventID]="id"
+                    [currentUserId]="currentUser.id"
+                    [isPastEvent]="isPastEvent"
+                    (updated)="onUpdatesOfParticipants()"
             ></participants-lines>
         </ion-grid>
     </ion-item>
-
+    <ion-item *ngIf="singleEventForm.value.isEventRequiresCars">
+        <ion-label stacked>Available seats</ion-label>
+        <ion-icon
+                name="car"
+                style="font-size: 1em;"
+                padding-end
+        ></ion-icon>
+        <ion-label *ngIf="event?.availableSeats && event?.availableSeats < 0" color="danger">OverBooked</ion-label>
+        <ion-label *ngIf="!(event?.availableSeats && event?.availableSeats < 0)">{{event?.availableSeats ? event?.availableSeats : '0'}} Available</ion-label>
+    </ion-item>
+    <ion-item *ngIf="isOrganizerOfTrip && totalPendingForEvent">
+        <ion-label style="background-color: #e0b500">{{totalPendingForEvent}} participants are waiting for your approval!</ion-label>
+    </ion-item>
     <ion-button *ngIf="!isPastEvent && !joined && event?.eventOrganizerId !== currentUser?.id && !isNewEvent" id='join' (click)="onJoinEvent()">Join</ion-button>
     <ion-button *ngIf="!isPastEvent && joined && event?.eventOrganizerId !== currentUser?.id && !isNewEvent" id='leave' (click)="onLeaveEvent()">Leave</ion-button>
     <ion-button *ngIf="isPastEvent && joined" id='rankEvent' (click)="rankEvent()">Rank Route and Participants</ion-button>
-    <ion-button *ngIf="!isPastEvent && !viewMode && !isNewEvent" id='approve' (click)="onApprove()">Approve Participants</ion-button>
+    <!-- <ion-button *ngIf="!isPastEvent && !viewMode && !isNewEvent" id='approve' (click)="onApprove()">Approve Participants</ion-button> -->
     <ion-button *ngIf="!isPastEvent && !viewMode" id='save' (click)="updateEvent(true)">Save</ion-button><!--TODO change label if you create new-->
     <ion-button *ngIf="!isPastEvent && !viewMode && !isNewEvent" id='delete' (click)="onDelete()">Delete</ion-button>
     TODO: should show if approved or not

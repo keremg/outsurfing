@@ -56,6 +56,8 @@ export class EventDetailPage implements OnInit {
     isApprovedForTrip = false;
     isNewEvent = false; // (started from route)
     isOrganizerOfTrip = false;
+    totalApprovedForEvent = 0;
+    totalPendingForEvent = 0;
 
 
     private eventSubscription: Subscription;
@@ -144,7 +146,6 @@ export class EventDetailPage implements OnInit {
                         this.viewMode = true;
                         this.singleEventForm.disable();
                     }
-
                     this.loadFromEvent(this.event);//todo should be read only?
 
                 } else {
@@ -198,7 +199,9 @@ export class EventDetailPage implements OnInit {
         this.event.participantsObs.subscribe(pars => {
             if(pars){
                 let placesInCars = 0;
-                this.joined = false;
+                this.joined = false; // until proven otherwise
+                this.totalPendingForEvent = 0;
+                this.totalApprovedForEvent = 0;
                 pars.forEach( par =>{
                     if(par.id === this.currentUser.id) {
                         //Just update component for easy info
@@ -207,12 +210,15 @@ export class EventDetailPage implements OnInit {
                     }
                     // Only for approved ones count the cars-seats
                     if (par.approved) {
+                        this.totalApprovedForEvent++;
                         if (par.needSeatInCar) {
                             placesInCars--;
                         }
                         if (par.offeringSeatsInCar > 0) {
                             placesInCars += par.offeringSeatsInCar;
                         }
+                    } else {
+                        this.totalPendingForEvent++;
                     }
                 });
                 this.event.availableSeats = placesInCars;
@@ -318,7 +324,8 @@ export class EventDetailPage implements OnInit {
         if(isNew) {
             const modal = await this.modalController.create({
                 component: JoinEventPage,
-                componentProps: {eventId: returnedId, event: this.event}
+                componentProps: {eventId: returnedId, event: this.event},
+                //cssClass: 'surf-big-modal-css'
             });
 
             modal.onDidDismiss().then(async data => {
@@ -375,18 +382,24 @@ export class EventDetailPage implements OnInit {
         return modal.present();
     }
 
-    async onApprove() {
-        this.updateEvent(true);
-        const modal = await this.modalController.create({
-            component: ParticipantApprovalPage,
-            componentProps: {eventId: this.id, eventOrganizer: this.event.eventOrganizerId, event:this.event}
-        });
-        modal.onDidDismiss().then(async data => {
-            await this.updateEventBasedOnParticipants();  // NO because if still pending we don't count it!
-            await this.eventService.updateEvent(this.id, {availableSeats: this.event.availableSeats}); // remember available seats
-        });
-        return modal.present();
+    async onUpdatesOfParticipants() {
+        await this.updateEventBasedOnParticipants();
+        await this.eventService.updateEvent(this.id, {availableSeats: this.event.availableSeats}); // remember available seats
     }
+
+    //No more approve-modal, it's done inline
+    // async onApprove() {
+    //     this.updateEvent(true);
+    //     const modal = await this.modalController.create({
+    //         component: ParticipantApprovalPage,
+    //         componentProps: {eventId: this.id, eventOrganizer: this.event.eventOrganizerId, event:this.event, eventObs: this.eventObs}
+    //     });
+    //     modal.onDidDismiss().then(async data => {
+    //         await this.updateEventBasedOnParticipants();  // NO because if still pending we don't count it!
+    //         await this.eventService.updateEvent(this.id, {availableSeats: this.event.availableSeats}); // remember available seats
+    //     });
+    //     return modal.present();
+    // }
 
     async rankEvent() {
         await this.updateEvent(true);

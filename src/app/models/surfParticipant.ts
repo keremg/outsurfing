@@ -2,7 +2,7 @@ import {SurfUser} from './surfUser';
 import {Observable} from 'rxjs';
 
 export class SurfParticipant {
-    id?: string;
+    id?: string; //UserID
     user: Observable<SurfUser>; //will take firstName and lastName from there
     phone: string;
     email: string;
