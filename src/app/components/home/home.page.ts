@@ -10,6 +10,7 @@ import {SurfEvent} from '../../models/surfEvent';
 import leaflet from 'leaflet';
 import {FilterEventsPage} from '../filter-events/filter-events.page';
 import {EventService} from '../../services/event.service';
+import {AudienceTypeEnum} from '../../AudienceType.enum';
 
 declare let window: any;
 
@@ -88,10 +89,20 @@ export class HomePage implements OnInit {
         this.locate();
         this.page.data.subscribe(events => {
             for (let i in events) {
-                let event: SurfEvent = events[i];
+                let event = events[i];
+
+                event.audienceTypeText = this.getAudienceText(event.audienceType);
+                event.eventOrganizer.subscribe( org=> {
+                    event.organizerAge = this.getAge(org.birthDate);
+                });
+                this.location.subscribe( loc=> {
+                    event.meetingDistance = this.getDistance(event.meetingGeolocation, loc);
+                    event.startDistance = this.getDistance(event.routeStartGeolocation, loc);
+                });
+
+                //mark past events
                 let latestTripDate = event.returnTime || event.routeStartTime || event.meetingTime;
                 if (!event.isPastEvent && latestTripDate && latestTripDate !== ''&& new Date().toISOString().substring(0, 19) > latestTripDate) {
-                    debugger;
                     this.eventService.updateEvent(event.id, {isPastEvent: true});
                 }
             }
@@ -267,5 +278,15 @@ export class HomePage implements OnInit {
                 return 'My events'
         }
         return 'Home';
+    }
+
+    getAudienceText(types){
+        let res: string = '';
+        for (let dif in types) {
+            if (dif !== '0') res = res + ',';
+
+            res = res + AudienceTypeEnum[types[dif]];
+        }
+        return res;
     }
 }

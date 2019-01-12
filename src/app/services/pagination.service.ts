@@ -75,7 +75,9 @@ export class PaginationService {
                         }
                     }
                 }
-                x = x.where('isPastEvent', '==', false)
+                if(this.query.path === 'events') {
+                    x = x.where('isPastEvent', '==', false)
+                }
             }
             return x
                 .orderBy(this.query.field, this.query.reverse ? 'desc' : 'asc')
@@ -119,8 +121,9 @@ export class PaginationService {
                         }
                     }
                 }
-                x = x.where('isPastEvent', '==', false)
-
+                if(this.query.path === 'events') {
+                    x = x.where('isPastEvent', '==', false)
+                }
             }
 
             return x

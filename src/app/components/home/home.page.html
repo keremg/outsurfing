@@ -94,7 +94,7 @@
                                 </ion-col>
                                 <ion-col id="organizer" size="4">
                                     <ion-item></ion-item>
-                                    <ion-item> {{(event.eventOrganizer |async)?.firstName}}{{getAge((event.eventOrganizer |async)?.birthDate)}}</ion-item>
+                                    <ion-item> {{(event.eventOrganizer |async)?.firstName}}{{event.organizerAge}}</ion-item>
                                     <ion-item> Is Guided: {{event.isGuidedEvent ? 'Yes' : 'No'}}</ion-item>
                                     <ion-item *ngIf="event.isGuidedEvent">
                                         Guide Rating:
@@ -136,8 +136,8 @@
                                         </ion-grid>
                                 </ion-col>
                                 <ion-col size="4">
-                                <ion-item *ngIf="event.meetingGeolocation && (location |async)"><ion-label>Distance to meeting: {{getDistance(event.meetingGeolocation,location|async)}}km</ion-label></ion-item>
-                                    <ion-item *ngIf="event.routeStartGeolocation && (location |async)"><ion-label>Distance to trip: {{getDistance(event.routeStartGeolocation,location|async)}}km</ion-label></ion-item>
+                                <ion-item *ngIf="event.meetingGeolocation && (location |async)"><ion-label>Distance to meeting: {{event.meetingDistance}}km</ion-label></ion-item>
+                                    <ion-item *ngIf="event.routeStartGeolocation && (location |async)"><ion-label>Distance to trip: {{event.startDistance}}km</ion-label></ion-item>
                                     <ion-item *ngIf="event.isEventRequiresCars">
                                         <ion-icon
                                                 name="car"
@@ -152,7 +152,7 @@
                                         {{event.isEventRequiresCars? 'Private cars' : 'Organized'}}
                                     </ion-item>
                                     <ion-item *ngIf="event.audienceType">
-                                        <ion-label> Audience: {{ event.audienceType }} </ion-label>
+                                        <ion-label> Audience: {{ event.audienceTypeText }} </ion-label>
                                     </ion-item>
                                 </ion-col>
                             </ion-row>
