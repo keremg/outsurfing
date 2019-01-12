@@ -74,8 +74,8 @@
                             </ion-card-title>
                             <ion-card-subtitle>
                                 <ion-label padding-end> Type: {{ event.routeProperties }} </ion-label><!--TODO change to icons-->
-                                <ion-label padding-end>Duration: {{ event.routeDuration }}</ion-label>
-                                <ion-label> Level: {{ event.routeDifficulty }} </ion-label>
+                                <ion-label padding-end>Duration: {{ event.routeDuration }} {{event.routeDurationUnits}}</ion-label>
+                                <ion-label> Level: {{event.routeDifficulty }} </ion-label>
                             </ion-card-subtitle>
                             <ion-card-subtitle>
                                 <ion-label padding-end>Meeting: {{ event.meetingTime }} {{ event.meetingLocation }}</ion-label>
