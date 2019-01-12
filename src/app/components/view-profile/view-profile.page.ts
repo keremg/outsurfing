@@ -1,15 +1,17 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { UserService } from '../../services/user.service';
-import {SurfUser} from '../../models/surfUser';
-import {UserReviewsPage} from '../user-reviews/user-reviews.page';
-import {ModalController, NavController} from '@ionic/angular';
-import {PaginationService} from '../../services/pagination.service';
-import {AudienceTypeEnum} from '../../AudienceType.enum';
-import {DurationEnum} from '../../enums/Duration.enum';
-import {DifficultiesEnum} from '../../enums/Difficulties.enum';
-import { AngularFireStorage, AngularFireUploadTask } from '@angular/fire/storage';
-
+import { SurfUser } from '../../models/surfUser';
+import { UserReviewsPage } from '../user-reviews/user-reviews.page';
+import { ModalController, NavController } from '@ionic/angular';
+import { PaginationService } from '../../services/pagination.service';
+import { AudienceTypeEnum } from '../../AudienceType.enum';
+import { DurationEnum } from '../../enums/Duration.enum';
+import { DifficultiesEnum } from '../../enums/Difficulties.enum';
+import {
+  AngularFireStorage,
+  AngularFireUploadTask
+} from '@angular/fire/storage';
 
 @Component({
   selector: 'app-view-profile',
@@ -33,15 +35,16 @@ export class ViewProfilePage implements OnInit {
 
   avgRating: number;
   numOfRaters: number;
-    profileUrl:string;
-    user: SurfUser;
+  profileUrl: string;
+  user: SurfUser;
+  guideButton: boolean = false;
 
-    constructor(
+  constructor(
     private modalController: ModalController,
     private activatedRoute: ActivatedRoute,
     private userService: UserService,
-    private storage: AngularFireStorage,
-  ) {  }
+    private storage: AngularFireStorage
+  ) {}
 
   async ngOnInit() {
     this.id = this.activatedRoute.snapshot.paramMap.get('uid');
@@ -65,61 +68,64 @@ export class ViewProfilePage implements OnInit {
         this.isGuide = this.user.isGuide;
         this.about = this.user.about;
 
-          this.audienceTypes='';
-          for(let dif in this.user.audienceTypes){
-              if(dif !== "0" )
-                  this.audienceTypes = this.audienceTypes + ',';
+        this.audienceTypes = '';
+        for (let dif in this.user.audienceTypes) {
+          if (dif !== '0') this.audienceTypes = this.audienceTypes + ',';
 
-              this.audienceTypes = this.audienceTypes + AudienceTypeEnum[this.user.audienceTypes[dif]];
-          }
+          this.audienceTypes =
+            this.audienceTypes + AudienceTypeEnum[this.user.audienceTypes[dif]];
+        }
 
-          this.tripDurations='';
-          for(let dif in this.user.tripDurations){
-              if(dif !== "0" )
-                  this.tripDurations = this.tripDurations + ',';
+        this.tripDurations = '';
+        for (let dif in this.user.tripDurations) {
+          if (dif !== '0') this.tripDurations = this.tripDurations + ',';
 
-              this.tripDurations = this.tripDurations + DurationEnum[this.user.tripDurations[dif]];
-          }
+          this.tripDurations =
+            this.tripDurations + DurationEnum[this.user.tripDurations[dif]];
+        }
 
-          this.tripDifficulties='';
-          for(let dif in this.user.tripDifficulties){
-              if(dif !== "0" )
-                  this.tripDifficulties = this.tripDifficulties + ',';
+        this.tripDifficulties = '';
+        for (let dif in this.user.tripDifficulties) {
+          if (dif !== '0') this.tripDifficulties = this.tripDifficulties + ',';
 
-              this.tripDifficulties = this.tripDifficulties + DifficultiesEnum[this.user.tripDifficulties[dif]];
-          }
-          this.avgRating = this.user.avgRating;
+          this.tripDifficulties =
+            this.tripDifficulties +
+            DifficultiesEnum[this.user.tripDifficulties[dif]];
+        }
+        this.avgRating = this.user.avgRating;
         this.numOfRaters = this.user.numOfRaters;
-
-
       }
     });
 
-      const ref = this.storage.ref('users/'+this.id+'/profilePic_Large');
-      ref.getDownloadURL().toPromise().then(res=>{
-              this.profileUrl =res },
-          async error=>{
-              console.log(error);
-          });
-
-
-
+    const ref = this.storage.ref('users/' + this.id + '/profilePic_Large');
+    ref
+      .getDownloadURL()
+      .toPromise()
+      .then(
+        res => {
+          this.profileUrl = res;
+        },
+        async error => {
+          console.log(error);
+        }
+      );
   }
 
   async onShow() {
+    this.guideButton = false;
     const modal = await this.modalController.create({
-        component: UserReviewsPage,
-        componentProps: { userId: this.id }
+      component: UserReviewsPage,
+      componentProps: { userId: this.id, button: this.guideButton }
     });
     return await modal.present();
-}
+  }
 
-    async onShowGuide() {//TODO urgent
-        const modal = await this.modalController.create({
-            component: UserReviewsPage,
-            componentProps: { userId: this.id }
-        });
-        return await modal.present();
-    }
-
+  async onShowGuide() {
+    this.guideButton = true;
+    const modal = await this.modalController.create({
+      component: UserReviewsPage,
+      componentProps: { userId: this.id, button: this.guideButton }
+    });
+    return await modal.present();
+  }
 }

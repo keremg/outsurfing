@@ -22,7 +22,9 @@ export class UserReviewsPage implements OnInit {
   private review: string;
   private grade: number;
   private totalTrips: number;
-  private reviews: Observable<SurfReview[]>;
+  private reviews: SurfReview[];
+  private guideButton: boolean = false;
+  private avilableReviews: boolean = false;
   constructor(
     private navParams: NavParams,
     private modalController: ModalController,
@@ -31,13 +33,31 @@ export class UserReviewsPage implements OnInit {
 
   ngOnInit() {
     this.userId = this.navParams.data.userId;
+    this.guideButton = this.navParams.data.button;
     this.userService.getuser(this.userId).subscribe(u => {
       if (u) {
         this.user = u;
       }
     });
-    this.reviews = this.userService.getUserReviews(this.userId);
-    console.log(this.reviews, 'im reviews');
+    if (this.guideButton) {
+      this.userService.getGuideReviews(this.userId).subscribe(res => {
+        this.reviews = res;
+        if (!this.reviews.length) {
+          this.avilableReviews = false;
+        } else {
+          this.avilableReviews = true;
+        }
+      });
+    } else {
+      this.userService.getUserReviews(this.userId).subscribe(res => {
+        this.reviews = res;
+        if (!this.reviews.length) {
+          this.avilableReviews = false;
+        } else {
+          this.avilableReviews = true;
+        }
+      });
+    }
 
     //this.name = this.user.firstName + this.user.lastName;
     //this.page.init('review', this.userId, {reverse: true, prepend: false}, this.userId);
