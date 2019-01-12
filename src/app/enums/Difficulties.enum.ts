@@ -6,3 +6,4 @@ export enum DifficultiesEnum {
     Extreme = 4,
     "Very extreme" = 5
 }
+

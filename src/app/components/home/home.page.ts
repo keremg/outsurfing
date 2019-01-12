@@ -11,6 +11,7 @@ import leaflet from 'leaflet';
 import {FilterEventsPage} from '../filter-events/filter-events.page';
 import {EventService} from '../../services/event.service';
 import {AudienceTypeEnum} from '../../AudienceType.enum';
+import {DifficultiesEnum} from '../../enums/Difficulties.enum';
 
 declare let window: any;
 
@@ -30,6 +31,7 @@ export class HomePage implements OnInit {
     map: any;
     title: string;
     onInitHappenedLast : boolean = false;
+    difficultiesEnum= DifficultiesEnum;
 
     constructor(
         public navCtrl: NavController,
