@@ -171,13 +171,15 @@ export class PaginationService {
                     if(this.query.path === 'routes'){
                         data.routeCreator = this.userService.getuser(data.routeCreatorId);
                     }
+                    /*
                     if(!this.query.uid || (data.isPastEvent === false && (!this.query.filter || !this.query.filter['past'])))
                     {
                         data.shouldShow = true;
                     }
                     else if( data.isPastEvent === true && this.query.filter && this.query.filter['past']){
                         data.shouldShow = true;
-                    }
+                    }*/
+                    data.shouldShow = true;
                     return { ...data, doc }
                 })
 
