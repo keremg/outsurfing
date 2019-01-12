@@ -79,7 +79,7 @@ export class EventService {
             update.searchIndex = x;
         }
         this.eventDoc = this.afs.doc<SurfEvent>(`${this.collection_endpoint}/${id}`);
-        return this.eventDoc.update(update);
+        return this.eventDoc.update({...update});
     }
 
     async deleteEvent(id) {

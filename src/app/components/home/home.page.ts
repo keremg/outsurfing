@@ -43,6 +43,11 @@ export class HomePage implements OnInit {
     }
 
     async ngOnInit() {
+        if(window.localStorage['lastReload'] && window.localStorage['lastReload']<new Date().getTime()-5) {
+            window.localStorage['lastReload'] =new Date().getTime();
+            document.location.reload()
+
+        }
         this.currentUser = await this.userService.getCurrentUserPromise();
         this.query = this.activatedRoute.snapshot.paramMap.get('q');
         this.filter = this.getFilter(this.activatedRoute.snapshot.paramMap.get('f'));
