@@ -360,7 +360,7 @@ export class EventDetailPage implements OnInit {
         if (!isStayOnPage) {
             this.navCtrl.navigateRoot('home');
         } else {
-            this.ngOnInit().then();
+            this.navCtrl.navigateRoot('EventDetail/' +this.id+'/0')
         }
     }
 
