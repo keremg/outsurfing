@@ -555,7 +555,7 @@
       <ion-button
         block
         (click)="deleteRoute()"
-        *ngIf="!viewMode"
+        *ngIf="!viewMode && this.id"
         padding
         color="danger"
         size="large"
