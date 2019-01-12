@@ -1,6 +1,6 @@
 
 <ion-content padding>
-    <ion-card>
+    <ion-card *ngIf="!isRouteRevExist">
         <ion-grid>
 
             <ion-card-header >
@@ -22,7 +22,7 @@
         </ion-grid>
     </ion-card>
 
-    <ion-card  *ngIf="isGuided">
+    <ion-card  *ngIf="isGuided && isGuideRevExist">
         <ion-grid>
 
             <ion-card-header >
@@ -44,8 +44,8 @@
     </ion-card>
 
 
-
-    <ion-card  *ngFor="let participant of participants_names;let i = index" [attr.data-index]="i">
+<ng-container *ngFor="let participant of participants_names;let i = index" [attr.data-index]="i">
+    <ion-card *ngIf="!isParticipantRevExist[i]">
         <ion-grid>
 
             <ion-card-header >
@@ -65,6 +65,7 @@
             </ion-row>
         </ion-grid>
     </ion-card>
+</ng-container>
     <ion-button id='close' (click)="onClose()">Submit Rating</ion-button>
 
 </ion-content>
