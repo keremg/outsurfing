@@ -170,33 +170,35 @@
             >*
           </ion-label>
           <ion-label stacked>Short description</ion-label>
-          <ion-input
+          <ion-textarea
             formControlName="shortDescription"
             type="text"
             placeholder="Short description"
+            row="3"
             [class.invalid]="
               !singleRouteForm.controls.shortDescription.valid &&
               blur &&
               !viewMode
             "
           >
-          </ion-input>
+          </ion-textarea>
         </ion-item>
 
         <!-- TODO: Add route ranking -->
         <ion-item>
           <ion-label stacked>Long description</ion-label>
-          <ion-input
+          <ion-textarea
             formControlName="longDescription"
             type="longDescription"
             placeholder="Long description"
+            rows="15"
             [class.invalid]="
               !singleRouteForm.controls.longDescription.valid &&
               blur &&
               !viewMode
             "
           >
-          </ion-input>
+          </ion-textarea>
         </ion-item>
 
         <ion-item>
@@ -360,17 +362,18 @@
             >*
           </ion-label>
           <ion-label stacked>Required equipment</ion-label>
-          <ion-input
+          <ion-textarea
             formControlName="requiredEquipment"
             type="text"
             placeholder="Required equipment"
+            rows="4"
             [class.invalid]="
               !singleRouteForm.controls.requiredEquipment.valid &&
               blur &&
               !viewMode
             "
           >
-          </ion-input>
+          </ion-textarea>
         </ion-item>
 
         <!--
@@ -537,7 +540,7 @@
     <div class="center">
       <ion-button
         block
-        (click)="updateRoute(true)"
+        (click)="updateRoute(false)"
         *ngIf="!viewMode"
         padding
         size="large"

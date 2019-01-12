@@ -324,7 +324,9 @@ export class SingleRoutePage implements OnInit {
       //TODO should event it
       this.navCtrl.navigateForward('EventDetail/0/' + this.id);
     } else {
-      this.navCtrl.navigateForward('ChooseRoute');
+      //this.navCtrl.navigateForward('ChooseRoute');
+      //this.ngOnInit().then();
+      this.navCtrl.navigateRoot('SingleRoute/' +this.id+'/0')
     }
   }
 
