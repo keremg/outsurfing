@@ -4,11 +4,10 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { Routes, RouterModule } from '@angular/router';
 import { SingleRouteReviewsPage } from '../single-route-reviews/single-route-reviews.page';
 import { IonicModule } from '@ionic/angular';
-// import { ImagePicker } from '@ionic-native/image-picker';
 import { SingleRoutePage } from './single-route.page';
 import { RouteImageComponentModule } from '../route-image/route-image.module';
 import { ToolbarComponentModule } from '../toolbar/toolbar.module';
-import { RatingComponent } from '../rating/rating.component';
+import {RatingComponentModule} from '../rating/rating.module';
 const routes: Routes = [
   {
     path: '',
@@ -24,9 +23,10 @@ const routes: Routes = [
     IonicModule,
     RouteImageComponentModule,
     ToolbarComponentModule,
+      RatingComponentModule,
     RouterModule.forChild(routes)
   ],
-  declarations: [SingleRoutePage, SingleRouteReviewsPage, RatingComponent],
+  declarations: [SingleRoutePage, SingleRouteReviewsPage],
   entryComponents: [SingleRouteReviewsPage]
 })
 export class SingleRoutePageModule {}

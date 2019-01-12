@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { IonicModule, ModalController, NavParams } from '@ionic/angular';
 import { RouteService } from '../../services/route.service';
-import { SurfReview } from '../../models/SurfReview';
-import { SurfRoute } from '../../models/SurfRoute';
+import { SurfReview } from '../../models/surfReview';
+import { SurfRoute } from '../../models/surfRoute';
 import { Observable } from 'rxjs';
 @Component({
   selector: 'app-single-route-reviews',
