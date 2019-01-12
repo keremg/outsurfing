@@ -10,6 +10,7 @@ import {SurfUser} from '../../models/surfUser';
 import {SurfReview} from '../../models/surfReview';
 import {RouteService} from '../../services/route.service';
 import {SurfRoute} from '../../models/surfRoute';
+import {promise} from 'selenium-webdriver';
 
 @Component({
   selector: 'app-event-review',
@@ -34,9 +35,12 @@ export class EventReviewPage implements OnInit {
     participants_imgs: string[] = [];
     participants_ids: string[] = [] ;
     event_comment: string = '';
-    guide_comment: string;
+    guide_comment: string = '';
     user_list: SurfUser[] = [];
     guide: SurfUser;
+    isRouteRevExist: boolean = false;
+    isGuideRevExist: boolean = true;
+    isParticipantRevExist: boolean[] = [];
     private currentUserID: string;
     private currentUser: SurfUser;
 
@@ -52,6 +56,7 @@ export class EventReviewPage implements OnInit {
   }
 
   async ngOnInit() {
+      debugger;
       this.currentUser = await this.userService.getCurrentUserPromise();
       this.currentUserID = this.currentUser.id;
       this.eventID = this.navParams.get('eventId');
@@ -74,16 +79,29 @@ export class EventReviewPage implements OnInit {
                   this.participants_names.push(u.firstName +" "+u.lastName);
                   this.participants_ids.push(u.id);
                   this.participants_imgs.push("./assets/images/haham.jpg");
+                  this.isParticipantRevExist.push(false);
               });
 
           }
-
-          this.routeService.ReviewAlreadyExist(this.event.routeId, this.currentUserID, this.eventID).subscribe(res=>{
-              if (res)
-                  alert('Review already exist');
-                  debugger;
-                  this.modalController.dismiss();
-          });
+          let allParticipantsRevExist= true;
+          for(let participant of this.user_list) {
+              let resPromise = new Promise<boolean>(res => this.userService.ReviewAlreadyExist(participant.id, this.currentUserID, this.eventID).subscribe(res)) ;
+              allParticipantsRevExist = await resPromise;
+              if(!allParticipantsRevExist) {
+                  break;
+              }
+          }
+          if(this.isGuided){
+              let resPromise = new Promise<boolean>( res=>this.userService.GuideReviewAlreadyExist(this.guideId,this.currentUserID,this.eventID).subscribe(res));
+              this.isGuideRevExist = await resPromise;
+          }
+          let resPromise = new Promise<boolean>(res=>this.routeService.ReviewAlreadyExist(this.event.routeId, this.currentUserID, this.eventID).subscribe(res));
+          this.isRouteRevExist = await resPromise;
+          debugger;
+          if(this.isRouteRevExist && this.isGuideRevExist && allParticipantsRevExist){
+              alert('Review already exist');
+              this.modalController.dismiss();
+          }
       }
       this.isGuided = this.event.isGuidedEvent;
       if(this.isGuided){
@@ -97,12 +115,17 @@ export class EventReviewPage implements OnInit {
 
   }
     build_review_for_user(index,time){
+        debugger;
         let review = new SurfReview();
         review.reviewerId = this.currentUserID;
         review.forEventId = this.eventID;
         review.grade = this.participants_rating[index];
         review.review = this.participants_comments[index];
+        if(review.review === undefined){
+            review.review = '';
+        }
         review.reviewTime = time;
+        debugger;
         return review;
     }
 
@@ -128,12 +151,24 @@ export class EventReviewPage implements OnInit {
     
     async onClose() {
         let time = (new Date()).getTime();
-        await this.routeService.addReview(this.route, this.build_review_for_event(time));
+        let rev = this.build_review_for_event(time);
+        if(rev.grade){
+            await this.routeService.addReview(this.route, rev);
+        }
+        debugger;
         if (this.isGuided) {
-            await this.userService.addGuideReview(this.guide, this.build_review_for_guide(time))
+            rev =  this.build_review_for_guide(time);
+            if(rev.grade){
+                await this.userService.addGuideReview(this.guide,rev)
+            }
         }
         for (let i = 0; i < this.user_list.length; i++) {
-            await this.userService.addReview(this.user_list[i], this.build_review_for_user(i, time))
+            debugger;
+            rev = this.build_review_for_user(i, time);
+            if(rev.grade){
+                await this.userService.addReview(this.user_list[i], rev )
+            }
+            debugger;
         }
         debugger;
         return this.modalController.dismiss();

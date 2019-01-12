@@ -390,12 +390,10 @@ export class EventDetailPage implements OnInit {
 
     async rankEvent() {
         await this.updateEvent(true);
-        debugger;
         const modal = await this.modalController.create({
             component: EventReviewPage,
             componentProps: {eventId: this.id, eventOrganizer: this.event.eventOrganizerId, event:this.event}
         });
-        debugger;
         return modal.present();
     }
 
