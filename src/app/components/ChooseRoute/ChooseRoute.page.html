@@ -83,7 +83,7 @@
               </ion-row>
             </ion-card-title>
             <ion-card-subtitle>
-             <ion-label padding-end *ngIf="route.routeStartGeolocation && (location |async)">Distance to route: {{getDistance(route.routeStartGeolocation,location|async)}}km</ion-label>
+             <ion-label padding-end *ngIf="route.routeStartGeolocation">Distance to route: {{route.distance}}km</ion-label>
             </ion-card-subtitle>
 
             <!-- need to be added from JS -->
