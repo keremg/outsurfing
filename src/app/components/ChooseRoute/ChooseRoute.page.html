@@ -95,7 +95,7 @@
                 <ion-item> Type: {{ route.routeProperties }} </ion-item>
                 <ion-item> Duration: {{ route.routeDuration }} {{route.routeDurationUnits}} </ion-item>
                 <ion-item> Length: {{ route.lengthKM }} </ion-item>
-                <ion-item> Level: {{ route.routeDifficulty }} </ion-item>
+                <ion-item> Level: {{ difficultiesEnum[route.routeDifficulty] }} </ion-item>
                 <ion-item> Seasons: {{ route.seasons }} </ion-item>
 
               </ion-col>
@@ -128,7 +128,7 @@
                 <ion-list *ngIf="route.isGuidingOffered">
                   <ion-item>
                     Optional Guidance for {{ route.offeredPrice }}
-                    <ion-icon name="contact" style="font-size: 1em;"></ion-icon>
+                    <ion-icon name="logo-usd" style="font-size: 1em;"></ion-icon>
                   </ion-item>
 
                   <ion-item>

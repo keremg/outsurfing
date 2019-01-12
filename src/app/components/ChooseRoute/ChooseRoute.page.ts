@@ -11,6 +11,7 @@ import {
 import leaflet from 'leaflet';
 import {ActivatedRoute} from '@angular/router';
 import {FilterEventsPage} from '../filter-events/filter-events.page';
+import {DifficultiesEnum} from '../../enums/Difficulties.enum';
 
 @Component({
     selector: 'app-ChooseRoute',
@@ -24,7 +25,7 @@ export class ChooseRoute implements OnInit {
     map: any;
     filter: {};
     onInitHappenedLast: boolean = false;
-
+    difficultiesEnum = DifficultiesEnum;
 
     constructor(
         public routeService: RouteService,
