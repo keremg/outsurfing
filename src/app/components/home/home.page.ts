@@ -43,7 +43,6 @@ export class HomePage implements OnInit {
     }
 
     async ngOnInit() {
-        
         this.currentUser = await this.userService.getCurrentUserPromise();
         this.query = this.activatedRoute.snapshot.paramMap.get('q');
         this.filter = this.getFilter(this.activatedRoute.snapshot.paramMap.get('f'));
@@ -52,6 +51,11 @@ export class HomePage implements OnInit {
         }
 
 
+
+        this.title=this.getTitle();
+    }
+
+    ionViewWillEnter(){
         if (this.query === this.currentUser.id) {
             this.onlyMine = true;
             this.page.init(
@@ -110,7 +114,7 @@ export class HomePage implements OnInit {
             }
         });
 
-        this.title=this.getTitle();
+        debugger;
     }
 
     getFilter(str: string) {
