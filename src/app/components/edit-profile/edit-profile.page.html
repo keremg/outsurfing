@@ -119,11 +119,11 @@
                 <div>{{ uploadPercent && (uploadPercent | async) !== 100 ? (uploadPercent| async) : ''  }}</div>
             </ion-item>
             <ion-item>
-                <ion-label>Total Rating: {{currentUser?.avgRating}} by {{currentUser?.numOfRaters}} traveler(s)</ion-label>
+                <ion-label>Total Rating: {{currentUser?.avgRating?.toFixed(2)}} by {{currentUser?.numOfRaters}} traveler(s)</ion-label>
             </ion-item>
             <ion-button id='showReview' (click)="onShow()">show all reviews</ion-button>
             <ion-item *ngIf="currentUser?.isGuide">
-                <ion-label>Total Guide Rating: {{currentUser?.avgGuideRating}} by {{currentUser?.numOfGuideRaters}}traveler(s)
+                <ion-label>Total Guide Rating: {{currentUser?.avgGuideRating?.toFixed(2)}} by {{currentUser?.numOfGuideRaters}}traveler(s)
                 </ion-label>
             </ion-item>
             <ion-button *ngIf="currentUser?.isGuide" id='showGuideReview' (click)="onShowGuide()">show guide reviews</ion-button>

@@ -63,7 +63,7 @@
                 </ion-col>
                 <ion-col size="3">
                   <ion-label style="font-size: 1rem" *ngIf="route.routeRanking">
-                    Route Rating: {{ route.routeRanking }} ({{
+                    Route Rating: {{ route.routeRanking.toFixed(2) }} ({{
                       route.routeNumOfRankers
                     }}
                     <ion-icon name="contact"></ion-icon>
