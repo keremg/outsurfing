@@ -27,7 +27,7 @@
 
         <ion-item [class.viewModeClass]="viewMode" *ngIf="route.routeRanking">
           <ion-label>
-            Route Rating: {{ route.routeRanking }} ({{
+            Route Rating: {{ route.routeRanking.toFixed(2) }} ({{
               route.routeNumOfRankers
             }}
             <ion-icon name="contact"></ion-icon>

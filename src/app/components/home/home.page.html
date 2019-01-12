@@ -65,7 +65,7 @@
                                     </ion-col>
                                     <ion-col size="3">
                                             <ion-label style="font-size: 1rem" *ngIf="event.routeRanking">
-                                                Route Rating: {{ event.routeRanking }} ({{event.routeNumOfRankers}}
+                                                Route Rating: {{ event.routeRanking.toFixed(2) }} ({{event.routeNumOfRankers}}
                                                 <ion-icon name="contact"></ion-icon>
                                                 )
                                             </ion-label>
@@ -98,7 +98,7 @@
                                     <ion-item> Is Guided: {{event.isGuidedEvent ? 'Yes' : 'No'}}</ion-item>
                                     <ion-item *ngIf="event.isGuidedEvent">
                                         Guide Rating:
-                                        <ion-label *ngIf="(event.eventOrganizer |async)?.avgGuideRating">{{(event.eventOrganizer |async)?.avgGuideRating}} ({{(event.eventOrganizer |async)?.numOfGuideRaters}}
+                                        <ion-label *ngIf="(event.eventOrganizer |async)?.avgGuideRating">{{(event.eventOrganizer |async)?.avgGuideRating?.toFixed(2)}} ({{(event.eventOrganizer |async)?.numOfGuideRaters}}
                                             <ion-icon name="contact"></ion-icon>
                                             )
                                         </ion-label>

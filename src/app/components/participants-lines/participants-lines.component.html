@@ -18,10 +18,10 @@
         <ion-col size="2">
             <ion-label>{{participant.isGuide ? 'Trip Guide' : participant.isOrganizer ? 'Trip organizer' : 'Traveller'}}</ion-label>
             <ion-label text-wrap *ngIf="participant.isGuide">
-                Rating: {{(participant.user| async)?.avgGuideRating}} ({{(participant.user| async)?.numOfGuideRaters}} <ion-icon name="contact"></ion-icon>)
+                Rating: {{(participant.user| async)?.avgGuideRating?.toFixed(2)}} ({{(participant.user| async)?.numOfGuideRaters}} <ion-icon name="contact"></ion-icon>)
             </ion-label>
             <ion-label text-wrap *ngIf="!participant.isGuide">
-                Rating: {{(participant.user| async)?.avgRating}} ({{(participant.user| async)?.numOfRaters}} <ion-icon name="contact"></ion-icon>)
+                Rating: {{(participant.user| async)?.avgRating?.toFixed(2)}} ({{(participant.user| async)?.numOfRaters}} <ion-icon name="contact"></ion-icon>)
             </ion-label>
             <ion-label text-wrap>Cancellations: {{(participant.user| async)?.cancellations}} out of {{(participant.user| async)?.cancellations}}</ion-label>
             <!-- TODO: rating and cancellations should be calculated with TOTAL# of total and total cancelled -->
