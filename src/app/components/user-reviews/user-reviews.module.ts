@@ -4,8 +4,8 @@ import { FormsModule } from '@angular/forms';
 import { Routes, RouterModule } from '@angular/router';
 import { RouteImageComponentModule } from '../route-image/route-image.module';
 import { IonicModule } from '@ionic/angular';
-import { RatingComponent } from '../rating/rating.component';
 import { UserReviewsPage } from './user-reviews.page';
+import {RatingComponentModule} from '../rating/rating.module';
 
 const routes: Routes = [
   {
@@ -20,8 +20,9 @@ const routes: Routes = [
     FormsModule,
     IonicModule,
     RouteImageComponentModule,
+      RatingComponentModule,
     RouterModule.forChild(routes)
   ],
-  declarations: [UserReviewsPage, RatingComponent]
+  declarations: [UserReviewsPage]
 })
 export class UserReviewsPageModule {}

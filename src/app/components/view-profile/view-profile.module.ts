@@ -8,7 +8,7 @@ import { IonicModule } from '@ionic/angular';
 import { ViewProfilePage } from './view-profile.page';
 import { UserReviewsPage } from '../user-reviews/user-reviews.page';
 import { ToolbarComponentModule } from '../toolbar/toolbar.module';
-import { RatingComponent } from '../rating/rating.component';
+import {RatingComponentModule} from '../rating/rating.module';
 const routes: Routes = [
   {
     path: '',
@@ -23,9 +23,10 @@ const routes: Routes = [
     IonicModule,
     RouteImageComponentModule,
     ToolbarComponentModule,
+      RatingComponentModule,
     RouterModule.forChild(routes)
   ],
-  declarations: [ViewProfilePage, UserReviewsPage, RatingComponent],
+  declarations: [ViewProfilePage, UserReviewsPage],
   entryComponents: [UserReviewsPage]
 })
 export class ViewProfilePageModule {}
