@@ -24,7 +24,6 @@ export class EventReviewPage implements OnInit {
     routeUrl: string;// "./assets/images/zavitan.jpg";
     guide_image = "./assets/images/haham.jpg";
     event_rating: number;
-    isGuided: boolean;
     guideName: string;
     guideId: string;
     guide_rating: number;
@@ -65,7 +64,6 @@ export class EventReviewPage implements OnInit {
           let routePromise = new Promise<SurfRoute>(res=> this.routeService.getRoute(this.event.routeId).subscribe(res));
           this.route = await routePromise;
           this.routeUrl = this.route.imagesUrls[0];
-          debugger;
           let participantsPromise = new Promise<SurfParticipant[]>(res => this.eventService.getParticipants(this.eventID).subscribe(res));
           this.participants = await participantsPromise;
           for(let participant of this.participants) {
@@ -88,12 +86,11 @@ export class EventReviewPage implements OnInit {
               let participant = this.user_list[index];
               let resPromise = new Promise<boolean>(res => this.userService.ReviewAlreadyExist(participant.id, this.currentUserID, this.eventID).subscribe(res)) ;
               this.isParticipantRevExist[index] =  await resPromise;
-              debugger;
               if(!this.isParticipantRevExist[index]) {
                   allParticipantsRevExist = false;
               }
           }
-          if(this.isGuided){
+          if(this.event.isGuidedEvent){
               let resPromise = new Promise<boolean>( res=>this.userService.GuideReviewAlreadyExist(this.guideId,this.currentUserID,this.eventID).subscribe(res));
               this.isGuideRevExist = await resPromise;
           }
@@ -104,8 +101,8 @@ export class EventReviewPage implements OnInit {
               this.modalController.dismiss();
           }
       }
-      this.isGuided = this.event.isGuidedEvent;
-      if(this.isGuided){
+
+      if(this.event.isGuidedEvent){
           this.event.eventOrganizer.subscribe(x=>{
               this.guide = x;
               this.guideName = x.firstName + " " + x.lastName;
@@ -154,7 +151,7 @@ export class EventReviewPage implements OnInit {
         if(rev.grade){
             await this.routeService.addReview(this.route, rev);
         }
-        if (this.isGuided) {
+        if (this.event.isGuidedEvent) {
             rev =  this.build_review_for_guide(time);
             if(rev.grade){
                 await this.userService.addGuideReview(this.guide,rev)

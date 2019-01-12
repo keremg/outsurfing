@@ -22,7 +22,7 @@
         </ion-grid>
     </ion-card>
 
-    <ion-card  *ngIf="isGuided && isGuideRevExist">
+    <ion-card  *ngIf="!isGuideRevExist && event.isGuidedEvent">
         <ion-grid>
 
             <ion-card-header >
