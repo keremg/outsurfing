@@ -1,8 +1,6 @@
 <ion-header>
   <div *ngIf="route">
-    <ion-toolbar>
-      <ion-title>{{ route.name }} reviews</ion-title>
-    </ion-toolbar>
+    <ion-toolbar> <ion-title>Route Reviews</ion-title> </ion-toolbar>
   </div>
 </ion-header>
 
@@ -13,12 +11,14 @@
         <ion-col>
           <ion-card-header no-padding>
             <ion-card-title style="font-size: 2em;">
-              <ion-row justify-content-between style="align-items: center;">
-                <div *ngIf="route">
+              <div *ngIf="route">
+                <ion-row justify-content-between style="align-items: center;">
                   <ion-col> {{ route.name }} </ion-col>
-                  <ion-col> grade: {{ route.routeRanking }} </ion-col>
-                </div>
-              </ion-row>
+                  <ion-label text-right>
+                    Grade: {{ route.routeRanking }}
+                  </ion-label>
+                </ion-row>
+              </div>
             </ion-card-title>
             <!-- need to be added from JS -->
           </ion-card-header>
@@ -65,6 +65,10 @@
             ></rating>
 
             <div text-right>{{ review.review }}</div>
+
+            <ion-label text-right color="secondary">{{
+              review.reviewTime | date
+            }}</ion-label>
           </ion-item>
         </ion-col>
       </ion-row>
