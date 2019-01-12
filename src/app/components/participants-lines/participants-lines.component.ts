@@ -21,6 +21,7 @@ export class ParticipantsLinesComponent implements OnInit {
   @Input() eventID;
   @Input() currentUserId; //The current logged-in user
   @Input() isPastEvent: boolean = true;
+  @Input() isUserApproved: boolean = false;// Only approved user is allowed to see email and phone
   @Output() updated: EventEmitter<any> = new EventEmitter();
 
   ngOnInit() {

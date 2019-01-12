@@ -554,8 +554,9 @@
                     [isOrganizerMode]="isOrganizerOfTrip && !isPastEvent && !viewMode"
                     [event]="event"
                     [eventID]="id"
-                    [currentUserId]="currentUser.id"
+                    [currentUserId]="currentUser?.id"
                     [isPastEvent]="isPastEvent"
+                    [isUserApproved]="isApprovedForTrip"
                     (updated)="onUpdatesOfParticipants()"
             ></participants-lines>
             <participants-lines
@@ -564,8 +565,9 @@
                     [isOrganizerMode]="isOrganizerOfTrip && !isPastEvent && !viewMode"
                     [event]="event"
                     [eventID]="id"
-                    [currentUserId]="currentUser.id"
+                    [currentUserId]="currentUser?.id"
                     [isPastEvent]="isPastEvent"
+                    [isUserApproved]="isApprovedForTrip"
                     (updated)="onUpdatesOfParticipants()"
             ></participants-lines>
         </ion-grid>
