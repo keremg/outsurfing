@@ -1,6 +1,8 @@
 import { SurfUser } from './surfUser';
 import { Observable } from 'rxjs';
 import { SurfReview } from './surfReview';
+import {SeasonsEnum} from '../enums/Seasons.enum';
+
 
 export class SurfRoute {
   id: string;
@@ -17,16 +19,10 @@ export class SurfRoute {
   shortDescription: string;
   longDescription: string; // details
 
-<<<<<<< Updated upstream
+
     routeDifficulty: number; // Level:  0 - very easy, 1-easy, 2-moderate, 3-challenging, 4-extreme, 5-very extreme
     routeDuration: number; // will represent number of hours
     routeProperties: string[]; // -	e.g. water, swimming, mountains, bicycles, forest, desert, oasis, historical, archeology, ropes
-=======
-  routeDifficulty: number; // Level:  0 - very easy, 1-easy, 2-moderate, 3-challenging, 4-extreme, 5-very extreme
-  routeDuration: number; // will represent number of days, so half day should be 0.5 , one hour should be 0.04
-  routeDurationUnits: string;
-  routeProperties: string[]; // -	e.g. water, swimming, mountains, bicycles, forest, desert, oasis, historical, archeology, ropes
->>>>>>> Stashed changes
 
   routeCreatorId: string;
   routeCreator?: Observable<SurfUser>;
@@ -44,5 +40,5 @@ export class SurfRoute {
   routeNumOfRankers: number;
 
   iconName: string; //TODO terrain
-  seasons: string; //TODO
+  seasons: SeasonsEnum[]; //TODO
 }

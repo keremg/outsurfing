@@ -26,6 +26,8 @@ import { CompressImageService } from '../../services/compress-image.service';
 import 'rxjs/add/observable/of';
 import { Observable } from 'rxjs';
 import { SingleRouteReviewsPage } from '../single-route-reviews/single-route-reviews.page';
+import {forEach} from '@angular-devkit/schematics';
+import {SeasonsEnum} from '../../enums/Seasons.enum';
 
 declare let window: any;
 
@@ -437,6 +439,7 @@ export class SingleRoutePage implements OnInit {
       this.singleRouteForm.value.requiredEquipment || '';
     this.route.recommendedMonths =
       this.singleRouteForm.value.recommendedMonths || [];
+    this.route.seasons = this.getSeasonsFromMonths(this.route.recommendedMonths);
   }
 
   //if new routem first set the creatorId and get creator in any case
@@ -693,4 +696,23 @@ export class SingleRoutePage implements OnInit {
     });
     return await modal.present();
   }
+
+    private getSeasonsFromMonths(months: string[]) {
+      let res = [];
+      for(let month of months){
+          if(!(res.includes(SeasonsEnum[1])) && (month =="12" || month == "1" || month == "2")){
+              res.push(SeasonsEnum[1])
+          }
+          if(!(res.includes(SeasonsEnum[2])) && (month =="3" || month == "4" || month == "5")){
+              res.push(SeasonsEnum[2])
+          }
+          if(!(res.includes(SeasonsEnum[3])) && (month =="6" || month == "7" || month == "8")){
+              res.push(SeasonsEnum[3])
+          }
+          if(!(res.includes(SeasonsEnum[4])) && (month =="9" || month == "10" || month == "11")){
+              res.push(SeasonsEnum[4])
+          }
+      }
+        return res;
+    }
 }
