@@ -68,7 +68,7 @@ export class EventReviewPage implements OnInit {
           let participantsPromise = new Promise<SurfParticipant[]>(res => this.eventService.getParticipants(this.eventID).subscribe(res));
           this.participants = await participantsPromise;
           for(let participant of this.participants) {
-              if(!participant.approved){
+              if(!participant.approved || participant.id === this.guide.id){//TODO Guy maybe fix it
                   continue;
               }
               let resPromise = new Promise<SurfUser>(u =>participant.user.subscribe(u));

@@ -129,11 +129,11 @@ export class UserService {
     }
 
     async addGuideReview(user:SurfUser, rev: SurfReview){
-        if(!user.avgRating){
-            user.avgRating = 0;
+        if(!user.avgGuideRating){
+            user.avgGuideRating = 0;
         }
-        if(!user.numOfRaters){
-            user.numOfRaters = 0;
+        if(!user.numOfGuideRaters){
+            user.numOfGuideRaters = 0;
         }
         delete rev.id;
 

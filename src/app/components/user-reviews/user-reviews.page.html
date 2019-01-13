@@ -21,7 +21,7 @@
                 <ion-row>
                   <ion-col> {{ user.firstName }} {{ user.lastName }} </ion-col>
                   <ion-label text-right>
-                    Grade: {{ user.avgRating.toFixed(2) }}
+                    Grade: {{ guideButton ? user.avgGuideRating.toFixed(2) : user.avgRating.toFixed(2) }}
                   </ion-label>
                 </ion-row>
               </div>
