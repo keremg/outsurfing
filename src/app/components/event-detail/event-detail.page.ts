@@ -51,7 +51,8 @@ export class EventDetailPage implements OnInit {
     photoMapIndex:number = 0;
     loading: HTMLIonLoadingElement;
     isPastEvent = false;
-    currentDate: string = new Date().toISOString();
+    currentDate: string;
+    twoDaysDate: string;
     joined = false; //current user already asked to join the event
     isApprovedForTrip = false;
     isNewEvent = false; // (started from route)
@@ -61,6 +62,7 @@ export class EventDetailPage implements OnInit {
 
 
     private eventSubscription: Subscription;
+    private organizer: SurfUser;
 
     constructor(
         private formBuilder: FormBuilder /* private imagePicker: ImagePicker*/,
@@ -77,6 +79,11 @@ export class EventDetailPage implements OnInit {
         public compressImageService: CompressImageService
     ) {
         window.event = this;
+        let d = new Date();
+        d.setHours(d.getHours()+2)
+        this.currentDate = d.toISOString();
+        d.setDate(d.getDate() + 3);
+        this.twoDaysDate = d.toISOString();
     }
 
 
@@ -176,6 +183,10 @@ export class EventDetailPage implements OnInit {
             this.event.eventOrganizerId = this.currentUser.id; // safety
             this.isOrganizerOfTrip = true;
         }
+        event.eventOrganizer.subscribe(org=>
+        {
+            this.organizer = org;
+        })
 
         //this.event.routeCreator = await this.userService.getuser(this.event.routeCreatorId).toPromise();
         //this.event.eventOrganizer = await this.userService.getuser(this.event.eventOrganizerId).toPromise();
@@ -253,8 +264,8 @@ export class EventDetailPage implements OnInit {
         this.event.eventOrganizer = Observable.of(this.currentUser);
         this.isOrganizerOfTrip = true;
         this.event.approvedParticipants=0;
-        this.event.meetingTime = this.currentDate;
-        this.event.routeStartTime = this.currentDate;
+        this.event.meetingTime = this.twoDaysDate;
+        this.event.routeStartTime = this.twoDaysDate;
         //this.event.routeCreator = await this.userService.getuser(this.event.routeCreatorId).toPromise();
         ////this.event.eventOrganizer = await this.userService.getuser(this.event.eventOrganizerId).toPromise();
 
@@ -409,7 +420,7 @@ export class EventDetailPage implements OnInit {
         await this.updateEvent(true);
         const modal = await this.modalController.create({
             component: EventReviewPage,
-            componentProps: {eventId: this.id, eventOrganizer: this.event.eventOrganizerId, event:this.event}
+            componentProps: {eventId: this.id, eventOrganizer: this.event.eventOrganizerId, event:this.event, organizer: this.organizer}
         });
         return modal.present();
     }
@@ -636,9 +647,9 @@ export class EventDetailPage implements OnInit {
         this.event.meetingGeolocation =
             this.singleEventForm.value.meetingGeolocation || '';
         this.event.meetingTime =
-            this.singleEventForm.value.meetingTime || this.currentDate;
+            this.singleEventForm.value.meetingTime || this.twoDaysDate;
         this.event.routeStartTime =
-            this.singleEventForm.value.routeStartTime || this.currentDate;
+            this.singleEventForm.value.routeStartTime || this.twoDaysDate;
         this.event.returnTime =
             this.singleEventForm.value.returnTime || '';
         this.event.audienceType =

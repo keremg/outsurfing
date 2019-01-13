@@ -19,7 +19,7 @@ export class RouteImageComponent implements OnInit {
   constructor(private storage: AngularFireStorage) {}
 
   ngOnInit() {
-    if (this.imgPath) {
+      if (this.imgPath) {
       const ref = this.storage.ref(this.imgPath);
       ref.getDownloadURL().subscribe(
         res => {

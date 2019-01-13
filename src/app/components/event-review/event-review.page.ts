@@ -22,11 +22,11 @@ export class EventReviewPage implements OnInit {
     route: SurfRoute;
     eventID: string;
     routeUrl: string;// "./assets/images/zavitan.jpg";
-    guide_image = "./assets/images/haham.jpg";
     event_rating: number;
     guideName: string;
     guideId: string;
     guide_rating: number;
+    guide_picture: string;
     participants_rating: number [] = [];
     participants_comments: string[] = [];
     participants: SurfParticipant[];
@@ -60,10 +60,11 @@ export class EventReviewPage implements OnInit {
       this.eventID = this.navParams.get('eventId');
       //this.eventOrganizer = this.navParams.get('eventOrganizer');
       this.event = this.navParams.get('event');
+      this.guide = this.navParams.get('organizer');
       if(this.eventID) {
           let routePromise = new Promise<SurfRoute>(res=> this.routeService.getRoute(this.event.routeId).subscribe(res));
           this.route = await routePromise;
-          this.routeUrl = this.route.imagesUrls[0];
+          this.routeUrl = this.route.imagesUrls[0]+'_Medium';
           let participantsPromise = new Promise<SurfParticipant[]>(res => this.eventService.getParticipants(this.eventID).subscribe(res));
           this.participants = await participantsPromise;
           for(let participant of this.participants) {
@@ -78,7 +79,7 @@ export class EventReviewPage implements OnInit {
               this.user_list.push(res);
               this.participants_names.push(res.firstName +" "+res.lastName);
               this.participants_ids.push(res.id);
-              this.participants_imgs.push("./assets/images/haham.jpg");
+              this.participants_imgs.push('users/' + res.id + '/profilePic_Medium');
               this.isParticipantRevExist.push(false);
           }
           let allParticipantsRevExist= true;
@@ -101,14 +102,10 @@ export class EventReviewPage implements OnInit {
               this.modalController.dismiss();
           }
       }
-
-      if(this.event.isGuidedEvent){
-          this.event.eventOrganizer.subscribe(x=>{
-              this.guide = x;
-              this.guideName = x.firstName + " " + x.lastName;
-              this.guideId = x.id;
-              
-          });
+      if(this.event.isGuidedEvent) {
+          this.guideName = this.guide.firstName + " " + this.guide.lastName;
+          this.guideId = this.guide.id;
+          this.guide_picture = 'users/' + this.guide.id + '/profilePic_Medium'
       }
 
   }
