@@ -297,8 +297,6 @@ export class SingleRoutePage implements OnInit {
   }
 
   async updateRoute(eventIt: boolean) {
-    this.openLoadingController();
-
     this.mapFormValuesToRouteModel();
     const copyOfRoute = _.cloneDeep(this.route);
 
@@ -306,6 +304,7 @@ export class SingleRoutePage implements OnInit {
     delete copyOfRoute.routeCreator; //remove the property
     let returnedId;
     if (!this.viewMode) {
+      this.openLoadingController();
       if (this.id) {
         //update
         await this.routesService.updateRoute(this.id, copyOfRoute);
