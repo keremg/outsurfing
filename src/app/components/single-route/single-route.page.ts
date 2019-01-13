@@ -64,7 +64,8 @@ export class SingleRoutePage implements OnInit {
     private storage: AngularFireStorage,
     public loadingController: LoadingController,
     public compressImageService: CompressImageService,
-    private modalController: ModalController
+    private modalController: ModalController,
+    private alertController: AlertController
   ) {
     window.route = this;
   }
@@ -304,6 +305,7 @@ export class SingleRoutePage implements OnInit {
     delete copyOfRoute.routeCreator; //remove the property
     let returnedId;
     if (!this.viewMode) {
+      let isNewRoute = !this.id;
       this.openLoadingController();
       if (this.id) {
         //update
@@ -319,10 +321,12 @@ export class SingleRoutePage implements OnInit {
       await this.uploadPhotos(copyOfRoute); //both regular photos and maps-photos
       console.log('After uploadPhotos, about to navigate');
       this.closeLoadingController();
+      if (!eventIt && isNewRoute) {
+        eventIt = await this.presentAlertConfirmEventIt();
+      }
     }
 
     if (eventIt) {
-      //TODO should event it
       this.navCtrl.navigateForward('EventDetail/0/' + this.id);
     } else {
       //this.navCtrl.navigateForward('ChooseRoute');
@@ -331,6 +335,35 @@ export class SingleRoutePage implements OnInit {
     }
   }
 
+
+  async presentAlertConfirmEventIt(): Promise<boolean> {
+    let shouldEventIt = false;
+    const alert = await this.alertController.create({
+      header: "Congratulations you've created a new route",
+      message: 'Would you like to EventIt? (create new trip-event)',
+      buttons: [
+        {
+          text: 'No thanks',
+          role: 'cancel',
+          cssClass: 'secondary',
+          handler: (blah) => {
+            console.log('Confirm Cancel: blah');
+            shouldEventIt = false;
+          }
+        }, {
+          text: 'EventIt!',
+          handler: () => {
+            console.log('Confirm Okay');
+            shouldEventIt = true;
+          }
+        }
+      ]
+    });
+
+    await alert.present();
+    await alert.onDidDismiss();
+    return shouldEventIt;
+  }
   async deleteRoute() {
     if (!this.viewMode && this.id) {
       await this.routesService.deleteRoute(this.id);
