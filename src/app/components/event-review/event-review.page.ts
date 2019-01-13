@@ -42,6 +42,7 @@ export class EventReviewPage implements OnInit {
     isParticipantRevExist: boolean[] = [];
     private currentUserID: string;
     private currentUser: SurfUser;
+    imGuide: boolean = false;
 
   constructor(
       private userService: UserService,
@@ -91,22 +92,28 @@ export class EventReviewPage implements OnInit {
                   allParticipantsRevExist = false;
               }
           }
-          if(this.event.isGuidedEvent){
+
+          if(this.event.isGuidedEvent) {
+              this.guideName = this.guide.firstName + " " + this.guide.lastName;
+              this.guideId = this.guide.id;
+              this.guide_picture = 'users/' + this.guide.id + '/profilePic_Medium'
+
               let resPromise = new Promise<boolean>( res=>this.userService.GuideReviewAlreadyExist(this.guideId,this.currentUserID,this.eventID).subscribe(res));
               this.isGuideRevExist = await resPromise;
+              if(this.guideId === this.currentUserID){
+                  this.imGuide = true;
+              }
           }
+
           let resPromise = new Promise<boolean>(res=>this.routeService.ReviewAlreadyExist(this.event.routeId, this.currentUserID, this.eventID).subscribe(res));
           this.isRouteRevExist = await resPromise;
-          if(this.isRouteRevExist && this.isGuideRevExist && allParticipantsRevExist){
+          if(this.isRouteRevExist && (this.isGuideRevExist || this.imGuide) && allParticipantsRevExist ){
               alert('Review already exist');
               this.modalController.dismiss();
           }
       }
-      if(this.event.isGuidedEvent) {
-          this.guideName = this.guide.firstName + " " + this.guide.lastName;
-          this.guideId = this.guide.id;
-          this.guide_picture = 'users/' + this.guide.id + '/profilePic_Medium'
-      }
+
+
 
   }
     build_review_for_user(index,time){
