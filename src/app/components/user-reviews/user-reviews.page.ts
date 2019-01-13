@@ -40,22 +40,34 @@ export class UserReviewsPage implements OnInit {
       }
     });
     if (this.guideButton) {
-      this.userService.getGuideReviews(this.userId).subscribe(res => {
-        this.reviews = res;
-        if (!this.reviews.length) {
-          this.avilableReviews = false;
-        } else {
-          this.avilableReviews = true;
-        }
+      this.userService.getGuideReviews(this.userId).subscribe(async res => {
+
+          if (!res.length) {
+              this.avilableReviews = false;
+          } else {
+              this.avilableReviews = true;
+          }
+          let rev: any;
+          for (rev of res) {
+              let routePromise = new Promise<SurfUser>(us=> this.userService.getuser(rev.reviewerId).subscribe(us));
+              rev.reviewer = await routePromise;
+          }
+          this.reviews = res;
       });
     } else {
-      this.userService.getUserReviews(this.userId).subscribe(res => {
-        this.reviews = res;
-        if (!this.reviews.length) {
-          this.avilableReviews = false;
-        } else {
-          this.avilableReviews = true;
-        }
+      this.userService.getUserReviews(this.userId).subscribe(async res => {
+          if (!res.length) {
+              this.avilableReviews = false;
+          } else {
+              this.avilableReviews = true;
+          }
+          let rev: any;
+          for (rev of res) {
+              let routePromise = new Promise<SurfUser>(us=> this.userService.getuser(rev.reviewerId).subscribe(us));
+              rev.reviewer = await routePromise;
+          }
+          this.reviews = res;
+
       });
     }
 

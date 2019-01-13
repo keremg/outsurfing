@@ -45,7 +45,7 @@
       </ion-row>
     </ion-grid>
   </ion-card>
-  <ion-card *ngFor="let review of (reviews | async)">
+  <ion-card *ngFor="let review of (reviews)">
     <ion-grid>
       <ion-row>
         <ion-col size =4>
@@ -73,7 +73,9 @@
           </ion-row>
             <ion-row>
                 <ion-col>
-                    <div text-left>{{ review.review }}</div>
+                  <ion-label>{{(review.reviewer)?.firstName}} {{(review.reviewer)?.lastName}}</ion-label>
+                  <ion-item></ion-item>
+                  <div text-left>{{ review.review }}</div>
                 </ion-col>
             </ion-row>
           </ion-col>
