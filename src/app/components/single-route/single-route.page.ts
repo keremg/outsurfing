@@ -700,17 +700,17 @@ export class SingleRoutePage implements OnInit {
     private getSeasonsFromMonths(months: string[]) {
       let res = [];
       for(let month of months){
-          if(!(res.includes(SeasonsEnum[1])) && (month =="12" || month == "1" || month == "2")){
+          if(!(res.includes(SeasonsEnum[0])) && (month =="12" || month == "1" || month == "2")){
+              res.push(SeasonsEnum[0])
+          }
+          if(!(res.includes(SeasonsEnum[1])) && (month =="3" || month == "4" || month == "5")){
               res.push(SeasonsEnum[1])
           }
-          if(!(res.includes(SeasonsEnum[2])) && (month =="3" || month == "4" || month == "5")){
+          if(!(res.includes(SeasonsEnum[2])) && (month =="6" || month == "7" || month == "8")){
               res.push(SeasonsEnum[2])
           }
-          if(!(res.includes(SeasonsEnum[3])) && (month =="6" || month == "7" || month == "8")){
+          if(!(res.includes(SeasonsEnum[3])) && (month =="9" || month == "10" || month == "11")){
               res.push(SeasonsEnum[3])
-          }
-          if(!(res.includes(SeasonsEnum[4])) && (month =="9" || month == "10" || month == "11")){
-              res.push(SeasonsEnum[4])
           }
       }
         return res;
