@@ -192,7 +192,7 @@
                   </ion-item>
                   <ion-grid wrap style="height: 110px; width: 110px;">
                     <ion-row size="12">
-                      <div
+                      <ng-container
                         *ngFor="
                           let par of (event?.participantsObs | async);
                           index as i
@@ -203,6 +203,7 @@
                           size="6"
                           *ngIf="par.approved"
                           (click)="onViewProfile(par.id, $event)"
+                          style="padding: 2px;"
                         >
                           <div *ngIf="i < maxPhotosToLoad">
                             <!-- TODO: urgent fix image size -->
@@ -217,7 +218,7 @@
                             ></app-route-image>
                           </div>
                         </ion-col>
-                      </div>
+                      </ng-container>
                     </ion-row>
                   </ion-grid>
                 </ion-col>
