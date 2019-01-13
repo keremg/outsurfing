@@ -86,11 +86,10 @@
                       style="font-size: 1rem"
                       *ngIf="event.routeRanking"
                     >
-                      Route Rating: {{ event.routeRanking.toFixed(2) }} ({{
+                      Route Rating: {{ event.routeRanking.toFixed(2) }}({{
                         event.routeNumOfRankers
                       }}
-                      <ion-icon name="contact"></ion-icon>
-                      )
+                      <ion-icon name="contact"></ion-icon>)
                     </ion-label>
                   </ion-col>
                 </ion-row>
@@ -159,19 +158,26 @@
                       >None</ion-label
                     >
                   </ion-item>
-                  <ion-item>
+
+                  <ion-item *ngIf="event.priceOfEvent">
                     <ion-icon
                       name="cart"
                       style="font-size: 1em;"
                       padding-end
                     ></ion-icon>
-                    {{
-                      event.isGuidedEvent
-                        ? event.priceOfEvent
-                        : event.entranceFee
-                    }}
+                    Price of Event: (US$) {{ event.priceOfEvent }}/
                     <ion-icon name="contact" style="font-size: 1em;"></ion-icon>
                   </ion-item>
+                  <ion-item *ngIf="event.entranceFee">
+                    <ion-icon
+                      name="cart"
+                      style="font-size: 1em;"
+                      padding-end
+                    ></ion-icon>
+                    Entrance Fee: (US$) {{ event.entranceFee }}/
+                    <ion-icon name="contact" style="font-size: 1em;"></ion-icon>
+                  </ion-item>
+
                   <!--
                     ion-item>
                         TODO Traveler Rating: 2 (12
