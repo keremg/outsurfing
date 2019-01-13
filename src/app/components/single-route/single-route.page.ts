@@ -77,7 +77,7 @@ export class SingleRoutePage implements OnInit {
     this.singleRouteForm = this.formBuilder.group({
       name: ['',  Validators.required],
       country: ['', Validators.required],
-      state: ['', Validators.required],
+      state: [''],
       routeStartLocation: ['', Validators.required],
       routeEndLocation: [''],
       routeStartGeolocation: ['', Validators.required],
