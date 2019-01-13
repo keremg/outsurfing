@@ -93,8 +93,8 @@
             <ion-row>
               <ion-col size="7">
                 <ion-item> Type: {{ route.routeProperties }} </ion-item>
-                <ion-item> Duration: {{ route.routeDuration }} {{route.routeDurationUnits}} </ion-item>
-                <ion-item> Length: {{ route.lengthKM }} </ion-item>
+                <ion-item> Duration: {{ getDurationText(route.routeDuration) }}</ion-item>
+                <ion-item> Length: {{ route.lengthKM }} Km </ion-item>
                 <ion-item> Level: {{ difficultiesEnum[route.routeDifficulty] }} </ion-item>
                 <ion-item> Seasons: {{ route.seasons }} </ion-item>
 

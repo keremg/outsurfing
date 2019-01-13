@@ -100,9 +100,7 @@
                   Type: {{ event.routeProperties }} </ion-label
                 ><!-- TODO change to icons -->
                 <ion-label padding-end
-                  >Duration: {{ event.routeDuration }}
-                  {{ event.routeDurationUnits }}</ion-label
-                >
+                  >Duration: {{ getDurationText(event.routeDuration) }}</ion-label>
                 <ion-label>
                   Level: {{ difficultiesEnum[event.routeDifficulty] }}
                 </ion-label>

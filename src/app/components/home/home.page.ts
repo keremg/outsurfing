@@ -316,4 +316,14 @@ export class HomePage implements OnInit {
     }
     return res;
   }
+
+  getDurationText(durationInHours){
+      let units = "hours";
+      let res = durationInHours;
+      if(durationInHours>24){
+          units = "days";
+          res = Math.floor(durationInHours/24);
+      }
+      return res+" "+units;
+  }
 }

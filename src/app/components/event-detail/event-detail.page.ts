@@ -618,25 +618,15 @@ export class EventDetailPage implements OnInit {
         this.event.routeDifficulty =
             this.singleEventForm.value.routeDifficulty || 0;
 
-        let durationValue = this.singleEventForm.value.routeDuration || 0;
-        if (!durationValue && this.event.routeStartTime && this.event.returnTime) {
-            durationValue = this.getHoursDifference(this.event.routeStartTime, this.event.returnTime);
-        }
-        this.event.routeDurationUnits = this.singleEventForm.value.routeDurationUnits;
-        if(durationValue >=24 && this.event.routeDurationUnits==='hours'){
-            this.event.routeDurationUnits = 'days';
-            this.event.routeDuration = Math.floor(durationValue/24);
-        }else{
-            this.event.routeDuration = durationValue;
-        }
-        // let durationHours = this.singleEventForm.value.routeDuration || 0;
-        // if (this.singleEventForm.value.routeDurationUnits === 'days') {
-        //     durationHours *= 24;
-        // }
-        // this.event.routeDuration = durationHours;
-        // if (!this.event.routeDuration && this.event.routeStartTime && this.event.returnTime) {
-        //     this.event.routeDuration = this.getHoursDifference(this.event.routeStartTime, this.event.returnTime);
-        // }
+
+         let durationHours = this.singleEventForm.value.routeDuration || 0;
+         if (this.singleEventForm.value.routeDurationUnits === 'days') {
+             durationHours *= 24;
+         }
+         this.event.routeDuration = durationHours;
+         if (!this.event.routeDuration && this.event.routeStartTime && this.event.returnTime) {
+             this.event.routeDuration = this.getHoursDifference(this.event.routeStartTime, this.event.returnTime);
+         }
 
 
         this.event.routeProperties =

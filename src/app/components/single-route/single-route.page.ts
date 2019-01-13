@@ -416,20 +416,13 @@ export class SingleRoutePage implements OnInit {
     this.route.routeDifficulty =
       this.singleRouteForm.value.routeDifficulty || 0;
 
-      let durationValue = this.singleRouteForm.value.routeDuration || 0;
-      this.route.routeDurationUnits = this.singleRouteForm.value.routeDurationUnits;
-      if(durationValue >=24 && this.route.routeDurationUnits==='hours'){
-          this.route.routeDurationUnits = 'days';
-          this.route.routeDuration = Math.floor(durationValue/24);
-      }else{
-          this.route.routeDuration = durationValue;
-      }
 
-/*    let durationHours = this.singleRouteForm.value.routeDuration || 0;
+
+    let durationHours = this.singleRouteForm.value.routeDuration || 0;
     if (this.singleRouteForm.value.routeDurationUnits === 'days') {
       durationHours *= 24;
     }
-    this.route.routeDuration = durationHours;*/
+    this.route.routeDuration = durationHours;
     this.route.routeProperties =
       this.singleRouteForm.value.routeProperties || '';
     this.route.isGuidingOffered =
