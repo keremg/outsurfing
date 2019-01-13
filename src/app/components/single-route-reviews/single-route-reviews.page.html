@@ -48,8 +48,7 @@
   <ion-card *ngFor="let review of (reviews | async)">
     <ion-grid>
       <ion-row>
-        <ion-col>
-          <ion-item>
+        <ion-col size =4>
             <app-route-image
               [imgPath]="
                 'users/' + review.reviewerId + '/profilePic' + '_Small'
@@ -57,18 +56,27 @@
               sizeToLoad="Small"
               width="20px"
             ></app-route-image>
-            <rating
-              style="font-size: 2rem; float:right"
-              [(rating)]="review.grade"
-            ></rating>
-
-            <div text-right>{{ review.review }}</div>
-
-            <ion-label text-right color="secondary">{{
-              review.reviewTime | date
-            }}</ion-label>
-          </ion-item>
         </ion-col>
+          <ion-col size = 8>
+          <ion-row>
+              <ion-col size = 8>
+                  <rating
+                          style="font-size: 2rem; float:left"
+                          [(rating)]="review.grade"
+                  ></rating>
+              </ion-col>
+              <ion-col size =4>
+                  <ion-label color="secondary">{{
+                      review.reviewTime | date
+                      }}</ion-label>
+              </ion-col>
+          </ion-row>
+            <ion-row>
+                <ion-col>
+                    <div text-left>{{ review.review }}</div>
+                </ion-col>
+            </ion-row>
+          </ion-col>
       </ion-row>
     </ion-grid>
   </ion-card>
