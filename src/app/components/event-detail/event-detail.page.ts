@@ -133,7 +133,7 @@ export class EventDetailPage implements OnInit {
             audienceType: [[]],
             isGuidedEvent: [false],
             priceOfEvent: [0],
-            organizerContactDetails: ['', Validators.required],
+            organizerContactDetails: [''],// Validators.required],
             isEventRequiresCars: [true],
             //TODO make sure numEventsCreatedFromRoute is updated!
         });

@@ -544,6 +544,7 @@
         *ngIf="!viewMode"
         padding
         size="large"
+        [disabled]="!singleRouteForm.valid"
         >Save</ion-button
       >
       <ion-button
@@ -576,7 +577,8 @@
       color="success"
       class="center"
       size="large"
-      >Event It</ion-button
+      [disabled]="!singleRouteForm.valid"
+    >Event It</ion-button
     >
   </ion-item>
 </ion-content>

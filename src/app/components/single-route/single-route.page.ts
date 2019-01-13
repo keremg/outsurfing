@@ -75,7 +75,7 @@ export class SingleRoutePage implements OnInit {
     this.id = this.activatedRoute.snapshot.paramMap.get('id');
 
     this.singleRouteForm = this.formBuilder.group({
-      name: ['', Validators.required],
+      name: ['',  Validators.required],
       country: ['', Validators.required],
       state: ['', Validators.required],
       routeStartLocation: ['', Validators.required],
@@ -328,7 +328,7 @@ export class SingleRoutePage implements OnInit {
     } else {
       //this.navCtrl.navigateForward('ChooseRoute');
       //this.ngOnInit().then();
-      this.navCtrl.navigateRoot('SingleRoute/' +this.id+'/0')
+      this.navCtrl.navigateRoot('SingleRoute/' +this.id);
     }
   }
 
@@ -410,7 +410,7 @@ export class SingleRoutePage implements OnInit {
       this.singleRouteForm.value.routeEndGeolocation || '';
     // this.route.imagesUrls = this.singleRouteForm.value.imagesUrls || [];
     // this.route.mapImagesUrl = this.singleRouteForm.value.mapImagesUrl || [];
-    this.route.lengthKM = this.singleRouteForm.value.lengthKM || '';
+    this.route.lengthKM = this.singleRouteForm.value.lengthKM || 0;
     this.route.shortDescription =
       this.singleRouteForm.value.shortDescription || '';
     this.route.longDescription =

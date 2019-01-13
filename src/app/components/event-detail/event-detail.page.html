@@ -594,6 +594,6 @@
     <ion-button *ngIf="!isPastEvent && joined && event?.eventOrganizerId !== currentUser?.id && !isNewEvent" id='leave' (click)="onLeaveEvent()">Leave</ion-button>
     <ion-button *ngIf="isPastEvent && joined" id='rankEvent' (click)="rankEvent()">Rank Route and Participants</ion-button>
     <!-- <ion-button *ngIf="!isPastEvent && !viewMode && !isNewEvent" id='approve' (click)="onApprove()">Approve Participants</ion-button> -->
-    <ion-button *ngIf="!isPastEvent && !viewMode" id='save' (click)="updateEvent(true)">Save</ion-button><!--TODO change label if you create new-->
+    <ion-button *ngIf="!isPastEvent && !viewMode" id='save' [disabled]="!singleEventForm.valid" (click)="updateEvent(true)">Save</ion-button><!--TODO change label if you create new-->
     <ion-button *ngIf="!isPastEvent && !viewMode && !isNewEvent" id='delete' (click)="onDelete()">Delete</ion-button>
 </ion-content>
