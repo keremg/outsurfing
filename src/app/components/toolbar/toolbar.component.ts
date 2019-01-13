@@ -22,4 +22,8 @@ export class ToolbarComponent implements OnInit {
       }
       this.currentUserId = this.authService.currentUserId;
   }
+
+    goToHome() {
+        return this.navCtrl.navigateRoot('home').then();
+    }
 }
