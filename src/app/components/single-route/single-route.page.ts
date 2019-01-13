@@ -321,7 +321,7 @@ export class SingleRoutePage implements OnInit {
       await this.uploadPhotos(copyOfRoute); //both regular photos and maps-photos
       console.log('After uploadPhotos, about to navigate');
       this.closeLoadingController();
-      if (!eventIt && isNewRoute) {
+      if (!eventIt) { //&& isNewRoute
         eventIt = await this.presentAlertConfirmEventIt();
       }
     }
@@ -340,7 +340,7 @@ export class SingleRoutePage implements OnInit {
     let shouldEventIt = false;
     const alert = await this.alertController.create({
       header: "Congratulations you've created a new route",
-      message: 'Would you like to EventIt? (create new trip-event)',
+      message: 'Would you like to Event-It? (create new trip-event)',
       buttons: [
         {
           text: 'No thanks',
