@@ -68,7 +68,6 @@ export class SignupPage implements OnInit{
                 `Need to complete the form, current value: ${this.signupForm.value}`
             );
         } else {
-            debugger;
             const email: string = this.signupForm.value.email;
             const password: string = this.signupForm.value.password;
             let success = false;
@@ -76,7 +75,6 @@ export class SignupPage implements OnInit{
                 this.loading = await this.loadingCtrl.create();
                 this.loading.present();
                 let user = await this.authService.emailSignup(email, password);
-                debugger;
                 let u = {
                     email: this.signupForm.value.email,
                     firstName: this.signupForm.value.firstName,
@@ -102,7 +100,7 @@ export class SignupPage implements OnInit{
 
                 await this.userService.addUsers(u);
                 success = true;
-                await this.loading.dismiss();
+                this.loading.dismiss();
 
             } catch (error) {
                 try {

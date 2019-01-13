@@ -52,15 +52,14 @@ export class UserService {
     }
 
     async addUsers(userProfile: any) {
-        await this.firebaseAuth.authState.subscribe(u => {
-            if (u) {
-                this.userId = u.uid;
-            } else {
-                // Empty the value when user signs out
-                this.userId = null;
-            }
-        });
-        this.afs.collection('users').doc(this.userId).set(userProfile);
+        let u = await new Promise<any>(res=> this.firebaseAuth.authState.subscribe(res));
+        if (u) {
+            this.userId = u.uid;
+        } else {
+            // Empty the value when user signs out
+            this.userId = null;
+        }
+        await this.afs.collection('users').doc(this.userId).set(userProfile);
     }
 
 

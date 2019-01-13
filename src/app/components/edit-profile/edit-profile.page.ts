@@ -173,13 +173,13 @@ export class EditProfilePage implements OnInit {
           this.ngOnInit().then();
         } catch (error) {
           console.log(error);
-          debugger;
           success = false;
         }
       }
-    } catch (error) {
-      debugger;
     }
+    // catch (error) {
+    //   debugger;
+    // }
   }
 
   openLoadingController() {
