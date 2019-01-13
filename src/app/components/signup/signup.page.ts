@@ -68,6 +68,7 @@ export class SignupPage implements OnInit{
                 `Need to complete the form, current value: ${this.signupForm.value}`
             );
         } else {
+            debugger;
             const email: string = this.signupForm.value.email;
             const password: string = this.signupForm.value.password;
             let success = false;

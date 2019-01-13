@@ -186,20 +186,21 @@
                     </ion-item
                   -->
                 </ion-col>
-                <ion-col size="2">
+                <ion-col size="2" style="width: 110px;">
                   <ion-item>
                     {{ event.approvedParticipants }} participants
                   </ion-item>
-                  <ion-grid wrap>
+                  <ion-grid wrap style="height: 110px; width: 110px;">
                     <ion-row size="12">
                       <div
                         *ngFor="
                           let par of (event?.participantsObs | async);
                           index as i
                         "
+                        style="height: 50px; width: 50px;"
                       >
                         <ion-col
-                          size="4"
+                          size="6"
                           *ngIf="par.approved"
                           (click)="onViewProfile(par.id, $event)"
                         >

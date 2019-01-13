@@ -32,7 +32,7 @@ export class HomePage implements OnInit {
   title: string;
   onInitHappenedLast: boolean = false;
   difficultiesEnum = DifficultiesEnum;
-  maxPhotosToLoad: number = 3;
+  maxPhotosToLoad: number = 6;
 
   constructor(
     public navCtrl: NavController,

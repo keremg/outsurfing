@@ -67,10 +67,11 @@ export class AppComponent implements OnInit {
   }
 
     logout() {
+        this.menuCtrl.close();
         this.authService
             .logoutUser()
             .then(() => {
-                this.navCtrl.navigateRoot('');
+                this.navCtrl.navigateRoot('SignIn');
             })
             .catch(() => {
                 console.log('error in logout');
