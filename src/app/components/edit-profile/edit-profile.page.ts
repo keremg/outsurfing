@@ -54,14 +54,13 @@ export class EditProfilePage implements OnInit {
   constructor(
     public navCtrl: NavController,
     public authService: AuthService,
-    public loadingCtrl: LoadingController,
-    public alertCtrl: AlertController,
     private formBuilder: FormBuilder,
     private userService: UserService,
     private storage: AngularFireStorage,
     private modalController: ModalController,
     public compressImageService: CompressImageService,
-    public loadingController: LoadingController
+    public loadingController: LoadingController,
+    private alertController: AlertController
   ) {
     this.updateForm = this.formBuilder.group({
       firstName: [
@@ -110,7 +109,7 @@ export class EditProfilePage implements OnInit {
         async error => {
           console.log(error);
           if (error.code === 'storage/object-not-found') {
-            const alert = await this.alertCtrl.create({
+            const alert = await this.alertController.create({
               message:
                 'It seems you dont have a profile picture. consider uploading one:)',
               buttons: [{ text: 'ok' }]
@@ -167,10 +166,15 @@ export class EditProfilePage implements OnInit {
             audienceTypes: this.updateForm.value.peopleType
           };
           console.log(this.currentUserId, u);
+          this.openLoadingController();
           await this.userService.updateUser(this.currentUserId, u);
+          this.closeLoadingController();
           success = true;
-          //this.navCtrl.navigateRoot('home');
           this.ngOnInit().then();
+          let shouldGoHome = await this.presentAlertConfirmGoHome();
+          if (shouldGoHome) {
+            this.navCtrl.navigateRoot('home');
+          }
         } catch (error) {
           console.log(error);
           success = false;
@@ -230,6 +234,36 @@ export class EditProfilePage implements OnInit {
     //return task;
   }
 
+  async presentAlertConfirmGoHome(): Promise<boolean> {
+    let shouldGoHome = false;
+    const alert = await this.alertController.create({
+      header: "Congratulations you've updated your account",
+      message: 'Would you like to go out to the world and see events around you?',
+      buttons: [
+        {
+          text: "No, I'm in love with my profile",
+          role: 'cancel',
+          cssClass: 'secondary',
+          handler: (blah) => {
+            console.log('Confirm Cancel: blah');
+            shouldGoHome = false;
+          }
+        }, {
+          text: 'Yes, lets go!',
+          handler: () => {
+            console.log('Confirm Okay');
+            shouldGoHome = true;
+          }
+        }
+      ]
+    });
+
+    await alert.present();
+    await alert.onDidDismiss();
+    return shouldGoHome;
+  }
+
+
   getENUM(ENUM: any): string[] {
     let myEnum = [];
     let objectEnum = Object.keys(ENUM);
@@ -262,7 +296,7 @@ export class EditProfilePage implements OnInit {
 
   /*on_no_profile_pic(){
         if(error.code === 'storage/object-not-found'){
-            const alert = await this.alertCtrl.create({
+            const alert = await this.alertController.create({
                 message: 'It seems you dont have a profile picture. consider uploading one:)',
                 buttons: [{text: 'ok'}]
             });
