@@ -144,7 +144,7 @@ export class EditProfilePage implements OnInit {
   }
 
   async updateUser() {
-    try {
+    //try {
       if (!this.updateForm.valid) {
         console.log(
           `Need to complete the form, current value: ${this.updateForm.value}`
@@ -176,8 +176,7 @@ export class EditProfilePage implements OnInit {
           success = false;
         }
       }
-    }
-    // catch (error) {
+    // } catch (error) {
     //   debugger;
     // }
   }
