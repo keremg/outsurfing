@@ -233,6 +233,17 @@ export class HomePage implements OnInit {
     if (this.map) {
       this.map.remove();
     }
+
+        var node  = document.getElementById('map');
+      if (node) {
+        node.hidden = false;
+        let parent = node.parentNode;
+        node.parentNode.removeChild(node);
+          var div = document.createElement("div");
+          div.setAttribute("id", "map");
+// as an example add it to the body
+          parent.appendChild(div);
+      }
     this.map = leaflet.map('map').fitWorld();
     this.map
       .locate({
