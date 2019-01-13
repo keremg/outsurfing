@@ -14,12 +14,13 @@ export class RouteImageComponent implements OnInit {
   @Input() height: string;
   @Input() number: number;
   @Input() alt: string = 'X';
+  @Input() round: boolean = false;
 
   picUrl: string | null;
   constructor(private storage: AngularFireStorage) {}
 
   ngOnInit() {
-      if (this.imgPath) {
+    if (this.imgPath) {
       const ref = this.storage.ref(this.imgPath);
       ref.getDownloadURL().subscribe(
         res => {

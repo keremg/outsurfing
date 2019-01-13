@@ -1,699 +1,806 @@
 <ion-header>
-<app-toolbar [defaultBack]="query ? 'home' : null" [title]="title"></app-toolbar>
+  <app-toolbar
+    [defaultBack]="query ? 'home' : null"
+    [title]="title"
+  ></app-toolbar>
 </ion-header>
 
 <ion-content padding>
-    <ion-buttons>
-        <ion-searchbar
-                id="search"
-                debounce="1000"
-                *ngIf="!this.onlyMine"
-                (ionChange)="search($event)"
-                value="{{query}}"
-                show-cancel-button="false"></ion-searchbar>
+  <ion-buttons>
+    <ion-searchbar
+      id="search"
+      debounce="1000"
+      *ngIf="!this.onlyMine"
+      (ionChange)="search($event)"
+      value="{{query}}"
+      show-cancel-button="false"
+    ></ion-searchbar>
 
-        <ion-button
-                style="float: right;"
-                slot="end"
-                color="dark"
-                fill="solid"
-                shape="round"
-                id="filter"
-                *ngIf="!this.onlyMine"
-                (click)="onFilter($event)">
-            <ion-icon name="funnel"></ion-icon>
-            Filter
-        </ion-button>
-    </ion-buttons>
+    <ion-button
+      style="float: right;"
+      slot="end"
+      color="dark"
+      fill="solid"
+      shape="round"
+      id="filter"
+      *ngIf="!this.onlyMine"
+      (click)="onFilter($event)"
+    >
+      <ion-icon name="funnel"></ion-icon>
+      Filter
+    </ion-button>
+  </ion-buttons>
 
-    <ion-card class="event"
-              (click)="onCreateEvent()"
-              *ngIf="!this.onlyMine">
-        <ion-button id="createEvent" fill="clear" expand="full" size="large"  color="dark">
-            Create New
-        </ion-button>
-    </ion-card>
-    <div *ngFor="let event of (this.page.data | async); let i = index">
-        <ion-card *ngIf="event.shouldShow"
-                [attr.data-index]="i"
-                class="event"
-                  (click)="ShowEventDetail(event.doc.id)">
-            <ion-grid>
-                <ion-row>
-                    <ion-col size="4" push-md="8">
-                        <!--ion-item>
-                        <ion-button shape="round"
-                                    fill="outline"
-                                    (click)="ShowEventDetail(event.doc.id)"
-                                    float-right>
-                            More Details
-                        </ion-button>
-                        </ion-item-->
-                        <ion-item>
-                            <app-route-image imgPath="{{event.imagesUrls && event.imagesUrls.length>0 && event.imagesUrls[0]+'_Large'}}" sizeToLoad="Large"></app-route-image>
-                        </ion-item>
-
-                    </ion-col>
-                    <ion-col size="8" pull-md="4">
-                        <ion-card-header no-padding>
-                            <ion-card-title style="font-size: 2em;">
-                                <ion-row justify-content-between style="align-items: center;">
-                                    <ion-col size="9">
-                                        <ion-icon name="calendar"></ion-icon>
-                                        <ion-text style="font-size: 0.5em;">Event</ion-text>
-                                        {{ event.name }} <ion-label color="danger">{{event.isPastEvent? 'Past':null}}</ion-label>
-                                    </ion-col>
-                                    <ion-col size="3">
-                                            <ion-label style="font-size: 1rem" *ngIf="event.routeRanking">
-                                                Route Rating: {{ event.routeRanking.toFixed(2) }} ({{event.routeNumOfRankers}}
-                                                <ion-icon name="contact"></ion-icon>
-                                                )
-                                            </ion-label>
-                                    </ion-col>
-                                </ion-row>
-                            </ion-card-title>
-                            <ion-card-subtitle>
-                                <ion-label padding-end> Type: {{ event.routeProperties }} </ion-label><!--TODO change to icons-->
-                                <ion-label padding-end>Duration: {{ event.routeDuration }} {{event.routeDurationUnits}}</ion-label>
-                                <ion-label> Level: {{difficultiesEnum[event.routeDifficulty] }} </ion-label>
-                            </ion-card-subtitle>
-                            <ion-card-subtitle>
-                                <ion-label padding-end>Meeting: {{ event.meetingTime }} {{ event.meetingLocation }}</ion-label>
-                                <!-- <ion-label> Ages: 20-70 </ion-label> -->
-                            </ion-card-subtitle>
-                            <!-- need to be added from JS -->
-                        </ion-card-header>
-                        <!-- <ion-card-content> -->
-                        <ion-grid wrap>
-                            <ion-row>
-                                <ion-col size="2" (click)="onViewProfile(event.eventOrganizerId, $event)">
-                                    <ion-item><ion-label style="font-size: 0.8em">Organizer:</ion-label></ion-item>
-                                    <app-route-image
-                                            imgPath="users/{{event.eventOrganizerId}}/profilePic_Small" sizeToLoad="Small"></app-route-image>
-
-                                </ion-col>
-                                <ion-col id="organizer" size="4">
-                                    <ion-item></ion-item>
-                                    <ion-item> {{(event.eventOrganizer |async)?.firstName}}{{event.organizerAge}}</ion-item>
-                                    <ion-item> Is Guided: {{event.isGuidedEvent ? 'Yes' : 'No'}}</ion-item>
-                                    <ion-item *ngIf="event.isGuidedEvent">
-                                        Guide Rating:
-                                        <ion-label *ngIf="(event.eventOrganizer |async)?.avgGuideRating">{{(event.eventOrganizer |async)?.avgGuideRating?.toFixed(2)}} ({{(event.eventOrganizer |async)?.numOfGuideRaters}}
-                                            <ion-icon name="contact"></ion-icon>
-                                            )
-                                        </ion-label>
-                                        <ion-label *ngIf="!(event.eventOrganizer |async)?.avgGuideRating">None</ion-label>
-
-                                    </ion-item>
-                                    <ion-item >
-                                        <ion-icon
-                                                name="cart"
-                                                style="font-size: 1em;"
-                                                padding-end
-                                        ></ion-icon>
-                                        {{ event.isGuidedEvent? event.priceOfEvent : event.entranceFee }}
-                                        <ion-icon name="contact" style="font-size: 1em;"></ion-icon>
-                                    </ion-item>
-                                    <!--ion-item>
-                                        TODO Traveler Rating: 2 (12
-                                        <ion-icon name="contact"></ion-icon>
-                                        )
-                                    </ion-item-->
-                                </ion-col>
-                                <ion-col size="2">
-                                    <ion-item>
-                                        {{ event.approvedParticipants }} participants
-                                    </ion-item>
-                                        <ion-grid wrap>
-                                            <ion-row size="12">
-                                                <div *ngFor="let par of (event?.participantsObs|async);">
-                                                    <ion-col size="4" *ngIf="par.approved" (click)="onViewProfile(par.id, $event)">
-                                                        <!--TODO: urgent fix image size-->
-                                                        <app-route-image [imgPath]="'users/'+par.id+'/profilePic'+'_Small'" sizeToLoad="Small" width="20px"></app-route-image>
-                                                    </ion-col>
-                                                </div>
-                                            </ion-row>
-                                        </ion-grid>
-                                </ion-col>
-                                <ion-col size="4">
-                                <ion-item *ngIf="event.meetingGeolocation && (location |async)"><ion-label>Distance to meeting: {{event.meetingDistance}}km</ion-label></ion-item>
-                                    <ion-item *ngIf="event.routeStartGeolocation && (location |async)"><ion-label>Distance to trip: {{event.startDistance}}km</ion-label></ion-item>
-                                    <ion-item *ngIf="event.isEventRequiresCars">
-                                        <ion-icon
-                                                name="car"
-                                                style="font-size: 1em;"
-                                                padding-end
-                                        ></ion-icon>
-                                        <ion-label *ngIf="event?.availableSeats && event?.availableSeats < 0" color="danger">OverBooked</ion-label>
-                                        <ion-label *ngIf="!(event?.availableSeats && event?.availableSeats < 0)">{{event?.availableSeats ? event?.availableSeats : '0'}} Available</ion-label>
-                                    </ion-item>
-                                    <ion-item>
-                                        <ion-icon name="log-in">Arrival</ion-icon>
-                                        {{event.isEventRequiresCars? 'Private cars' : 'Organized'}}
-                                    </ion-item>
-                                    <ion-item *ngIf="event.audienceType">
-                                        <ion-label> Audience: {{ event.audienceTypeText }} </ion-label>
-                                    </ion-item>
-                                </ion-col>
-                            </ion-row>
-                            <ion-row>
-                                <ion-col>
-                                    <ion-item>
-                                        (Short) Description: {{ event.shortDescription }}
-                                    </ion-item>
-                                </ion-col>
-                            </ion-row>
-                            <ion-row>
-                                <ion-col>
-                                    <ion-item> Equipment: {{ event.requiredEquipment }} </ion-item>
-                                </ion-col>
-                            </ion-row>
-                        </ion-grid>
-                        <!-- </ion-card-content> -->
-                    </ion-col>
+  <ion-card class="event" (click)="onCreateEvent()" *ngIf="!this.onlyMine">
+    <ion-button
+      id="createEvent"
+      fill="clear"
+      expand="full"
+      size="large"
+      color="dark"
+    >
+      Create New
+    </ion-button>
+  </ion-card>
+  <div *ngFor="let event of (this.page.data | async); let i = index">
+    <ion-card
+      *ngIf="event.shouldShow"
+      [attr.data-index]="i"
+      class="event"
+      (click)="ShowEventDetail(event.doc.id)"
+    >
+      <ion-grid>
+        <ion-row>
+          <ion-col size="4" push-md="8">
+            <!--
+              ion-item>
+              <ion-button shape="round"
+                          fill="outline"
+                          (click)="ShowEventDetail(event.doc.id)"
+                          float-right>
+                  More Details
+              </ion-button>
+              </ion-item
+            -->
+            <ion-item>
+              <app-route-image
+                imgPath="{{event.imagesUrls && event.imagesUrls.length>0 && event.imagesUrls[0]+'_Large'}}"
+                sizeToLoad="Large"
+              ></app-route-image>
+            </ion-item>
+          </ion-col>
+          <ion-col size="8" pull-md="4">
+            <ion-card-header no-padding>
+              <ion-card-title style="font-size: 2em;">
+                <ion-row justify-content-between style="align-items: center;">
+                  <ion-col size="9">
+                    <ion-icon name="calendar"></ion-icon>
+                    <ion-text style="font-size: 0.5em;">Event</ion-text>
+                    {{ event.name }}
+                    <ion-label color="danger">{{
+                      event.isPastEvent ? 'Past' : null
+                    }}</ion-label>
+                  </ion-col>
+                  <ion-col size="3">
+                    <ion-label
+                      style="font-size: 1rem"
+                      *ngIf="event.routeRanking"
+                    >
+                      Route Rating: {{ event.routeRanking.toFixed(2) }} ({{
+                        event.routeNumOfRankers
+                      }}
+                      <ion-icon name="contact"></ion-icon>
+                      )
+                    </ion-label>
+                  </ion-col>
                 </ion-row>
+              </ion-card-title>
+              <ion-card-subtitle>
+                <ion-label padding-end>
+                  Type: {{ event.routeProperties }} </ion-label
+                ><!-- TODO change to icons -->
+                <ion-label padding-end
+                  >Duration: {{ event.routeDuration }}
+                  {{ event.routeDurationUnits }}</ion-label
+                >
+                <ion-label>
+                  Level: {{ difficultiesEnum[event.routeDifficulty] }}
+                </ion-label>
+              </ion-card-subtitle>
+              <ion-card-subtitle>
+                <ion-label padding-end
+                  >Meeting: {{ event.meetingTime }}
+                  {{ event.meetingLocation }}</ion-label
+                >
+                <!-- <ion-label> Ages: 20-70 </ion-label> -->
+              </ion-card-subtitle>
+              <!-- need to be added from JS -->
+            </ion-card-header>
+            <!-- <ion-card-content> -->
+            <ion-grid wrap>
+              <ion-row>
+                <ion-col
+                  size="2"
+                  (click)="onViewProfile(event.eventOrganizerId, $event)"
+                >
+                  <ion-item
+                    ><ion-label style="font-size: 0.8em"
+                      >Organizer:</ion-label
+                    ></ion-item
+                  >
+                  <app-route-image
+                    imgPath="users/{{event.eventOrganizerId}}/profilePic_Small"
+                    sizeToLoad="Small"
+                  ></app-route-image>
+                </ion-col>
+                <ion-col id="organizer" size="4">
+                  <ion-item></ion-item>
+                  <ion-item>
+                    {{ (event.eventOrganizer | async)?.firstName
+                    }}{{ event.organizerAge }}</ion-item
+                  >
+                  <ion-item>
+                    Is Guided:
+                    {{ event.isGuidedEvent ? 'Yes' : 'No' }}</ion-item
+                  >
+                  <ion-item *ngIf="event.isGuidedEvent">
+                    Guide Rating:
+                    <ion-label
+                      *ngIf="(event.eventOrganizer | async)?.avgGuideRating"
+                      >{{
+                        (event.eventOrganizer | async)?.avgGuideRating?.toFixed(
+                          2
+                        )
+                      }}
+                      ({{ (event.eventOrganizer | async)?.numOfGuideRaters }}
+                      <ion-icon name="contact"></ion-icon>
+                      )
+                    </ion-label>
+                    <ion-label
+                      *ngIf="!(event.eventOrganizer | async)?.avgGuideRating"
+                      >None</ion-label
+                    >
+                  </ion-item>
+                  <ion-item>
+                    <ion-icon
+                      name="cart"
+                      style="font-size: 1em;"
+                      padding-end
+                    ></ion-icon>
+                    {{
+                      event.isGuidedEvent
+                        ? event.priceOfEvent
+                        : event.entranceFee
+                    }}
+                    <ion-icon name="contact" style="font-size: 1em;"></ion-icon>
+                  </ion-item>
+                  <!--
+                    ion-item>
+                        TODO Traveler Rating: 2 (12
+                        <ion-icon name="contact"></ion-icon>
+                        )
+                    </ion-item
+                  -->
+                </ion-col>
+                <ion-col size="2">
+                  <ion-item>
+                    {{ event.approvedParticipants }} participants
+                  </ion-item>
+                  <ion-grid wrap>
+                    <ion-row size="12">
+                      <div
+                        *ngFor="
+                          let par of (event?.participantsObs | async);
+                          index as i
+                        "
+                      >
+                        <ion-col
+                          size="4"
+                          *ngIf="par.approved"
+                          (click)="onViewProfile(par.id, $event)"
+                        >
+                          <div *ngIf="i < maxPhotosToLoad">
+                            <!-- TODO: urgent fix image size -->
+                            <app-route-image
+                              [imgPath]="
+                                'users/' + par.id + '/profilePic' + '_Small'
+                              "
+                              sizeToLoad="Small"
+                              width="2px"
+                              round="true"
+                            ></app-route-image>
+                          </div>
+                        </ion-col>
+                      </div>
+                    </ion-row>
+                  </ion-grid>
+                </ion-col>
+                <ion-col size="4">
+                  <ion-item
+                    *ngIf="event.meetingGeolocation && (location | async)"
+                    ><ion-label
+                      >Distance to meeting:
+                      {{ event.meetingDistance }}km</ion-label
+                    ></ion-item
+                  >
+                  <ion-item
+                    *ngIf="event.routeStartGeolocation && (location | async)"
+                    ><ion-label
+                      >Distance to trip: {{ event.startDistance }}km</ion-label
+                    ></ion-item
+                  >
+                  <ion-item *ngIf="event.isEventRequiresCars">
+                    <ion-icon
+                      name="car"
+                      style="font-size: 1em;"
+                      padding-end
+                    ></ion-icon>
+                    <ion-label
+                      *ngIf="event?.availableSeats && event?.availableSeats < 0"
+                      color="danger"
+                      >OverBooked</ion-label
+                    >
+                    <ion-label
+                      *ngIf="
+                        !(event?.availableSeats && event?.availableSeats < 0)
+                      "
+                      >{{
+                        event?.availableSeats ? event?.availableSeats : '0'
+                      }}
+                      Available</ion-label
+                    >
+                  </ion-item>
+                  <ion-item>
+                    <ion-icon name="log-in">Arrival</ion-icon>
+                    {{
+                      event.isEventRequiresCars ? 'Private cars' : 'Organized'
+                    }}
+                  </ion-item>
+                  <ion-item *ngIf="event.audienceType">
+                    <ion-label>
+                      Audience: {{ event.audienceTypeText }}
+                    </ion-label>
+                  </ion-item>
+                </ion-col>
+              </ion-row>
+              <ion-row>
+                <ion-col>
+                  <ion-item>
+                    (Short) Description: {{ event.shortDescription }}
+                  </ion-item>
+                </ion-col>
+              </ion-row>
+              <ion-row>
+                <ion-col>
+                  <ion-item>
+                    Equipment: {{ event.requiredEquipment }}
+                  </ion-item>
+                </ion-col>
+              </ion-row>
             </ion-grid>
-        </ion-card>
-    </div>
-    <div *ngIf="(page.data | async)?.length < 1">
-        <hr/>
-        <p>No results found :(</p>
-    </div>
+            <!-- </ion-card-content> -->
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </ion-card>
+  </div>
+  <div *ngIf="(page.data | async)?.length < 1">
+    <hr />
+    <p>No results found :(</p>
+  </div>
 
-    <ion-infinite-scroll id="infinite-scroll" (ionInfinite)="loadData($event)">
-        <ion-infinite-scroll-content
-                loadingSpinner="bubbles"
-                loadingText="Loading more data..."
-        >
-        </ion-infinite-scroll-content>
-    </ion-infinite-scroll>
+  <ion-infinite-scroll id="infinite-scroll" (ionInfinite)="loadData($event)">
+    <ion-infinite-scroll-content
+      loadingSpinner="bubbles"
+      loadingText="Loading more data..."
+    >
+    </ion-infinite-scroll-content>
+  </ion-infinite-scroll>
 
-    <div id="map" ></div>
+  <div id="map"></div>
 
-    <!-- TODO: from here all cards are just an example -->
-    <!-- <ion-card class="event"> -->
-    <!-- <ion-grid> -->
-    <!-- <ion-row> -->
-    <!-- <ion-col size="4" push-md="8"> -->
-    <!--
-      <ion-img src="/assets/images/zeelim_zfira.jpg" class="eventImg"></ion-img>
-    -->
-    <!-- <ion-list> -->
-    <!-- <ion-item> -->
-    <!-- <ion-label> -->
-    <!-- Trip Rating: 9 (17 -->
-    <!-- <ion-icon name="contact"></ion-icon> -->
-    <!-- ) -->
-    <!-- </ion-label> -->
-    <!-- <ion-label> -->
-    <!-- Level: Medium + -->
-    <!-- </ion-label> -->
-    <!-- </ion-item> -->
-    <!-- </ion-list> -->
-    <!-- </ion-col> -->
-    <!-- <ion-col size="8" pull-md="4"> -->
+  <!-- TODO: from here all cards are just an example -->
+  <!-- <ion-card class="event"> -->
+  <!-- <ion-grid> -->
+  <!-- <ion-row> -->
+  <!-- <ion-col size="4" push-md="8"> -->
+  <!--
+    <ion-img src="/assets/images/zeelim_zfira.jpg" class="eventImg"></ion-img>
+  -->
+  <!-- <ion-list> -->
+  <!-- <ion-item> -->
+  <!-- <ion-label> -->
+  <!-- Trip Rating: 9 (17 -->
+  <!-- <ion-icon name="contact"></ion-icon> -->
+  <!-- ) -->
+  <!-- </ion-label> -->
+  <!-- <ion-label> -->
+  <!-- Level: Medium + -->
+  <!-- </ion-label> -->
+  <!-- </ion-item> -->
+  <!-- </ion-list> -->
+  <!-- </ion-col> -->
+  <!-- <ion-col size="8" pull-md="4"> -->
 
-    <!-- <ion-card-header no-padding> -->
-    <!-- <ion-card-title style="font-size: 2em;"> -->
-    <!-- <ion-row justify-content-between style="align-items: center;"> -->
-    <!-- <ion-col size="9"> -->
-    <!-- <ion-icon name="calendar"></ion-icon> -->
-    <!-- <ion-text style="font-size: 0.5em;">Event</ion-text> -->
-    <!-- Upper tzeelim -->
-    <!-- </ion-col> -->
-    <!-- <ion-col size="3"> -->
-    <!-- <ion-button shape="round" fill="outline" (click)="ShowEventDetail(2)" -->
-    <!-- float-right>More Details -->
-    <!-- </ion-button> -->
-    <!-- </ion-col> -->
-    <!-- </ion-row> -->
-    <!-- </ion-card-title> -->
-    <!-- <ion-card-subtitle> -->
-    <!-- <ion-label padding-end>24/11/2018 08:00am</ion-label> -->
-    <!-- <ion-label padding-end>1 day</ion-label> -->
-    <!-- <ion-label padding-end>Meeting: Tel Aviv, Ben Yehuda 220</ion-label> -->
-    <!-- <ion-label padding-end>Distance to meeting: 5km</ion-label> -->
-    <!-- <ion-label padding-end>Distance to trip: 70km</ion-label> -->
-    <!-- </ion-card-subtitle> -->
-    <!-- <ion-card-subtitle> -->
-    <!-- <ion-label> -->
-    <!-- Type: Water, Hiking, Canyon, Swiming -->
-    <!-- </ion-label> -->
-    <!-- <ion-label> -->
-    <!-- Ages: 20-70 -->
-    <!-- </ion-label> -->
-    <!-- </ion-card-subtitle> -->
-    <!-- &lt;!&ndash;need to be added from JS&ndash;&gt; -->
-    <!-- </ion-card-header> -->
-    <!-- &lt;!&ndash;<ion-card-content>&ndash;&gt; -->
-    <!-- <ion-grid wrap> -->
-    <!-- <ion-row> -->
-    <!-- <ion-col size="2"> -->
-    <!-- <ion-img src="/assets/images/haham.jpg"></ion-img> -->
-    <!-- </ion-col> -->
-    <!-- <ion-col size="4"> -->
-    <!-- <ion-item> -->
-    <!-- Hanuka, Age: 35 -->
-    <!-- </ion-item> -->
-    <!-- <ion-item> -->
-    <!-- Is Guide: Yes -->
-    <!-- </ion-item> -->
-    <!-- <ion-item> -->
-    <!-- Guide Rating: 8 (544 -->
-    <!-- <ion-icon name="contact"></ion-icon> -->
-    <!-- ) -->
-    <!-- </ion-item> -->
-    <!-- <ion-item> -->
-    <!-- Traveler Rating: 2 (12 -->
-    <!-- <ion-icon name="contact"></ion-icon> -->
-    <!-- ) -->
-    <!-- </ion-item> -->
-    <!-- </ion-col> -->
-    <!-- <ion-col size="2"> -->
-    <!-- <ion-item> -->
-    <!-- 5 participants -->
-    <!-- </ion-item> -->
-    <!-- <ion-grid wrap> -->
-    <!-- <ion-row size="12"> -->
-    <!-- <ion-col size="4"> -->
-    <!-- <ion-img src="/assets/images/haham.jpg"></ion-img> -->
-    <!-- </ion-col> -->
-    <!-- <ion-col size="4"> -->
-    <!-- <ion-img src="/assets/images/haham.jpg"></ion-img> -->
-    <!-- </ion-col> -->
-    <!-- <ion-col size="4"> -->
-    <!-- <ion-img src="/assets/images/haham.jpg"></ion-img> -->
-    <!-- </ion-col> -->
-    <!-- </ion-row> -->
-    <!-- <ion-row size="12"> -->
-    <!-- <ion-col size="4"> -->
-    <!-- <ion-img src="/assets/images/haham.jpg"></ion-img> -->
-    <!-- </ion-col> -->
-    <!-- <ion-col size="4"> -->
-    <!-- <ion-img src="/assets/images/haham.jpg"></ion-img> -->
-    <!-- </ion-col> -->
-    <!-- </ion-row> -->
-    <!-- </ion-grid> -->
+  <!-- <ion-card-header no-padding> -->
+  <!-- <ion-card-title style="font-size: 2em;"> -->
+  <!-- <ion-row justify-content-between style="align-items: center;"> -->
+  <!-- <ion-col size="9"> -->
+  <!-- <ion-icon name="calendar"></ion-icon> -->
+  <!-- <ion-text style="font-size: 0.5em;">Event</ion-text> -->
+  <!-- Upper tzeelim -->
+  <!-- </ion-col> -->
+  <!-- <ion-col size="3"> -->
+  <!-- <ion-button shape="round" fill="outline" (click)="ShowEventDetail(2)" -->
+  <!-- float-right>More Details -->
+  <!-- </ion-button> -->
+  <!-- </ion-col> -->
+  <!-- </ion-row> -->
+  <!-- </ion-card-title> -->
+  <!-- <ion-card-subtitle> -->
+  <!-- <ion-label padding-end>24/11/2018 08:00am</ion-label> -->
+  <!-- <ion-label padding-end>1 day</ion-label> -->
+  <!-- <ion-label padding-end>Meeting: Tel Aviv, Ben Yehuda 220</ion-label> -->
+  <!-- <ion-label padding-end>Distance to meeting: 5km</ion-label> -->
+  <!-- <ion-label padding-end>Distance to trip: 70km</ion-label> -->
+  <!-- </ion-card-subtitle> -->
+  <!-- <ion-card-subtitle> -->
+  <!-- <ion-label> -->
+  <!-- Type: Water, Hiking, Canyon, Swiming -->
+  <!-- </ion-label> -->
+  <!-- <ion-label> -->
+  <!-- Ages: 20-70 -->
+  <!-- </ion-label> -->
+  <!-- </ion-card-subtitle> -->
+  <!-- &lt;!&ndash;need to be added from JS&ndash;&gt; -->
+  <!-- </ion-card-header> -->
+  <!-- &lt;!&ndash;<ion-card-content>&ndash;&gt; -->
+  <!-- <ion-grid wrap> -->
+  <!-- <ion-row> -->
+  <!-- <ion-col size="2"> -->
+  <!-- <ion-img src="/assets/images/haham.jpg"></ion-img> -->
+  <!-- </ion-col> -->
+  <!-- <ion-col size="4"> -->
+  <!-- <ion-item> -->
+  <!-- Hanuka, Age: 35 -->
+  <!-- </ion-item> -->
+  <!-- <ion-item> -->
+  <!-- Is Guide: Yes -->
+  <!-- </ion-item> -->
+  <!-- <ion-item> -->
+  <!-- Guide Rating: 8 (544 -->
+  <!-- <ion-icon name="contact"></ion-icon> -->
+  <!-- ) -->
+  <!-- </ion-item> -->
+  <!-- <ion-item> -->
+  <!-- Traveler Rating: 2 (12 -->
+  <!-- <ion-icon name="contact"></ion-icon> -->
+  <!-- ) -->
+  <!-- </ion-item> -->
+  <!-- </ion-col> -->
+  <!-- <ion-col size="2"> -->
+  <!-- <ion-item> -->
+  <!-- 5 participants -->
+  <!-- </ion-item> -->
+  <!-- <ion-grid wrap> -->
+  <!-- <ion-row size="12"> -->
+  <!-- <ion-col size="4"> -->
+  <!-- <ion-img src="/assets/images/haham.jpg"></ion-img> -->
+  <!-- </ion-col> -->
+  <!-- <ion-col size="4"> -->
+  <!-- <ion-img src="/assets/images/haham.jpg"></ion-img> -->
+  <!-- </ion-col> -->
+  <!-- <ion-col size="4"> -->
+  <!-- <ion-img src="/assets/images/haham.jpg"></ion-img> -->
+  <!-- </ion-col> -->
+  <!-- </ion-row> -->
+  <!-- <ion-row size="12"> -->
+  <!-- <ion-col size="4"> -->
+  <!-- <ion-img src="/assets/images/haham.jpg"></ion-img> -->
+  <!-- </ion-col> -->
+  <!-- <ion-col size="4"> -->
+  <!-- <ion-img src="/assets/images/haham.jpg"></ion-img> -->
+  <!-- </ion-col> -->
+  <!-- </ion-row> -->
+  <!-- </ion-grid> -->
 
-    <!-- </ion-col> -->
-    <!-- <ion-col size="4"> -->
-    <!-- <ion-item> -->
-    <!-- <ion-icon name="car" style="font-size: 1em;" padding-end></ion-icon> -->
-    <!-- 6 Available seats -->
-    <!-- </ion-item> -->
-    <!-- <ion-item> -->
-    <!-- <ion-icon name="cart" style="font-size: 1em;" padding-end></ion-icon> -->
-    <!-- 50$/ -->
-    <!-- <ion-icon name="contact" style="font-size: 1em;"></ion-icon> -->
-    <!-- </ion-item> -->
-    <!-- <ion-item> -->
-    <!-- <ion-label> -->
-    <!-- Audience: Single, Couples -->
-    <!-- </ion-label> -->
-    <!-- </ion-item> -->
-    <!-- <ion-item> -->
-    <!-- <ion-icon name="log-in">Arrival</ion-icon> -->
-    <!-- : private cars -->
-    <!-- </ion-item> -->
-    <!-- </ion-col> -->
+  <!-- </ion-col> -->
+  <!-- <ion-col size="4"> -->
+  <!-- <ion-item> -->
+  <!-- <ion-icon name="car" style="font-size: 1em;" padding-end></ion-icon> -->
+  <!-- 6 Available seats -->
+  <!-- </ion-item> -->
+  <!-- <ion-item> -->
+  <!-- <ion-icon name="cart" style="font-size: 1em;" padding-end></ion-icon> -->
+  <!-- 50$/ -->
+  <!-- <ion-icon name="contact" style="font-size: 1em;"></ion-icon> -->
+  <!-- </ion-item> -->
+  <!-- <ion-item> -->
+  <!-- <ion-label> -->
+  <!-- Audience: Single, Couples -->
+  <!-- </ion-label> -->
+  <!-- </ion-item> -->
+  <!-- <ion-item> -->
+  <!-- <ion-icon name="log-in">Arrival</ion-icon> -->
+  <!-- : private cars -->
+  <!-- </ion-item> -->
+  <!-- </ion-col> -->
 
-    <!-- </ion-row> -->
-    <!-- <ion-row> -->
-    <!-- <ion-col> -->
-    <!-- <ion-item> -->
-    <!--
-      (Short) Description: Join us to the beautiful Zeelim river, for a day-hike
-    -->
-    <!--
-      in a canyon with beautiful water pools, boulders, cliffs, and desert wild
-    -->
-    <!-- life. -->
-    <!--
-      We will start at Zfira-pool at the upper-Zeelim and walk through the whole
-    -->
-    <!-- canyon until the dead sea. -->
-    <!--
-      The trip requires good shape, as we will have cool adventures such as using
-    -->
-    <!-- ropes, metal ladders, and swimming through water pools -->
-    <!-- </ion-item> -->
-    <!-- </ion-col> -->
-    <!-- </ion-row> -->
-    <!-- <ion-row> -->
-    <!-- <ion-col> -->
-    <!-- <ion-item> -->
-    <!-- Equipment: hikng shoes, 3 liters of water, food for the day, sun -->
-    <!-- screen, short sleeves, long sleeves, flash-lights -->
-    <!-- </ion-item> -->
-    <!-- </ion-col> -->
-    <!-- </ion-row> -->
-    <!-- </ion-grid> -->
-    <!-- &lt;!&ndash;</ion-card-content>&ndash;&gt; -->
+  <!-- </ion-row> -->
+  <!-- <ion-row> -->
+  <!-- <ion-col> -->
+  <!-- <ion-item> -->
+  <!--
+    (Short) Description: Join us to the beautiful Zeelim river, for a day-hike
+  -->
+  <!--
+    in a canyon with beautiful water pools, boulders, cliffs, and desert wild
+  -->
+  <!-- life. -->
+  <!--
+    We will start at Zfira-pool at the upper-Zeelim and walk through the whole
+  -->
+  <!-- canyon until the dead sea. -->
+  <!--
+    The trip requires good shape, as we will have cool adventures such as using
+  -->
+  <!-- ropes, metal ladders, and swimming through water pools -->
+  <!-- </ion-item> -->
+  <!-- </ion-col> -->
+  <!-- </ion-row> -->
+  <!-- <ion-row> -->
+  <!-- <ion-col> -->
+  <!-- <ion-item> -->
+  <!-- Equipment: hikng shoes, 3 liters of water, food for the day, sun -->
+  <!-- screen, short sleeves, long sleeves, flash-lights -->
+  <!-- </ion-item> -->
+  <!-- </ion-col> -->
+  <!-- </ion-row> -->
+  <!-- </ion-grid> -->
+  <!-- &lt;!&ndash;</ion-card-content>&ndash;&gt; -->
 
-    <!-- </ion-col> -->
-    <!-- </ion-row> -->
-    <!-- </ion-grid> -->
+  <!-- </ion-col> -->
+  <!-- </ion-row> -->
+  <!-- </ion-grid> -->
 
-    <!-- </ion-card> -->
+  <!-- </ion-card> -->
 
-    <!-- <ion-card class="event"> -->
-    <!-- <ion-grid> -->
-    <!-- <ion-row> -->
-    <!-- <ion-col size="4" push-md="8"> -->
-    <!-- <ion-img src="/assets/images/yehudia.jpg" class="eventImg"></ion-img> -->
-    <!-- <ion-list> -->
-    <!-- <ion-item> -->
-    <!-- <ion-label> -->
-    <!-- Trip Rating: 9 (17 -->
-    <!-- <ion-icon name="contact"></ion-icon> -->
-    <!-- ) -->
-    <!-- </ion-label> -->
-    <!-- <ion-label> -->
-    <!-- Level: Extreme -->
-    <!-- </ion-label> -->
-    <!-- </ion-item> -->
+  <!-- <ion-card class="event"> -->
+  <!-- <ion-grid> -->
+  <!-- <ion-row> -->
+  <!-- <ion-col size="4" push-md="8"> -->
+  <!-- <ion-img src="/assets/images/yehudia.jpg" class="eventImg"></ion-img> -->
+  <!-- <ion-list> -->
+  <!-- <ion-item> -->
+  <!-- <ion-label> -->
+  <!-- Trip Rating: 9 (17 -->
+  <!-- <ion-icon name="contact"></ion-icon> -->
+  <!-- ) -->
+  <!-- </ion-label> -->
+  <!-- <ion-label> -->
+  <!-- Level: Extreme -->
+  <!-- </ion-label> -->
+  <!-- </ion-item> -->
 
-    <!-- </ion-list> -->
-    <!-- </ion-col> -->
-    <!-- <ion-col size="8" pull-md="4"> -->
+  <!-- </ion-list> -->
+  <!-- </ion-col> -->
+  <!-- <ion-col size="8" pull-md="4"> -->
 
-    <!-- <ion-card-header no-padding> -->
-    <!-- <ion-card-title style="font-size: 2em;"> -->
-    <!-- <ion-row justify-content-between style="align-items: center;"> -->
-    <!-- <ion-col size="9"> -->
-    <!-- <ion-icon name="calendar"></ion-icon> -->
-    <!-- <ion-text style="font-size: 0.5em;">Event</ion-text> -->
-    <!-- Yehudia Stream - Forbidden paradise -->
-    <!-- </ion-col> -->
-    <!-- <ion-col size="3"> -->
-    <!--
-      <ion-button shape="round" fill="outline" float-right>More Details</ion-button>
-    -->
-    <!-- </ion-col> -->
-    <!-- </ion-row> -->
-    <!-- </ion-card-title> -->
-    <!-- <ion-card-subtitle> -->
-    <!-- <ion-label padding-end>24/11/2018 08:00am</ion-label> -->
-    <!-- <ion-label padding-end>1 day</ion-label> -->
-    <!-- <ion-label padding-end>Meeting: Tel Aviv, Ben Yehuda 220</ion-label> -->
-    <!-- <ion-label padding-end>Distance to meeting: 5km</ion-label> -->
-    <!-- <ion-label padding-end>Distance to trip: 70km</ion-label> -->
-    <!-- </ion-card-subtitle> -->
-    <!-- <ion-card-subtitle> -->
-    <!-- <ion-label> -->
-    <!-- Type: Water, Hiking, Canyon, Swiming -->
-    <!-- </ion-label> -->
-    <!-- <ion-label> -->
-    <!-- Ages: 20-70 -->
-    <!-- </ion-label> -->
-    <!-- </ion-card-subtitle> -->
-    <!-- &lt;!&ndash;need to be added from JS&ndash;&gt; -->
-    <!-- </ion-card-header> -->
-    <!-- &lt;!&ndash;<ion-card-content>&ndash;&gt; -->
-    <!-- <ion-grid wrap> -->
-    <!-- <ion-row> -->
-    <!-- <ion-col size="2"> -->
-    <!-- <ion-img src="/assets/images/haham.jpg"></ion-img> -->
-    <!-- </ion-col> -->
-    <!-- <ion-col size="4"> -->
-    <!-- <ion-item> -->
-    <!-- Hanuka, Age: 35 -->
-    <!-- </ion-item> -->
-    <!-- <ion-item> -->
-    <!-- Is Guide: Yes -->
-    <!-- </ion-item> -->
-    <!-- <ion-item> -->
-    <!-- Guide Rating: 8 (544 -->
-    <!-- <ion-icon name="contact"></ion-icon> -->
-    <!-- ) -->
-    <!-- </ion-item> -->
-    <!-- <ion-item> -->
-    <!-- Traveler Rating: 2 (12 -->
-    <!-- <ion-icon name="contact"></ion-icon> -->
-    <!-- ) -->
-    <!-- </ion-item> -->
-    <!-- </ion-col> -->
-    <!-- <ion-col size="2"> -->
-    <!-- <ion-item> -->
-    <!-- 5 participants -->
-    <!-- </ion-item> -->
-    <!-- <ion-grid wrap> -->
-    <!-- <ion-row size="12"> -->
-    <!-- <ion-col size="4"> -->
-    <!-- <ion-img src="/assets/images/haham.jpg"></ion-img> -->
-    <!-- </ion-col> -->
-    <!-- <ion-col size="4"> -->
-    <!-- <ion-img src="/assets/images/haham.jpg"></ion-img> -->
-    <!-- </ion-col> -->
-    <!-- <ion-col size="4"> -->
-    <!-- <ion-img src="/assets/images/haham.jpg"></ion-img> -->
-    <!-- </ion-col> -->
-    <!-- </ion-row> -->
-    <!-- <ion-row size="12"> -->
-    <!-- <ion-col size="4"> -->
-    <!-- <ion-img src="/assets/images/haham.jpg"></ion-img> -->
-    <!-- </ion-col> -->
-    <!-- <ion-col size="4"> -->
-    <!-- <ion-img src="/assets/images/haham.jpg"></ion-img> -->
-    <!-- </ion-col> -->
-    <!-- </ion-row> -->
-    <!-- </ion-grid> -->
+  <!-- <ion-card-header no-padding> -->
+  <!-- <ion-card-title style="font-size: 2em;"> -->
+  <!-- <ion-row justify-content-between style="align-items: center;"> -->
+  <!-- <ion-col size="9"> -->
+  <!-- <ion-icon name="calendar"></ion-icon> -->
+  <!-- <ion-text style="font-size: 0.5em;">Event</ion-text> -->
+  <!-- Yehudia Stream - Forbidden paradise -->
+  <!-- </ion-col> -->
+  <!-- <ion-col size="3"> -->
+  <!--
+    <ion-button shape="round" fill="outline" float-right>More Details</ion-button>
+  -->
+  <!-- </ion-col> -->
+  <!-- </ion-row> -->
+  <!-- </ion-card-title> -->
+  <!-- <ion-card-subtitle> -->
+  <!-- <ion-label padding-end>24/11/2018 08:00am</ion-label> -->
+  <!-- <ion-label padding-end>1 day</ion-label> -->
+  <!-- <ion-label padding-end>Meeting: Tel Aviv, Ben Yehuda 220</ion-label> -->
+  <!-- <ion-label padding-end>Distance to meeting: 5km</ion-label> -->
+  <!-- <ion-label padding-end>Distance to trip: 70km</ion-label> -->
+  <!-- </ion-card-subtitle> -->
+  <!-- <ion-card-subtitle> -->
+  <!-- <ion-label> -->
+  <!-- Type: Water, Hiking, Canyon, Swiming -->
+  <!-- </ion-label> -->
+  <!-- <ion-label> -->
+  <!-- Ages: 20-70 -->
+  <!-- </ion-label> -->
+  <!-- </ion-card-subtitle> -->
+  <!-- &lt;!&ndash;need to be added from JS&ndash;&gt; -->
+  <!-- </ion-card-header> -->
+  <!-- &lt;!&ndash;<ion-card-content>&ndash;&gt; -->
+  <!-- <ion-grid wrap> -->
+  <!-- <ion-row> -->
+  <!-- <ion-col size="2"> -->
+  <!-- <ion-img src="/assets/images/haham.jpg"></ion-img> -->
+  <!-- </ion-col> -->
+  <!-- <ion-col size="4"> -->
+  <!-- <ion-item> -->
+  <!-- Hanuka, Age: 35 -->
+  <!-- </ion-item> -->
+  <!-- <ion-item> -->
+  <!-- Is Guide: Yes -->
+  <!-- </ion-item> -->
+  <!-- <ion-item> -->
+  <!-- Guide Rating: 8 (544 -->
+  <!-- <ion-icon name="contact"></ion-icon> -->
+  <!-- ) -->
+  <!-- </ion-item> -->
+  <!-- <ion-item> -->
+  <!-- Traveler Rating: 2 (12 -->
+  <!-- <ion-icon name="contact"></ion-icon> -->
+  <!-- ) -->
+  <!-- </ion-item> -->
+  <!-- </ion-col> -->
+  <!-- <ion-col size="2"> -->
+  <!-- <ion-item> -->
+  <!-- 5 participants -->
+  <!-- </ion-item> -->
+  <!-- <ion-grid wrap> -->
+  <!-- <ion-row size="12"> -->
+  <!-- <ion-col size="4"> -->
+  <!-- <ion-img src="/assets/images/haham.jpg"></ion-img> -->
+  <!-- </ion-col> -->
+  <!-- <ion-col size="4"> -->
+  <!-- <ion-img src="/assets/images/haham.jpg"></ion-img> -->
+  <!-- </ion-col> -->
+  <!-- <ion-col size="4"> -->
+  <!-- <ion-img src="/assets/images/haham.jpg"></ion-img> -->
+  <!-- </ion-col> -->
+  <!-- </ion-row> -->
+  <!-- <ion-row size="12"> -->
+  <!-- <ion-col size="4"> -->
+  <!-- <ion-img src="/assets/images/haham.jpg"></ion-img> -->
+  <!-- </ion-col> -->
+  <!-- <ion-col size="4"> -->
+  <!-- <ion-img src="/assets/images/haham.jpg"></ion-img> -->
+  <!-- </ion-col> -->
+  <!-- </ion-row> -->
+  <!-- </ion-grid> -->
 
-    <!-- </ion-col> -->
-    <!-- <ion-col size="4"> -->
-    <!-- <ion-item> -->
-    <!-- <ion-icon name="car" style="font-size: 1em;"></ion-icon> -->
-    <!-- 6 Available seats -->
-    <!-- </ion-item> -->
-    <!-- <ion-item> -->
-    <!-- <ion-icon name="cart" style="font-size: 1em;"></ion-icon> -->
-    <!-- 50$/ -->
-    <!-- <ion-icon name="contact" style="font-size: 1em;"></ion-icon> -->
-    <!-- </ion-item> -->
-    <!-- <ion-item> -->
-    <!-- <ion-label> -->
-    <!-- Audience: Single, Couples -->
-    <!-- </ion-label> -->
-    <!-- </ion-item> -->
-    <!-- <ion-item> -->
-    <!-- <ion-icon name="bus"></ion-icon> -->
-    <!-- <ion-icon name="car"></ion-icon> -->
-    <!-- <ion-icon name="train"></ion-icon> -->
-    <!-- : private cars -->
-    <!-- </ion-item> -->
-    <!-- </ion-col> -->
+  <!-- </ion-col> -->
+  <!-- <ion-col size="4"> -->
+  <!-- <ion-item> -->
+  <!-- <ion-icon name="car" style="font-size: 1em;"></ion-icon> -->
+  <!-- 6 Available seats -->
+  <!-- </ion-item> -->
+  <!-- <ion-item> -->
+  <!-- <ion-icon name="cart" style="font-size: 1em;"></ion-icon> -->
+  <!-- 50$/ -->
+  <!-- <ion-icon name="contact" style="font-size: 1em;"></ion-icon> -->
+  <!-- </ion-item> -->
+  <!-- <ion-item> -->
+  <!-- <ion-label> -->
+  <!-- Audience: Single, Couples -->
+  <!-- </ion-label> -->
+  <!-- </ion-item> -->
+  <!-- <ion-item> -->
+  <!-- <ion-icon name="bus"></ion-icon> -->
+  <!-- <ion-icon name="car"></ion-icon> -->
+  <!-- <ion-icon name="train"></ion-icon> -->
+  <!-- : private cars -->
+  <!-- </ion-item> -->
+  <!-- </ion-col> -->
 
-    <!-- </ion-row> -->
-    <!-- <ion-row> -->
-    <!-- <ion-col> -->
-    <!-- <ion-item> -->
-    <!--
-      (Short) Description: Join us to the beautiful Zeelim river, for a day-hike
-    -->
-    <!--
-      in a canyon with beautiful water pools, boulders, cliffs, and desert wild
-    -->
-    <!-- life. -->
-    <!--
-      We will start at Zfira-pool at the upper-Zeelim and walk through the whole
-    -->
-    <!-- canyon until the dead sea. -->
-    <!--
-      The trip requires good shape, as we will have cool adventures such as using
-    -->
-    <!-- ropes, metal ladders, and swimming through water pools -->
-    <!-- </ion-item> -->
-    <!-- </ion-col> -->
-    <!-- </ion-row> -->
-    <!-- <ion-row> -->
-    <!-- <ion-col> -->
-    <!-- <ion-item> -->
-    <!-- Equipment: hikng shoes, 3 liters of water, food for the day, sun -->
-    <!-- screen, short sleeves, long sleeves, flash-lights -->
-    <!-- </ion-item> -->
-    <!-- </ion-col> -->
-    <!-- </ion-row> -->
-    <!-- </ion-grid> -->
-    <!-- &lt;!&ndash;</ion-card-content>&ndash;&gt; -->
+  <!-- </ion-row> -->
+  <!-- <ion-row> -->
+  <!-- <ion-col> -->
+  <!-- <ion-item> -->
+  <!--
+    (Short) Description: Join us to the beautiful Zeelim river, for a day-hike
+  -->
+  <!--
+    in a canyon with beautiful water pools, boulders, cliffs, and desert wild
+  -->
+  <!-- life. -->
+  <!--
+    We will start at Zfira-pool at the upper-Zeelim and walk through the whole
+  -->
+  <!-- canyon until the dead sea. -->
+  <!--
+    The trip requires good shape, as we will have cool adventures such as using
+  -->
+  <!-- ropes, metal ladders, and swimming through water pools -->
+  <!-- </ion-item> -->
+  <!-- </ion-col> -->
+  <!-- </ion-row> -->
+  <!-- <ion-row> -->
+  <!-- <ion-col> -->
+  <!-- <ion-item> -->
+  <!-- Equipment: hikng shoes, 3 liters of water, food for the day, sun -->
+  <!-- screen, short sleeves, long sleeves, flash-lights -->
+  <!-- </ion-item> -->
+  <!-- </ion-col> -->
+  <!-- </ion-row> -->
+  <!-- </ion-grid> -->
+  <!-- &lt;!&ndash;</ion-card-content>&ndash;&gt; -->
 
-    <!-- </ion-col> -->
-    <!-- </ion-row> -->
-    <!-- </ion-grid> -->
+  <!-- </ion-col> -->
+  <!-- </ion-row> -->
+  <!-- </ion-grid> -->
 
-    <!-- </ion-card> -->
+  <!-- </ion-card> -->
 
-    <!-- <ion-card class="event"> -->
-    <!-- <ion-grid> -->
-    <!-- <ion-row> -->
-    <!-- <ion-col size="4" push-md="8"> -->
-    <!-- <ion-img src="/assets/images/zavitan.jpg" class="eventImg"></ion-img> -->
-    <!-- <ion-list> -->
-    <!-- <ion-item> -->
-    <!-- <ion-label> -->
-    <!-- Trip Rating: 9 (17 -->
-    <!-- <ion-icon name="contact"></ion-icon> -->
-    <!-- ) -->
-    <!-- </ion-label> -->
-    <!-- <ion-label> -->
-    <!-- Level: Extreme -->
-    <!-- </ion-label> -->
-    <!-- </ion-item> -->
+  <!-- <ion-card class="event"> -->
+  <!-- <ion-grid> -->
+  <!-- <ion-row> -->
+  <!-- <ion-col size="4" push-md="8"> -->
+  <!-- <ion-img src="/assets/images/zavitan.jpg" class="eventImg"></ion-img> -->
+  <!-- <ion-list> -->
+  <!-- <ion-item> -->
+  <!-- <ion-label> -->
+  <!-- Trip Rating: 9 (17 -->
+  <!-- <ion-icon name="contact"></ion-icon> -->
+  <!-- ) -->
+  <!-- </ion-label> -->
+  <!-- <ion-label> -->
+  <!-- Level: Extreme -->
+  <!-- </ion-label> -->
+  <!-- </ion-item> -->
 
-    <!-- </ion-list> -->
-    <!-- </ion-col> -->
-    <!-- <ion-col size="8" pull-md="4"> -->
+  <!-- </ion-list> -->
+  <!-- </ion-col> -->
+  <!-- <ion-col size="8" pull-md="4"> -->
 
-    <!-- <ion-card-header no-padding> -->
-    <!-- <ion-card-title style="font-size: 2em;"> -->
-    <!-- <ion-row justify-content-between style="align-items: center;"> -->
-    <!-- <ion-col size="9"> -->
-    <!-- <ion-icon name="calendar"></ion-icon> -->
-    <!-- <ion-text style="font-size: 0.5em;">Event</ion-text> -->
-    <!-- Zavitan Stream - Canyoning Adventuregi -->
-    <!-- </ion-col> -->
-    <!-- <ion-col size="3"> -->
-    <!--
-      <ion-button shape="round" fill="outline" float-right>More Details</ion-button>
-    -->
-    <!-- </ion-col> -->
-    <!-- </ion-row> -->
-    <!-- </ion-card-title> -->
-    <!-- <ion-card-subtitle> -->
-    <!-- <ion-label padding-end>24/11/2018 08:00am</ion-label> -->
-    <!-- <ion-label padding-end>1 day</ion-label> -->
-    <!-- <ion-label padding-end>Meeting: Tel Aviv, Ben Yehuda 220</ion-label> -->
-    <!-- <ion-label padding-end>Distance to meeting: 5km</ion-label> -->
-    <!-- <ion-label padding-end>Distance to route: 70km</ion-label> -->
-    <!-- </ion-card-subtitle> -->
-    <!-- <ion-card-subtitle> -->
-    <!-- <ion-label> -->
-    <!-- Type: Water, Hiking, Canyon, Swiming -->
-    <!-- </ion-label> -->
-    <!-- <ion-label> -->
-    <!-- Ages: 20-70 -->
-    <!-- </ion-label> -->
-    <!-- </ion-card-subtitle> -->
-    <!-- &lt;!&ndash;need to be added from JS&ndash;&gt; -->
-    <!-- </ion-card-header> -->
-    <!-- &lt;!&ndash;<ion-card-content>&ndash;&gt; -->
-    <!-- <ion-grid wrap> -->
-    <!-- <ion-row> -->
-    <!-- <ion-col size="2"> -->
-    <!-- <ion-img src="/assets/images/haham.jpg"></ion-img> -->
-    <!-- </ion-col> -->
-    <!-- <ion-col size="4"> -->
-    <!-- <ion-item> -->
-    <!-- Hanuka, Age: 35 -->
-    <!-- </ion-item> -->
-    <!-- <ion-item> -->
-    <!-- Is Guide: Yes -->
-    <!-- </ion-item> -->
-    <!-- <ion-item> -->
-    <!-- Guide Rating: 8 (544 -->
-    <!-- <ion-icon name="contact"></ion-icon> -->
-    <!-- ) -->
-    <!-- </ion-item> -->
-    <!-- <ion-item> -->
-    <!-- Traveler Rating: 2 (12 -->
-    <!-- <ion-icon name="contact"></ion-icon> -->
-    <!-- ) -->
-    <!-- </ion-item> -->
-    <!-- </ion-col> -->
-    <!-- <ion-col size="2"> -->
-    <!-- <ion-item> -->
-    <!-- 5 participants -->
-    <!-- </ion-item> -->
-    <!-- <ion-grid wrap> -->
-    <!-- <ion-row size="12"> -->
-    <!-- <ion-col size="4"> -->
-    <!-- <ion-img src="/assets/images/haham.jpg"></ion-img> -->
-    <!-- </ion-col> -->
-    <!-- <ion-col size="4"> -->
-    <!-- <ion-img src="/assets/images/haham.jpg"></ion-img> -->
-    <!-- </ion-col> -->
-    <!-- <ion-col size="4"> -->
-    <!-- <ion-img src="/assets/images/haham.jpg"></ion-img> -->
-    <!-- </ion-col> -->
-    <!-- </ion-row> -->
-    <!-- <ion-row size="12"> -->
-    <!-- <ion-col size="4"> -->
-    <!-- <ion-img src="/assets/images/haham.jpg"></ion-img> -->
-    <!-- </ion-col> -->
-    <!-- <ion-col size="4"> -->
-    <!-- <ion-img src="/assets/images/haham.jpg"></ion-img> -->
-    <!-- </ion-col> -->
-    <!-- </ion-row> -->
-    <!-- </ion-grid> -->
+  <!-- <ion-card-header no-padding> -->
+  <!-- <ion-card-title style="font-size: 2em;"> -->
+  <!-- <ion-row justify-content-between style="align-items: center;"> -->
+  <!-- <ion-col size="9"> -->
+  <!-- <ion-icon name="calendar"></ion-icon> -->
+  <!-- <ion-text style="font-size: 0.5em;">Event</ion-text> -->
+  <!-- Zavitan Stream - Canyoning Adventuregi -->
+  <!-- </ion-col> -->
+  <!-- <ion-col size="3"> -->
+  <!--
+    <ion-button shape="round" fill="outline" float-right>More Details</ion-button>
+  -->
+  <!-- </ion-col> -->
+  <!-- </ion-row> -->
+  <!-- </ion-card-title> -->
+  <!-- <ion-card-subtitle> -->
+  <!-- <ion-label padding-end>24/11/2018 08:00am</ion-label> -->
+  <!-- <ion-label padding-end>1 day</ion-label> -->
+  <!-- <ion-label padding-end>Meeting: Tel Aviv, Ben Yehuda 220</ion-label> -->
+  <!-- <ion-label padding-end>Distance to meeting: 5km</ion-label> -->
+  <!-- <ion-label padding-end>Distance to route: 70km</ion-label> -->
+  <!-- </ion-card-subtitle> -->
+  <!-- <ion-card-subtitle> -->
+  <!-- <ion-label> -->
+  <!-- Type: Water, Hiking, Canyon, Swiming -->
+  <!-- </ion-label> -->
+  <!-- <ion-label> -->
+  <!-- Ages: 20-70 -->
+  <!-- </ion-label> -->
+  <!-- </ion-card-subtitle> -->
+  <!-- &lt;!&ndash;need to be added from JS&ndash;&gt; -->
+  <!-- </ion-card-header> -->
+  <!-- &lt;!&ndash;<ion-card-content>&ndash;&gt; -->
+  <!-- <ion-grid wrap> -->
+  <!-- <ion-row> -->
+  <!-- <ion-col size="2"> -->
+  <!-- <ion-img src="/assets/images/haham.jpg"></ion-img> -->
+  <!-- </ion-col> -->
+  <!-- <ion-col size="4"> -->
+  <!-- <ion-item> -->
+  <!-- Hanuka, Age: 35 -->
+  <!-- </ion-item> -->
+  <!-- <ion-item> -->
+  <!-- Is Guide: Yes -->
+  <!-- </ion-item> -->
+  <!-- <ion-item> -->
+  <!-- Guide Rating: 8 (544 -->
+  <!-- <ion-icon name="contact"></ion-icon> -->
+  <!-- ) -->
+  <!-- </ion-item> -->
+  <!-- <ion-item> -->
+  <!-- Traveler Rating: 2 (12 -->
+  <!-- <ion-icon name="contact"></ion-icon> -->
+  <!-- ) -->
+  <!-- </ion-item> -->
+  <!-- </ion-col> -->
+  <!-- <ion-col size="2"> -->
+  <!-- <ion-item> -->
+  <!-- 5 participants -->
+  <!-- </ion-item> -->
+  <!-- <ion-grid wrap> -->
+  <!-- <ion-row size="12"> -->
+  <!-- <ion-col size="4"> -->
+  <!-- <ion-img src="/assets/images/haham.jpg"></ion-img> -->
+  <!-- </ion-col> -->
+  <!-- <ion-col size="4"> -->
+  <!-- <ion-img src="/assets/images/haham.jpg"></ion-img> -->
+  <!-- </ion-col> -->
+  <!-- <ion-col size="4"> -->
+  <!-- <ion-img src="/assets/images/haham.jpg"></ion-img> -->
+  <!-- </ion-col> -->
+  <!-- </ion-row> -->
+  <!-- <ion-row size="12"> -->
+  <!-- <ion-col size="4"> -->
+  <!-- <ion-img src="/assets/images/haham.jpg"></ion-img> -->
+  <!-- </ion-col> -->
+  <!-- <ion-col size="4"> -->
+  <!-- <ion-img src="/assets/images/haham.jpg"></ion-img> -->
+  <!-- </ion-col> -->
+  <!-- </ion-row> -->
+  <!-- </ion-grid> -->
 
-    <!-- </ion-col> -->
-    <!-- <ion-col size="4"> -->
-    <!-- <ion-item> -->
-    <!-- <ion-icon name="car" style="font-size: 1em;"></ion-icon> -->
-    <!-- 6 Available seats -->
-    <!-- </ion-item> -->
-    <!-- <ion-item> -->
-    <!-- <ion-icon name="cart" style="font-size: 1em;"></ion-icon> -->
-    <!-- 50$/ -->
-    <!-- <ion-icon name="contact" style="font-size: 1em;"></ion-icon> -->
-    <!-- </ion-item> -->
-    <!-- <ion-item> -->
-    <!-- <ion-label> -->
-    <!-- Audience: Single, Couples -->
-    <!-- </ion-label> -->
-    <!-- </ion-item> -->
-    <!-- <ion-item> -->
-    <!-- <ion-icon name="bus"></ion-icon> -->
-    <!-- <ion-icon name="car"></ion-icon> -->
-    <!-- <ion-icon name="train"></ion-icon> -->
-    <!-- : private cars -->
-    <!-- </ion-item> -->
-    <!-- </ion-col> -->
+  <!-- </ion-col> -->
+  <!-- <ion-col size="4"> -->
+  <!-- <ion-item> -->
+  <!-- <ion-icon name="car" style="font-size: 1em;"></ion-icon> -->
+  <!-- 6 Available seats -->
+  <!-- </ion-item> -->
+  <!-- <ion-item> -->
+  <!-- <ion-icon name="cart" style="font-size: 1em;"></ion-icon> -->
+  <!-- 50$/ -->
+  <!-- <ion-icon name="contact" style="font-size: 1em;"></ion-icon> -->
+  <!-- </ion-item> -->
+  <!-- <ion-item> -->
+  <!-- <ion-label> -->
+  <!-- Audience: Single, Couples -->
+  <!-- </ion-label> -->
+  <!-- </ion-item> -->
+  <!-- <ion-item> -->
+  <!-- <ion-icon name="bus"></ion-icon> -->
+  <!-- <ion-icon name="car"></ion-icon> -->
+  <!-- <ion-icon name="train"></ion-icon> -->
+  <!-- : private cars -->
+  <!-- </ion-item> -->
+  <!-- </ion-col> -->
 
-    <!-- </ion-row> -->
-    <!-- <ion-row> -->
-    <!-- <ion-col> -->
-    <!-- <ion-item> -->
-    <!--
-      (Short) Description: Join us to the beautiful Zeelim river, for a day-hike
-    -->
-    <!--
-      in a canyon with beautiful water pools, boulders, cliffs, and desert wild
-    -->
-    <!-- life. -->
-    <!--
-      We will start at Zfira-pool at the upper-Zeelim and walk through the whole
-    -->
-    <!-- canyon until the dead sea. -->
-    <!--
-      The trip requires good shape, as we will have cool adventures such as using
-    -->
-    <!-- ropes, metal ladders, and swimming through water pools -->
-    <!-- </ion-item> -->
-    <!-- </ion-col> -->
-    <!-- </ion-row> -->
-    <!-- <ion-row> -->
-    <!-- <ion-col> -->
-    <!-- <ion-item> -->
-    <!-- Equipment: hikng shoes, 3 liters of water, food for the day, sun -->
-    <!-- screen, short sleeves, long sleeves, flash-lights -->
-    <!-- </ion-item> -->
-    <!-- </ion-col> -->
-    <!-- </ion-row> -->
-    <!-- </ion-grid> -->
-    <!-- &lt;!&ndash;</ion-card-content>&ndash;&gt; -->
+  <!-- </ion-row> -->
+  <!-- <ion-row> -->
+  <!-- <ion-col> -->
+  <!-- <ion-item> -->
+  <!--
+    (Short) Description: Join us to the beautiful Zeelim river, for a day-hike
+  -->
+  <!--
+    in a canyon with beautiful water pools, boulders, cliffs, and desert wild
+  -->
+  <!-- life. -->
+  <!--
+    We will start at Zfira-pool at the upper-Zeelim and walk through the whole
+  -->
+  <!-- canyon until the dead sea. -->
+  <!--
+    The trip requires good shape, as we will have cool adventures such as using
+  -->
+  <!-- ropes, metal ladders, and swimming through water pools -->
+  <!-- </ion-item> -->
+  <!-- </ion-col> -->
+  <!-- </ion-row> -->
+  <!-- <ion-row> -->
+  <!-- <ion-col> -->
+  <!-- <ion-item> -->
+  <!-- Equipment: hikng shoes, 3 liters of water, food for the day, sun -->
+  <!-- screen, short sleeves, long sleeves, flash-lights -->
+  <!-- </ion-item> -->
+  <!-- </ion-col> -->
+  <!-- </ion-row> -->
+  <!-- </ion-grid> -->
+  <!-- &lt;!&ndash;</ion-card-content>&ndash;&gt; -->
 
-    <!-- </ion-col> -->
-    <!-- </ion-row> -->
-    <!-- </ion-grid> -->
+  <!-- </ion-col> -->
+  <!-- </ion-row> -->
+  <!-- </ion-grid> -->
 
-    <!-- </ion-card> -->
+  <!-- </ion-card> -->
 
-    <ion-fab vertical="bottom" horizontal="start" slot="fixed">
-        <ion-fab-button>
-            <ion-icon name="arrow-dropup"></ion-icon>
-        </ion-fab-button>
-    </ion-fab>
-    <!--
-      add filter https://www.joshmorony.com/high-performance-list-filtering-in-ionic-2/
-    -->
+  <ion-fab vertical="bottom" horizontal="start" slot="fixed">
+    <ion-fab-button> <ion-icon name="arrow-dropup"></ion-icon> </ion-fab-button>
+  </ion-fab>
+  <!--
+    add filter https://www.joshmorony.com/high-performance-list-filtering-in-ionic-2/
+  -->
 </ion-content>
