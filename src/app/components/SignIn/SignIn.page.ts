@@ -37,11 +37,7 @@ export class SignInPage implements OnInit{
   }
 
   ngOnInit(): void {
-      this.authService.whenLoggedIn().asObservable().subscribe((b) => {
-          if(b) {
-            this.navCtrl.navigateForward('home', true);
-          }
-      });
+
 
   }
 
@@ -54,6 +50,12 @@ export class SignInPage implements OnInit{
   }
 
   async loginUser() {
+      this.authService.whenLoggedIn().asObservable().subscribe((b) => {
+          if(b) {
+              this.navCtrl.navigateForward('home', true);
+          }
+      });
+
     if (!this.loginForm.valid) {
       console.log(
         `Form is not valid yet, current value: ${this.loginForm.value}`
