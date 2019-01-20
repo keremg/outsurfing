@@ -38,6 +38,7 @@ export class SurfRoute {
   //this should be handled in a separated collection: routeRanking: {reviewerId: string, ranking: number, review: string}[];
   routeRanking: number;
   routeNumOfRankers: number;
+  routeSortRanking: number; //should be used for smart sorting (takes into account avg rank and num of rankers) (3*2 + #real-reviews*Avg-reviews) / (3 + #real-reviews)
 
   iconName: string; //TODO terrain
   seasons: SeasonsEnum[]; //TODO

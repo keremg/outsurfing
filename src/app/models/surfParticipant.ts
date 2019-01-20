@@ -21,4 +21,5 @@ export class SurfParticipant {
 
     messageToOthers: string;
     approved: boolean;
+    sortRanking: number; //(3*2 + user.numOfRaters*user.averageRate) / (3+user.numOfRaters)
 }

@@ -32,7 +32,6 @@ export class AuthService {
 
     // Returns true if user is logged in
     get authenticated() {
-        //debugger;
         return this.authState !== null;
     }
 

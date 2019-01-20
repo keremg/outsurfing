@@ -8,6 +8,8 @@ import {AuthService} from './auth.service';
 import {SurfRoute} from '../models/surfRoute';
 import {SurfEvent} from '../models/surfEvent';
 import {SurfReview} from '../models/surfReview';
+import leaflet from 'leaflet';
+import '../../geocoder/Control.Geocoder';
 
 
 @Injectable({
@@ -21,6 +23,12 @@ export class UserService {
     collection_endpoint = 'users';
     review_collection_endpoint = 'reviews';
     guide_review_collection_endpoint = 'guideReviews';
+    country = '';
+    state = '';
+    location: ReplaySubject<string[]> = new ReplaySubject(1);
+    locationGeo: any;
+    mapp: any;
+
 
 
     constructor(private afs: AngularFirestore,
@@ -28,10 +36,15 @@ export class UserService {
                 private authService: AuthService) {
         this.authService.whenLoggedIn().asObservable().subscribe(() => {
             if (this.authService.authenticated) {
+                this.locate();
                 this.getuser(this.authService.currentUserId).subscribe(u => {
                         if (u) {
                             this.currentUser.next(u);
-                            this.currentUser.complete();
+                            //Force waiting for location (an country) before user is approved
+                            this.location.subscribe(loc => {
+                                this.locationGeo = loc;
+                                this.currentUser.complete();
+                            });
                         }
                         else {
                             this.currentUser.next(null);
@@ -176,6 +189,44 @@ export class UserService {
             let ageDate = new Date(ageDifMs); // miliseconds from epoch
             return '' + Math.abs(ageDate.getUTCFullYear() - 1970);
         }
+    }
+
+    locate() {
+        if (this.mapp) {
+            this.mapp.remove();
+        }
+        let node = document.getElementById('map');
+        if (node) {
+            node.hidden = false;
+            let parent = node.parentNode;
+            node.parentNode.removeChild(node);
+            let div = document.createElement('div');
+            div.setAttribute('id', 'map');
+// as an example add it to the body
+            parent.appendChild(div);
+        }
+        const geocoder = leaflet.Control.Geocoder.nominatim();
+        this.mapp = leaflet.map('map').fitWorld();
+        this.mapp
+            .locate({
+                timeout: 30000,
+                maximumAge: 300000
+            })
+            .on('locationfound', e => {
+                this.location.next([e.latlng.lat, e.latlng.lng]);
+                geocoder.reverse(e.latlng, this.mapp.options.crs.scale(this.mapp.getZoom()), (results) => {
+                    const r = results[0];
+                    if (r) {
+                        this.country = r.properties.address.country;
+                        this.state = r.properties.address.state;
+                        this.location.complete(); //we're completing the location only now when we have the country and state
+                    }
+                })
+            })
+            .on('locationerror', err => {
+                console.log(err.message);
+            });
+        document.getElementById('map').hidden = true;
     }
 
 }

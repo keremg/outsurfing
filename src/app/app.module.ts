@@ -26,6 +26,7 @@ import {Ng2ImgMaxModule, Ng2ImgMaxService} from 'ng2-img-max';
 import {RouteImageComponentModule} from './components/route-image/route-image.module';
 import {ToolbarComponentModule} from './components/toolbar/toolbar.module';
 import {UserReviewsPageModule} from './components/user-reviews/user-reviews.module';
+import {CommonService} from './services/common.service';
 
 
 @NgModule({
@@ -42,6 +43,7 @@ import {UserReviewsPageModule} from './components/user-reviews/user-reviews.modu
     AuthGuardService,
       Geolocation,
       Ng2ImgMaxService,
+      CommonService,
       { provide: RouteReuseStrategy, useClass: IonicRouteStrategy }
   ],
   bootstrap: [AppComponent]

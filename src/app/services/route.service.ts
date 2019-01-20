@@ -5,7 +5,7 @@ import {Observable} from 'rxjs';
 import {map} from 'rxjs/operators';
 import {UserService} from './user.service';
 import {SurfReview} from '../models/surfReview';
-import {SurfParticipant} from '../models/surfParticipant';
+import {CommonService} from './common.service';
 
 @Injectable({
   providedIn: 'root'
@@ -19,13 +19,14 @@ export class RouteService {
 
 
   constructor(private db: AngularFirestore,
-              private userService: UserService) {
+              private userService: UserService,
+              private commonService: CommonService) {
       this.routes = db.collection<SurfRoute>(this.collection_endpoint);
   }
 
     addRoute(newRoute: any): Promise<string|void> {
         delete newRoute.routeCreator;
-        let x = this.getAllSubstrings(newRoute.name);
+        let x = this.commonService.getAllSubstrings(newRoute.name);
         newRoute.searchIndex = x;
         return this.routes.add({...newRoute}).then(function(docRef) {
             console.log('Route document written with ID: ', docRef.id);
@@ -41,9 +42,11 @@ export class RouteService {
         delete update.routeCreator;
 
         if(update.name) {
-            let x = this.getAllSubstrings(update.name);
+            let x = this.commonService.getAllSubstrings(update.name);
             update.searchIndex = x;
         }
+        update.routeSortRanking = this.commonService.calculateRouteSort(update);
+
         this.routeDoc = this.db.doc<SurfRoute>(`${this.collection_endpoint}/${id}`);
         return this.routeDoc.update(({...update}));
     }
@@ -85,17 +88,6 @@ export class RouteService {
         return this.routeDoc.delete();
     }
 
-    getAllSubstrings(str) {
-        var i, j, result = [];
-
-        for (i = 0; i < str.length; i++) {
-            for (j = i + 1; j < str.length + 1; j++) {
-                result.push(str.slice(i, j));
-            }
-        }
-        return result;
-    }
-
     async addReview(route:SurfRoute, rev: SurfReview){
         if(!route.routeRanking){
             route.routeRanking = 0;
@@ -111,7 +103,10 @@ export class RouteService {
         });
 
       let grade = ((route.routeRanking * route.routeNumOfRankers) + rev.grade)/(route.routeNumOfRankers+1);
-      return this.updateRoute(route.id,{routeRanking: grade, routeNumOfRankers: route.routeNumOfRankers+1});
+      route.routeRanking = grade;
+      route.routeNumOfRankers++;
+      let sortRank = this.commonService.calculateRouteSort(route);
+      return this.updateRoute(route.id,{routeRanking: route.routeRanking, routeNumOfRankers: route.routeNumOfRankers, routeSortRanking: sortRank});
     }
 
     getRouteReviews(id: string): Observable<SurfReview[]> {

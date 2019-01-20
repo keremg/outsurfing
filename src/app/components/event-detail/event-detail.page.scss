@@ -1,0 +1,57 @@
+
+.item-interactive-disabled.sc-ion-label-md-h, .item-interactive-disabled .sc-ion-label-md-h {
+  opacity: 1 !important;
+}
+//input.native-input:disabled {
+//  background-color: lightgreen !important;
+//  color: blue !important;
+//  opacity: 1 !important;
+//}
+//ion-input[disabled] {
+//  background-color: lightgreen !important;
+//  color: blue !important;
+//  opacity: 1 !important;
+//}
+//ion-input > input {
+//  color: blue !important;
+//  opacity: 1 !important;
+//}
+//
+//form[disabled] {
+//  color: blue !important;
+//  opacity: 1 !important;
+//}
+//form:disabled {
+//  color: blue !important;
+//  opacity: 1 !important;
+//}
+//
+//[ng-reflect-readonly=true] {
+//  color: blue;
+//  opacity: 1 !important;
+//}
+//[disabled=true] {
+//  color: blue;
+//  opacity: 1 !important;
+//}
+//:host {
+//  all: initial;
+//}
+
+//.item-interactive-disabled {
+//  color: blue;
+//  opacity: 1 !important;
+//}
+//
+//.item-input-disabled ion-label {
+//  color: blue;
+//  opacity: 1 !important;
+//}
+
+ion-input[ng-reflect-disabled=true]{
+  --opacity: 1 !important;
+  --color: green;
+}
+ion-label:disabled {
+  --opacity: 1 !important;
+}

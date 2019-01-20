@@ -6,7 +6,7 @@
     <ion-row >
         <ion-col size="8">
             <form [formGroup]="singleEventForm" novalidate>
-                <ion-item [class.viewModeClass]="viewMode">
+                <ion-item *ngIf="!viewMode" >
                     <ion-label
                             *ngIf="!singleEventForm.controls.name.valid && !viewMode"
                             color="danger"
@@ -14,8 +14,11 @@
                     >*
                     </ion-label>
                     <ion-label stacked>Trip name</ion-label>
-                    <ion-input formControlName="name" type="text" placeholder="event name">
+                    <ion-input formControlName="name" type="text" placeholder="event name" class="kuku" [readonly]="viewMode">
                     </ion-input>
+                </ion-item>
+                <ion-item *ngIf="viewMode" >
+                    <ion-label stacked>Trip name: {{event.name}}</ion-label>
                 </ion-item>
 
                 <ion-item *ngIf="joined && isApprovedForTrip && !isOrganizerOfTrip" >
@@ -50,6 +53,7 @@
                     <ion-input
                             formControlName="meetingLocation"
                             type="text"
+                            [readonly]="viewMode"
                             placeholder="Meeting location is is the optional gathering for car-pooling and starting your
                             drive toward the route start"
                             [class.invalid]="
@@ -69,6 +73,7 @@
                     <ion-input
                             formControlName="meetingGeolocation"
                             type="text"
+                            [readonly]="viewMode"
                             placeholder="Meeting geolocation"
                             [class.invalid]="
           !singleEventForm.controls.meetingGeolocation?.valid && blur && !viewMode"
@@ -91,6 +96,7 @@
                                   pickerFormat="MMM DD, YYYY HH:mm"
                                   [min]="currentDate" max="2030"
                                   formControlName="meetingTime"
+                                  [disabled]="viewMode"
                                   [class.invalid]="!singleEventForm.controls.meetingTime.valid && blur && !viewMode">
 
                     </ion-datetime>

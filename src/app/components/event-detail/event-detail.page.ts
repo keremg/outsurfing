@@ -151,7 +151,7 @@ export class EventDetailPage implements OnInit {
                     this.isPastEvent = (new Date().toISOString().substring(0, 19) > latestTripDate); //TODO: bring back to true
                     if (this.isPastEvent) {
                         this.viewMode = true;
-                        this.singleEventForm.disable();
+                        this.singleEventForm.disable(); //TODO: maybe not
                     }
                     this.loadFromEvent(this.event);//todo should be read only?
 
@@ -195,7 +195,7 @@ export class EventDetailPage implements OnInit {
 
         if (this.event.eventOrganizerId !== this.currentUser.id) {
             this.isOrganizerOfTrip = false;
-            this.singleEventForm.disable();
+            this.singleEventForm.disable(); // TODO: maybe not
             this.viewMode = true;
             console.log('just changed to view mode');
         }
@@ -262,6 +262,7 @@ export class EventDetailPage implements OnInit {
 
         this.event.eventOrganizerId = this.currentUser.id;
         this.event.eventOrganizer = Observable.of(this.currentUser);
+        this.event.eventOrganizerReal = this.currentUser;
         this.isOrganizerOfTrip = true;
         this.event.approvedParticipants=0;
         this.event.meetingTime = this.twoDaysDate;
@@ -346,7 +347,7 @@ export class EventDetailPage implements OnInit {
                     data.data.id = this.currentUser.id;
                     data.data.isOrganizer = true;
                     data.data.isGuide = this.event.isGuidedEvent;
-                    await this.eventService.approveParticipant(returnedId,data.data, this.event); //TODO guy test
+                    await this.eventService.approveParticipant(returnedId,data.data, this.event);
                     await this.updateEventBasedOnParticipants();
                     //copyOfEvent.availableSeats = this.event.availableSeats;
                     //await this.eventService.updateEvent(this.id, copyOfEvent); // remember available seats
@@ -435,12 +436,11 @@ export class EventDetailPage implements OnInit {
         this.mapFormValuesToEventModel();
         const copyOfEvent = _.cloneDeep(this.event);
 
+        // Junk deletion better to do in service
         //delete junk that the DB shouldn't have
-        delete copyOfEvent.eventOrganizer; //remove the property
-        if (copyOfEvent.routeCreator) {
-            delete copyOfEvent.routeCreator;
-            delete copyOfEvent.eventOrganizer;
-        }
+        //delete copyOfEvent.eventOrganizer; //remove the property
+        //delete copyOfEvent.routeCreator;
+
         return copyOfEvent;
     }
 
