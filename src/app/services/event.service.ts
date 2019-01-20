@@ -6,6 +6,9 @@ import {SurfEvent} from '../models/surfEvent';
 import {SurfParticipant} from '../models/surfParticipant';
 import {UserService} from './user.service';
 import * as firebase from 'firebase/app';
+import {PaginationService} from './pagination.service';
+import {CommonService} from './common.service';
+import {SurfUser} from '../models/surfUser';
 
 @Injectable({
     providedIn: 'root'
@@ -18,7 +21,8 @@ export class EventService {
 
 
     constructor(private afs: AngularFirestore,
-                private userService: UserService) {
+                private userService: UserService,
+                public commonService: CommonService) {
         this.events = this.afs.collection(this.collection_endpoint, ref => ref.orderBy('region', 'asc'));
     }
 
@@ -26,7 +30,7 @@ export class EventService {
         return this.events.snapshotChanges().pipe(map(changes => {
             return changes.map(action => {
                 const data = action.payload.doc.data() as SurfEvent;
-                data.participantsObs = this.getParticipants(action.payload.doc.id);
+                data.participantsObs = this.getParticipants(action.payload.doc.id); // participants of the event-id
                 data.participantsObs.subscribe(pars => {
                     data.participants = pars;
                 });
@@ -50,15 +54,23 @@ export class EventService {
                     data.participants = pars;
                 });
                 data.eventOrganizer = this.userService.getuser(data.eventOrganizerId);
+                data.eventOrganizer.subscribe( u => {
+                    data.eventOrganizerReal = u;
+                });
                 return data;
             }
         }));
     }
 
     async addEvent(event: SurfEvent) {
+        event.eventSortRanking = await this.commonService.calculateEventSortRanking(event);
+
         delete event.participantsObs;
         delete event.participants;
-        let x = this.getAllSubstrings(event.name);
+        delete event.eventOrganizer; //remove the property
+        delete event.eventOrganizerReal;
+        delete event.routeCreator;
+        let x = this.commonService.getAllSubstrings(event.name);
         event.searchIndex = x;
         return this.events.add({...event}).then((docRef) => {
             return docRef.id;
@@ -69,13 +81,26 @@ export class EventService {
         });
     }
 
+    async verifyEventHasParticipants(eventId: string, event: SurfEvent): Promise<SurfEvent> {
+        if (event.participants && event.participants.length > 0) {
+            return event;
+        }
+        event.participantsObs = this.getParticipants(eventId);
+        event.participants  = await new Promise<SurfParticipant[]>(p=> event.participantsObs.subscribe(p));
+        return event;
+    }
 
     async updateEvent(id, update) {
+        update = await this.verifyEventHasParticipants(id, update);
+        update.eventSortRanking = await this.commonService.calculateEventSortRanking(update);
         //Get the task document
         delete update.participantsObs;
         delete update.participants;
+        delete update.eventOrganizer; //remove the property
+        delete update.eventOrganizerReal;
+        delete update.routeCreator;
         if (update.name) {
-            let x = this.getAllSubstrings(update.name);
+            let x = this.commonService.getAllSubstrings(update.name);
             update.searchIndex = x;
         }
         this.eventDoc = this.afs.doc<SurfEvent>(`${this.collection_endpoint}/${id}`);
@@ -90,16 +115,8 @@ export class EventService {
     }
 
 
-    getAllSubstrings(str) {
-        let i, j, result = [];
 
-        for (i = 0; i < str.length; i++) {
-            for (j = i + 1; j < str.length + 1; j++) {
-                result.push(str.slice(i, j));
-            }
-        }
-        return result;
-    }
+
 
 
     getParticipants(id: string): Observable<SurfParticipant[]> {
@@ -118,7 +135,15 @@ export class EventService {
         this.events.doc(id).update({[uid]: 1});
         delete participant.id;
         delete participant.user;
-        return this.events.doc(id).collection(this.participant_collection_endpoint).doc(uid).set({...participant}).catch(function (error) {
+        return this.events.doc(id).collection(this.participant_collection_endpoint).doc(uid).set({...participant})
+            .then(async (r) => {
+                event.participants = [];//force read from db
+                event = await this.verifyEventHasParticipants(id, event);
+                event.eventSortRanking = await this.commonService.calculateEventSortRanking(event);
+                this.events.doc(id).update({eventSortRanking: event.eventSortRanking});
+                return r;
+        })
+            .catch( (error) => {
             alert('Failed adding participantsObs' + error);
             console.error('Error adding participantsObs: ', error);
         });
@@ -143,10 +168,25 @@ export class EventService {
                 if (p.approved) {
                     newAvialableSeats -= p.offeringSeatsInCar;
                 }
+                const index = event.participants.indexOf(p, 0);
+                if (index > -1) {
+                    event.participants.splice(index, 1);
+                }
+                break; //out of for-loop
             }
         }
-        this.events.doc(id).update({[uid]: firebase.firestore.FieldValue.delete(), availableSeats: newAvialableSeats});
-        return this.events.doc(id).collection(this.participant_collection_endpoint).doc(uid).delete().catch(function (error) {
+        event.eventSortRanking = await this.commonService.calculateEventSortRanking(event);
+
+        this.events.doc(id).update({[uid]: firebase.firestore.FieldValue.delete(), availableSeats: newAvialableSeats, eventSortRanking: event.eventSortRanking});
+        return this.events.doc(id).collection(this.participant_collection_endpoint).doc(uid).delete()
+            .then(async (r) => {
+                event.participants = [];//force read from db
+                event = await this.verifyEventHasParticipants(id, event);
+                event.eventSortRanking = await this.commonService.calculateEventSortRanking(event);
+                this.events.doc(id).update({eventSortRanking: event.eventSortRanking});
+                return r;
+            })
+            .catch(function (error) {
             alert('Failed deleting participantsObs' + error);
             console.error('Error deleting participantsObs: ', error);
         });
@@ -168,7 +208,15 @@ export class EventService {
             approvedParticipants: newApproved,
             availableSeats: newAvialableSeats
         });
-        return this.events.doc(id).collection(this.participant_collection_endpoint).doc(participant.id).update({approved: true}).catch(function (error) {
+        return this.events.doc(id).collection(this.participant_collection_endpoint).doc(participant.id).update({approved: true})
+            .then(async (r) => {
+                event.participants = [];//force read from db
+                event = await this.verifyEventHasParticipants(id, event);
+                event.eventSortRanking = await this.commonService.calculateEventSortRanking(event);
+                this.events.doc(id).update({eventSortRanking: event.eventSortRanking});
+                return r;
+            })
+            .catch(function (error) {
             alert('Failed deleting participantsObs' + error);
             console.error('Error deleting participantsObs: ', error);
         });
@@ -191,7 +239,15 @@ export class EventService {
             approvedParticipants: newApproved,
             availableSeats: newAvialableSeats
         });
-        return this.events.doc(id).collection(this.participant_collection_endpoint).doc(participant.id).update({approved: false}).catch(function (error) {
+        return this.events.doc(id).collection(this.participant_collection_endpoint).doc(participant.id).update({approved: false})
+            .then(async (r) => {
+                event.participants = [];//force read from db
+                event = await this.verifyEventHasParticipants(id, event);
+                event.eventSortRanking = await this.commonService.calculateEventSortRanking(event);
+                this.events.doc(id).update({eventSortRanking: event.eventSortRanking});
+                return r;
+            })
+            .catch(function (error) {
             alert('Failed deleting participantsObs' + error);
             console.error('Error deleting participantsObs: ', error);
         });

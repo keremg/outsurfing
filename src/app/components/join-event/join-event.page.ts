@@ -63,7 +63,8 @@ export class JoinEventPage implements OnInit {
                 places: this.participant.offeringSeatsInCar | 0,
                 car: !this.participant.needSeatInCar,
                 equipment: this.participant.groupEquipmentIBring,
-                message: this.participant.messageToOthers
+                message: this.participant.messageToOthers,
+
             };
         } else {
             valueToPatchToForm = {
@@ -84,6 +85,15 @@ export class JoinEventPage implements OnInit {
         this.mapFormValuesToParticipantModel();
         this.participant.isOrganizer = (this.event.eventOrganizerId === this.user.id);
         this.participant.isGuide = this.participant.isOrganizer && this.event.isGuidedEvent;
+        // Set sort-ranking for the participant
+        this.participant.sortRanking = 2;//default
+        // For participants we give better baseline of score 3, as we don't want low rank when more people join
+        if (this.user.avgRating && this.user.numOfRaters > 0) {
+            this.participant.sortRanking = (3*3 + this.user.numOfRaters * this.user.avgRating) / (3 + this.user.numOfRaters);
+        } else if (this.user.avgGuideRating && this.user.numOfGuideRaters > 0) {
+            this.participant.sortRanking = (3*3 + this.user.numOfGuideRaters * this.user.avgGuideRating) / (3 + this.user.numOfGuideRaters);
+        }
+
         //this.participant.approved  //better to do separate when we also updating the event counters of seats
 
         if (this.isEditParticipant) {

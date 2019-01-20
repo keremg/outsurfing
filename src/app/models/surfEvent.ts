@@ -12,6 +12,13 @@ export class SurfEvent extends SurfRoute {
             this.routeId = surfRoute.id;
             this.meetingLocation = surfRoute.routeStartLocation; // as default
             this.meetingGeolocation = surfRoute.routeStartGeolocation; // as default
+
+            this.eventSortRanking = 6; //default rank of 2 for route + organizer + participants
+            if (surfRoute.routeNumOfRankers > 0) {
+                this.eventSortRanking -= 2;
+                let add = (3*2 + surfRoute.routeNumOfRankers * surfRoute.routeRanking) / (3 + surfRoute.routeNumOfRankers);
+                this.eventSortRanking += add;
+            }
         }
     }
 
@@ -62,6 +69,7 @@ export class SurfEvent extends SurfRoute {
 
     eventOrganizerId: string;
     eventOrganizer: Observable<SurfUser>; //will also show organizer's ranking
+    eventOrganizerReal: SurfUser;
     audienceType: string[]; //singles, couples, with kids, LGBT, elderlies, youngs, women only, men only, etc
     isGuidedEvent: boolean;
     priceOfEvent: number;    //default 0, more if isGuidedEvent
@@ -76,5 +84,6 @@ export class SurfEvent extends SurfRoute {
 
     searchIndex: any[];
     isPastEvent:boolean;
+    eventSortRanking = 6;
 
 }

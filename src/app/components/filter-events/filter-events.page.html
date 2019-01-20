@@ -11,58 +11,83 @@
 
 
     <form [formGroup]="filterForm" novalidate>
+        <ion-radio-group allowEmptySelection="true">
+        <ion-item>
+            <ion-radio id="0" (ionSelect)="check(0)" [checked]="checkedid===0" >
+            </ion-radio>
+            <ion-label stacked>Length (Km) From:</ion-label>
+            <ion-input [disabled]="checkedid!==0"
+                       formControlName="lengthKMFrom"
+                       type="number">
+            </ion-input>
+            <ion-label stacked>To:</ion-label>
+            <ion-input [disabled]="checkedid!==0"
+                       formControlName="lengthKMTo"
+                       type="number">
+            </ion-input>
+        </ion-item>
 
-            <ion-item >
-                <ion-checkbox id="0" (ionChange)="check(0)" checked>
-                </ion-checkbox>
-                <ion-label stacked>Length (Km) ></ion-label>
-                <ion-input [disabled]="checkedid!==0"
-                        formControlName="lengthKM"
-                        type="number"
-                >
-                </ion-input>
-            </ion-item>
+        <ion-item>
+            <ion-radio id="1" (ionSelect)="check(1)" [checked]="checkedid===1">
+            </ion-radio>
+            <ion-label stacked>Duration From:</ion-label>
+            <ion-input [disabled]="checkedid!==1"
+                       formControlName="routeDurationFrom"
+                       placeholder="0"
+                       type="number"
+                       min="1"
+                       step="1"
+                       side="left"
+            ></ion-input>
+            <ion-label stacked> To: </ion-label>
+            <ion-input [disabled]="checkedid!==1"
+                       formControlName="routeDurationTo"
+                       type="number"
+                       placeholder="99999"
+                       min="0"
+                       step="1"
+                       side="left"
+            ></ion-input>
+            <ion-label stacked>Hours</ion-label>
+        </ion-item>
 
-            <ion-item  >
-                <ion-checkbox id="1"  (ionChange)="check(1)" >
+        <ion-item>
+            <ion-radio id="2" (ionSelect)="check(2)" [checked]="checkedid===2">
 
-                </ion-checkbox>
-                <ion-label>Difficulty ></ion-label>
-                <ion-select formControlName="routeDifficulty" multiple="false" [disabled]="checkedid!==1">
-                    <ion-select-option value="0">Very easy</ion-select-option>
-                    <ion-select-option value="1">Easy</ion-select-option>
-                    <ion-select-option value="2">Moderate</ion-select-option>
-                    <ion-select-option value="3">Challenging</ion-select-option>
-                    <ion-select-option value="4">Extreme</ion-select-option>
-                    <ion-select-option value="5">Very extreme</ion-select-option>
-                </ion-select>
-            </ion-item>
+            </ion-radio>
+            <ion-label>Difficulty From:</ion-label>
+            <ion-select formControlName="routeDifficultyFrom" multiple="false" [disabled]="checkedid!==2">
+                <ion-select-option value="0">Very easy</ion-select-option>
+                <ion-select-option value="1">Easy</ion-select-option>
+                <ion-select-option value="2">Moderate</ion-select-option>
+                <ion-select-option value="3">Challenging</ion-select-option>
+                <ion-select-option value="4">Extreme</ion-select-option>
+                <ion-select-option value="5">Very extreme</ion-select-option>
+            </ion-select>
+            <ion-label> To: </ion-label>
+            <ion-select formControlName="routeDifficultyTo" multiple="false" [disabled]="checkedid!==2">
+                <ion-select-option value="0">Very easy</ion-select-option>
+                <ion-select-option value="1">Easy</ion-select-option>
+                <ion-select-option value="2">Moderate</ion-select-option>
+                <ion-select-option value="3">Challenging</ion-select-option>
+                <ion-select-option value="4">Extreme</ion-select-option>
+                <ion-select-option value="5">Very extreme</ion-select-option>
+            </ion-select>
+        </ion-item>
+        </ion-radio-group>
 
-            <ion-item  >
-                <ion-checkbox id="2" (ionChange)="check(2)">
-
-                </ion-checkbox>
-                <ion-label stacked>Duration ></ion-label>
-                <ion-row style="width: 80%" justify-content-end>
-                    <ion-col size="2">
-                        <ion-input [disabled]="checkedid!==2"
-                                formControlName="routeDuration"
-                                type="number"
-                                placeholder="Route duration"
-                                min="0"
-                                max="59"
-                                step="1"
-                                side="left"
-                        ></ion-input>
-                    </ion-col>
-                    <ion-col size="10">
-                        <ion-select formControlName="routeDurationUnits" multiple="false" [disabled]="checkedid!==2">
-                            <ion-select-option value="hours">Hours</ion-select-option>
-                            <ion-select-option value="days">Days</ion-select-option>
-                        </ion-select>
-                    </ion-col>
-                </ion-row>
-            </ion-item>
+        <ion-item>
+            <!--<ion-checkbox id="3" (ionChange)="check(3)">-->
+            <!--</ion-checkbox>-->
+            <ion-label stacked>Country:</ion-label>
+            <ion-input formControlName="country"
+                       type="string">
+            </ion-input>
+            <ion-label stacked>State:</ion-label>
+            <ion-input formControlName="state"
+                       type="string">
+            </ion-input>
+        </ion-item>
 
         <!--ion-item>
 <ion-label>Route Properties</ion-label>
